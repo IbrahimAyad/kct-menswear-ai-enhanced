@@ -1,7 +1,7 @@
 'use client';
 
-import { motion, AnimatePresence, useSpring, useTransform } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { motion, AnimatePresence, useSpring, useTransform, useMotionValue } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
 import { Check, Heart, ShoppingCart, Star, Sparkles, Zap } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -496,5 +496,43 @@ export function PulseEffect({ children, className = '' }: { children: React.Reac
     >
       {children}
     </motion.div>
+  );
+}
+
+// Animated Counter
+export function AnimatedCounter({ 
+  value, 
+  duration = 2,
+  className = ''
+}: { 
+  value: number; 
+  duration?: number;
+  className?: string;
+}) {
+  const [displayValue, setDisplayValue] = useState(0);
+  const spring = useSpring(0, { 
+    stiffness: 50,
+    damping: 15
+  });
+  
+  useEffect(() => {
+    spring.set(value);
+    
+    const unsubscribe = spring.on("change", (latest) => {
+      setDisplayValue(Math.round(latest));
+    });
+    
+    return unsubscribe;
+  }, [value, spring]);
+  
+  return (
+    <motion.span
+      className={className}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {displayValue.toLocaleString()}
+    </motion.span>
   );
 }

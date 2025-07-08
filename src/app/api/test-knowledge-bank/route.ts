@@ -6,11 +6,23 @@ import { knowledgeBankAdapter } from '@/lib/services/knowledgeBankAdapter';
  * Access at: /api/test-knowledge-bank
  */
 export async function GET() {
-  const results = {
+  const results: {
+    timestamp: string;
+    apiUrl: string;
+    apiKeyConfigured: boolean;
+    tests: any;
+    summary?: {
+      totalTests: number;
+      passed: number;
+      failed: number;
+      apiStatus: string;
+      fallbackWorking: boolean;
+    };
+  } = {
     timestamp: new Date().toISOString(),
     apiUrl: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_API || 'https://kct-knowledge-api-production.up.railway.app',
     apiKeyConfigured: !!process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_KEY,
-    tests: {} as any
+    tests: {}
   };
 
   try {
