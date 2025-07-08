@@ -1,3 +1,5 @@
+"use client";
+
 import { VideoPlayer } from "@/components/video/VideoPlayer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, ShoppingBag, Sparkles, Camera } from "lucide-react";
