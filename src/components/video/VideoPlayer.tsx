@@ -1,0 +1,84 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Hls from "hls.js";
+import { cn } from "@/lib/utils/cn";
+
+interface VideoPlayerProps {
+  videoId: string;
+  className?: string;
+  autoPlay?: boolean;
+  muted?: boolean;
+  loop?: boolean;
+  controls?: boolean;
+}
+
+export function VideoPlayer({
+  videoId,
+  className,
+  autoPlay = true,
+  muted = true,
+  loop = true,
+  controls = false,
+}: VideoPlayerProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const src = `https://customer-6njalxhlz5ulnoaq.cloudflarestream.com/${videoId}/manifest/video.m3u8`;
+
+    try {
+      if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        // Safari native HLS support
+        video.src = src;
+      } else if (Hls.isSupported()) {
+        // HLS.js for other browsers
+        const hls = new Hls();
+        
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          console.error("HLS Error:", data);
+          if (data.fatal) {
+            setError(true);
+          }
+        });
+        
+        hls.loadSource(src);
+        hls.attachMedia(video);
+        
+        return () => {
+          hls.destroy();
+        };
+      } else {
+        console.error("HLS is not supported in this browser");
+        setError(true);
+      }
+    } catch (err) {
+      console.error("Video player error:", err);
+      setError(true);
+    }
+  }, [videoId]);
+
+  if (error) {
+    return (
+      <div className={cn("w-full h-full bg-gray-900 flex items-center justify-center", className)}>
+        <p className="text-white">Video unavailable</p>
+      </div>
+    );
+  }
+
+  return (
+    <video
+      ref={videoRef}
+      className={cn("w-full h-full object-cover", className)}
+      autoPlay={autoPlay}
+      muted={muted}
+      loop={loop}
+      controls={controls}
+      playsInline
+      onError={() => setError(true)}
+    />
+  );
+}

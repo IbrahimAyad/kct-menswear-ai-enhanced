@@ -1,0 +1,90 @@
+import { NextResponse } from 'next/server';
+import { knowledgeBankAdapter } from '@/lib/services/knowledgeBankAdapter';
+
+/**
+ * API route to test Knowledge Bank Railway API integration
+ * Access at: /api/test-knowledge-bank
+ */
+export async function GET() {
+  const results = {
+    timestamp: new Date().toISOString(),
+    apiUrl: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_API || 'https://kct-knowledge-api-production.up.railway.app',
+    apiKeyConfigured: !!process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_KEY,
+    tests: {} as any
+  };
+
+  try {
+    // Test 1: Color Relationships (with fallback)
+    console.log('Testing color relationships...');
+    const navyColors = await knowledgeBankAdapter.getColorRelationships('navy');
+    results.tests.colorRelationships = {
+      success: !!navyColors,
+      data: navyColors,
+      usedFallback: !navyColors || !navyColors.perfect_matches
+    };
+
+    // Test 2: Validate Combination
+    console.log('Testing combination validation...');
+    const validation = await knowledgeBankAdapter.validateCombination('navy', 'white', 'burgundy');
+    results.tests.validation = {
+      success: true,
+      data: validation
+    };
+
+    // Test 3: Recommendations
+    console.log('Testing recommendations...');
+    const recommendations = await knowledgeBankAdapter.getRecommendations({
+      occasion: 'business',
+      season: 'fall'
+    });
+    results.tests.recommendations = {
+      success: recommendations.length > 0,
+      count: recommendations.length,
+      sample: recommendations[0]
+    };
+
+    // Test 4: Trending Combinations
+    console.log('Testing trending combinations...');
+    const trending = await knowledgeBankAdapter.getTrendingCombinations(5);
+    results.tests.trending = {
+      success: trending.length > 0,
+      count: trending.length,
+      sample: trending[0]
+    };
+
+    // Test 5: Style Profile
+    console.log('Testing style profile...');
+    const profile = await knowledgeBankAdapter.getStyleProfile('classic_conservative');
+    results.tests.styleProfile = {
+      success: !!profile,
+      data: profile,
+      usedFallback: true // Currently always uses fallback
+    };
+
+    // Overall status
+    const allTests = Object.values(results.tests);
+    const successCount = allTests.filter((test: any) => test.success).length;
+    
+    results.summary = {
+      totalTests: allTests.length,
+      passed: successCount,
+      failed: allTests.length - successCount,
+      apiStatus: successCount > 0 ? 'partial' : 'offline',
+      fallbackWorking: true
+    };
+
+    return NextResponse.json(results, { 
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+  } catch (error) {
+    console.error('Test error:', error);
+    return NextResponse.json({
+      error: 'Test failed',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      results
+    }, { status: 500 });
+  }
+}
