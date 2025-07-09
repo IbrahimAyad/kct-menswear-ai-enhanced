@@ -61,6 +61,63 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
 
   const currentData = getSeasonData();
 
+  // Helper functions to safely access data
+  const getSuitColor = () => {
+    if (!currentData) return '';
+    if ('champion' in currentData) return currentData.champion?.suit || '';
+    if ('predicted' in currentData) return currentData.predicted?.suit || '';
+    return '';
+  };
+
+  const getShirtColor = () => {
+    if (!currentData) return '';
+    if ('champion' in currentData) return currentData.champion?.shirt || '';
+    if ('predicted' in currentData) return currentData.predicted?.shirt || '';
+    return '';
+  };
+
+  const getTieColor = () => {
+    if (!currentData) return '';
+    if ('champion' in currentData) return currentData.champion?.tie || '';
+    if ('predicted' in currentData) return currentData.predicted?.tie || '';
+    return '';
+  };
+
+  const getPopularityScore = () => {
+    if (!currentData) return 0;
+    if ('champion' in currentData) return currentData.champion?.popularity || 0;
+    if ('predicted' in currentData) return currentData.predicted?.confidence || 0;
+    return 0;
+  };
+
+  const getFabric = () => {
+    if (!currentData) return 'Premium Blend';
+    if ('champion' in currentData) return currentData.champion?.fabric || 'Premium Blend';
+    if ('predicted' in currentData) return currentData.predicted?.fabricInnovation || 'Premium Blend';
+    return 'Premium Blend';
+  };
+
+  const getNote = () => {
+    if (!currentData) return '';
+    if ('champion' in currentData) return currentData.champion?.note || '';
+    if ('predicted' in currentData && currentData.predicted?.luxuryMaterials) {
+      return `Features ${currentData.predicted.luxuryMaterials}`;
+    }
+    return '';
+  };
+
+  const hasSocialMentions = () => {
+    return currentData && 'champion' in currentData && currentData.champion?.socialMentions;
+  };
+
+  const hasConversionRate = () => {
+    return currentData && 'champion' in currentData && currentData.champion?.conversionRate;
+  };
+
+  const hasSustainabilityFocus = () => {
+    return selectedYear === '2026' && currentData && 'predicted' in currentData && currentData.predicted?.sustainabilityFocus;
+  };
+
   return (
     <div className="space-y-6">
       {/* Season Selector */}
@@ -127,9 +184,9 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
             <h2 className="text-3xl font-serif mb-2">
               {activeSeason.charAt(0).toUpperCase() + activeSeason.slice(1)} {selectedYear} Champion
             </h2>
-            {selectedYear === '2026' && (
+            {selectedYear === '2026' && currentData && 'predicted' in currentData && (
               <Badge className="bg-purple-600 text-white">
-                AI Prediction • {currentData.predicted.confidence}% Confidence
+                AI Prediction • {(currentData as any).predicted.confidence}% Confidence
               </Badge>
             )}
           </div>
@@ -140,22 +197,22 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
               <div>
                 <h3 className="text-2xl font-semibold flex items-center gap-2">
                   <Award className="w-6 h-6 text-gold" />
-                  {currentData.champion?.suit || currentData.predicted?.suit} Suit
+                  {getSuitColor()} Suit
                 </h3>
                 <div className="flex items-center gap-4 mt-2">
                   <Badge variant="outline" className="flex items-center gap-1">
                     <Shirt className="w-3 h-3" />
-                    {currentData.champion?.shirt || currentData.predicted?.shirt} Shirt
+                    {getShirtColor()} Shirt
                   </Badge>
                   <Badge variant="outline">
-                    🎀 {currentData.champion?.tie || currentData.predicted?.tie} Tie
+                    🎀 {getTieColor()} Tie
                   </Badge>
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-3xl font-bold text-gold">
                   <AnimatedCounter 
-                    value={currentData.champion?.popularity || currentData.predicted?.confidence || 0} 
+                    value={getPopularityScore()} 
                   />%
                 </div>
                 <p className="text-sm text-gray-600">Popularity Score</p>
@@ -168,29 +225,29 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
                 <Sparkles className="w-6 h-6 mx-auto mb-2 text-gold" />
                 <p className="text-sm text-gray-600">Fabric Choice</p>
                 <p className="font-semibold">
-                  {currentData.champion?.fabric || currentData.predicted?.fabricInnovation || 'Premium Blend'}
+                  {getFabric()}
                 </p>
               </div>
               
-              {currentData.champion?.socialMentions && (
+              {hasSocialMentions() && (
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
                   <Users className="w-6 h-6 mx-auto mb-2 text-blue-600" />
                   <p className="text-sm text-gray-600">Social Mentions</p>
                   <p className="font-semibold">
-                    {currentData.champion.socialMentions.toLocaleString()}
+                    {(currentData && 'champion' in currentData && currentData.champion?.socialMentions || 0).toLocaleString()}
                   </p>
                 </div>
               )}
 
-              {currentData.champion?.conversionRate && (
+              {hasConversionRate() && (
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
                   <BarChart3 className="w-6 h-6 mx-auto mb-2 text-green-600" />
                   <p className="text-sm text-gray-600">Conversion Rate</p>
-                  <p className="font-semibold">{currentData.champion.conversionRate}</p>
+                  <p className="font-semibold">{currentData && 'champion' in currentData ? currentData.champion?.conversionRate : ''}</p>
                 </div>
               )}
 
-              {selectedYear === '2026' && currentData.predicted?.sustainabilityFocus && (
+              {hasSustainabilityFocus() && (
                 <div className="text-center p-4 bg-green-50 rounded-lg">
                   <Zap className="w-6 h-6 mx-auto mb-2 text-green-600" />
                   <p className="text-sm text-gray-600">Eco-Friendly</p>
@@ -200,13 +257,12 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
             </div>
 
             {/* Special Notes */}
-            {(currentData.champion?.note || currentData.predicted?.luxuryMaterials) && (
+            {getNote() && (
               <div className="mt-4 p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm flex items-start gap-2">
                   <Info className="w-4 h-4 text-blue-600 mt-0.5" />
                   <span>
-                    {currentData.champion?.note || 
-                     `Features ${currentData.predicted?.luxuryMaterials || 'premium materials'}`}
+                    {getNote()}
                   </span>
                 </p>
               </div>
