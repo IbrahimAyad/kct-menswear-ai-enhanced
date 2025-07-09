@@ -571,15 +571,16 @@ Based on this analysis, I can help you find similar items or create complete out
   }
 
   private generateTrendResponse(context: StylistContext): StylistResponse {
+    const trendList = [
+      "Oversized blazers with structured shoulders",
+      "Earth tones and warm neutrals",
+      "Textured fabrics like corduroy and tweed",
+      "Statement accessories",
+      "Sustainable and ethical fashion choices"
+    ];
+    
     return {
-      message: "Fashion trends are constantly evolving! Here's what's trending in men's fashion right now:",
-      recommendations: [
-        "Oversized blazers with structured shoulders",
-        "Earth tones and warm neutrals",
-        "Textured fabrics like corduroy and tweed",
-        "Statement accessories",
-        "Sustainable and ethical fashion choices"
-      ],
+      message: `Fashion trends are constantly evolving! Here's what's trending in men's fashion right now:\n\n${trendList.map((trend, i) => `${i + 1}. ${trend}`).join('\n')}`,
       suggestions: [
         "Show me trending pieces",
         "How to incorporate trends into my style",
