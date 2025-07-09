@@ -6,6 +6,7 @@
     "dev": "next dev",
     "dev:turbo": "next dev --turbopack",
     "build": "next build",
+    "build:force": "next build --experimental-type-check=false",
     "start": "next start",
     "lint": "next lint"
   },

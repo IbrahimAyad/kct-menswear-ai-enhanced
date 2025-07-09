@@ -312,9 +312,9 @@ class UnifiedRecommendationService {
       }
     };
 
-    const suit = products.suits[sourceRec.suit] || products.suits.navy;
-    const shirt = products.shirts[sourceRec.shirt] || products.shirts.white;
-    const tie = products.ties[sourceRec.tie] || products.ties.burgundy;
+    const suit = products.suits[sourceRec.suit as keyof typeof products.suits] || products.suits.navy;
+    const shirt = products.shirts[sourceRec.shirt as keyof typeof products.shirts] || products.shirts.white;
+    const tie = products.ties[sourceRec.tie as keyof typeof products.ties] || products.ties.burgundy;
 
     const totalPrice = suit.price + shirt.price + tie.price;
     const discountedPrice = totalPrice * 0.9; // 10% bundle discount
