@@ -356,11 +356,6 @@ class DynamicPricingService {
       winter: [11, 0, 1]
     };
     
-    // Handle year-round items
-    if (seasonality === 'year-round') {
-      return 0; // No seasonal adjustment
-    }
-    
     const isInSeason = seasonality in seasonMap 
       ? seasonMap[seasonality as keyof typeof seasonMap].includes(month)
       : false;
