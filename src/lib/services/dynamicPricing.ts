@@ -356,8 +356,17 @@ class DynamicPricingService {
       winter: [11, 0, 1]
     };
     
-    const isInSeason = seasonMap[seasonality]?.includes(month) || false;
-    const isPreSeason = seasonMap[seasonality]?.includes((month + 11) % 12) || false; // Month before
+    // Handle year-round items
+    if (seasonality === 'year-round') {
+      return 0; // No seasonal adjustment
+    }
+    
+    const isInSeason = seasonality in seasonMap 
+      ? seasonMap[seasonality as keyof typeof seasonMap].includes(month)
+      : false;
+    const isPreSeason = seasonality in seasonMap
+      ? seasonMap[seasonality as keyof typeof seasonMap].includes((month + 11) % 12)
+      : false; // Month before
     
     if (isInSeason) {
       return 0.1; // 10% premium during season
@@ -440,7 +449,12 @@ class DynamicPricingService {
       winter: [11, 0, 1]
     };
     
-    return seasonMap[seasonality]?.includes(month) || false;
+    // Handle year-round items (always in season)
+    if (seasonality === 'year-round') return true;
+    
+    return seasonality in seasonMap 
+      ? seasonMap[seasonality as keyof typeof seasonMap].includes(month)
+      : false;
   }
 
   private determineTrendDirection(trendScore: number): TrendAnalysis['trendDirection'] {
@@ -466,9 +480,11 @@ class DynamicPricingService {
         winter: [11, 0, 1]
       };
       
-      seasonMap[seasonality]?.forEach(month => {
-        pattern[month] = 1.3; // 30% boost in season
-      });
+      if (seasonality in seasonMap) {
+        seasonMap[seasonality as keyof typeof seasonMap].forEach(month => {
+          pattern[month] = 1.3; // 30% boost in season
+        });
+      }
     }
     
     return pattern;
