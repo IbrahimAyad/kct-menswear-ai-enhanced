@@ -144,12 +144,12 @@ export const KNOWLEDGE_BANK_CONFIG = {
 
 // Helper function to map colors
 export function mapColorToKnowledgeBank(color: string): string {
-  return KNOWLEDGE_BANK_CONFIG.colorMapping[color] || color;
+  return KNOWLEDGE_BANK_CONFIG.colorMapping[color as keyof typeof KNOWLEDGE_BANK_CONFIG.colorMapping] || color;
 }
 
 // Helper function to map occasions
 export function mapOccasionToKnowledgeBank(occasion: string): string {
-  return KNOWLEDGE_BANK_CONFIG.occasionMapping[occasion] || occasion;
+  return KNOWLEDGE_BANK_CONFIG.occasionMapping[occasion as keyof typeof KNOWLEDGE_BANK_CONFIG.occasionMapping] || occasion;
 }
 
 // Helper function to calculate unified score

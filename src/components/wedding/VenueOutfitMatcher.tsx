@@ -50,13 +50,21 @@ export function VenueOutfitMatcher({ onSelect, selectedVenue }: VenueOutfitMatch
     const recs = venueData.idealSuits.map((suit, index) => {
       // Get color coordination data
       const suitColorKey = suit.color.toLowerCase().replace(/\s+/g, '');
-      const coordination = colorCoordinationMatrix[suitColorKey] || {
-        perfectMatches: {
-          shirts: ['White', 'Light Blue'],
-          ties: ['Navy', 'Burgundy'],
-          confidence: 85
-        }
-      };
+      
+      // Type-safe lookup with fallback
+      let coordination;
+      if (suitColorKey in colorCoordinationMatrix) {
+        coordination = colorCoordinationMatrix[suitColorKey as keyof typeof colorCoordinationMatrix];
+      } else {
+        // Default coordination for colors not in the matrix
+        coordination = {
+          perfectMatches: {
+            shirts: ['White', 'Light Blue'],
+            ties: ['Navy', 'Burgundy'],
+            confidence: 85
+          }
+        };
+      }
 
       return {
         id: `${venue}-${index}`,
@@ -270,7 +278,7 @@ export function VenueOutfitMatcher({ onSelect, selectedVenue }: VenueOutfitMatch
                     <ul className="text-sm text-gray-700 space-y-1">
                       {Object.entries(rec.stylingNotes).map(([key, value]) => (
                         <li key={key}>
-                          <span className="font-medium capitalize">{key}:</span> {value}
+                          <span className="font-medium capitalize">{key}:</span> {String(value)}
                         </li>
                       ))}
                     </ul>

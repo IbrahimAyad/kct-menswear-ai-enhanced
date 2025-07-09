@@ -121,7 +121,7 @@ export function WeddingPartyCoordinator({ weddingId, groomName = 'Groom', onSave
   const generateCoordinatedColors = () => {
     if (coordinationMode === 'identical') {
       // Everyone gets the same colors
-      const colors = colorCoordinationMatrix[primarySuitColor];
+      const colors = colorCoordinationMatrix[primarySuitColor as keyof typeof colorCoordinationMatrix];
       const outfit = {
         suitColor: primarySuitColor,
         shirtColor: colors.perfectMatches.shirts[0],
@@ -133,7 +133,7 @@ export function WeddingPartyCoordinator({ weddingId, groomName = 'Groom', onSave
       );
     } else if (coordinationMode === 'coordinated') {
       // Groom gets primary, others get variations
-      const primaryColors = colorCoordinationMatrix[primarySuitColor];
+      const primaryColors = colorCoordinationMatrix[primarySuitColor as keyof typeof colorCoordinationMatrix];
       
       setPartyMembers(members =>
         members.map((member, index) => {
