@@ -490,7 +490,7 @@ class SmartBundlesService {
   private extractSeasonality(items: BundleItem[]): string[] {
     const seasons = items
       .map(item => item.product.seasonality)
-      .filter((season): season is string => season !== undefined);
+      .filter((season): season is NonNullable<Product['seasonality']> => season !== undefined);
     
     return [...new Set(seasons)];
   }
