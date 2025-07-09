@@ -47,7 +47,7 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
     winter: 'from-blue-100 to-purple-100'
   };
 
-  const getSeasonData = () => {
+  const getSeasonData = (): any => {
     if (selectedYear === '2026') {
       return weddingTrends2026[activeSeason as keyof typeof weddingTrends2026];
     }
@@ -279,7 +279,7 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
           </Card>
 
           {/* Runner Up */}
-          {currentData.runnerUp && (
+          {currentData && 'runnerUp' in currentData && currentData.runnerUp && (
             <Card className="mt-4 p-4 bg-white/80">
               <div className="flex items-center justify-between">
                 <div>

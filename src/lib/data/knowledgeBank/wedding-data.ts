@@ -12,6 +12,31 @@ export interface SeasonalChampion {
   conversionRate?: string;
 }
 
+export interface SeasonalData {
+  champion: SeasonalChampion;
+  runnerUp?: {
+    suit: string;
+    shirt: string;
+    tie: string;
+    popularity: number;
+  };
+}
+
+export interface PredictedTrend {
+  suit: string;
+  shirt: string;
+  tie: string;
+  confidence: number;
+  sustainabilityFocus?: boolean;
+  fabricInnovation?: string;
+  luxuryMaterials?: string;
+  fabricFocus?: string;
+}
+
+export interface PredictedData {
+  predicted: PredictedTrend;
+}
+
 export interface VenueCompatibility {
   characteristics: {
     environment: string;
@@ -51,7 +76,7 @@ export interface FormalityData {
 }
 
 // Seasonal Champions Data (2023-2025)
-export const seasonalChampions = {
+export const seasonalChampions: Record<string, Partial<Record<'2023' | '2024' | '2025', SeasonalData>>> = {
   spring: {
     2023: {
       champion: {
@@ -421,7 +446,7 @@ export const formalityIndex: FormalityData = {
 };
 
 // Wedding Trends 2026 Predictions
-export const weddingTrends2026 = {
+export const weddingTrends2026: Record<string, PredictedData> = {
   spring: {
     predicted: {
       suit: "Mint Green",
