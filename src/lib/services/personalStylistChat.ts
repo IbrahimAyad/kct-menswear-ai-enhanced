@@ -355,7 +355,7 @@ Based on this analysis, I can help you find similar items or create complete out
   private async generateOutfitPlanningResponse(
     message: string,
     context: StylistContext
-  ): StylistResponse {
+  ): Promise<StylistResponse> {
     // Extract occasion from message
     const occasion = this.extractOccasion(message);
     
