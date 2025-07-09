@@ -159,7 +159,10 @@ export function getColorHarmonyScore(
   shirtColor: string,
   tieColor: string
 ): number {
-  const suitRelations = COLOR_RELATIONSHIPS[suitColor];
+  // Type-safe access with proper checking
+  const suitRelations = suitColor in COLOR_RELATIONSHIPS 
+    ? COLOR_RELATIONSHIPS[suitColor as keyof typeof COLOR_RELATIONSHIPS]
+    : null;
   if (!suitRelations) return 50; // Default middle score
   
   let score = 50; // Base score
