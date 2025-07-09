@@ -21,8 +21,7 @@ export function SatisfyingButton({
   size = 'md',
   className = '',
   disabled,
-  type,
-  ...rest 
+  type
 }: SatisfyingButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -85,7 +84,6 @@ export function SatisfyingButton({
       onClick={handleClick}
       disabled={disabled || isLoading || isSuccess}
       type={type}
-      {...rest}
     >
       {/* Shimmer Effect */}
       <motion.div
@@ -296,7 +294,6 @@ export function InteractiveCard({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       onClick={onClick}
-      {...props}
     >
       {/* Hover Gradient */}
       <motion.div
@@ -356,8 +353,7 @@ export function MagneticButton({
   strength = 0.3,
   onClick,
   disabled,
-  type,
-  ...props 
+  type
 }: MagneticButtonProps) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -386,7 +382,6 @@ export function MagneticButton({
       onClick={onClick}
       disabled={disabled}
       type={type}
-      {...props}
     >
       {children}
     </motion.button>
