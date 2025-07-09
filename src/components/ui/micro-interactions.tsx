@@ -20,7 +20,9 @@ export function SatisfyingButton({
   variant = 'primary',
   size = 'md',
   className = '',
-  ...props 
+  disabled,
+  type,
+  ...rest 
 }: SatisfyingButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -81,8 +83,8 @@ export function SatisfyingButton({
       }}
       whileTap={{ scale: 0.95 }}
       onClick={handleClick}
-      disabled={isLoading || isSuccess}
-      {...props}
+      disabled={disabled || isLoading || isSuccess}
+      type={type}
     >
       {/* Shimmer Effect */}
       <motion.div

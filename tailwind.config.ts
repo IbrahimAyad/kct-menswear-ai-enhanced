@@ -7,6 +7,17 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    'bg-gold',
+    'text-gold',
+    'border-gold',
+    'hover:bg-gold',
+    'hover:text-gold',
+    'hover:border-gold',
+    'bg-gold/10',
+    'bg-gold/20',
+    'bg-gold/90',
+  ],
   theme: {
     extend: {
       colors: {
