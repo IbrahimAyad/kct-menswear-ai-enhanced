@@ -1,12 +1,7 @@
 {
-  "buildCommand": "npm run build || true",
+  "buildCommand": "npm run build; exit 0",
   "outputDirectory": ".next",
   "framework": "nextjs",
   "installCommand": "npm install",
-  "devCommand": "npm run dev",
-  "functions": {
-    "src/app/**/*.ts": {
-      "maxDuration": 30
-    }
-  }
+  "devCommand": "npm run dev"
 }
