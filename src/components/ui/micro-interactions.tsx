@@ -352,6 +352,9 @@ export function MagneticButton({
   children, 
   className = '',
   strength = 0.3,
+  onClick,
+  disabled,
+  type,
   ...props 
 }: MagneticButtonProps) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -378,7 +381,9 @@ export function MagneticButton({
       onMouseLeave={handleMouseLeave}
       animate={{ x: position.x, y: position.y }}
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
-      {...props}
+      onClick={onClick}
+      disabled={disabled}
+      type={type}
     >
       {children}
     </motion.button>
