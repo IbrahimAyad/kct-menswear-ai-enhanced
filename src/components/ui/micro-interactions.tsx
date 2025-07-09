@@ -6,6 +6,14 @@ import { Check, Heart, ShoppingCart, Star, Sparkles, Zap } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 // Satisfying Button with Micro-Interactions
+interface SatisfyingButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  onClick?: () => void | Promise<void>;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
 export function SatisfyingButton({ 
   children, 
   onClick, 
@@ -13,7 +21,7 @@ export function SatisfyingButton({
   size = 'md',
   className = '',
   ...props 
-}: any) {
+}: SatisfyingButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -257,12 +265,18 @@ export function LoadingSkeleton({ className }: { className?: string }) {
 }
 
 // Interactive Card Hover
+interface InteractiveCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+}
+
 export function InteractiveCard({ 
   children, 
   className = '', 
   onClick,
   ...props 
-}: any) {
+}: InteractiveCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -327,12 +341,18 @@ export function InteractiveCard({
 }
 
 // Magnetic Button Effect
+interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  className?: string;
+  strength?: number;
+}
+
 export function MagneticButton({ 
   children, 
   className = '',
   strength = 0.3,
   ...props 
-}: any) {
+}: MagneticButtonProps) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
