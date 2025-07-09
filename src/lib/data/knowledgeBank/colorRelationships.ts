@@ -170,14 +170,14 @@ export function getColorHarmonyScore(
   // Check shirt match
   if (suitRelations.perfect_matches.shirts.includes(shirtColor)) {
     score += 25;
-  } else if (suitRelations.good_matches.shirts.includes(shirtColor)) {
+  } else if ('good_matches' in suitRelations && suitRelations.good_matches.shirts.includes(shirtColor)) {
     score += 15;
   }
   
   // Check tie match
   if (suitRelations.perfect_matches.ties.includes(tieColor)) {
     score += 25;
-  } else if (suitRelations.good_matches.ties.includes(tieColor)) {
+  } else if ('good_matches' in suitRelations && suitRelations.good_matches.ties.includes(tieColor)) {
     score += 15;
   }
   
