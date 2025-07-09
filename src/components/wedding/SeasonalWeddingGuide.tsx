@@ -53,7 +53,8 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
     }
     
     const seasonData = seasonalChampions[activeSeason as keyof typeof seasonalChampions];
-    const yearData = seasonData?.[selectedYear as keyof typeof seasonData];
+    const yearKey = selectedYear as '2023' | '2024' | '2025';
+    const yearData = seasonData?.[yearKey];
     
     return yearData;
   };
