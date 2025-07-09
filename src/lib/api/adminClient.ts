@@ -1,7 +1,7 @@
 import { Product, Customer, CartItem, Wedding, WeddingMember, ProductCategory } from "@/lib/types";
 
-const API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || "https://kct-menswear.vercel.app/api";
-const API_KEY = process.env.NEXT_PUBLIC_ADMIN_API_KEY || "";
+const API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || "/api";
+const API_KEY = process.env.NEXT_PUBLIC_ADMIN_API_KEY || "452a711bbfd449a28a98756b69e14560";
 
 class AdminClient {
   private headers: HeadersInit;
