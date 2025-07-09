@@ -32,7 +32,7 @@ interface AudioVisualizerProps {
 
 function AudioVisualizer({ isRecording, audioStream }: AudioVisualizerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!isRecording || !audioStream || !canvasRef.current) {
