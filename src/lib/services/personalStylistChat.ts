@@ -169,9 +169,9 @@ What would you like to work on today?`,
       ...context.styleProfile,
       ...preferences,
       // Ensure required fields are always arrays
-      preferredColors: preferences?.preferredColors || context.styleProfile.preferredColors || [],
-      preferredStyles: preferences?.preferredStyles || context.styleProfile.preferredStyles || [],
-      occasions: preferences?.occasions || context.styleProfile.occasions || []
+      preferredColors: preferences?.preferredColors || context.styleProfile?.preferredColors || [],
+      preferredStyles: preferences?.preferredStyles || context.styleProfile?.preferredStyles || [],
+      occasions: preferences?.occasions || context.styleProfile?.occasions || []
     };
 
     // Update the social style matching profile
