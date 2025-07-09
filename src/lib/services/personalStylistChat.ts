@@ -219,9 +219,9 @@ What would you like to work on today?`,
     try {
       const analysis = await fashionClipService.analyzeImage(attachments[0]);
       return analysis ? {
-        categories: analysis.categories,
-        colors: analysis.colors,
-        styles: analysis.styleTypes || [],
+        categories: analysis.predictions?.map((p: any) => p.label) || [],
+        colors: [], // Fashion CLIP doesn't return colors directly
+        styles: analysis.similar_items || [],
         confidence: analysis.confidence || 0.8
       } : undefined;
     } catch (error) {
