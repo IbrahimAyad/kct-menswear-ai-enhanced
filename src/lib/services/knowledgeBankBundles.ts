@@ -272,7 +272,9 @@ class KnowledgeBankBundlesService {
     
     // Get conversion data if available
     const comboKey = `${topCombo.combination.suit}_${topCombo.combination.shirt}_${topCombo.combination.tie}`;
-    const conversionData = COMBINATION_CONVERSION_DATA[comboKey];
+    const conversionData = comboKey in COMBINATION_CONVERSION_DATA
+      ? COMBINATION_CONVERSION_DATA[comboKey as keyof typeof COMBINATION_CONVERSION_DATA]
+      : null;
     
     // Calculate color harmony score
     const harmonyScore = getColorHarmonyScore(
