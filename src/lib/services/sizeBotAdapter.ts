@@ -112,7 +112,12 @@ export class SizeBotAdapter {
       .map(alt => alt.type);
     
     // Get return risk
-    const returnRisk = getReturnRisk(bodyType, sizeResult.confidence, isFirstTimeBuyer);
+    const riskData = getReturnRisk(bodyType, sizeResult.confidence, isFirstTimeBuyer);
+    const returnRisk = {
+      level: riskData.riskLevel,
+      percentage: riskData.riskPercentage,
+      recommendations: riskData.recommendations
+    };
     
     // Get alteration costs
     const alterationCosts = getCommonAlterations(bodyType);
@@ -148,7 +153,12 @@ export class SizeBotAdapter {
     const confidence = recommendation.confidence || 0.85;
     
     // Add return risk analysis
-    const returnRisk = getReturnRisk(bodyType, confidence, isFirstTimeBuyer);
+    const riskData = getReturnRisk(bodyType, confidence, isFirstTimeBuyer);
+    const returnRisk = {
+      level: riskData.riskLevel,
+      percentage: riskData.riskPercentage,
+      recommendations: riskData.recommendations
+    };
     
     // Add alteration costs
     const alterationCosts = getCommonAlterations(bodyType);
