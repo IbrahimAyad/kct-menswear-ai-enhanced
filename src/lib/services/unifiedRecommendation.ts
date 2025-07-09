@@ -213,7 +213,7 @@ class UnifiedRecommendationService {
     if (context?.recentPurchases) {
       return recommendations.filter(rec => {
         const comboId = `${rec.suit.color}_${rec.shirt.color}_${rec.tie.color}`;
-        return !context.recentPurchases.includes(comboId);
+        return !context.recentPurchases!.includes(comboId);
       });
     }
 
