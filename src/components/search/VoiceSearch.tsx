@@ -12,7 +12,7 @@ import {
   Loader2,
   CheckCircle,
   XCircle,
-  Waveform
+  AudioLines
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -417,7 +417,7 @@ export function VoiceSearch({
                       onClick={handleSearch}
                       className="flex items-center gap-2"
                     >
-                      <Waveform className="w-4 h-4" />
+                      <AudioLines className="w-4 h-4" />
                       Search for This
                     </SatisfyingButton>
                     

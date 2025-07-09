@@ -15,7 +15,7 @@ import {
   CheckCircle,
   Clock,
   Users,
-  Waveform
+  AudioLines
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -141,7 +141,7 @@ export default function VoiceSearchPage() {
                 <h1 className="text-4xl md:text-5xl font-serif bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Voice Search
                 </h1>
-                <Waveform className="w-8 h-8 text-purple-600" />
+                <AudioLines className="w-8 h-8 text-purple-600" />
               </div>
               <p className="text-gray-600 max-w-2xl mx-auto">
                 Experience the future of shopping with AI-powered voice search. Just speak naturally to find exactly what you're looking for.

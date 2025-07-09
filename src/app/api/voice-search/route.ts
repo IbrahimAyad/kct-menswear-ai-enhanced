@@ -39,8 +39,9 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    // Extract text from output
-    const transcribedText = typeof output === 'string' ? output : output.text || '';
+    // Extract text from output (Whisper returns an object with 'text' property)
+    const outputData = output as any;
+    const transcribedText = typeof outputData === 'string' ? outputData : outputData?.text || '';
 
     // Log for analytics
     console.log('Voice search transcription:', {
@@ -53,8 +54,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       text: transcribedText,
-      confidence: output.confidence || null,
-      language: output.language || 'en',
+      confidence: outputData?.confidence || null,
+      language: outputData?.language || 'en',
       timestamp: new Date().toISOString()
     });
 
