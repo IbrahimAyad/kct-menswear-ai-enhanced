@@ -1,9 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
+@layer utilities {
+  .bg-gold {
+    background-color: #D4AF37;
+  }
+  .text-gold {
+    color: #D4AF37;
+  }
+  .border-gold {
+    border-color: #D4AF37;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #1A1A1A;
+  --gold: #D4AF37;
 }
 
 @layer base {

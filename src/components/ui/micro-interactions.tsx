@@ -295,7 +295,6 @@ export function InteractiveCard({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       onClick={onClick}
-      {...props}
     >
       {/* Hover Gradient */}
       <motion.div
