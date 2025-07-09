@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Users, Package, DollarSign, MessageCircle, Sparkles, 
   TrendingUp, Target, ShoppingBag, Heart, Zap
