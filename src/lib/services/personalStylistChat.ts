@@ -218,7 +218,7 @@ What would you like to work on today?`,
         categories: analysis.categories,
         colors: analysis.colors,
         styles: analysis.styleTypes || [],
-        confidence: analysis.confidence
+        confidence: analysis.confidence || 0.8
       } : undefined;
     } catch (error) {
       console.error('Failed to analyze image:', error);
