@@ -79,14 +79,14 @@ class SocialStyleMatchingService {
       for (const image of data.uploadedImages) {
         const analysis = await fashionClipService.analyzeImage(image);
         if (analysis) {
+          // Extract style information from predictions
+          const extractedStyles = analysis.predictions?.map((p: any) => p.label) || [];
           profile.preferredStyles = this.mergePreferences(
             profile.preferredStyles, 
-            analysis.categories
+            extractedStyles
           );
-          profile.preferredColors = this.mergePreferences(
-            profile.preferredColors,
-            analysis.colors
-          );
+          // Fashion CLIP doesn't provide colors directly, keep existing preferences
+          // profile.preferredColors unchanged
         }
       }
     }
