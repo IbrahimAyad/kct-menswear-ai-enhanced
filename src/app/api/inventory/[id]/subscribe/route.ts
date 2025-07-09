@@ -2,15 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const encoder = new TextEncoder();
   
   const stream = new ReadableStream({
     start(controller) {
       // Send initial stock level
       const data = JSON.stringify({
-        productId: params.id,
+        productId: id,
         stock: Math.floor(Math.random() * 50) + 10,
         lastUpdated: new Date().toISOString()
       });
