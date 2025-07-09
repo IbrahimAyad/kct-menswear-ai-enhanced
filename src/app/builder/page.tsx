@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { SuitBuilder3D } from '@/components/builder/SuitBuilder3D';
 import { SuitConfiguration } from '@/components/builder/SuitBuilder3D';
 import Link from 'next/link';
 import { ArrowLeft, Save } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function BuilderPage() {
+function BuilderContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [savedConfigs, setSavedConfigs] = useState<SuitConfiguration[]>([]);
@@ -216,5 +216,13 @@ export default function BuilderPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function BuilderPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <BuilderContent />
+    </Suspense>
   );
 }
