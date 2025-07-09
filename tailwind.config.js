@@ -1,28 +1,13 @@
-import type { Config } from "tailwindcss";
-
-export default {
-  darkMode: "class",
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  safelist: [
-    'bg-gold',
-    'text-gold',
-    'border-gold',
-    'hover:bg-gold',
-    'hover:text-gold',
-    'hover:border-gold',
-    'bg-gold/10',
-    'bg-gold/20',
-    'bg-gold/90',
-  ],
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
         gold: {
           DEFAULT: "#D4AF37",
           50: "#F9F6E6",
@@ -73,6 +58,8 @@ export default {
         "fade-in": "fadeIn 0.5s ease-in-out",
         "fade-up": "fadeUp 0.5s ease-out",
         "slide-in": "slideIn 0.3s ease-out",
+        "shimmer": "shimmer 2s linear infinite",
+        "scale-in": "scaleIn 0.3s ease-out",
       },
       keyframes: {
         fadeIn: {
@@ -87,17 +74,19 @@ export default {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(0)" },
         },
+        shimmer: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "100%": { backgroundPosition: "200% 50%" },
+        },
+        scaleIn: {
+          "0%": { transform: "scale(0)" },
+          "100%": { transform: "scale(1)" },
+        },
       },
-      backgroundColor: {
-        'gold': '#D4AF37',
-      },
-      textColor: {
-        'gold': '#D4AF37',
-      },
-      borderColor: {
-        'gold': '#D4AF37',
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
     },
   },
   plugins: [],
-} satisfies Config;
+};

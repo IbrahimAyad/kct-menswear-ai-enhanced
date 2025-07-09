@@ -1,0 +1,201 @@
+src/app/(account)/addresses/page.tsx(5,37): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/(account)/addresses/page.tsx(68,9): error TS2304: Cannot find name 'window'.
+src/app/(account)/measurements/page.tsx(7,22): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/(account)/measurements/page.tsx(105,58): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/(account)/orders/page.tsx(9,30): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/(account)/orders/page.tsx(76,28): error TS2304: Cannot find name 'window'.
+src/app/(account)/preferences/page.tsx(136,79): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/(account)/preferences/page.tsx(191,88): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/(account)/profile/page.tsx(66,79): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/(account)/profile/page.tsx(80,78): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/(account)/profile/page.tsx(109,75): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/(shop)/orders/[orderId]/page.tsx(6,52): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/account/page.tsx(7,65): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/account/page.tsx(145,31): error TS2322: Type '{ children: string; variant: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/account/page.tsx(184,27): error TS2322: Type '{ children: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/api/checkout/payment-intent/route.ts(21,13): error TS2339: Property 'amount' does not exist on type 'unknown'.
+src/app/api/checkout/payment-intent/route.ts(21,21): error TS2339: Property 'metadata' does not exist on type 'unknown'.
+src/app/api/revalidate/route.ts(15,13): error TS2339: Property 'paths' does not exist on type 'unknown'.
+src/app/api/revalidate/route.ts(15,20): error TS2339: Property 'tags' does not exist on type 'unknown'.
+src/app/api/webhooks/admin/inventory/route.ts(31,11): error TS2322: Type 'unknown' is not assignable to type 'InventoryWebhookPayload'.
+src/app/api/webhooks/admin/prices/route.ts(30,11): error TS2322: Type 'unknown' is not assignable to type 'PriceWebhookPayload'.
+src/app/api/webhooks/admin/products/route.ts(36,11): error TS2322: Type 'unknown' is not assignable to type 'ProductWebhookPayload'.
+src/app/api/webhooks/customers/route.ts(17,13): error TS2339: Property 'event' does not exist on type 'unknown'.
+src/app/api/webhooks/customers/route.ts(17,20): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/api/webhooks/inventory/route.ts(17,13): error TS2339: Property 'event' does not exist on type 'unknown'.
+src/app/api/webhooks/inventory/route.ts(17,20): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/api/webhooks/orders/route.ts(17,13): error TS2339: Property 'event' does not exist on type 'unknown'.
+src/app/api/webhooks/orders/route.ts(17,20): error TS2339: Property 'data' does not exist on type 'unknown'.
+src/app/api/wedding-studio/generate/route.ts(53,11): error TS2322: Type 'unknown' is not assignable to type 'WeddingVisualizationParams'.
+src/app/builder/page.tsx(7,33): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/builder/page.tsx(20,30): error TS2304: Cannot find name 'localStorage'.
+src/app/cart/page.tsx(8,67): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/cart/page.tsx(37,21): error TS2322: Type '{ children: (string | Element)[]; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/cart/page.tsx(194,60): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/cart/page.tsx(198,27): error TS2322: Type '{ children: Element; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/cart/page.tsx(217,25): error TS2322: Type '{ children: (string | Element)[]; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/cart/page.tsx(224,25): error TS2322: Type '{ children: string; variant: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/checkout/page.tsx(9,10): error TS2305: Module '"@stripe/stripe-js"' has no exported member 'loadStripe'.
+src/app/checkout/page.tsx(10,54): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/checkout/page.tsx(47,9): error TS2304: Cannot find name 'alert'.
+src/app/checkout/page.tsx(59,17): error TS2339: Property 'name' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/checkout/page.tsx(59,33): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/checkout/page.tsx(312,17): error TS2322: Type '{ children: Element; type: "submit"; size: string; className: string; onClick: (e: FormEvent<Element>) => Promise<void>; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/contact/page.tsx(3,59): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/demo/advanced-commerce/page.tsx(4,41): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/framer-motion/dist/types/index.d.ts' is not a module.
+src/app/demo/advanced-commerce/page.tsx(8,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/demo/advanced-commerce/page.tsx(267,38): error TS2304: Cannot find name 'alert'.
+src/app/demo/advanced-commerce/page.tsx(268,40): error TS2304: Cannot find name 'alert'.
+src/app/demo/advanced-commerce/page.tsx(269,39): error TS2304: Cannot find name 'alert'.
+src/app/demo/knowledge-bank-bundles/page.tsx(4,24): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/framer-motion/dist/types/index.d.ts' is not a module.
+src/app/demo/knowledge-bank-bundles/page.tsx(8,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/demo/knowledge-bank-bundles/page.tsx(157,38): error TS2304: Cannot find name 'alert'.
+src/app/demo/knowledge-bank-bundles/page.tsx(159,39): error TS2304: Cannot find name 'alert'.
+src/app/demo/unified-ai/page.tsx(4,24): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/framer-motion/dist/types/index.d.ts' is not a module.
+src/app/demo/unified-ai/page.tsx(8,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/demo/unified-ai/page.tsx(222,63): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLSelectElement'.
+src/app/dev/test/page.tsx(404,44): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLSelectElement'.
+src/app/dev/test/page.tsx(405,37): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLSelectElement'.
+src/app/live/page.tsx(28,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/locations/page.tsx(4,44): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/locations/page.tsx(154,27): error TS2322: Type '{ children: (string | Element)[]; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/occasions/[occasion]/page.tsx(13,62): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/occasions/[occasion]/page.tsx(221,25): error TS2322: Type '{ children: string; variant: string; onClick: (e: MouseEvent<HTMLButtonElement, MouseEvent>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/occasions/[occasion]/page.tsx(333,21): error TS2322: Type '{ children: (string | Element)[]; size: string; className: string; onClick: () => void; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/occasions/page.tsx(10,28): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/occasions/page.tsx(255,15): error TS2322: Type '{ children: string; size: string; onClick: () => void; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/occasions/page.tsx(292,23): error TS2322: Type '{ children: (string | Element)[]; variant: string; size: string; className: string; onClick: (e: MouseEvent<HTMLButtonElement, MouseEvent>) => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/occasions/page.tsx(399,25): error TS2322: Type '{ children: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/occasions/page.tsx(426,25): error TS2322: Type '{ children: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/occasions/page.tsx(453,25): error TS2322: Type '{ children: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/occasions/page.tsx(476,23): error TS2322: Type '{ children: string; size: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/occasions/page.tsx(480,25): error TS2322: Type '{ children: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(5,69): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/page.tsx(43,25): error TS2322: Type '{ children: (string | Element)[]; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(48,23): error TS2322: Type '{ children: (string | Element)[]; size: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(169,29): error TS2322: Type '{ children: (string | Element)[]; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(175,21): error TS2322: Type '{ children: (string | Element)[]; size: string; variant: string; onClick: () => void; "data-search-trigger": true; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(234,29): error TS2322: Type '{ children: (string | Element)[]; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(259,29): error TS2322: Type '{ children: (string | Element)[]; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(295,25): error TS2322: Type '{ children: (string | Element)[]; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(300,23): error TS2322: Type '{ children: string; size: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(326,23): error TS2322: Type '{ children: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/page.tsx(330,25): error TS2322: Type '{ children: string; size: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/privacy/page.tsx(2,56): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/products/[id]/page.tsx(16,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/products/[id]/page.tsx(21,33): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/framer-motion/dist/types/index.d.ts' is not a module.
+src/app/products/[id]/page.tsx(262,55): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLInputElement'.
+src/app/products/[id]/page.tsx(291,21): error TS2322: Type '{ children: Element; size: string; className: string; onClick: () => void; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/[id]/page.tsx(309,21): error TS2322: Type '{ children: Element; size: string; variant: string; onClick: () => void; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/[id]/page.tsx(316,27): error TS2322: Type '{ children: Element; size: string; variant: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/[id]/page.tsx(322,27): error TS2322: Type '{ children: (string | Element)[]; size: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/[id]/page.tsx(326,27): error TS2322: Type '{ children: (string | Element)[]; size: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/[id]/page.tsx(488,21): error TS2322: Type '{ children: string; variant: string; size: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/[id]/page.tsx(524,27): error TS2322: Type '{ children: (string | Element)[]; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/[id]/page.tsx(558,27): error TS2322: Type '{ children: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/category/[category]/page.tsx(13,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/products/category/[category]/page.tsx(134,17): error TS2322: Type '{ children: string; key: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & BadgeProps'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & BadgeProps'.
+src/app/products/category/[category]/page.tsx(150,17): error TS2322: Type '{ children: (string | false | Element)[]; variant: string; onClick: () => void; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/category/[category]/page.tsx(167,55): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLSelectElement'.
+src/app/products/category/[category]/page.tsx(188,19): error TS2322: Type '{ children: Element; variant: string; size: string; onClick: () => void; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/category/[category]/page.tsx(196,19): error TS2322: Type '{ children: Element; variant: string; size: string; onClick: () => void; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/category/[category]/page.tsx(233,23): error TS2322: Type '{ children: string; variant: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/page.tsx(7,25): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/products/page.tsx(93,19): error TS2322: Type '{ children: string; key: ProductCategory | "all"; variant: string; onClick: () => void; disabled: boolean; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/products/page.tsx(110,53): error TS2339: Property 'value' does not exist on type 'EventTarget & HTMLSelectElement'.
+src/app/prom-collection/page.tsx(22,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/prom-collection/page.tsx(255,46): error TS2322: Type '{ children: string; key: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & BadgeProps'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & BadgeProps'.
+src/app/prom-collection/page.tsx(263,46): error TS2322: Type '{ children: string; key: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & BadgeProps'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & BadgeProps'.
+src/app/prom/guides/page.tsx(6,27): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/prom/page.tsx(7,37): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/prom/videos/page.tsx(295,9): error TS2304: Cannot find name 'navigator'.
+src/app/prom/videos/page.tsx(297,15): error TS2304: Cannot find name 'navigator'.
+src/app/prom/videos/page.tsx(300,19): error TS2304: Cannot find name 'window'.
+src/app/returns/page.tsx(3,73): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/returns/page.tsx(207,25): error TS2322: Type '{ children: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/returns/page.tsx(280,23): error TS2322: Type '{ children: (string | Element)[]; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/shipping/page.tsx(3,61): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/style-quiz/page.tsx(9,27): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/style-quiz/page.tsx(198,23): error TS2322: Type '{ children: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/style-quiz/page.tsx(202,21): error TS2322: Type '{ children: string; size: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/voice-search/page.tsx(19,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/voice-search/page.tsx(110,16): error TS2304: Cannot find name 'window'.
+src/app/voice-search/page.tsx(110,43): error TS2304: Cannot find name 'window'.
+src/app/voice-search/page.tsx(111,8): error TS2304: Cannot find name 'window'.
+src/app/voice-search/page.tsx(223,32): error TS2322: Type '{ children: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & BadgeProps'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & BadgeProps'.
+src/app/voice-search/page.tsx(263,28): error TS2322: Type '{ children: string[]; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & BadgeProps'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & BadgeProps'.
+src/app/voice-search/page.tsx(291,32): error TS2322: Type '{ children: any; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & BadgeProps'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & BadgeProps'.
+src/app/wedding-guide/page.tsx(25,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/wedding-guide/page.tsx(131,30): error TS2322: Type '{ children: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & BadgeProps'.
+  Property 'variant' does not exist on type 'IntrinsicAttributes & BadgeProps'.
+src/app/wedding/page.tsx(10,48): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/wedding/page.tsx(43,23): error TS2322: Type '{ children: (string | Element)[]; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/wedding/page.tsx(48,25): error TS2322: Type '{ children: string; size: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/wedding/page.tsx(216,23): error TS2322: Type '{ children: string; size: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/wedding/page.tsx(219,23): error TS2322: Type '{ children: string; size: string; variant: string; className: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+  Property 'size' does not exist on type 'IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement>'.
+src/app/weddings/collections/page.tsx(7,27): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/weddings/coordination/page.tsx(7,27): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/weddings/page.tsx(8,75): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/weddings/video-lookbook/page.tsx(4,41): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/framer-motion/dist/types/index.d.ts' is not a module.
+src/app/weddings/video-lookbook/page.tsx(24,8): error TS2306: File '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/node_modules/lucide-react/dist/lucide-react.d.ts' is not a module.
+src/app/weddings/video-lookbook/page.tsx(321,57): error TS2812: Property 'currentTime' does not exist on type 'HTMLVideoElement'. Try changing the 'lib' compiler option to include 'dom'.
+src/app/weddings/video-lookbook/page.tsx(322,58): error TS2812: Property 'duration' does not exist on type 'HTMLVideoElement'. Try changing the 'lib' compiler option to include 'dom'.
+src/app/weddings/video-lookbook/page.tsx(325,11): error TS2812: Property 'addEventListener' does not exist on type 'HTMLVideoElement'. Try changing the 'lib' compiler option to include 'dom'.
+src/app/weddings/video-lookbook/page.tsx(326,11): error TS2812: Property 'addEventListener' does not exist on type 'HTMLVideoElement'. Try changing the 'lib' compiler option to include 'dom'.
+src/app/weddings/video-lookbook/page.tsx(327,11): error TS2812: Property 'addEventListener' does not exist on type 'HTMLVideoElement'. Try changing the 'lib' compiler option to include 'dom'.
+src/app/weddings/video-lookbook/page.tsx(330,13): error TS2812: Property 'removeEventListener' does not exist on type 'HTMLVideoElement'. Try changing the 'lib' compiler option to include 'dom'.
+=== TOTAL ERROR COUNT ===

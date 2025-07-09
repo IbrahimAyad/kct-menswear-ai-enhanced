@@ -1,35 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
-/* Import Tailwind CSS v4 */
-@import "tailwindcss";
-
-/* Custom color utilities for Tailwind CSS v4 */
-@layer utilities {
-  /* Gold utilities */
-  .bg-gold { background-color: #D4AF37 !important; }
-  .text-gold { color: #D4AF37 !important; }
-  .border-gold { border-color: #D4AF37 !important; }
-  .hover\:bg-gold:hover { background-color: #D4AF37 !important; }
-  .hover\:text-gold:hover { color: #D4AF37 !important; }
-  .hover\:border-gold:hover { border-color: #D4AF37 !important; }
-  
-  /* Gold with opacity */
-  .bg-gold\/10 { background-color: rgb(212 175 55 / 0.1) !important; }
-  .bg-gold\/20 { background-color: rgb(212 175 55 / 0.2) !important; }
-  .bg-gold\/90 { background-color: rgb(212 175 55 / 0.9) !important; }
-  
-  /* Gold shades */
-  .bg-gold-50 { background-color: #F9F6E6 !important; }
-  .bg-gold-100 { background-color: #F3EDCD !important; }
-  .bg-gold-200 { background-color: #E7DB9B !important; }
-  .bg-gold-300 { background-color: #DBC969 !important; }
-  .bg-gold-400 { background-color: #D4AF37 !important; }
-  .bg-gold-500 { background-color: #B8922C !important; }
-  .bg-gold-600 { background-color: #9C7A25 !important; }
-  .bg-gold-700 { background-color: #80621E !important; }
-  .bg-gold-800 { background-color: #644A17 !important; }
-  .bg-gold-900 { background-color: #483210 !important; }
-}
+/* Tailwind CSS v3 Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
@@ -73,18 +47,7 @@
 
 @layer components {
   .btn-primary {
-    background-color: #D4AF37;
-    color: black;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.125rem;
-    font-weight: 600;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-  }
-  
-  .btn-primary:hover {
-    background-color: rgb(212 175 55 / 0.9);
+    @apply bg-gold hover:bg-gold/90 text-black px-6 py-3 rounded-sm font-semibold transition-colors;
   }
   
   .btn-secondary {
