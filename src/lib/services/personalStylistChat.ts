@@ -177,8 +177,8 @@ What would you like to work on today?`,
     // Update the social style matching profile
     await socialStyleMatching.updateCustomerStyleProfile(customerId, {
       explicitPreferences: {
-        colors: preferences.preferredColors,
-        styles: preferences.preferredStyles
+        colors: preferences?.preferredColors,
+        styles: preferences?.preferredStyles
       }
     });
   }
