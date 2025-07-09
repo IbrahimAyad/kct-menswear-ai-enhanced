@@ -348,7 +348,9 @@ export function getReturnRisk(
   recommendations: string[];
 } {
   // Base risk from body type
-  const bodyTypePattern = RETURN_ANALYSIS.body_type_patterns[bodyType];
+  const bodyTypePattern = bodyType in RETURN_ANALYSIS.body_type_patterns
+    ? RETURN_ANALYSIS.body_type_patterns[bodyType as keyof typeof RETURN_ANALYSIS.body_type_patterns]
+    : null;
   let baseRisk = bodyTypePattern?.return_rate || 0.09;
   
   // Adjust for confidence

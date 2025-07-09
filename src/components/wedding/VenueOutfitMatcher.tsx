@@ -46,7 +46,10 @@ export function VenueOutfitMatcher({ onSelect, selectedVenue }: VenueOutfitMatch
   const generateRecommendations = () => {
     if (!venue) return;
 
-    const venueData = venueCompatibility[venue];
+    const venueData = venue in venueCompatibility
+      ? venueCompatibility[venue as keyof typeof venueCompatibility]
+      : null;
+    if (!venueData) return;
     const recs = venueData.idealSuits.map((suit, index) => {
       // Get color coordination data
       const suitColorKey = suit.color.toLowerCase().replace(/\s+/g, '');
@@ -106,8 +109,9 @@ export function VenueOutfitMatcher({ onSelect, selectedVenue }: VenueOutfitMatch
         </h3>
         <div className="grid md:grid-cols-3 gap-4">
           {venues.map((v) => {
-            const Icon = venueIcons[v] || MapPin;
-            const data = venueCompatibility[v];
+            const Icon = v in venueIcons ? venueIcons[v as keyof typeof venueIcons] : MapPin;
+            const data = v in venueCompatibility ? venueCompatibility[v as keyof typeof venueCompatibility] : null;
+            if (!data) return null;
             return (
               <InteractiveCard
                 key={v}

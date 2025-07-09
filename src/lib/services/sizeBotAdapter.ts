@@ -163,12 +163,16 @@ export class SizeBotAdapter {
   
   // Get body type data
   async getBodyTypeInfo(bodyType: string) {
-    const data = BODY_TYPES[bodyType];
+    const data = bodyType in BODY_TYPES 
+      ? BODY_TYPES[bodyType as keyof typeof BODY_TYPES]
+      : null;
     if (!data) return null;
     
     return {
       ...data,
-      returnAnalysis: RETURN_ANALYSIS.body_type_patterns[bodyType]
+      returnAnalysis: bodyType in RETURN_ANALYSIS.body_type_patterns
+        ? RETURN_ANALYSIS.body_type_patterns[bodyType as keyof typeof RETURN_ANALYSIS.body_type_patterns]
+        : undefined
     };
   }
   
@@ -179,7 +183,9 @@ export class SizeBotAdapter {
       name: data.body_type,
       description: data.description,
       frequency: data.characteristics.frequency_in_population,
-      returnRate: RETURN_ANALYSIS.body_type_patterns[key]?.return_rate || 0.09
+      returnRate: key in RETURN_ANALYSIS.body_type_patterns
+        ? RETURN_ANALYSIS.body_type_patterns[key as keyof typeof RETURN_ANALYSIS.body_type_patterns]?.return_rate || 0.09
+        : 0.09
     }));
   }
   
@@ -247,7 +253,9 @@ export class SizeBotAdapter {
   }
   
   private buildRationale(bodyType: string, size: string, fitPreference: string): string {
-    const bodyTypeData = BODY_TYPES[bodyType];
+    const bodyTypeData = bodyType in BODY_TYPES 
+      ? BODY_TYPES[bodyType as keyof typeof BODY_TYPES]
+      : null;
     const approach = bodyTypeData?.sizing_strategy.primary_approach || 'Standard sizing';
     
     let rationale = `Based on your ${bodyType} build, we recommend size ${size}. `;

@@ -561,7 +561,9 @@ class KnowledgeBankAdapter {
       }
     };
     
-    return staticRelationships[suitColor] || null;
+    return suitColor in staticRelationships 
+      ? staticRelationships[suitColor as keyof typeof staticRelationships]
+      : null;
   }
 
   private getStaticStyleProfile(profileType: string): StyleProfile | null {
@@ -627,7 +629,9 @@ class KnowledgeBankAdapter {
       }
     };
     
-    return staticProfiles[profileType] || null;
+    return profileType in staticProfiles
+      ? staticProfiles[profileType as keyof typeof staticProfiles]
+      : null;
   }
 }
 

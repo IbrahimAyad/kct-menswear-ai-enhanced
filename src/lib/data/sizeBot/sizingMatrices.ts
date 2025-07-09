@@ -323,7 +323,9 @@ export function calculateSizeFromMeasurements(
   confidence: number;
   alternativeSize?: string;
 } {
-  const matrices = SIZE_MATRICES[bodyType] || SIZE_MATRICES.regular;
+  const matrices = bodyType in SIZE_MATRICES 
+    ? SIZE_MATRICES[bodyType as keyof typeof SIZE_MATRICES]
+    : SIZE_MATRICES.regular;
   let bestMatch: { size: string; confidence: number } | null = null;
   let secondBestMatch: { size: string; confidence: number } | null = null;
   

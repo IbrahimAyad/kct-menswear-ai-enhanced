@@ -164,8 +164,8 @@ export function FloatingHeart({ onComplete }: { onComplete?: () => void }) {
     <motion.div
       className="fixed pointer-events-none z-50"
       style={{
-        left: Math.random() * window.innerWidth,
-        top: window.innerHeight - 100,
+        left: typeof window !== 'undefined' ? Math.random() * window.innerWidth : 0,
+        top: typeof window !== 'undefined' ? window.innerHeight - 100 : 0,
       }}
       initial={{ y: 0, opacity: 1, scale: 0 }}
       animate={{ 
