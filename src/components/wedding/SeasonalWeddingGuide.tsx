@@ -92,30 +92,39 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
 
   const getFabric = () => {
     if (!currentData) return 'Premium Blend';
-    if ('champion' in currentData) return currentData.champion?.fabric || 'Premium Blend';
-    if ('predicted' in currentData) return currentData.predicted?.fabricInnovation || 'Premium Blend';
+    if ('champion' in currentData && currentData.champion) {
+      return (currentData.champion as any).fabric || 'Premium Blend';
+    }
+    if ('predicted' in currentData && currentData.predicted) {
+      return (currentData.predicted as any).fabricInnovation || 'Premium Blend';
+    }
     return 'Premium Blend';
   };
 
   const getNote = () => {
     if (!currentData) return '';
-    if ('champion' in currentData) return currentData.champion?.note || '';
-    if ('predicted' in currentData && currentData.predicted?.luxuryMaterials) {
-      return `Features ${currentData.predicted.luxuryMaterials}`;
+    if ('champion' in currentData && currentData.champion) {
+      return (currentData.champion as any).note || '';
+    }
+    if ('predicted' in currentData && currentData.predicted) {
+      const predicted = currentData.predicted as any;
+      if (predicted.luxuryMaterials) {
+        return `Features ${predicted.luxuryMaterials}`;
+      }
     }
     return '';
   };
 
   const hasSocialMentions = () => {
-    return currentData && 'champion' in currentData && currentData.champion?.socialMentions;
+    return currentData && 'champion' in currentData && currentData.champion && (currentData.champion as any).socialMentions;
   };
 
   const hasConversionRate = () => {
-    return currentData && 'champion' in currentData && currentData.champion?.conversionRate;
+    return currentData && 'champion' in currentData && currentData.champion && (currentData.champion as any).conversionRate;
   };
 
   const hasSustainabilityFocus = () => {
-    return selectedYear === '2026' && currentData && 'predicted' in currentData && currentData.predicted?.sustainabilityFocus;
+    return selectedYear === '2026' && currentData && 'predicted' in currentData && currentData.predicted && (currentData.predicted as any).sustainabilityFocus;
   };
 
   return (
@@ -234,7 +243,7 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
                   <Users className="w-6 h-6 mx-auto mb-2 text-blue-600" />
                   <p className="text-sm text-gray-600">Social Mentions</p>
                   <p className="font-semibold">
-                    {(currentData && 'champion' in currentData && currentData.champion?.socialMentions || 0).toLocaleString()}
+                    {(currentData && 'champion' in currentData && currentData.champion && (currentData.champion as any).socialMentions || 0).toLocaleString()}
                   </p>
                 </div>
               )}
@@ -243,7 +252,7 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
                   <BarChart3 className="w-6 h-6 mx-auto mb-2 text-green-600" />
                   <p className="text-sm text-gray-600">Conversion Rate</p>
-                  <p className="font-semibold">{currentData && 'champion' in currentData ? currentData.champion?.conversionRate : ''}</p>
+                  <p className="font-semibold">{currentData && 'champion' in currentData && currentData.champion ? (currentData.champion as any).conversionRate : ''}</p>
                 </div>
               )}
 
