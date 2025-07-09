@@ -77,6 +77,15 @@ export default {
           "100%": { transform: "translateX(0)" },
         },
       },
+      backgroundColor: {
+        'gold': '#D4AF37',
+      },
+      textColor: {
+        'gold': '#D4AF37',
+      },
+      borderColor: {
+        'gold': '#D4AF37',
+      },
     },
   },
   plugins: [],

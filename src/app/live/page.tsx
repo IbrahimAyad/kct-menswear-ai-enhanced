@@ -302,16 +302,17 @@ export default function LiveShoppingPage() {
                   </div>
 
                   {event.status === 'live' && (
-                    <SatisfyingButton
-                      className="w-full mt-4"
-                      onClick={(e: any) => {
-                        e.stopPropagation();
-                        setSelectedEvent(event);
-                      }}
-                    >
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <SatisfyingButton
+                        className="w-full mt-4"
+                        onClick={() => {
+                          setSelectedEvent(event);
+                        }}
+                      >
                       <Play className="w-4 h-4 mr-2" />
                       Join Live Event
                     </SatisfyingButton>
+                    </div>
                   )}
                 </InteractiveCard>
               ))}
