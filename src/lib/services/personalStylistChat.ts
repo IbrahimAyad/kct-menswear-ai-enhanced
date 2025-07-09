@@ -167,7 +167,10 @@ What would you like to work on today?`,
 
     context.styleProfile = {
       ...context.styleProfile,
-      ...preferences
+      ...preferences,
+      // Ensure required fields are always arrays
+      preferredColors: preferences.preferredColors || context.styleProfile.preferredColors || [],
+      occasions: preferences.occasions || context.styleProfile.occasions || []
     };
 
     // Update the social style matching profile
