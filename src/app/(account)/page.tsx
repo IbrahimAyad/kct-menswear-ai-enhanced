@@ -16,3 +16,6 @@ export default function AccountPage() {
 
   return null;
 }
+
+// Export to help Next.js build system
+export const dynamic = 'force-dynamic';

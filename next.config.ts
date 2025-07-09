@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Experimental features to fix build issues
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
   // Fix for server external packages
   serverExternalPackages: [],
   images: {
