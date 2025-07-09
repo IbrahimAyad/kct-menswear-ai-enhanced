@@ -234,8 +234,12 @@ export class SizeBotAdapter {
     }
     
     // Add body type specific concerns
-    if (bodyType === 'athletic' && !alterations.includes('waist_suppression')) {
-      suggestions.push('Athletic builds typically need waist suppression');
+    if (bodyType === 'athletic') {
+      suggestions.push('Athletic builds typically benefit from waist suppression alterations');
+    }
+    
+    if (bodyType === 'broad') {
+      suggestions.push('Broad builds may need shoulder adjustments');
     }
     
     return {
