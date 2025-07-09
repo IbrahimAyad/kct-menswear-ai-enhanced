@@ -14,7 +14,13 @@ interface ProductRecommendation {
 }
 
 class FashionClipService {
-  private readonly apiUrl = 'https://fashion-clip-kct-production.up.railway.app';
+  private readonly apiUrl: string;
+  private readonly apiKey: string;
+
+  constructor() {
+    this.apiUrl = process.env.NEXT_PUBLIC_FASHION_CLIP_API || 'https://fashion-clip-kct-production.up.railway.app';
+    this.apiKey = process.env.NEXT_PUBLIC_FASHION_CLIP_KEY || 'kct-menswear-api-2024-secret';
+  }
 
   /**
    * Analyze an image using Fashion CLIP
@@ -26,6 +32,9 @@ class FashionClipService {
 
       const response = await fetch(`${this.apiUrl}/predict`, {
         method: 'POST',
+        headers: {
+          'x-api-key': this.apiKey,
+        },
         body: formData,
       });
 
