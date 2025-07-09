@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { LiveShoppingEvent } from '@/components/live/LiveShoppingEvent';
 import { VideoHeatmap, useVideoAnalytics } from '@/components/analytics/VideoHeatmap';
+import type { StockLevel } from '@/lib/types';
 import { 
   SatisfyingButton, 
   InteractiveCard, 
@@ -49,7 +50,7 @@ const liveEvents = [
         price: 79900,
         images: ['/api/placeholder/400/500'],
         category: 'suits' as const,
-        stock: { '40R': 10 },
+        stock: { '40R': 10 } as StockLevel,
         variants: []
       },
       {
@@ -59,7 +60,7 @@ const liveEvents = [
         price: 5900,
         images: ['/api/placeholder/400/500'],
         category: 'accessories' as const,
-        stock: { 'OS': 25 },
+        stock: { 'OS': 25 } as StockLevel,
         variants: []
       }
     ],
@@ -73,7 +74,7 @@ const liveEvents = [
           price: 79900,
           images: ['/api/placeholder/400/500'],
           category: 'suits' as const,
-          stock: { '40R': 10 },
+          stock: { '40R': 10 } as StockLevel,
           variants: []
         },
         originalPrice: 79900,
