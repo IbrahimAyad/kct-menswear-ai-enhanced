@@ -136,8 +136,8 @@ class UnifiedRecommendationService {
   ): Promise<{
     valid: boolean;
     score: number;
-    warnings: string[];
-    suggestions: string[];
+    warnings?: string[];
+    suggestions?: string[];
   }> {
     // Map colors to knowledge bank format
     const mappedSuit = mapColorToKnowledgeBank(suit);
@@ -150,10 +150,6 @@ class UnifiedRecommendationService {
       mappedShirt,
       mappedTie
     );
-    
-    // Ensure warnings and suggestions are always arrays
-    validation.warnings = validation.warnings || [];
-    validation.suggestions = validation.suggestions || [];
 
     // Get color relationships
     const colorRelations = await knowledgeBankAdapter.getColorRelationships(mappedSuit);
@@ -169,10 +165,12 @@ class UnifiedRecommendationService {
         colorRelations.good_matches.ties.includes(mappedTie);
 
       if (!shirtMatch) {
+        if (!validation.warnings) validation.warnings = [];
         validation.warnings.push(`${shirt} shirt may not be ideal with ${suit} suit`);
       }
 
       if (!tieMatch) {
+        if (!validation.warnings) validation.warnings = [];
         validation.warnings.push(`${tie} tie may not complement ${suit} suit well`);
       }
     }
