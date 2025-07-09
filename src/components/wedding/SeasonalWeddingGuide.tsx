@@ -286,20 +286,20 @@ export function SeasonalWeddingGuide({ selectedSeason, onSelectCombination }: Se
                   <p className="text-sm font-medium text-gray-600">Runner Up</p>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge variant="outline" className="text-xs">
-                      {currentData.runnerUp.suit}
+                      {(currentData as any).runnerUp.suit}
                     </Badge>
                     <span className="text-gray-500">+</span>
                     <Badge variant="outline" className="text-xs">
-                      {currentData.runnerUp.shirt}
+                      {(currentData as any).runnerUp.shirt}
                     </Badge>
                     <span className="text-gray-500">+</span>
                     <Badge variant="outline" className="text-xs">
-                      {currentData.runnerUp.tie}
+                      {(currentData as any).runnerUp.tie}
                     </Badge>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-semibold">{currentData.runnerUp.popularity}%</p>
+                  <p className="text-lg font-semibold">{(currentData as any).runnerUp.popularity}%</p>
                 </div>
               </div>
             </Card>
