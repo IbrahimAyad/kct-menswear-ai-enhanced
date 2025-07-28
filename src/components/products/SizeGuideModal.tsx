@@ -42,9 +42,13 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ onClose, productType = 
     
     setRecommendedSize(`${baseSize}${length}`);
   };
+
+  const modalContentStyle = {
+    maxHeight: 'calc(90vh - 200px)'
+  };
   
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-5xl w-full max-h-[90vh] overflow-hidden">
         <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold">Find Your Perfect Size</h2>
@@ -95,7 +99,7 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ onClose, productType = 
           </div>
         </div>
         
-        <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 200px)' }}>
+        <div className="p-6 overflow-y-auto" style={modalContentStyle}>
           {activeTab === 'chart' && (
             <div className="space-y-8">
               {/* Suit Measurements */}
