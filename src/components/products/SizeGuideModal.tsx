@@ -36,9 +36,9 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ onClose, productType = 
     
     // Determine length
     let length = '';
-    if (height <= 67) length = 'S'; // 5'7" and under
-    else if (height <= 73) length = 'R'; // 5'8" to 6'1"
-    else length = 'L'; // 6'2" and over
+    if (height <= 67) length = 'S'; // 5ft7in and under
+    else if (height <= 73) length = 'R'; // 5ft8in to 6ft1in
+    else length = 'L'; // 6ft2in and over
     
     setRecommendedSize(`${baseSize}${length}`);
   };
@@ -47,9 +47,13 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ onClose, productType = 
     maxHeight: 'calc(90vh - 200px)'
   };
   
+  const modalStyle = {
+    maxHeight: '90vh'
+  };
+  
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-5xl w-full overflow-hidden" style={{ maxHeight: '90vh' }}>
+      <div className="bg-white rounded-lg max-w-5xl w-full overflow-hidden" style={modalStyle}>
         <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
           <h2 className="text-2xl font-bold">Find Your Perfect Size</h2>
           <button
@@ -152,19 +156,19 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ onClose, productType = 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="border rounded-lg p-4">
                     <h4 className="font-medium mb-2">Short (S)</h4>
-                    <p className="text-sm text-gray-600">Height: 5'4" - 5'7"</p>
+                    <p className="text-sm text-gray-600">Height: 5ft4in - 5ft7in</p>
                     <p className="text-sm text-gray-600">Jacket Length: -2 inches</p>
                     <p className="text-sm text-gray-600">Sleeve Length: -1 inch</p>
                   </div>
                   <div className="border rounded-lg p-4 border-black">
                     <h4 className="font-medium mb-2">Regular (R)</h4>
-                    <p className="text-sm text-gray-600">Height: 5'8" - 6'1"</p>
+                    <p className="text-sm text-gray-600">Height: 5ft8in - 6ft1in</p>
                     <p className="text-sm text-gray-600">Jacket Length: Standard</p>
                     <p className="text-sm text-gray-600">Sleeve Length: Standard</p>
                   </div>
                   <div className="border rounded-lg p-4">
                     <h4 className="font-medium mb-2">Long (L)</h4>
-                    <p className="text-sm text-gray-600">Height: 6'2" and above</p>
+                    <p className="text-sm text-gray-600">Height: 6ft2in and above</p>
                     <p className="text-sm text-gray-600">Jacket Length: +2 inches</p>
                     <p className="text-sm text-gray-600">Sleeve Length: +1 inch</p>
                   </div>
@@ -233,7 +237,7 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ onClose, productType = 
                       value={measurements.height}
                       onChange={(e) => setMeasurements({ ...measurements, height: e.target.value })}
                       className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
-                      placeholder="e.g., 70 (5'10\")"
+                      placeholder="e.g., 70 (5ft10in)"
                     />
                   </div>
                   <div>
