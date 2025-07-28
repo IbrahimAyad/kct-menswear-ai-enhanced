@@ -1,23 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
-
-if (!STRIPE_SECRET_KEY) {
-  console.warn("STRIPE_SECRET_KEY not found in environment variables");
-}
-
-const stripe = STRIPE_SECRET_KEY ? new Stripe(STRIPE_SECRET_KEY) : null;
-
 export async function POST(request: NextRequest) {
   try {
-    if (!stripe) {
+    // Initialize Stripe inside the function to ensure env vars are available
+    const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+    
+    if (!STRIPE_SECRET_KEY) {
+      console.error("STRIPE_SECRET_KEY not found in environment variables");
       return NextResponse.json(
-        { error: "Payment processing not configured" },
-        { status: 503 }
+        { error: "Payment configuration error" },
+        { status: 500 }
       );
     }
-
+    
+    const stripe = new Stripe(STRIPE_SECRET_KEY);
+    
     const { amount, metadata } = await request.json();
 
     if (!amount || amount < 50) {

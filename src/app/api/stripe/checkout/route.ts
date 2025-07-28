@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-11-20.acacia',
-});
-
 export async function POST(req: NextRequest) {
   try {
+    // Initialize Stripe inside the function to ensure env vars are available
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error('STRIPE_SECRET_KEY not found in environment variables');
+      return NextResponse.json(
+        { error: 'Payment configuration error' },
+        { status: 500 }
+      );
+    }
+    
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2024-11-20.acacia',
+    });
+    
     const { items, customerEmail } = await req.json();
     
     if (!items || items.length === 0) {
