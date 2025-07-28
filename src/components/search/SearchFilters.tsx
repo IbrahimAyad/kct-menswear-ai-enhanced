@@ -20,7 +20,7 @@ export interface FilterState {
   priceRange: [number, number];
   sizes: string[];
   colors: string[];
-  sortBy: string;
+  sort: string;
 }
 
 const categoryOptions: FilterOption[] = [
@@ -61,7 +61,7 @@ export function SearchFilters({ onFilterChange, productCount = 0 }: SearchFilter
     priceRange: [0, 2000],
     sizes: [],
     colors: [],
-    sortBy: "featured",
+    sort: "featured",
   });
 
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
@@ -111,7 +111,7 @@ export function SearchFilters({ onFilterChange, productCount = 0 }: SearchFilter
       priceRange: [0, 2000],
       sizes: [],
       colors: [],
-      sortBy: "featured",
+      sort: "featured",
     };
     setFilters(clearedFilters);
     onFilterChange(clearedFilters);
@@ -147,8 +147,8 @@ export function SearchFilters({ onFilterChange, productCount = 0 }: SearchFilter
           Sort By
         </label>
         <select
-          value={filters.sortBy}
-          onChange={(e) => handleFilterChange({ sortBy: e.target.value })}
+          value={filters.sort}
+          onChange={(e) => handleFilterChange({ sort: e.target.value })}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-gold focus:border-gold"
         >
           {sortOptions.map((option) => (
