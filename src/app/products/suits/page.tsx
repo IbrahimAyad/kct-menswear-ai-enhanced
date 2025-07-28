@@ -125,9 +125,6 @@ export default function SuitsPage() {
                         height={400}
                         className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                        onError={(e) => {
-                          e.currentTarget.src = '/placeholder-suit.jpg';
-                        }}
                       />
                     </div>
                     <h3 className="font-medium text-lg mb-1">{suit.name}</h3>
