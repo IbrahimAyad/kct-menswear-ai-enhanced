@@ -9,6 +9,7 @@ import { formatPrice, getSizeLabel } from "@/lib/utils/format";
 import { cn } from "@/lib/utils/cn";
 import Image from "next/image";
 import Link from "next/link";
+import { CheckoutButton } from "@/components/cart/CheckoutButton";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -178,16 +179,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </div>
               
               <div className="space-y-2">
-                <Button 
-                  className="w-full" 
-                  size="lg"
-                  onClick={() => {
-                    onClose();
-                    // Navigate to checkout
-                  }}
-                >
-                  Checkout
-                </Button>
+                <CheckoutButton />
                 <Button 
                   variant="outline" 
                   className="w-full" 
