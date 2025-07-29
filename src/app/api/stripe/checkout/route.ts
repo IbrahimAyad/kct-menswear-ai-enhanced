@@ -13,10 +13,20 @@ export async function POST(req: NextRequest) {
     }
     
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2024-11-20.acacia',
+      apiVersion: '2024-10-28.acacia',
     });
     
     const { items, customerEmail } = await req.json();
+    
+    console.log('Checkout request received:', { 
+      itemsCount: items?.length, 
+      customerEmail,
+      items: items?.map((item: any) => ({
+        stripePriceId: item.stripePriceId,
+        quantity: item.quantity,
+        name: item.name
+      }))
+    });
     
     if (!items || items.length === 0) {
       return NextResponse.json(
@@ -78,6 +88,8 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error('Checkout error:', error);
+    console.error('Error details:', error instanceof Error ? error.message : 'Unknown error');
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack');
     return NextResponse.json(
       { error: 'Checkout failed', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
