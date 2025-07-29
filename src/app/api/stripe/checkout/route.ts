@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
 export async function POST(req: NextRequest) {
+  console.log('=== CHECKOUT API CALLED ===');
+  console.log('Timestamp:', new Date().toISOString());
+  console.log('Environment check:', {
+    hasStripeKey: !!process.env.STRIPE_SECRET_KEY,
+    stripeKeyPrefix: process.env.STRIPE_SECRET_KEY?.substring(0, 10)
+  });
+  
   try {
     // Initialize Stripe inside the function to ensure env vars are available
     if (!process.env.STRIPE_SECRET_KEY) {
@@ -52,6 +59,12 @@ export async function POST(req: NextRequest) {
       price: item.price,
       stripePriceId: item.stripePriceId,
     }));
+    
+    console.log('About to create Stripe session with config:', {
+      lineItemsCount: lineItems.length,
+      firstLineItem: lineItems[0],
+      origin: req.headers.get('origin')
+    });
     
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
