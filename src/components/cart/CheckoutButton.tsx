@@ -10,7 +10,7 @@ import { stripeProducts } from '@/lib/services/stripeProductService';
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export function CheckoutButton() {
-  const { items, cartSummary } = useCart();
+  const { items, cartSummary, clearCart } = useCart();
   const { products } = useProductStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -110,7 +110,6 @@ export function CheckoutButton() {
       const { sessionId, url } = await response.json();
       
       // Clear cart before redirecting (to prevent stale data on return)
-      const { clearCart } = useCart.getState();
       clearCart();
       
       // Redirect to Stripe Checkout
