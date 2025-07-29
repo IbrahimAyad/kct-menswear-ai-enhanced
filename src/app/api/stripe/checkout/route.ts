@@ -85,6 +85,14 @@ export async function POST(req: NextRequest) {
       mode: 'payment',
       success_url: `${req.headers.get('origin')}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get('origin')}/cart`,
+      shipping_address_collection: {
+        allowed_countries: ['US', 'CA'],
+      },
+      shipping_options: [
+        {
+          shipping_rate: 'shr_1Rq49FCHc12x7sCzaNB3IohF',
+        },
+      ],
       metadata: {
         order_details: JSON.stringify(orderDetails),
       },
