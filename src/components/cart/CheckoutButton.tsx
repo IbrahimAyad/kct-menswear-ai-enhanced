@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { useCart } from '@/lib/hooks/useCart';
+import { useCartStore } from '@/lib/store/cartStore';
 import { useProductStore } from '@/lib/store/productStore';
 import { stripeProducts } from '@/lib/services/stripeProductService';
 
@@ -106,6 +107,10 @@ export function CheckoutButton() {
       }
       
       const { sessionId, url } = await response.json();
+      
+      // Clear cart before redirecting (to prevent stale data on return)
+      const { clearCart } = useCart.getState();
+      clearCart();
       
       // Redirect to Stripe Checkout
       if (url) {
