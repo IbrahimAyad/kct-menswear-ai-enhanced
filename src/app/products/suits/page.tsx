@@ -1,8 +1,7 @@
-import Link from 'next/link';
-import Image from 'next/image';
 import { stripeProducts } from '@/lib/services/stripeProductService';
 import { getSuitImages } from '@/lib/data/suitImages';
 import { Filter, ChevronDown } from 'lucide-react';
+import SuitCard from '@/components/products/SuitCard';
 
 export const metadata = {
   title: 'Premium Men\'s Suits - 2 & 3 Piece | KCT Menswear',
@@ -112,31 +111,7 @@ export default function SuitsPage() {
               {suits
                 .filter(suit => colors.includes(suit.color))
                 .map((suit) => (
-                  <Link
-                    key={suit.id}
-                    href={`/products/suits/${suit.id}`}
-                    className="group"
-                  >
-                    <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-4">
-                      <Image
-                        src={suit.image || '/placeholder-suit.jpg'}
-                        alt={suit.name}
-                        width={300}
-                        height={400}
-                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                      />
-                    </div>
-                    <h3 className="font-medium text-lg mb-1">{suit.name}</h3>
-                    <div className="flex items-baseline space-x-2">
-                      <span className="text-sm text-gray-600">From</span>
-                      <span className="font-semibold">${suit.twoPiecePrice}</span>
-                    </div>
-                    <div className="mt-2 flex space-x-2">
-                      <span className="text-xs bg-gray-100 px-2 py-1 rounded">2-Piece</span>
-                      <span className="text-xs bg-gray-100 px-2 py-1 rounded">3-Piece</span>
-                    </div>
-                  </Link>
+                  <SuitCard key={suit.id} suit={suit} />
                 ))}
             </div>
           </div>

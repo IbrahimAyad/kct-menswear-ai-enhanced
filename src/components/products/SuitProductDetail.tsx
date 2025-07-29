@@ -27,8 +27,7 @@ export default function SuitProductDetail({ color, suitData }: SuitProductDetail
   const [showSizeError, setShowSizeError] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isZoomed, setIsZoomed] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [imageError, setImageError] = useState(false);
   
   // Product details
   const productName = `${color.charAt(0).toUpperCase() + color.slice(1).replace(/([A-Z])/g, ' $1')} Suit`;
@@ -80,12 +79,6 @@ export default function SuitProductDetail({ color, suitData }: SuitProductDetail
     setTimeout(() => setAddedToCart(false), 3000);
   };
   
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePosition({ x, y });
-  };
   
   // Trust badges data
   const trustBadges = [
@@ -120,37 +113,17 @@ export default function SuitProductDetail({ color, suitData }: SuitProductDetail
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image Gallery */}
           <div className="space-y-4">
-            {/* Main Image with Zoom */}
-            <div 
-              className="relative aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden cursor-zoom-in"
-              onMouseEnter={() => setIsZoomed(true)}
-              onMouseLeave={() => setIsZoomed(false)}
-              onMouseMove={handleMouseMove}
-            >
+            {/* Main Image */}
+            <div className="relative aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
               <Image
-                src={images[currentImageIndex] || '/placeholder-suit.jpg'}
+                src={imageError ? '/placeholder-suit.jpg' : (images[currentImageIndex] || '/placeholder-suit.jpg')}
                 alt={`${productName} - View ${currentImageIndex + 1}`}
                 fill
                 className="object-cover"
                 priority
                 sizes="(max-width: 768px) 100vw, 50vw"
-                onError={(e) => {
-                  e.currentTarget.src = '/placeholder-suit.jpg';
-                }}
+                onError={() => setImageError(true)}
               />
-              
-              {/* Zoom Window */}
-              {isZoomed && (
-                <div 
-                  className="absolute inset-0 overflow-hidden"
-                  style={{
-                    backgroundImage: `url(${images[currentImageIndex]})`,
-                    backgroundPosition: `${mousePosition.x}% ${mousePosition.y}%`,
-                    backgroundSize: '200%',
-                    backgroundRepeat: 'no-repeat',
-                  }}
-                />
-              )}
               
               {/* Navigation Arrows */}
               <button
