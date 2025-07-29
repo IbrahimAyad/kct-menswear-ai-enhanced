@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import SuitProductDetail from '@/components/products/SuitProductDetail';
+import EnhancedSuitProductDetail from '@/components/products/EnhancedSuitProductDetail';
 import { stripeProducts } from '@/lib/services/stripeProductService';
 
 // Generate metadata for SEO
@@ -48,5 +48,5 @@ export default function SuitProductPage({ params }: { params: { id: string } }) 
   
   const [color, suitData] = suitEntry;
   
-  return <SuitProductDetail color={color} suitData={suitData} />;
+  return <EnhancedSuitProductDetail color={color} suitData={suitData} />;
 }
