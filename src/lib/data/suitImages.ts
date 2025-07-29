@@ -69,11 +69,11 @@ export const suitImages = {
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/beige/beige-main.jpg`,
   },
   brown: {
-    main: `${R2_BASE_URL}/kct-prodcuts/suits/brown/main.jpg`,
+    main: `${R2_BASE_URL}/kct-prodcuts/suits/brown/dark-brown-main.jpg`,
     gallery: [
-      `${R2_BASE_URL}/kct-prodcuts/suits/brown/main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/brown/dark-brown-main.jpg`,
     ],
-    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/brown/main.jpg`,
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/brown/dark-brown-main.jpg`,
   },
   darkBrown: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/dark-brown/brown-main.jpg`,
@@ -83,21 +83,23 @@ export const suitImages = {
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/dark-brown/brown-main.jpg`,
   },
   burgundy: {
-    main: `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/burgundy-main.jpg`,
+    main: `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/two-peice-main-bur.jpg`,
     gallery: [
-      `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/burgundy-main.jpg`,
-      `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/burgundy-main-2.jpg`,
-      `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/burgundy-main-3.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/two-peice-main-bur.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/three-peice-burgundy-main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/vest+tie+pants+bur.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/vest-tie-main-2.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/vest-tie-main.jpg`,
     ],
-    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/burgundy-main.jpg`,
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/two-peice-main-bur.jpg`,
   },
   emerald: {
-    main: `${R2_BASE_URL}/kct-prodcuts/suits/emerald/emerlad-main.jpg`,
+    main: `${R2_BASE_URL}/kct-prodcuts/suits/emerlad/emerlad-main.jpg`,
     gallery: [
-      `${R2_BASE_URL}/kct-prodcuts/suits/emerald/emerlad-main.jpg`,
-      `${R2_BASE_URL}/kct-prodcuts/suits/emerald/emerland-main-2.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/emerlad/emerlad-main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/emerlad/emerland-main-2.jpg`,
     ],
-    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/emerald/emerlad-main.jpg`,
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/emerlad/emerlad-main.jpg`,
   },
   hunterGreen: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/hunter-green/hunter-main.jpg`,
@@ -119,7 +121,7 @@ export const suitImages = {
     gallery: [
       `${R2_BASE_URL}/kct-prodcuts/suits/indigo/indigo-main.jpg`,
       `${R2_BASE_URL}/kct-prodcuts/suits/indigo/indigo-main-2.jpg`,
-      `${R2_BASE_URL}/kct-prodcuts/suits/indigo/indio-on-main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/indigo/indigo-on-main.jpg`,
       `${R2_BASE_URL}/kct-prodcuts/suits/indigo/shirt-tie-indigo-main.jpg`,
       `${R2_BASE_URL}/kct-prodcuts/suits/indigo/shirt-tie-indir-main.jpg`,
       `${R2_BASE_URL}/kct-prodcuts/suits/indigo/vest-tie-indigo-main.jpg`,
