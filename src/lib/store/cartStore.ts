@@ -85,16 +85,26 @@ export const useCartStore = create<CartStore>()(
         return items.reduce((total, item) => total + item.quantity, 0);
       },
 
-      getTotalPrice: (products: Product[]) => {
+      getTotalPrice: (products?: Product[]) => {
         const { items } = get();
         return items.reduce((total, item) => {
-          const product = products.find((p) => p.id === item.productId);
-          if (!product) return total;
+          // Use the price stored on the cart item first
+          if (item.price) {
+            return total + item.price * item.quantity;
+          }
           
-          const variant = product.variants.find((v) => v.size === item.size);
-          const price = variant?.price || product.price;
+          // Fallback to product lookup if no price on item
+          if (products) {
+            const product = products.find((p) => p.id === item.productId);
+            if (!product) return total;
+            
+            const variant = product.variants?.find((v) => v.size === item.size);
+            const price = variant?.price || product.price;
+            
+            return total + price * item.quantity;
+          }
           
-          return total + price * item.quantity;
+          return total;
         }, 0);
       },
 

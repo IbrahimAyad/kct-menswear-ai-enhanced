@@ -3,6 +3,7 @@ import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
 import { Providers } from "@/components/providers/Providers";
 import { AIStyleAssistant } from "@/components/ai/AIStyleAssistant";
+import { SimpleCartDrawer } from "@/components/cart/SimpleCartDrawer";
 
 export const metadata: Metadata = {
   title: "KCT Menswear - Premium Men's Formal Wear",
@@ -29,6 +30,7 @@ export default function RootLayout({
             {children}
           </main>
           <AIStyleAssistant />
+          <SimpleCartDrawer />
         </Providers>
       </body>
     </html>

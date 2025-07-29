@@ -76,7 +76,8 @@ export function Navigation() {
                 <User className="h-5 w-5" />
               </Button>
             </Link>
-            <Button 
+            {/* Cart button disabled - using SimpleCartDrawer instead */}
+            {/* <Button 
               variant="ghost" 
               size="icon"
               className="relative hover:text-gold transition-colors"
@@ -88,7 +89,7 @@ export function Navigation() {
                   {cartSummary.itemCount}
                 </span>
               )}
-            </Button>
+            </Button> */}
             <Button className="bg-black hover:bg-gray-900 text-white px-6 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
               Book Appointment
             </Button>
@@ -131,7 +132,8 @@ export function Navigation() {
                 Account
               </Button>
             </Link>
-            <Button 
+            {/* Mobile cart button disabled - using SimpleCartDrawer instead */}
+            {/* <Button 
               variant="outline" 
               className="w-full relative border-gold/20 hover:bg-gold/10 hover:border-gold transition-all duration-200"
               onClick={() => {
@@ -144,15 +146,15 @@ export function Navigation() {
               {cartSummary.itemCount > 0 && (
                 <span className="ml-1">({cartSummary.itemCount})</span>
               )}
-            </Button>
+            </Button> */}
             <Button className="w-full bg-gold hover:bg-gold/90 text-black font-semibold shadow-md">Book Appointment</Button>
           </div>
         </div>
       </div>
     </nav>
     
-    {/* Cart Drawer */}
-    <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+    {/* Cart Drawer - Disabled in favor of SimpleCartDrawer */}
+    {/* <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} /> */}
     </>
   );
 }

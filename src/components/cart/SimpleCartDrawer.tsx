@@ -27,7 +27,7 @@ export function SimpleCartDrawer() {
       {/* Cart Drawer */}
       {isOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setIsOpen(false)} />
+          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsOpen(false)} />
           <div className="absolute right-0 top-0 h-full w-96 bg-white shadow-xl">
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold">Shopping Cart ({items.length})</h2>
@@ -37,8 +37,8 @@ export function SimpleCartDrawer() {
             </div>
             
             <div className="p-4 space-y-4 max-h-96 overflow-y-auto">
-              {items.map((item, index) => (
-                <div key={index} className="border-b pb-4">
+              {items.map((item) => (
+                <div key={`${item.productId}-${item.size}`} className="border-b pb-4">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
                       <h3 className="font-medium">{item.name || `Product ${item.productId}`}</h3>
