@@ -69,11 +69,12 @@ export const suitImages = {
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/beige/beige-main.jpg`,
   },
   brown: {
-    main: `${R2_BASE_URL}/kct-prodcuts/suits/brown/dark-brown-main.jpg`,
+    main: `${R2_BASE_URL}/kct-prodcuts/suits/brown/brown-suit-main.jpg`,
     gallery: [
-      `${R2_BASE_URL}/kct-prodcuts/suits/brown/dark-brown-main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/brown/brown-suit-main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/brown/brown-suit-.jpg`,
     ],
-    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/brown/dark-brown-main.jpg`,
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/brown/brown-suit-main.jpg`,
   },
   darkBrown: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/dark-brown/brown-main.jpg`,
