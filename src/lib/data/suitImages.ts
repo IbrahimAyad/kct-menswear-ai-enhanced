@@ -27,11 +27,13 @@ export const suitImages = {
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/navy/navy-main-2.jpg`,
   },
   charcoalGrey: {
-    main: `${R2_BASE_URL}/kct-prodcuts/suits/charcoal-grey/charcoal-main.jpg`,
+    main: `${R2_BASE_URL}/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg`,
     gallery: [
-      `${R2_BASE_URL}/kct-prodcuts/suits/charcoal-grey/charcoal-main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/char%20grey/dark-grey-main-.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/char%20grey/vest-tie-dark-grey.jpg`,
     ],
-    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/charcoal-grey/charcoal-main.jpg`,
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg`,
   },
   lightGrey: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/light-grey/main.jpg`,
