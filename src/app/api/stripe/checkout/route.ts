@@ -60,25 +60,8 @@ export async function POST(req: NextRequest) {
       mode: 'payment',
       success_url: `${req.headers.get('origin')}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get('origin')}/cart`,
-      customer_email: customerEmail,
-      shipping_address_collection: {
-        allowed_countries: ['US', 'CA'],
-      },
-      automatic_tax: {
-        enabled: true,
-      },
       metadata: {
         order_details: JSON.stringify(orderDetails),
-      },
-      // Add phone number collection for customer service
-      phone_number_collection: {
-        enabled: true,
-      },
-      // Add customer creation for future purchases
-      customer_creation: 'if_required',
-      // Add invoice creation
-      invoice_creation: {
-        enabled: true,
       },
     });
     
