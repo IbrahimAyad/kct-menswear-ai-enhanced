@@ -157,7 +157,8 @@ export default function SuitProductDetail({ color, suitData }: SuitProductDetail
                     height={133}
                     className="object-cover w-full h-full"
                     onError={(e) => {
-                      e.currentTarget.src = '/placeholder-suit.jpg';
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder-suit.jpg';
                     }}
                   />
                 </button>
@@ -414,7 +415,8 @@ export default function SuitProductDetail({ color, suitData }: SuitProductDetail
                   height={400}
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
-                    e.currentTarget.src = '/placeholder-shirt.jpg';
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder-shirt.jpg';
                   }}
                 />
               </div>
@@ -432,7 +434,8 @@ export default function SuitProductDetail({ color, suitData }: SuitProductDetail
                   height={400}
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
-                    e.currentTarget.src = '/placeholder-tie.jpg';
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder-tie.jpg';
                   }}
                 />
               </div>
@@ -450,7 +453,8 @@ export default function SuitProductDetail({ color, suitData }: SuitProductDetail
                   height={400}
                   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
                   onError={(e) => {
-                    e.currentTarget.src = '/placeholder-shoes.jpg';
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder-shoes.jpg';
                   }}
                 />
               </div>

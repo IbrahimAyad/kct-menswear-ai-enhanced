@@ -33,8 +33,14 @@ export default function SuitsPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="relative h-[40vh] bg-gray-900 flex items-center justify-center">
-        <div className="absolute inset-0 bg-black/40" />
+      <div className="relative h-[40vh] bg-gray-900 flex items-center justify-center overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&q=80)',
+          }}
+        />
+        <div className="absolute inset-0 bg-black/50" />
         <div className="relative z-10 text-center text-white">
           <h1 className="text-5xl font-bold mb-4">Premium Men's Suits</h1>
           <p className="text-xl">Expertly Tailored • Perfect Fit • 14 Colors Available</p>
