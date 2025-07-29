@@ -1,7 +1,7 @@
 import { stripeProducts } from '@/lib/services/stripeProductService';
 import { getSuitImages } from '@/lib/data/suitImages';
 import { Filter, ChevronDown } from 'lucide-react';
-import OptimizedSuitCard from '@/components/products/OptimizedSuitCard';
+import SuitCard from '@/components/products/SuitCard';
 
 export const metadata = {
   title: 'Premium Men\'s Suits - 2 & 3 Piece | KCT Menswear',
@@ -117,7 +117,7 @@ export default function SuitsPage() {
               {suits
                 .filter(suit => colors.includes(suit.color))
                 .map((suit) => (
-                  <OptimizedSuitCard key={suit.id} suit={suit} />
+                  <SuitCard key={suit.id} suit={suit} />
                 ))}
             </div>
           </div>
