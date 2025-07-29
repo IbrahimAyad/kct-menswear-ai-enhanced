@@ -110,11 +110,14 @@ export const suitImages = {
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/hunter-green/hunter-main.jpg`,
   },
   midnightBlue: {
-    main: `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/main.jpg`,
+    main: `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/midnight-blue-main.jpg`,
     gallery: [
-      `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/midnight-blue-main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/midnight-blue-two-main.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/midnight-blue-main-open.jpg`,
+      `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/vest-tie-main.jpg`,
     ],
-    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/main.jpg`,
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/midnight-blue-main.jpg`,
   },
   indigo: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/indigo/indigo-main.jpg`,
