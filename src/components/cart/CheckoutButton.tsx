@@ -103,7 +103,8 @@ export function CheckoutButton() {
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Checkout failed');
+        console.error('Checkout API error response:', errorData);
+        throw new Error(errorData.error || errorData.details || 'Checkout failed');
       }
       
       const { sessionId, url } = await response.json();
