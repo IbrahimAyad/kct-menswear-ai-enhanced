@@ -66,11 +66,17 @@ export function CheckoutButton() {
           } as any;
         }
         
-        if (!product) throw new Error(`Product ${item.productId} not found`);
+        if (!product) {
+          console.error('Cart item:', item);
+          console.error('Available products:', products.length);
+          throw new Error(`Product ${item.productId} not found`);
+        }
         
         const stripePriceId = item.metadata?.stripePriceId || getStripePriceId(product);
         if (!stripePriceId) {
-          throw new Error(`No Stripe price found for ${product.name}`);
+          console.error('Product metadata:', product.metadata);
+          console.error('Item metadata:', item.metadata);
+          throw new Error(`No Stripe price found for ${product.name}. Please clear your cart and add items again.`);
         }
         
         return {
