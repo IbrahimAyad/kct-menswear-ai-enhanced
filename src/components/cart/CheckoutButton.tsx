@@ -51,10 +51,24 @@ export function CheckoutButton() {
     try {
       // Prepare cart items for checkout
       const checkoutItems = items.map(item => {
-        const product = products.find(p => p.id === item.productId);
+        // Try to find product in store first
+        let product = products.find(p => p.id === item.productId);
+        
+        // If not in store, use the cart item data directly
+        if (!product && item.metadata) {
+          product = {
+            id: item.productId,
+            name: item.name,
+            price: item.price,
+            category: 'suits',
+            metadata: item.metadata,
+            color: item.metadata.suitColor,
+          } as any;
+        }
+        
         if (!product) throw new Error(`Product ${item.productId} not found`);
         
-        const stripePriceId = getStripePriceId(product);
+        const stripePriceId = item.metadata?.stripePriceId || getStripePriceId(product);
         if (!stripePriceId) {
           throw new Error(`No Stripe price found for ${product.name}`);
         }
@@ -62,11 +76,11 @@ export function CheckoutButton() {
         return {
           stripePriceId,
           quantity: item.quantity,
-          name: product.name,
+          name: item.name || product.name,
           selectedSize: item.size,
-          selectedColor: product.color || 'default',
+          selectedColor: item.metadata?.suitColor || product.color || 'default',
           id: product.id,
-          price: product.price,
+          price: item.price || product.price,
         };
       });
       

@@ -8,6 +8,9 @@ export interface Product {
   category: ProductCategory;
   stock: StockLevel;
   variants: ProductVariant[];
+  color?: string;
+  description?: string;
+  metadata?: any;
 }
 
 export type ProductCategory = 'suits' | 'shirts' | 'accessories' | 'shoes';
@@ -51,6 +54,11 @@ export interface CartItem {
   quantity: number;
   size: string;
   customizations?: Customization[];
+  // Additional fields for checkout
+  name?: string;
+  price?: number;
+  image?: string;
+  metadata?: any;
 }
 
 // Style Types
