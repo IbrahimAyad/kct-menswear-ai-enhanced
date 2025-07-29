@@ -43,10 +43,22 @@ export async function POST(req: NextRequest) {
     }
     
     // Build line items with metadata
-    const lineItems = items.map((item: any) => ({
-      price: item.stripePriceId,
-      quantity: item.quantity,
-    }));
+    const lineItems = items.map((item: any) => {
+      console.log('Processing line item:', {
+        stripePriceId: item.stripePriceId,
+        quantity: item.quantity,
+        name: item.name
+      });
+      
+      if (!item.stripePriceId) {
+        throw new Error(`Missing stripePriceId for item: ${item.name || item.id}`);
+      }
+      
+      return {
+        price: item.stripePriceId,
+        quantity: item.quantity,
+      };
+    });
     
     // Store detailed order information in metadata
     const orderDetails = items.map((item: any) => ({
