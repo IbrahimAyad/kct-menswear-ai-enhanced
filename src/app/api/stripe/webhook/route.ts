@@ -138,6 +138,43 @@ export async function POST(req: NextRequest) {
         break;
       }
 
+      case 'charge.refunded': {
+        const charge = event.data.object as Stripe.Charge;
+        console.log('Charge refunded:', charge.id);
+        console.log('Amount refunded:', charge.amount_refunded);
+        console.log('Refund reason:', charge.refunds?.data[0]?.reason || 'No reason provided');
+        // TODO: Update order status in database
+        // TODO: Send refund notification email
+        break;
+      }
+
+      case 'refund.created': {
+        const refund = event.data.object as Stripe.Refund;
+        console.log('Refund created:', refund.id);
+        console.log('Amount:', refund.amount);
+        console.log('Charge ID:', refund.charge);
+        console.log('Reason:', refund.reason || 'No reason provided');
+        break;
+      }
+
+      case 'refund.updated': {
+        const refund = event.data.object as Stripe.Refund;
+        console.log('Refund updated:', refund.id);
+        console.log('Status:', refund.status);
+        break;
+      }
+
+      case 'charge.updated': {
+        const charge = event.data.object as Stripe.Charge;
+        console.log('Charge updated:', charge.id);
+        console.log('Status:', charge.status);
+        if (charge.refunded) {
+          console.log('Charge has been refunded');
+          console.log('Amount refunded:', charge.amount_refunded);
+        }
+        break;
+      }
+
       default:
         console.log(`Unhandled event type: ${event.type}`);
     }
