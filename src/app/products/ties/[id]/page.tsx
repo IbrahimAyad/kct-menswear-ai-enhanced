@@ -17,11 +17,11 @@ interface BundleItem {
 
 export default function TieProductPage() {
   const params = useParams();
-  const slug = params.slug as string;
+  const id = params.id as string;
   const { addItem } = useCart();
   
-  // Parse slug (e.g., "navy-bowtie" -> color: navy, style: bowtie)
-  const [colorId, styleId] = slug.split('-');
+  // Parse id (e.g., "navy-bowtie" -> color: navy, style: bowtie)
+  const [colorId, styleId] = id.split('-');
   const colorData = getTieColorById(colorId);
   const styleData = tieProducts.styles[styleId as keyof typeof tieProducts.styles];
   
