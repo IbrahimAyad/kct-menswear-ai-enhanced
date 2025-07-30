@@ -15,8 +15,8 @@ export const stripeProducts = {
     },
     black: { 
       productId: 'prod_SlRxbBl5ZnnoDy', 
-      twoPiece: 'price_1Rpv3cCHc12x7sCzLtiatn73', 
-      threePiece: 'price_1Rpv3iCHc12x7sCzJYg14SL8' 
+      twoPiece: 'price_1RqeTbCHc12x7sCzWJsI2iDF', 
+      threePiece: 'price_1Rf2leCHc12x7sCze2X4icnL' 
     },
     charcoalGrey: { 
       productId: 'prod_SlRy6SLQKpwQfz', 
