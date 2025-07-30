@@ -5,6 +5,9 @@ import Stripe from 'stripe';
 export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
+  console.log('=== WEBHOOK RECEIVED at /api/webhooks/stripe ===');
+  console.log('Timestamp:', new Date().toISOString());
+  
   // Initialize Stripe inside the function to ensure env vars are available
   if (!process.env.STRIPE_SECRET_KEY) {
     console.error('STRIPE_SECRET_KEY not found in environment variables');
@@ -14,8 +17,16 @@ export async function POST(req: NextRequest) {
     );
   }
   
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error('STRIPE_WEBHOOK_SECRET not found');
+    return NextResponse.json(
+      { error: 'Webhook secret not configured' },
+      { status: 500 }
+    );
+  }
+  
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: '2024-11-20.acacia',
+    apiVersion: '2024-10-28.acacia',
   });
   
   const body = await req.text();
@@ -99,6 +110,38 @@ export async function POST(req: NextRequest) {
     case 'payment_intent.payment_failed': {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
       console.log('Payment failed:', paymentIntent.id);
+      break;
+    }
+    
+    case 'charge.refunded': {
+      const charge = event.data.object as Stripe.Charge;
+      console.log('Charge refunded:', charge.id);
+      console.log('Amount refunded:', charge.amount_refunded);
+      // TODO: Update order status in database
+      break;
+    }
+
+    case 'refund.created': {
+      const refund = event.data.object as Stripe.Refund;
+      console.log('Refund created:', refund.id);
+      console.log('Amount:', refund.amount);
+      console.log('Reason:', refund.reason || 'No reason provided');
+      break;
+    }
+
+    case 'refund.updated': {
+      const refund = event.data.object as Stripe.Refund;
+      console.log('Refund updated:', refund.id);
+      console.log('Status:', refund.status);
+      break;
+    }
+
+    case 'charge.updated': {
+      const charge = event.data.object as Stripe.Charge;
+      console.log('Charge updated:', charge.id);
+      if (charge.refunded) {
+        console.log('Charge has been refunded');
+      }
       break;
     }
     
