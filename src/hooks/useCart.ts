@@ -7,10 +7,12 @@ interface CartItemData {
   image: string;
   quantity: number;
   stripePriceId: string;
+  stripeProductId?: string;
   selectedColor?: string;
   selectedSize?: string;
   category?: string;
   bundleId?: string;
+  metadata?: Record<string, any>;
 }
 
 export function useCart() {
@@ -24,10 +26,24 @@ export function useCart() {
       price: item.price,
       images: [item.image],
       stripePriceId: item.stripePriceId,
+      stripeProductId: item.stripeProductId,
       category: item.category || 'ties',
       color: item.selectedColor,
-      bundleId: item.bundleId
+      bundleId: item.bundleId,
+      metadata: {
+        ...item.metadata,
+        stripePriceId: item.stripePriceId,
+        stripeProductId: item.stripeProductId,
+        category: item.category,
+      }
     } as any;
+    
+    console.log('Adding to cart:', {
+      name: item.name,
+      stripePriceId: item.stripePriceId,
+      category: item.category,
+      metadata: product.metadata
+    });
 
     store.addItem(product, item.selectedSize || '', item.quantity);
   };

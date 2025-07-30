@@ -51,9 +51,15 @@ export default function DressShirtProductPage() {
       image: colorData.imageUrl,
       quantity: quantity,
       stripePriceId: currentFitData.priceId,
+      stripeProductId: currentFitData.productId,
       selectedColor: colorData.name,
       selectedSize: selectedSize,
-      category: 'dress-shirts'
+      category: 'dress-shirts',
+      metadata: {
+        color: colorData.name,
+        fit: currentFitData.name,
+        size: selectedSize
+      }
     });
 
     setAddedToCart(true);

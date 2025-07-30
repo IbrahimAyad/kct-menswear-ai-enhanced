@@ -22,6 +22,11 @@ export function CheckoutButton() {
       return product.metadata.stripePriceId;
     }
     
+    // Also check direct stripePriceId property
+    if (product.stripePriceId) {
+      return product.stripePriceId;
+    }
+    
     // Check if it's a suit
     const category = product.category?.toLowerCase();
     
@@ -37,6 +42,16 @@ export function CheckoutButton() {
         // Check if it's 2-piece or 3-piece
         const is3Piece = product.name.includes('3 Piece') || product.metadata?.suitType === 'threePiece';
         return is3Piece ? suitData.threePiece : suitData.twoPiece;
+      }
+    }
+    
+    // Check if it's a dress shirt
+    if (category === 'dress-shirts') {
+      // Dress shirts have fixed price IDs based on fit
+      if (product.name.includes('Slim Cut')) {
+        return 'price_1RpvWnCHc12x7sCzzioA64qD';
+      } else if (product.name.includes('Classic Fit')) {
+        return 'price_1RpvXACHc12x7sCz2Ngkmp64';
       }
     }
     
@@ -61,9 +76,10 @@ export function CheckoutButton() {
             id: item.productId,
             name: item.name,
             price: item.price,
-            category: 'suits',
+            category: item.metadata.category || 'suits',
             metadata: item.metadata,
-            color: item.metadata.suitColor,
+            color: item.metadata.suitColor || item.metadata.color,
+            stripePriceId: item.metadata.stripePriceId,
           } as any;
         }
         
