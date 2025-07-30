@@ -109,7 +109,131 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ isOpen, onClose, produc
         <div className="p-6 overflow-y-auto" style={modalContentStyle}>
           {activeTab === 'chart' && (
             <div className="space-y-8">
-              {productType === 'ties' ? (
+              {productType === 'shirt' ? (
+                // Dress Shirt Measurements
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Dress Shirt Size Guide</h3>
+                  
+                  {/* Fit Comparison */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium mb-3">Slim Cut</h4>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Modern tailored fit that follows the natural lines of the body.
+                      </p>
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left py-2">Size</th>
+                            <th className="text-left py-2">Neck</th>
+                            <th className="text-left py-2">Chest</th>
+                            <th className="text-left py-2">Waist</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-b">
+                            <td className="py-2">S</td>
+                            <td>15"</td>
+                            <td>36-38"</td>
+                            <td>30-32"</td>
+                          </tr>
+                          <tr className="border-b">
+                            <td className="py-2">M</td>
+                            <td>15.5"</td>
+                            <td>38-40"</td>
+                            <td>32-34"</td>
+                          </tr>
+                          <tr className="border-b">
+                            <td className="py-2">L</td>
+                            <td>16"</td>
+                            <td>42-44"</td>
+                            <td>36-38"</td>
+                          </tr>
+                          <tr className="border-b">
+                            <td className="py-2">XL</td>
+                            <td>16.5"</td>
+                            <td>46-48"</td>
+                            <td>40-42"</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2">XXL</td>
+                            <td>17"</td>
+                            <td>50-52"</td>
+                            <td>44-46"</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h4 className="font-medium mb-3">Classic Fit</h4>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Traditional relaxed fit with generous room through the body.
+                      </p>
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left py-2">Neck</th>
+                            <th className="text-left py-2">Sleeve Options</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-b">
+                            <td className="py-2">15" - 18.5"</td>
+                            <td>32-33, 34-35, 36-37</td>
+                          </tr>
+                          <tr className="border-b">
+                            <td className="py-2">19" - 20"</td>
+                            <td>34-35, 36-37</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2">22"</td>
+                            <td>34-35, 36-37</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <p className="text-xs text-gray-500 mt-3">
+                        * Sleeve length availability varies by neck size
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* How to Measure */}
+                  <div>
+                    <h4 className="font-medium mb-3">How to Measure</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h5 className="font-medium text-sm mb-2">Neck</h5>
+                        <p className="text-sm text-gray-600">
+                          Measure around the base of your neck where the collar sits. 
+                          Add 1/2 inch for comfort.
+                        </p>
+                      </div>
+                      <div>
+                        <h5 className="font-medium text-sm mb-2">Sleeve</h5>
+                        <p className="text-sm text-gray-600">
+                          Measure from the center back of neck, over the shoulder, 
+                          down to the wrist with arm slightly bent.
+                        </p>
+                      </div>
+                      <div>
+                        <h5 className="font-medium text-sm mb-2">Chest</h5>
+                        <p className="text-sm text-gray-600">
+                          Measure around the fullest part of your chest, 
+                          keeping the tape level and parallel to the floor.
+                        </p>
+                      </div>
+                      <div>
+                        <h5 className="font-medium text-sm mb-2">Waist</h5>
+                        <p className="text-sm text-gray-600">
+                          Measure around your natural waistline, 
+                          keeping the tape comfortably loose.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : productType === 'ties' ? (
                 // Tie Measurements
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Tie Style Guide</h3>

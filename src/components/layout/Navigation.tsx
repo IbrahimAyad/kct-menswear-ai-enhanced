@@ -12,6 +12,7 @@ import { SmartSearchBar } from "@/components/search/SmartSearchBar";
 const navItems = [
   { href: "/products", label: "Shop" },
   { href: "/products/suits", label: "Suits" },
+  { href: "/collections/dress-shirts", label: "Dress Shirts", highlight: true },
   { href: "/collections/ties", label: "Ties & Bowties", highlight: true },
   { href: "/style-quiz", label: "Style Finder" },
   { href: "/weddings", label: "Weddings" },
