@@ -15,63 +15,63 @@ export const stripeProducts = {
     },
     black: { 
       productId: 'prod_SlRxbBl5ZnnoDy', 
-      twoPiece: 'price_1Rpv3ZCHc12x7sCzr4qlBV5x', 
-      threePiece: 'price_1Rpv3iCHc12x7sCzXWfyYJW0' 
+      twoPiece: 'price_1Rpv3cCHc12x7sCzLtiatn73', 
+      threePiece: 'price_1Rpv3iCHc12x7sCzJYg14SL8' 
     },
     charcoalGrey: { 
       productId: 'prod_SlRy6SLQKpwQfz', 
-      twoPiece: 'price_1Rpv3uCHc12x7sCzOPeVvQ1w', 
-      threePiece: 'price_1Rpv41CHc12x7sCzyLxU7cHI' 
+      twoPiece: 'price_1Rpv4sCHc12x7sCzgMUu7hLq', 
+      threePiece: 'price_1Rpv4zCHc12x7sCzerWp2R07' 
     },
     lightGrey: { 
       productId: 'prod_SlRyHCJXMJlqxo', 
-      twoPiece: 'price_1Rpv4BCHc12x7sCzGIcJOKTk', 
-      threePiece: 'price_1Rpv4KCHc12x7sCzdNJdL02w' 
+      twoPiece: 'price_1Rpv6WCHc12x7sCzDJI7Ypav', 
+      threePiece: 'price_1Rpv6dCHc12x7sCz3JOmrvuA' 
     },
     tan: { 
       productId: 'prod_SlRyRLJtIYIdyA', 
-      twoPiece: 'price_1Rpv4SCHc12x7sCzr2VKKFZI', 
-      threePiece: 'price_1Rpv4aCHc12x7sCzQlzlT8Xn' 
+      twoPiece: 'price_1Rpv7dCHc12x7sCzoWrXk2Ot', 
+      threePiece: 'price_1Rpv7mCHc12x7sCzixeUm5ep' 
     },
     brown: { 
       productId: 'prod_SlRyYQl1s5RVJP', 
-      twoPiece: 'price_1Rpv4mCHc12x7sCzSLCOJO7e', 
-      threePiece: 'price_1Rpv4vCHc12x7sCz7aHO1Fsa' 
+      twoPiece: 'price_1Rpv3zCHc12x7sCzKMSpA4hP', 
+      threePiece: 'price_1Rpv4ECHc12x7sCzhUuL9uCE' 
     },
     darkBrown: { 
       productId: 'prod_SlRydJMwdvBUkG', 
-      twoPiece: 'price_1Rpv57CHc12x7sCzJq53VvJW', 
-      threePiece: 'price_1Rpv5DCHc12x7sCzJFMiGvdJ' 
+      twoPiece: 'price_1Rpv5DCHc12x7sCzdWjcaCY4', 
+      threePiece: 'price_1Rpv5JCHc12x7sCzPd619lQ8' 
     },
     burgundy: { 
       productId: 'prod_SlRymQ4V8R4bkm', 
-      twoPiece: 'price_1Rpv5OCHc12x7sCzs00h69CU', 
-      threePiece: 'price_1Rpv5XCHc12x7sCzSGP5A5Nf' 
+      twoPiece: 'price_1Rpv4XCHc12x7sCzSC3Mbtey', 
+      threePiece: 'price_1Rpv4eCHc12x7sCzwbuknObE' 
     },
     sand: { 
       productId: 'prod_SlRyypASPU3cOA', 
-      twoPiece: 'price_1Rpv5hCHc12x7sCzvHsxwrO6', 
-      threePiece: 'price_1Rpv5oCHc12x7sCz0AjKWzYN' 
+      twoPiece: 'price_1Rpv7GCHc12x7sCzV9qUCc7I', 
+      threePiece: 'price_1Rpv7PCHc12x7sCzbXQ9a1MG' 
     },
     emerald: { 
       productId: 'prod_SlRz7vOgZRdcYF', 
-      twoPiece: 'price_1Rpv61CHc12x7sCzbJxCXi6h', 
-      threePiece: 'price_1Rpv68CHc12x7sCzsGpJJrAB' 
+      twoPiece: 'price_1Rpv5XCHc12x7sCzzP57OQvP', 
+      threePiece: 'price_1Rpv5eCHc12x7sCzIAVMbB7m' 
     },
     midnightBlue: { 
       productId: 'prod_SlRzE9fW3rNVdh', 
-      twoPiece: 'price_1Rpv6ECHc12x7sCzhg4DQz8g', 
-      threePiece: 'price_1Rpv6MCHc12x7sCzsClqVBJD' 
+      twoPiece: 'price_1Rpv6sCHc12x7sCz6OZIkTR2', 
+      threePiece: 'price_1Rpv6yCHc12x7sCz1LFaN5gS' 
     },
     hunterGreen: { 
       productId: 'prod_SlRzMHHbuMKaHV', 
-      twoPiece: 'price_1Rpv6VCHc12x7sCzYbF4nYOR', 
-      threePiece: 'price_1Rpv6bCHc12x7sCz9f0NnJp9' 
+      twoPiece: 'price_1Rpv5vCHc12x7sCzAlFuGQNL', 
+      threePiece: 'price_1Rpv61CHc12x7sCzIboI1eC8' 
     },
     indigo: { 
       productId: 'prod_SlRzUCPxiGejzx', 
-      twoPiece: 'price_1Rpv6jCHc12x7sCz9vKEUkqH', 
-      threePiece: 'price_1Rpv6sCHc12x7sCzjOx7FJx8' 
+      twoPiece: 'price_1Rpv6ECHc12x7sCz7JjWOP0p', 
+      threePiece: 'price_1Rpv6KCHc12x7sCzzaFWFxef' 
     },
   },
 };
