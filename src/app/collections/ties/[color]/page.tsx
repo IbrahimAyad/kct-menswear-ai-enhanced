@@ -10,6 +10,7 @@ import { tieProducts, getTieColorById } from '@/lib/products/tieProducts';
 import TieStyleSelector from '@/components/products/TieStyleSelector';
 import TieBundleCalculator from '@/components/products/TieBundleCalculator';
 import SizeGuideModal from '@/components/products/SizeGuideModal';
+import { useCart } from '@/hooks/useCart';
 
 interface ColorParams {
   color: string;
@@ -19,12 +20,14 @@ export default function TieColorCollectionPage() {
   const params = useParams() as unknown as ColorParams;
   const colorId = params.color.replace('-collection', '');
   const colorData = getTieColorById(colorId);
+  const { addItem } = useCart();
   
   const [selectedStyle, setSelectedStyle] = useState<string>('bowtie');
   const [purchaseMode, setPurchaseMode] = useState<'single' | 'bundle'>('single');
   const [quantity, setQuantity] = useState(1);
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const [selectedBundle, setSelectedBundle] = useState<'five' | 'eight' | 'eleven'>('five');
+  const [addedToCart, setAddedToCart] = useState(false);
 
   if (!colorData) {
     return (
@@ -38,14 +41,31 @@ export default function TieColorCollectionPage() {
   const pageTitle = `${colorData.name} Ties & Bowties Collection`;
 
   const handleAddToCart = () => {
-    // TODO: Implement add to cart functionality
-    console.log('Adding to cart:', {
-      color: colorData.name,
-      style: selectedStyleData.name,
-      quantity,
-      mode: purchaseMode,
-      bundle: purchaseMode === 'bundle' ? selectedBundle : null
-    });
+    if (purchaseMode === 'single') {
+      // Add single tie
+      addItem({
+        id: `tie-${colorData.id}-${selectedStyle}`,
+        name: `${colorData.name} ${selectedStyleData.name}`,
+        price: selectedStyleData.price,
+        image: colorData.imageUrl,
+        quantity: quantity,
+        stripePriceId: selectedStyleData.priceId,
+        stripeProductId: selectedStyleData.productId,
+        selectedColor: colorData.name,
+        selectedSize: selectedStyleData.width,
+        category: 'ties',
+        metadata: {
+          color: colorData.name,
+          style: selectedStyleData.name,
+          width: selectedStyleData.width
+        }
+      });
+      setAddedToCart(true);
+      setTimeout(() => setAddedToCart(false), 3000);
+    } else {
+      // Navigate to bundle builder
+      window.location.href = `/products/ties/${colorData.id}-${selectedStyle}`;
+    }
   };
 
   const handleShare = () => {
@@ -267,9 +287,20 @@ export default function TieColorCollectionPage() {
 
                   <button
                     onClick={handleAddToCart}
-                    className="w-full bg-gray-900 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+                    className={`w-full py-3 px-6 rounded-lg font-medium transition-all ${
+                      addedToCart
+                        ? 'bg-green-600 text-white'
+                        : 'bg-gray-900 text-white hover:bg-gray-800'
+                    }`}
                   >
-                    Add to Cart - ${(selectedStyleData.price * quantity).toFixed(2)}
+                    {addedToCart ? (
+                      <>
+                        <Check className="w-5 h-5 inline-block mr-2" />
+                        Added to Cart
+                      </>
+                    ) : (
+                      `Add to Cart - $${(selectedStyleData.price * quantity).toFixed(2)}`
+                    )}
                   </button>
                 </div>
               ) : (

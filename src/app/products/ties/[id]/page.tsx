@@ -81,9 +81,15 @@ export default function TieProductPage() {
         image: colorData.imageUrl,
         quantity: 1,
         stripePriceId: styleData.priceId,
+        stripeProductId: styleData.productId,
         selectedColor: colorData.name,
         selectedSize: styleData.width,
-        category: 'ties'
+        category: 'ties',
+        metadata: {
+          color: colorData.name,
+          style: styleData.name,
+          width: styleData.width
+        }
       });
       console.log('Added to cart!');
     } else {
@@ -101,10 +107,16 @@ export default function TieProductPage() {
             image: itemColor.imageUrl,
             quantity: item.quantity,
             stripePriceId: currentBundle.priceId,
+            stripeProductId: currentBundle.productId,
             selectedColor: itemColor.name,
             selectedSize: itemStyle.width,
             category: 'tie-bundle',
-            bundleId: bundleId
+            bundleId: bundleId,
+            metadata: {
+              bundleType: selectedBundle,
+              itemStyle: itemStyle.name,
+              itemColor: itemColor.name
+            }
           });
         }
       });

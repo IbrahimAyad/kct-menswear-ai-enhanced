@@ -55,6 +55,31 @@ export function CheckoutButton() {
       }
     }
     
+    // Check if it's a tie
+    if (category === 'ties') {
+      // Ties have fixed price IDs based on style
+      if (product.name.includes('Pre-tied Bow Tie') || product.name.includes('Bow Tie')) {
+        return 'price_1RpvIMCHc12x7sCzj6ZTx21q';
+      } else if (product.name.includes('Classic') && product.name.includes('3.25')) {
+        return 'price_1RpvI9CHc12x7sCzE8Q9emhw';
+      } else if (product.name.includes('Skinny') && product.name.includes('2.75')) {
+        return 'price_1RpvHyCHc12x7sCzjX1WV931';
+      } else if (product.name.includes('Slim') && product.name.includes('2.25')) {
+        return 'price_1RpvHlCHc12x7sCzp0TVNS92';
+      }
+    }
+    
+    // Check if it's a tie bundle
+    if (category === 'tie-bundle') {
+      if (product.metadata?.bundleType === 'five') {
+        return 'price_1RpvQqCHc12x7sCzfRrWStZb';
+      } else if (product.metadata?.bundleType === 'eight') {
+        return 'price_1RpvRACHc12x7sCzVYFZh6Ia';
+      } else if (product.metadata?.bundleType === 'eleven') {
+        return 'price_1RpvRSCHc12x7sCzpo0fgH6A';
+      }
+    }
+    
     // For other products, you would add similar mappings
     // For now, return null if we can't find a mapping
     return null;

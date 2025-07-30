@@ -11,15 +11,15 @@ export const tieProducts = {
       description: 'Sophisticated and distinctive, our self-tie bowties are perfect for black-tie events, formal dinners, and special occasions.'
     },
     classic: {
-      name: 'Classic Width Tie',
-      width: '3.5 inches',
+      name: 'Classic',
+      width: '3.25 inches',
       productId: 'prod_SlSCPLZUyO8MFe',
       priceId: 'price_1RpvI9CHc12x7sCzE8Q9emhw',
       price: 24.99,
       description: 'Timeless and versatile, the classic width is appropriate for most formal occasions and business settings.'
     },
     skinny: {
-      name: 'Skinny Tie',
+      name: 'Skinny',
       width: '2.75 inches',
       productId: 'prod_SlSC1Sy11qUgt1',
       priceId: 'price_1RpvHyCHc12x7sCzjX1WV931',
@@ -27,7 +27,7 @@ export const tieProducts = {
       description: 'A modern alternative that bridges classic and contemporary styles. Perfect for business-casual settings.'
     },
     slim: {
-      name: 'Slim Tie',
+      name: 'Slim',
       width: '2.25 inches',
       productId: 'prod_SlSC9yAp6lLFm3',
       priceId: 'price_1RpvHlCHc12x7sCzp0TVNS92',
