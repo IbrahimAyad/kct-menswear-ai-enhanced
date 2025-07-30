@@ -1,33 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-// This is your Stripe webhook secret
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-
 export async function POST(req: NextRequest) {
-  const body = await req.text();
-  const sig = req.headers.get('stripe-signature')!;
+  let body: string;
+  let event: Stripe.Event;
 
-  if (!endpointSecret) {
+  try {
+    body = await req.text();
+  } catch (error) {
+    console.error('Error reading request body:', error);
+    return NextResponse.json(
+      { error: 'Invalid request body' },
+      { status: 400 }
+    );
+  }
+
+  const sig = req.headers.get('stripe-signature');
+
+  if (!sig) {
+    console.error('No stripe-signature header');
+    return NextResponse.json(
+      { error: 'No stripe-signature header' },
+      { status: 400 }
+    );
+  }
+
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
     console.error('STRIPE_WEBHOOK_SECRET not configured');
     return NextResponse.json(
-      { error: 'Webhook secret not configured' },
+      { error: 'Webhook endpoint not configured on server' },
       { status: 500 }
     );
   }
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.error('STRIPE_SECRET_KEY not configured');
+    return NextResponse.json(
+      { error: 'Stripe not configured on server' },
+      { status: 500 }
+    );
+  }
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2024-10-28.acacia',
   });
 
-  let event: Stripe.Event;
-
   try {
-    event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
-  } catch (err) {
-    console.error('Webhook signature verification failed:', err);
+    event = stripe.webhooks.constructEvent(
+      body, 
+      sig, 
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err: any) {
+    console.error('Webhook signature verification failed:', err.message);
     return NextResponse.json(
-      { error: 'Webhook signature verification failed' },
+      { error: `Webhook Error: ${err.message}` },
       { status: 400 }
     );
   }
@@ -79,10 +106,3 @@ export async function POST(req: NextRequest) {
   // Return a 200 response to acknowledge receipt of the event
   return NextResponse.json({ received: true }, { status: 200 });
 }
-
-// Stripe requires raw body for webhook signature verification
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
