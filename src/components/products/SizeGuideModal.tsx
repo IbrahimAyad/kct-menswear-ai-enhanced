@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { X, Ruler, User, Calculator, Phone, MessageCircle } from 'lucide-react';
 
 interface SizeGuideModalProps {
+  isOpen: boolean;
   onClose: () => void;
-  productType?: 'suit' | 'shirt' | 'general';
+  productType?: 'suit' | 'shirt' | 'ties' | 'general';
 }
 
-const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ onClose, productType = 'suit' }) => {
+const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ isOpen, onClose, productType = 'suit' }) => {
   const [activeTab, setActiveTab] = useState<'chart' | 'calculator' | 'video'>('chart');
   const [measurements, setMeasurements] = useState({
     chest: '',
@@ -106,9 +107,141 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ onClose, productType = 
         <div className="p-6 overflow-y-auto" style={modalContentStyle}>
           {activeTab === 'chart' && (
             <div className="space-y-8">
-              {/* Suit Measurements */}
-              <div>
-                <h3 className="text-lg font-semibold mb-4">Suit Jacket Measurements</h3>
+              {productType === 'ties' ? (
+                // Tie Measurements
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Tie Style Guide</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                      <h4 className="font-medium mb-3">Visual Comparison</h4>
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 h-32 bg-gray-200 rounded" style={{ width: '3.5rem' }} />
+                          <div>
+                            <p className="font-medium">Classic (3.5")</p>
+                            <p className="text-sm text-gray-600">Traditional width</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 h-32 bg-gray-200 rounded" style={{ width: '2.75rem' }} />
+                          <div>
+                            <p className="font-medium">Skinny (2.75")</p>
+                            <p className="text-sm text-gray-600">Modern width</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                          <div className="w-20 h-32 bg-gray-200 rounded" style={{ width: '2.25rem' }} />
+                          <div>
+                            <p className="font-medium">Slim (2.25")</p>
+                            <p className="text-sm text-gray-600">Fashion-forward</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                          <div className="w-24 h-16 bg-gray-200 rounded-full" />
+                          <div>
+                            <p className="font-medium">Bowtie</p>
+                            <p className="text-sm text-gray-600">Adjustable size</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-3">Detailed Measurements</h4>
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left py-2">Style</th>
+                            <th className="text-left py-2">Width</th>
+                            <th className="text-left py-2">Length</th>
+                            <th className="text-left py-2">Best For</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-b">
+                            <td className="py-3">Classic Tie</td>
+                            <td>3.5 inches</td>
+                            <td>57 inches</td>
+                            <td>Traditional formal occasions</td>
+                          </tr>
+                          <tr className="border-b">
+                            <td className="py-3">Skinny Tie</td>
+                            <td>2.75 inches</td>
+                            <td>57 inches</td>
+                            <td>Modern professional settings</td>
+                          </tr>
+                          <tr className="border-b">
+                            <td className="py-3">Slim Tie</td>
+                            <td>2.25 inches</td>
+                            <td>57 inches</td>
+                            <td>Fashion-forward events</td>
+                          </tr>
+                          <tr>
+                            <td className="py-3">Bowtie</td>
+                            <td>2.5 inches (height)</td>
+                            <td>Adjustable neck size</td>
+                            <td>Formal black-tie events</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium mb-3">Style Recommendations</h4>
+                    <div className="space-y-4">
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h5 className="font-medium mb-2">Classic Tie (3.5")</h5>
+                        <p className="text-sm text-gray-600">
+                          Timeless and versatile, the classic width is appropriate for most formal occasions 
+                          and business settings. Ideal for traditional wedding attire and conservative 
+                          professional environments.
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h5 className="font-medium mb-2">Skinny Tie (2.75")</h5>
+                        <p className="text-sm text-gray-600">
+                          A modern alternative that bridges classic and contemporary styles. Perfect for 
+                          business-casual settings, creative workplaces, and semi-formal events where 
+                          you want to appear stylish yet professional.
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h5 className="font-medium mb-2">Slim Tie (2.25")</h5>
+                        <p className="text-sm text-gray-600">
+                          Fashion-forward and sleek, the slim tie makes a bold contemporary statement. 
+                          Best for creative industries, modern weddings, and fashion-conscious individuals 
+                          wanting to stand out.
+                        </p>
+                      </div>
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h5 className="font-medium mb-2">Bowtie</h5>
+                        <p className="text-sm text-gray-600">
+                          Sophisticated and distinctive, our self-tie bowties are perfect for black-tie 
+                          events, formal dinners, and special occasions where you want to make a refined 
+                          impression.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium mb-3">Body Type Considerations</h4>
+                    <p className="text-sm text-gray-600 mb-3">
+                      Select a tie width that complements your body type for the most flattering look:
+                    </p>
+                    <ul className="space-y-2 text-sm text-gray-600">
+                      <li>• <strong>Broader build:</strong> Choose wider ties (Classic 3.5") to maintain visual proportion</li>
+                      <li>• <strong>Slender build:</strong> Slimmer ties (2.25"-2.75") create a balanced silhouette</li>
+                      <li>• <strong>Average build:</strong> All widths work well, choose based on the occasion and personal style</li>
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                // Original Suit Measurements
+                <>
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Suit Jacket Measurements</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse text-sm">
                     <thead>
