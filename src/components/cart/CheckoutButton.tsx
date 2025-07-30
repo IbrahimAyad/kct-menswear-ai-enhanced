@@ -91,6 +91,13 @@ export function CheckoutButton() {
         };
       });
       
+      // Log what we're sending to checkout
+      console.log('Sending to checkout API:', {
+        items: checkoutItems,
+        itemsCount: checkoutItems.length,
+        firstItem: checkoutItems[0]
+      });
+      
       // Create checkout session
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -104,16 +111,16 @@ export function CheckoutButton() {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         console.error('Checkout API error response:', errorData);
+        console.error('Full error details:', JSON.stringify(errorData, null, 2));
         throw new Error(errorData.error || errorData.details || 'Checkout failed');
       }
       
       const { sessionId, url } = await response.json();
       
-      // Clear cart before redirecting (to prevent stale data on return)
-      clearCart();
-      
       // Redirect to Stripe Checkout
       if (url) {
+        // Clear cart only after successful redirect starts
+        setTimeout(() => clearCart(), 100);
         window.location.href = url;
       } else if (sessionId) {
         // Fallback to Stripe.js redirect
