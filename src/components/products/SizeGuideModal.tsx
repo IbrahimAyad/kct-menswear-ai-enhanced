@@ -52,6 +52,8 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ isOpen, onClose, produc
     maxHeight: '90vh'
   };
   
+  if (!isOpen) return null;
+  
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-5xl w-full overflow-hidden" style={modalStyle}>
@@ -242,7 +244,7 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ isOpen, onClose, produc
                 <>
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Suit Jacket Measurements</h3>
-                <div className="overflow-x-auto">
+                    <div className="overflow-x-auto">
                   <table className="w-full border-collapse text-sm">
                     <thead>
                       <tr className="bg-gray-50">
