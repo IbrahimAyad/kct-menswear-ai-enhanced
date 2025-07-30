@@ -91,7 +91,7 @@ export const tieProducts = {
       name: 'Gold',
       displayName: 'gold-tie+bowtie',
       hex: '#FFD700',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/gold-tie%2Bbowtie.jpg'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/gold-tie%2Bbpwtie.jpg'
     },
     {
       id: 'hunter-green',
@@ -119,7 +119,7 @@ export const tieProducts = {
       name: 'Medium Orange',
       displayName: 'Medium Orange Bow + Tie',
       hex: '#FF8C00',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Medium%20Orange%20%20Bow%20%2B%20Tie.jpg'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Medium%20Orange%20Bow%20%2B%20Tie.jpg'
     },
     {
       id: 'medium-purple',
@@ -133,7 +133,7 @@ export const tieProducts = {
       name: 'Mermaid Green',
       displayName: 'Mermaid Green + Bow + Toe',
       hex: '#3FE0D0',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Mermaid%20Green%20%2B%20Bow%20%2B%20Toe.jpg'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Mermaid%20Green%20%2B%20Bow%20%2B%20Toe%20.jpg'
     },
     {
       id: 'mint-green',
