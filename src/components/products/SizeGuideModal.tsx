@@ -336,6 +336,8 @@ const SizeGuideModal: React.FC<SizeGuideModalProps> = ({ isOpen, onClose, produc
                   </div>
                 </div>
               </div>
+              </>
+              )}
             </div>
           )}
           
