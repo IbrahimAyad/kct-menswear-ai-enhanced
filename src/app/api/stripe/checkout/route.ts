@@ -93,6 +93,9 @@ export async function POST(req: NextRequest) {
           shipping_rate: 'shr_1Rq49FCHc12x7sCzaNB3IohF',
         },
       ],
+      automatic_tax: {
+        enabled: true,
+      },
       metadata: {
         order_details: JSON.stringify(orderDetails),
       },
