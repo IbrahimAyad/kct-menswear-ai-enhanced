@@ -139,7 +139,7 @@ export const bundleProducts = {
       suit: { color: 'Burgundy', type: '2-piece' as const },
       shirt: { color: 'Black', fit: 'Slim' as const },
       tie: { color: 'Fuchsia', style: 'Slim' as const },
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/burgundy-black-fuschia.png',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/burgundy-black-fusicha.png',
       originalPrice: 763.97,
       bundlePrice: 649.99,
       savings: 113.98,
