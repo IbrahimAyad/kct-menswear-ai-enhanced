@@ -18,7 +18,7 @@ import {
   Sparkles,
   ChevronRight
 } from 'lucide-react';
-import { bundleProducts } from '@/lib/products/bundleProducts';
+import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import { useCart } from '@/hooks/useCart';
 
 export default function BundleDetailPage() {
@@ -26,7 +26,7 @@ export default function BundleDetailPage() {
   const router = useRouter();
   const { addItem } = useCart();
   
-  const bundle = bundleProducts.bundles.find(b => b.id === params.id);
+  const bundle = bundleProductsWithImages.bundles.find(b => b.id === params.id);
   const [selectedSize, setSelectedSize] = useState('');
   const [isFavorited, setIsFavorited] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -81,7 +81,7 @@ export default function BundleDetailPage() {
   };
 
   // Related bundles
-  const relatedBundles = bundleProducts.bundles
+  const relatedBundles = bundleProductsWithImages.bundles
     .filter(b => b.category === bundle.category && b.id !== bundle.id)
     .slice(0, 4);
 
@@ -132,26 +132,55 @@ export default function BundleDetailPage() {
                 )}
               </div>
 
-              {/* Thumbnail Navigation */}
-              <div className="grid grid-cols-3 gap-2">
-                {images.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveImageIndex(idx)}
-                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                      activeImageIndex === idx 
-                        ? 'border-black' 
-                        : 'border-transparent hover:border-gray-300'
-                    }`}
-                  >
-                    <Image
-                      src={img}
-                      alt={`View ${idx + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                ))}
+              {/* Thumbnail Navigation - Individual Products */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-gray-700">Included Items:</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {/* Suit Thumbnail */}
+                  {bundle.suit.image && (
+                    <div className="relative">
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border hover:border-gray-400 transition-colors">
+                        <Image
+                          src={bundle.suit.image}
+                          alt={`${bundle.suit.color} Suit`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <p className="text-xs text-center mt-1 text-gray-600">{bundle.suit.color} Suit</p>
+                    </div>
+                  )}
+                  
+                  {/* Shirt Thumbnail */}
+                  {bundle.shirt.image && (
+                    <div className="relative">
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border hover:border-gray-400 transition-colors">
+                        <Image
+                          src={bundle.shirt.image}
+                          alt={`${bundle.shirt.color} Shirt`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <p className="text-xs text-center mt-1 text-gray-600">{bundle.shirt.color} Shirt</p>
+                    </div>
+                  )}
+                  
+                  {/* Tie Thumbnail */}
+                  {bundle.tie.image && (
+                    <div className="relative">
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border hover:border-gray-400 transition-colors">
+                        <Image
+                          src={bundle.tie.image}
+                          alt={`${bundle.tie.color} Tie`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <p className="text-xs text-center mt-1 text-gray-600">{bundle.tie.color} Tie</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

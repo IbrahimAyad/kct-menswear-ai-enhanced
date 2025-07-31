@@ -150,35 +150,73 @@ export default function BundleQuickView({ bundle, onClose }: BundleQuickViewProp
                 <p className="text-gray-600">{bundle.description}</p>
               </div>
 
-              {/* Bundle Contents */}
+              {/* Bundle Contents with Images */}
               <div className="bg-gray-50 rounded-lg p-4">
                 <h3 className="font-semibold mb-3 flex items-center gap-2">
                   <Package className="w-5 h-5" />
                   This Bundle Includes:
                 </h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start gap-2">
-                    <Check className="w-5 h-5 text-green-500 mt-0.5" />
-                    <div>
+                <div className="space-y-3">
+                  {/* Suit */}
+                  <div className="flex items-start gap-3">
+                    {bundle.suit.image && (
+                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border">
+                        <Image
+                          src={bundle.suit.image}
+                          alt={`${bundle.suit.color} Suit`}
+                          width={64}
+                          height={64}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1">
                       <span className="font-medium">{bundle.suit.color} {bundle.suit.type} Suit</span>
                       <p className="text-sm text-gray-600">Premium wool blend, tailored fit</p>
                     </div>
-                  </li>
-                  <li className="flex items-start gap-2">
                     <Check className="w-5 h-5 text-green-500 mt-0.5" />
-                    <div>
+                  </div>
+                  
+                  {/* Shirt */}
+                  <div className="flex items-start gap-3">
+                    {bundle.shirt.image && (
+                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border">
+                        <Image
+                          src={bundle.shirt.image}
+                          alt={`${bundle.shirt.color} Shirt`}
+                          width={64}
+                          height={64}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1">
                       <span className="font-medium">{bundle.shirt.color} {bundle.shirt.fit} Fit Shirt</span>
                       <p className="text-sm text-gray-600">100% cotton, wrinkle-resistant</p>
                     </div>
-                  </li>
-                  <li className="flex items-start gap-2">
                     <Check className="w-5 h-5 text-green-500 mt-0.5" />
-                    <div>
+                  </div>
+                  
+                  {/* Tie */}
+                  <div className="flex items-start gap-3">
+                    {bundle.tie.image && (
+                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border">
+                        <Image
+                          src={bundle.tie.image}
+                          alt={`${bundle.tie.color} Tie`}
+                          width={64}
+                          height={64}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1">
                       <span className="font-medium">{bundle.tie.color} {bundle.tie.style}</span>
                       <p className="text-sm text-gray-600">Silk blend, handcrafted</p>
                     </div>
-                  </li>
-                </ul>
+                    <Check className="w-5 h-5 text-green-500 mt-0.5" />
+                  </div>
+                </div>
               </div>
 
               {/* Size Selection */}

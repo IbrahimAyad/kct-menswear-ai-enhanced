@@ -5,14 +5,17 @@ export interface Bundle {
   suit: {
     color: string;
     type: '2-piece' | '3-piece';
+    image?: string;
   };
   shirt: {
     color: string;
     fit: 'Classic' | 'Slim';
+    image?: string;
   };
   tie: {
     color: string;
     style: 'Classic' | 'Skinny' | 'Slim' | 'Bowtie';
+    image?: string;
   };
   imageUrl: string;
   originalPrice: number;

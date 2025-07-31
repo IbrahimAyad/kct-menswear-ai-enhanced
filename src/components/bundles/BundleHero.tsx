@@ -5,9 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Sparkles, TrendingUp } from 'lucide-react';
-import { bundleProducts } from '@/lib/products/bundleProducts';
+import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 
-const featuredBundles = bundleProducts.bundles.filter(b => b.trending).slice(0, 3);
+const featuredBundles = bundleProductsWithImages.bundles.filter(b => b.trending).slice(0, 3);
 
 export default function BundleHero() {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Sparkles, TrendingUp, Heart, ShoppingBag, Sliders, X, Check, Clock, Tag } from 'lucide-react';
-import { bundleProducts } from '@/lib/products/bundleProducts';
+import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import BundleCard from '@/components/bundles/BundleCard';
 import BundleFilters from '@/components/bundles/BundleFilters';
 import BundleHero from '@/components/bundles/BundleHero';
@@ -21,7 +21,7 @@ export default function BundleCollectionPage() {
   const { addItem } = useCart();
 
   // Filter and sort bundles
-  const filteredBundles = bundleProducts.bundles.filter(bundle => {
+  const filteredBundles = bundleProductsWithImages.bundles.filter(bundle => {
     if (selectedCategory !== 'all' && bundle.category !== selectedCategory) return false;
     if (selectedOccasion !== 'all' && !bundle.occasions.includes(selectedOccasion)) return false;
     return true;
@@ -43,7 +43,7 @@ export default function BundleCollectionPage() {
 
   // Categories for filtering
   const categories = [
-    { id: 'all', name: 'All Bundles', count: bundleProducts.bundles.length },
+    { id: 'all', name: 'All Bundles', count: bundleProductsWithImages.bundles.length },
     { id: 'classic', name: 'The Classics', count: 9 },
     { id: 'bold', name: 'Bold & Modern', count: 8 },
     { id: 'sophisticated', name: 'Sophisticated', count: 7 },
