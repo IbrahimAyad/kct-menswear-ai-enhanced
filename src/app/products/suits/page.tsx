@@ -126,28 +126,12 @@ export default function SuitsPage() {
         ))}
         
         {/* Statement Tuxedos Section */}
-        <div className="mt-16 pt-12 border-t">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Statement Tuxedos</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Make an unforgettable impression with our formal tuxedo collection. 
-              Perfect for prom, weddings, and black-tie events.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Statement Tuxedos</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {tuxedoProducts.map((tuxedo) => (
               <TuxedoCard key={tuxedo.id} tuxedo={tuxedo} />
             ))}
-          </div>
-          
-          {/* Tuxedo CTA */}
-          <div className="mt-8 bg-gradient-to-r from-purple-600 to-purple-800 text-white rounded-lg p-6 text-center">
-            <h3 className="text-xl font-bold mb-2">Special Prom Group Pricing</h3>
-            <p className="mb-4">Order 4+ tuxedos and save! Perfect for your prom squad.</p>
-            <button className="px-6 py-2 bg-white text-purple-700 rounded-lg hover:bg-gray-100 transition-colors font-semibold">
-              Learn About Group Discounts
-            </button>
           </div>
         </div>
 
