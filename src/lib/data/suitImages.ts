@@ -142,11 +142,11 @@ export const suitImages = {
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png`,
   },
   burgundyTuxedo: {
-    main: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/burgundy-tuxedo-white-tuxedo-shirt-black-blowtie.png`,
+    main: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/burgunndy-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
     gallery: [
-      `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/burgundy-tuxedo-white-tuxedo-shirt-black-blowtie.png`,
+      `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/burgunndy-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
     ],
-    thumbnail: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/burgundy-tuxedo-white-tuxedo-shirt-black-blowtie.png`,
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/burgunndy-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
   },
   lightGreyTuxedo: {
     main: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/light-grey-tuxedo-white-tuxedo-shirt-black-bowtie.png`,

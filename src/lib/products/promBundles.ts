@@ -52,7 +52,7 @@ export const promBundles = {
       suit: { color: 'Burgundy', type: 'tuxedo' as const },
       shirt: { color: 'White', fit: 'Slim' as const },
       tie: { color: 'Black', style: 'Bowtie' as const },
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Tuxedo-Bundles/burgundy-tuxedo-white-tuxedo-shirt-black-blowtie.png',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Tuxedo-Bundles/burgunndy-tuxedo-white-tuxedo-shirt-black-bowtie.png',
       originalPrice: 299.99,
       bundlePrice: 249.99,
       savings: 50.00,
