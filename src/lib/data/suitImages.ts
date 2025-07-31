@@ -132,6 +132,43 @@ export const suitImages = {
     ],
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/indigo/indigo-main.jpg`,
   },
+  
+  // Statement Tuxedos
+  blackTuxedo: {
+    main: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png`,
+    gallery: [
+      `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png`,
+    ],
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png`,
+  },
+  burgundyTuxedo: {
+    main: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/burgundy-tuxedo-white-tuxedo-shirt-black-blowtie.png`,
+    gallery: [
+      `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/burgundy-tuxedo-white-tuxedo-shirt-black-blowtie.png`,
+    ],
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/burgundy-tuxedo-white-tuxedo-shirt-black-blowtie.png`,
+  },
+  lightGreyTuxedo: {
+    main: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/light-grey-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
+    gallery: [
+      `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/light-grey-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
+    ],
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/light-grey-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
+  },
+  midnightBlueTuxedo: {
+    main: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/midnight-blue-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
+    gallery: [
+      `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/midnight-blue-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
+    ],
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/midnight-blue-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
+  },
+  royalBlueTuxedo: {
+    main: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/royal-blue-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
+    gallery: [
+      `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/royal-blue-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
+    ],
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/royal-blue-tuxedo-white-tuxedo-shirt-black-bowtie.png`,
+  },
 };
 
 // Helper function to get suit images

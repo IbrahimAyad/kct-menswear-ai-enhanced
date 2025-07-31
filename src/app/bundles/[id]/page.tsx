@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import { weddingBundles } from '@/lib/products/weddingBundles';
+import { promBundles } from '@/lib/products/promBundles';
 import { getSuitImage, getShirtImage, getTieImage } from '@/lib/products/bundleImageMapping';
 import { useCart } from '@/hooks/useCart';
 
@@ -28,9 +29,10 @@ export default function BundleDetailPage() {
   const router = useRouter();
   const { addItem } = useCart();
   
-  // Check both regular bundles and wedding bundles
+  // Check regular bundles, wedding bundles, and prom bundles
   let bundle = bundleProductsWithImages.bundles.find(b => b.id === params.id);
   let isWeddingBundle = false;
+  let isPromBundle = false;
   
   if (!bundle) {
     // Check wedding bundles
@@ -43,6 +45,20 @@ export default function BundleDetailPage() {
         tie: { ...weddingBundle.tie, image: getTieImage(weddingBundle.tie.color) || '' }
       };
       isWeddingBundle = true;
+    }
+  }
+  
+  if (!bundle) {
+    // Check prom bundles
+    const promBundle = promBundles.bundles.find(b => b.id === params.id);
+    if (promBundle) {
+      bundle = {
+        ...promBundle,
+        suit: { ...promBundle.suit, image: getSuitImage(promBundle.suit.color) || '' },
+        shirt: { ...promBundle.shirt, image: getShirtImage(promBundle.shirt.color) || '' },
+        tie: { ...promBundle.tie, image: getTieImage(promBundle.tie.color) || '' }
+      };
+      isPromBundle = true;
     }
   }
   const [selectedSize, setSelectedSize] = useState('');
@@ -86,7 +102,7 @@ export default function BundleDetailPage() {
       price: bundle.bundlePrice,
       image: bundle.imageUrl,
       quantity: 1,
-      category: isWeddingBundle ? 'wedding-bundle' : 'bundle',
+      category: isPromBundle ? 'prom-bundle' : isWeddingBundle ? 'wedding-bundle' : 'bundle',
       size: selectedSize,
       metadata: {
         suit: bundle.suit,
@@ -105,6 +121,11 @@ export default function BundleDetailPage() {
     // For wedding bundles, show other wedding bundles from the same season
     relatedBundles = weddingBundles.bundles
       .filter(b => b.season === bundle.season && b.id !== bundle.id)
+      .slice(0, 4);
+  } else if (isPromBundle) {
+    // For prom bundles, show other prom bundles from the same category
+    relatedBundles = promBundles.bundles
+      .filter(b => b.category === bundle.category && b.id !== bundle.id)
       .slice(0, 4);
   } else {
     // For regular bundles, show bundles from the same category
@@ -131,6 +152,16 @@ export default function BundleDetailPage() {
                 <ChevronRight className="w-4 h-4 text-gray-400" />
                 <Link href="/occasions/wedding-party" className="text-gray-500 hover:text-gray-700">
                   Wedding Party
+                </Link>
+              </>
+            ) : isPromBundle ? (
+              <>
+                <Link href="/occasions" className="text-gray-500 hover:text-gray-700">
+                  Occasions
+                </Link>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
+                <Link href="/occasions/prom" className="text-gray-500 hover:text-gray-700">
+                  Prom
                 </Link>
               </>
             ) : (
