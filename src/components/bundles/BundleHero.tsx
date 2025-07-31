@@ -70,7 +70,7 @@ export default function BundleHero() {
               {/* Stats */}
               <div className="flex items-center gap-8 pt-4">
                 <div>
-                  <p className="text-3xl font-bold text-gold">31</p>
+                  <p className="text-3xl font-bold text-gold">30</p>
                   <p className="text-sm text-gray-400">Curated Styles</p>
                 </div>
                 <div className="w-px h-12 bg-gray-700" />

@@ -44,7 +44,7 @@ export default function BundleCollectionPage() {
   // Categories for filtering
   const categories = [
     { id: 'all', name: 'All Bundles', count: bundleProducts.bundles.length },
-    { id: 'classic', name: 'The Classics', count: 10 },
+    { id: 'classic', name: 'The Classics', count: 9 },
     { id: 'bold', name: 'Bold & Modern', count: 8 },
     { id: 'sophisticated', name: 'Sophisticated', count: 7 },
     { id: 'contemporary', name: 'Contemporary', count: 6 }
