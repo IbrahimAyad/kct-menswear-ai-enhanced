@@ -185,18 +185,19 @@ export default function WeddingBundlesPage() {
       {/* Bundle Grid */}
       <section className="py-12">
         <div className="container-main">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {sortedBundles.map((bundle, index) => (
               <motion.div
                 key={bundle.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
+                whileHover={{ y: -8 }}
                 className="group"
               >
-                <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+                <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col transform hover:scale-[1.02]">
                   {/* Image */}
-                  <div className="relative aspect-[3/4] overflow-hidden">
+                  <div className="relative aspect-[4/5] overflow-hidden">
                     <Image
                       src={bundle.imageUrl}
                       alt={bundle.name}
@@ -206,70 +207,69 @@ export default function WeddingBundlesPage() {
                     
                     {/* Badges */}
                     <div className="absolute top-4 left-4 flex flex-col gap-2">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 border ${seasonColors[bundle.season]}`}>
+                      <span className={`px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 border-2 ${seasonColors[bundle.season]}`}>
                         {seasonIcons[bundle.season]}
                         {bundle.season.charAt(0).toUpperCase() + bundle.season.slice(1)}
                       </span>
                       {bundle.trending && (
-                        <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                          <TrendingUp className="w-3 h-3" />
+                        <span className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
+                          <TrendingUp className="w-4 h-4" />
                           Trending
                         </span>
                       )}
                       {bundle.aiScore && bundle.aiScore >= 95 && (
-                        <span className="bg-black text-white px-3 py-1 rounded-full text-xs font-medium">
+                        <span className="bg-black text-white px-4 py-2 rounded-full text-sm font-medium">
                           AI Pick {bundle.aiScore}%
                         </span>
                       )}
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="flex gap-2">
+                    <div className="absolute bottom-6 left-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="flex gap-3">
                         <Button
-                          size="sm"
-                          className="flex-1 bg-white/90 backdrop-blur-sm text-black hover:bg-white"
+                          className="flex-1 bg-white/95 backdrop-blur-sm text-black hover:bg-white shadow-lg py-3 text-base font-semibold"
                           onClick={() => setShowQuickView(bundle.id)}
                         >
                           Quick View
                         </Button>
-                        <button className="p-2 bg-white/90 backdrop-blur-sm rounded-lg hover:bg-white transition-colors">
-                          <Heart className="w-4 h-4" />
+                        <button className="p-3 bg-white/95 backdrop-blur-sm rounded-lg hover:bg-white transition-colors shadow-lg">
+                          <Heart className="w-5 h-5" />
                         </button>
                       </div>
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="p-6 flex-1 flex flex-col">
-                    <h3 className="text-lg font-semibold mb-2">{bundle.name}</h3>
+                  <div className="p-8 flex-1 flex flex-col">
+                    <h3 className="text-2xl font-bold mb-3">{bundle.name}</h3>
                     
                     {/* Color Combination */}
-                    <p className="text-sm text-gray-600 mb-3">
+                    <p className="text-base text-gray-600 mb-4">
                       {bundle.suit.color} • {bundle.shirt.color} • {bundle.tie.color}
                     </p>
 
                     {/* Description */}
-                    <p className="text-sm text-gray-500 mb-4 line-clamp-2 flex-1">
+                    <p className="text-gray-600 mb-6 line-clamp-3 flex-1 leading-relaxed">
                       {bundle.description}
                     </p>
 
                     {/* Price */}
-                    <div className="mb-4">
-                      <div className="flex items-center gap-2">
-                        <span className="text-2xl font-bold">${bundle.bundlePrice}</span>
-                        <span className="text-sm text-gray-400 line-through">${bundle.originalPrice}</span>
+                    <div className="mb-6">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="text-3xl font-bold">${bundle.bundlePrice}</span>
+                        <span className="text-lg text-gray-400 line-through">${bundle.originalPrice}</span>
                       </div>
-                      <div className="flex items-center gap-1 text-green-600 text-sm">
-                        <Tag className="w-3 h-3" />
-                        <span>Save ${bundle.savings}</span>
+                      <div className="flex items-center gap-1 text-green-600">
+                        <Tag className="w-4 h-4" />
+                        <span className="font-medium">Save ${bundle.savings}</span>
                       </div>
                     </div>
 
                     {/* Actions */}
                     <Link href={`/bundles/${bundle.id}`}>
-                      <Button className="w-full bg-black hover:bg-gray-800 text-white">
-                        <ShoppingBag className="w-4 h-4 mr-2" />
+                      <Button className="w-full bg-black hover:bg-gray-800 text-white py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+                        <ShoppingBag className="w-5 h-5 mr-2" />
                         View Bundle
                       </Button>
                     </Link>

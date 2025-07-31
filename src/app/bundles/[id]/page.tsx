@@ -19,6 +19,8 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
+import { weddingBundles } from '@/lib/products/weddingBundles';
+import { getSuitImage, getShirtImage, getTieImage } from '@/lib/products/bundleImageMapping';
 import { useCart } from '@/hooks/useCart';
 
 export default function BundleDetailPage() {
@@ -26,7 +28,23 @@ export default function BundleDetailPage() {
   const router = useRouter();
   const { addItem } = useCart();
   
-  const bundle = bundleProductsWithImages.bundles.find(b => b.id === params.id);
+  // Check both regular bundles and wedding bundles
+  let bundle = bundleProductsWithImages.bundles.find(b => b.id === params.id);
+  let isWeddingBundle = false;
+  
+  if (!bundle) {
+    // Check wedding bundles
+    const weddingBundle = weddingBundles.bundles.find(b => b.id === params.id);
+    if (weddingBundle) {
+      bundle = {
+        ...weddingBundle,
+        suit: { ...weddingBundle.suit, image: getSuitImage(weddingBundle.suit.color) || '' },
+        shirt: { ...weddingBundle.shirt, image: getShirtImage(weddingBundle.shirt.color) || '' },
+        tie: { ...weddingBundle.tie, image: getTieImage(weddingBundle.tie.color) || '' }
+      };
+      isWeddingBundle = true;
+    }
+  }
   const [selectedSize, setSelectedSize] = useState('');
   const [isFavorited, setIsFavorited] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -68,22 +86,32 @@ export default function BundleDetailPage() {
       price: bundle.bundlePrice,
       image: bundle.imageUrl,
       quantity: 1,
-      category: 'bundle',
+      category: isWeddingBundle ? 'wedding-bundle' : 'bundle',
       size: selectedSize,
       metadata: {
         suit: bundle.suit,
         shirt: bundle.shirt,
         tie: bundle.tie,
         originalPrice: bundle.originalPrice,
-        savings: bundle.savings
+        savings: bundle.savings,
+        ...(isWeddingBundle && { season: bundle.season })
       }
     });
   };
 
   // Related bundles
-  const relatedBundles = bundleProductsWithImages.bundles
-    .filter(b => b.category === bundle.category && b.id !== bundle.id)
-    .slice(0, 4);
+  let relatedBundles = [];
+  if (isWeddingBundle) {
+    // For wedding bundles, show other wedding bundles from the same season
+    relatedBundles = weddingBundles.bundles
+      .filter(b => b.season === bundle.season && b.id !== bundle.id)
+      .slice(0, 4);
+  } else {
+    // For regular bundles, show bundles from the same category
+    relatedBundles = bundleProductsWithImages.bundles
+      .filter(b => b.category === bundle.category && b.id !== bundle.id)
+      .slice(0, 4);
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -95,9 +123,21 @@ export default function BundleDetailPage() {
               Home
             </Link>
             <ChevronRight className="w-4 h-4 text-gray-400" />
-            <Link href="/bundles" className="text-gray-500 hover:text-gray-700">
-              Bundles
-            </Link>
+            {isWeddingBundle ? (
+              <>
+                <Link href="/occasions" className="text-gray-500 hover:text-gray-700">
+                  Occasions
+                </Link>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
+                <Link href="/occasions/wedding-party" className="text-gray-500 hover:text-gray-700">
+                  Wedding Party
+                </Link>
+              </>
+            ) : (
+              <Link href="/bundles" className="text-gray-500 hover:text-gray-700">
+                Bundles
+              </Link>
+            )}
             <ChevronRight className="w-4 h-4 text-gray-400" />
             <span className="text-gray-900 font-medium">{bundle.name}</span>
           </nav>
