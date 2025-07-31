@@ -38,17 +38,12 @@ export default function BundleCard({ bundle, onQuickView, featured = false }: Bu
     });
   };
 
-  const CardWrapper = featured ? motion.div : 'div';
-  const cardProps = featured ? {
-    whileHover: { y: -8 },
-    transition: { duration: 0.3 }
-  } : {};
-
   return (
-    <CardWrapper
-      {...cardProps}
-      className={`group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 ${
-        featured ? 'border-2 border-gold' : ''
+    <motion.div
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.3 }}
+      className={`group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border ${
+        featured ? 'border-2 border-gold' : 'border-gray-100'
       }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -87,7 +82,7 @@ export default function BundleCard({ bundle, onQuickView, featured = false }: Bu
       </button>
 
       {/* Image Container */}
-      <Link href={`/bundles/${bundle.id}`} className="block relative aspect-[4/5] overflow-hidden">
+      <Link href={`/bundles/${bundle.id}`} className="block relative aspect-[3/4] overflow-hidden">
         <Image
           src={bundle.imageUrl}
           alt={bundle.name}
@@ -124,19 +119,19 @@ export default function BundleCard({ bundle, onQuickView, featured = false }: Bu
       </Link>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-5">
         {/* Category */}
         <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">
           {bundle.category.replace('-', ' ')}
         </p>
 
         {/* Name */}
-        <h3 className="font-semibold text-lg mb-2 line-clamp-1">
+        <h3 className="font-semibold text-xl mb-2 line-clamp-1">
           {bundle.name}
         </h3>
 
         {/* Combination */}
-        <div className="text-sm text-gray-600 mb-3">
+        <div className="text-base text-gray-600 mb-3">
           <p className="line-clamp-1">
             {bundle.suit.color} • {bundle.shirt.color} • {bundle.tie.color}
           </p>
@@ -145,8 +140,8 @@ export default function BundleCard({ bundle, onQuickView, featured = false }: Bu
         {/* Price */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold">${bundle.bundlePrice}</span>
-            <span className="text-sm text-gray-400 line-through">${bundle.originalPrice}</span>
+            <span className="text-2xl font-bold">${bundle.bundlePrice}</span>
+            <span className="text-base text-gray-400 line-through">${bundle.originalPrice}</span>
           </div>
           <div className="flex items-center gap-1 text-green-600">
             <Tag className="w-4 h-4" />
@@ -155,17 +150,17 @@ export default function BundleCard({ bundle, onQuickView, featured = false }: Bu
         </div>
 
         {/* Occasions */}
-        <div className="flex flex-wrap gap-1 mb-3">
+        <div className="flex flex-wrap gap-1.5 mb-4">
           {bundle.occasions.slice(0, 2).map((occasion) => (
             <span
               key={occasion}
-              className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
+              className="text-sm bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium"
             >
               {occasion}
             </span>
           ))}
           {bundle.occasions.length > 2 && (
-            <span className="text-xs text-gray-500">
+            <span className="text-sm text-gray-500">
               +{bundle.occasions.length - 2} more
             </span>
           )}
@@ -174,11 +169,11 @@ export default function BundleCard({ bundle, onQuickView, featured = false }: Bu
         {/* Quick Add Button (Mobile) */}
         <button
           onClick={handleAddToCart}
-          className="md:hidden w-full bg-black text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors"
+          className="md:hidden w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
         >
           Add to Cart
         </button>
       </div>
-    </CardWrapper>
+    </motion.div>
   );
 }
