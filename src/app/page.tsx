@@ -7,6 +7,7 @@ import Link from "next/link";
 import { VIDEO_IDS } from "@/lib/utils/constants";
 import { StyleSwiperPreview } from "@/components/style/StyleSwiperPreview";
 import { VisualSearch } from "@/components/search/VisualSearch";
+import { TrendingBundles } from "@/components/home/TrendingBundles";
 import { useState } from "react";
 
 export default function Home() {
@@ -200,6 +201,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Trending Bundles Section */}
+      <TrendingBundles />
 
       {/* Wedding & Prom Features */}
       <section className="py-20 bg-white">
