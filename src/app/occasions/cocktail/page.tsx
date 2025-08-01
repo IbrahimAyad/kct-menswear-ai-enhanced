@@ -143,6 +143,42 @@ export default function CocktailPage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Category Filters */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">Style Categories</h2>
+              <div className="hidden md:flex items-center gap-2">
+                <span className="text-sm text-gray-600">Sort by:</span>
+                <select
+                  value={selectedSort}
+                  onChange={(e) => setSelectedSort(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                >
+                  <option value="trending">Trending</option>
+                  <option value="newest">Newest</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap gap-3">
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`px-6 py-3 rounded-full font-medium transition-all ${
+                    selectedCategory === category.id
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-gray-100 hover:bg-gray-200'
+                  }`}
+                >
+                  {category.name} ({category.count})
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Special Offer Banner */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -163,107 +199,64 @@ export default function CocktailPage() {
             </div>
           </motion.div>
 
-          <div className="grid lg:grid-cols-4 gap-8">
-            {/* Sidebar Filters - Desktop */}
-            <div className="hidden lg:block">
-              <div className="sticky top-24 space-y-6">
-                <div>
-                  <h3 className="font-semibold text-lg mb-4">Style Categories</h3>
-                  <div className="space-y-2">
+          {/* Mobile Filters */}
+          {showFilters && (
+            <div className="fixed inset-0 z-50 lg:hidden">
+              <div className="absolute inset-0 bg-black/50" onClick={() => setShowFilters(false)} />
+              <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl">
+                <div className="p-4 border-b flex justify-between items-center">
+                  <h3 className="font-semibold text-lg">Filters</h3>
+                  <button onClick={() => setShowFilters(false)}>
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="p-4 space-y-6">
+                  <div>
+                    <h4 className="font-medium mb-3">Sort By</h4>
+                    <select
+                      value={selectedSort}
+                      onChange={(e) => setSelectedSort(e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    >
+                      <option value="trending">Trending</option>
+                      <option value="newest">Newest</option>
+                      <option value="price-low">Price: Low to High</option>
+                      <option value="price-high">Price: High to Low</option>
+                    </select>
+                  </div>
+                  <div>
+                    <h4 className="font-medium mb-3">Categories</h4>
                     {categories.map((category) => (
                       <button
                         key={category.id}
-                        onClick={() => setSelectedCategory(category.id)}
-                        className={`w-full text-left px-4 py-3 rounded-lg transition-all ${
+                        onClick={() => {
+                          setSelectedCategory(category.id);
+                          setShowFilters(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 rounded-lg mb-2 ${
                           selectedCategory === category.id
-                            ? 'bg-purple-100 text-purple-700 font-medium'
+                            ? 'bg-purple-100 text-purple-700'
                             : 'hover:bg-gray-100'
                         }`}
                       >
-                        <div className="flex justify-between items-center">
-                          <span>{category.name}</span>
-                          <span className="text-sm text-gray-500">({category.count})</span>
-                        </div>
+                        {category.name} ({category.count})
                       </button>
                     ))}
                   </div>
                 </div>
-
-                {/* Style Guide */}
-                <div className="bg-purple-50 rounded-lg p-4">
-                  <h4 className="font-semibold mb-3 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-purple-600" />
-                    Style Guide
-                  </h4>
-                  <ul className="text-sm space-y-2 text-gray-700">
-                    <li>• <strong>Monochrome:</strong> Sleek single-color schemes</li>
-                    <li>• <strong>Contrast:</strong> Bold color combinations</li>
-                    <li>• <strong>Subtle:</strong> Soft, elegant pairings</li>
-                    <li>• <strong>Bold:</strong> Statement-making colors</li>
-                  </ul>
-                </div>
               </div>
             </div>
+          )}
 
-            {/* Mobile Filters */}
-            {showFilters && (
-              <div className="fixed inset-0 z-50 lg:hidden">
-                <div className="absolute inset-0 bg-black/50" onClick={() => setShowFilters(false)} />
-                <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-xl">
-                  <div className="p-4 border-b flex justify-between items-center">
-                    <h3 className="font-semibold text-lg">Filters</h3>
-                    <button onClick={() => setShowFilters(false)}>
-                      <X className="w-5 h-5" />
-                    </button>
-                  </div>
-                  <div className="p-4 space-y-6">
-                    <div>
-                      <h4 className="font-medium mb-3">Sort By</h4>
-                      <select
-                        value={selectedSort}
-                        onChange={(e) => setSelectedSort(e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                      >
-                        <option value="trending">Trending</option>
-                        <option value="newest">Newest</option>
-                        <option value="price-low">Price: Low to High</option>
-                        <option value="price-high">Price: High to Low</option>
-                      </select>
-                    </div>
-                    <div>
-                      <h4 className="font-medium mb-3">Categories</h4>
-                      {categories.map((category) => (
-                        <button
-                          key={category.id}
-                          onClick={() => {
-                            setSelectedCategory(category.id);
-                            setShowFilters(false);
-                          }}
-                          className={`w-full text-left px-4 py-3 rounded-lg mb-2 ${
-                            selectedCategory === category.id
-                              ? 'bg-purple-100 text-purple-700'
-                              : 'hover:bg-gray-100'
-                          }`}
-                        >
-                          {category.name} ({category.count})
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          {/* Bundle Grid */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">
+              {selectedCategory === 'all' ? 'All Cocktail Bundles' : categories.find(c => c.id === selectedCategory)?.name}
+            </h2>
+            <p className="text-gray-600">{sortedBundles.length} bundles</p>
+          </div>
 
-            {/* Bundle Grid */}
-            <div className="lg:col-span-3">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">
-                  {selectedCategory === 'all' ? 'All Cocktail Bundles' : categories.find(c => c.id === selectedCategory)?.name}
-                </h2>
-                <p className="text-gray-600">{sortedBundles.length} bundles</p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {sortedBundles.map((bundle, index) => (
                   <motion.div
                     key={bundle.id}
@@ -306,33 +299,31 @@ export default function CocktailPage() {
                     </div>
                   </motion.div>
                 ))}
-              </div>
-
-              {/* Call to Action */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="mt-16 bg-gray-900 text-white rounded-xl p-8 text-center"
-              >
-                <h2 className="text-3xl font-bold mb-4">Need Help Choosing?</h2>
-                <p className="text-lg mb-6 text-gray-300">
-                  Our style experts can help you find the perfect cocktail outfit
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button className="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold">
-                    Book Virtual Styling Session
-                  </button>
-                  <Link 
-                    href="/custom-suits"
-                    className="px-8 py-3 border border-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors font-semibold"
-                  >
-                    Create Custom Bundle
-                  </Link>
-                </div>
-              </motion.div>
-            </div>
           </div>
+
+          {/* Call to Action */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-16 bg-gray-900 text-white rounded-xl p-8 text-center"
+          >
+            <h2 className="text-3xl font-bold mb-4">Need Help Choosing?</h2>
+            <p className="text-lg mb-6 text-gray-300">
+              Our style experts can help you find the perfect cocktail outfit
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold">
+                Book Virtual Styling Session
+              </button>
+              <Link 
+                href="/custom-suits"
+                className="px-8 py-3 border border-white rounded-lg hover:bg-white hover:text-gray-900 transition-colors font-semibold"
+              >
+                Create Custom Bundle
+              </Link>
+            </div>
+          </motion.div>
         </div>
 
         {/* Quick View Modal */}
