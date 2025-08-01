@@ -111,9 +111,17 @@ export function addProductImages(bundle: any): any {
       ...bundle.shirt,
       image: getShirtImage(bundle.shirt.color)
     },
-    tie: {
-      ...bundle.tie,
-      image: getTieImage(bundle.tie.color)
-    }
+    ...(bundle.tie && {
+      tie: {
+        ...bundle.tie,
+        image: getTieImage(bundle.tie.color)
+      }
+    }),
+    ...(bundle.pocketSquare && {
+      pocketSquare: {
+        ...bundle.pocketSquare,
+        image: undefined // Pocket squares don't have individual images in our system
+      }
+    })
   };
 }

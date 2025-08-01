@@ -21,6 +21,7 @@ import {
 import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import { weddingBundles } from '@/lib/products/weddingBundles';
 import { promBundles } from '@/lib/products/promBundles';
+import { casualBundles } from '@/lib/products/casualBundles';
 import { getSuitImage, getShirtImage, getTieImage } from '@/lib/products/bundleImageMapping';
 import { useCart } from '@/hooks/useCart';
 
@@ -29,10 +30,11 @@ export default function BundleDetailPage() {
   const router = useRouter();
   const { addItem } = useCart();
   
-  // Check regular bundles, wedding bundles, and prom bundles
+  // Check regular bundles, wedding bundles, prom bundles, and casual bundles
   let bundle = bundleProductsWithImages.bundles.find(b => b.id === params.id);
   let isWeddingBundle = false;
   let isPromBundle = false;
+  let isCasualBundle = false;
   
   if (!bundle) {
     // Check wedding bundles
@@ -59,6 +61,20 @@ export default function BundleDetailPage() {
         tie: { ...promBundle.tie, image: getTieImage(promBundle.tie.color) || '' }
       };
       isPromBundle = true;
+    }
+  }
+  
+  if (!bundle) {
+    // Check casual bundles
+    const casualBundle = casualBundles.bundles.find(b => b.id === params.id);
+    if (casualBundle) {
+      bundle = {
+        ...casualBundle,
+        suit: { ...casualBundle.suit, image: getSuitImage(casualBundle.suit.color) || '' },
+        shirt: { ...casualBundle.shirt, image: getShirtImage(casualBundle.shirt.color) || '' },
+        tie: casualBundle.pocketSquare ? { ...casualBundle.pocketSquare, image: '' } : { color: '', style: '', image: '' }
+      };
+      isCasualBundle = true;
     }
   }
   const [selectedSize, setSelectedSize] = useState('');
@@ -102,7 +118,7 @@ export default function BundleDetailPage() {
       price: bundle.bundlePrice,
       image: bundle.imageUrl,
       quantity: 1,
-      category: isPromBundle ? 'prom-bundle' : isWeddingBundle ? 'wedding-bundle' : 'bundle',
+      category: isCasualBundle ? 'casual-bundle' : isPromBundle ? 'prom-bundle' : isWeddingBundle ? 'wedding-bundle' : 'bundle',
       size: selectedSize,
       metadata: {
         suit: bundle.suit,
@@ -110,7 +126,8 @@ export default function BundleDetailPage() {
         tie: bundle.tie,
         originalPrice: bundle.originalPrice,
         savings: bundle.savings,
-        ...(isWeddingBundle && { season: bundle.season })
+        ...(isWeddingBundle && { season: bundle.season }),
+        ...(isCasualBundle && { pocketSquare: bundle.pocketSquare })
       }
     });
   };
@@ -162,6 +179,16 @@ export default function BundleDetailPage() {
                 <ChevronRight className="w-4 h-4 text-gray-400" />
                 <Link href="/occasions/prom" className="text-gray-500 hover:text-gray-700">
                   Prom
+                </Link>
+              </>
+            ) : isCasualBundle ? (
+              <>
+                <Link href="/occasions" className="text-gray-500 hover:text-gray-700">
+                  Occasions
+                </Link>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
+                <Link href="/occasions/cocktail" className="text-gray-500 hover:text-gray-700">
+                  Cocktail
                 </Link>
               </>
             ) : (
@@ -237,8 +264,8 @@ export default function BundleDetailPage() {
                     </div>
                   )}
                   
-                  {/* Tie Thumbnail */}
-                  {bundle.tie.image && (
+                  {/* Tie/Pocket Square Thumbnail */}
+                  {!isCasualBundle && bundle.tie.image && (
                     <div className="relative">
                       <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border hover:border-gray-400 transition-colors">
                         <Image
@@ -249,6 +276,14 @@ export default function BundleDetailPage() {
                         />
                       </div>
                       <p className="text-xs text-center mt-1 text-gray-600">{bundle.tie.color} Tie</p>
+                    </div>
+                  )}
+                  {isCasualBundle && bundle.pocketSquare && (
+                    <div className="relative">
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border hover:border-gray-400 transition-colors flex items-center justify-center">
+                        <div className="w-16 h-16 bg-gradient-to-br from-gray-200 to-gray-300 rounded transform rotate-45" />
+                      </div>
+                      <p className="text-xs text-center mt-1 text-gray-600">{bundle.pocketSquare.color} Pocket Square</p>
                     </div>
                   )}
                 </div>
@@ -298,13 +333,24 @@ export default function BundleDetailPage() {
                     <p className="text-sm text-gray-600">100% Egyptian cotton, wrinkle-resistant finish</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-500 mt-1" />
-                  <div className="flex-1">
-                    <h3 className="font-medium">{bundle.tie.color} {bundle.tie.style}</h3>
-                    <p className="text-sm text-gray-600">Luxurious silk blend, handcrafted details</p>
+                {!isCasualBundle && (
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-500 mt-1" />
+                    <div className="flex-1">
+                      <h3 className="font-medium">{bundle.tie.color} {bundle.tie.style}</h3>
+                      <p className="text-sm text-gray-600">Luxurious silk blend, handcrafted details</p>
+                    </div>
                   </div>
-                </div>
+                )}
+                {isCasualBundle && bundle.pocketSquare && (
+                  <div className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-500 mt-1" />
+                    <div className="flex-1">
+                      <h3 className="font-medium">{bundle.pocketSquare.color} Pocket Square</h3>
+                      <p className="text-sm text-gray-600">Matching pocket square for sophisticated style</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
