@@ -9,6 +9,79 @@ import { ChevronLeft, Share2, Check, Plus, Minus, X } from 'lucide-react';
 import { tieProducts, getTieColorById } from '@/lib/products/tieProducts';
 import { useCart } from '@/hooks/useCart';
 
+// Helper function to generate style-specific image URLs
+function getStyleSpecificImage(colorData: any, styleId: string): string {
+  // Convert color directory name format (e.g., "3000-TT (Mermaid Green)")
+  const colorDirMap: { [key: string]: string } = {
+    'mermaid-green': '3000-TT (Mermaid Green)',
+    'emerald-green': '3000-Z (Emerald Green)',
+    'mint-green': '3000-V (Mint)',
+    'light-lilac': '3000-VV (Light Lilac)',
+    'lilac': '3000-XX (Lilac)',
+    'pink': '3000-X (Pink)',
+    'light-pink': '3000-UU (Light Pink)',
+    'baby-blue': '3000-R (Baby Blue)',
+    'powder-blue': '3000-OO (Powder Blue)',
+    'royal-blue': '3000-EE (Royal Blue)',
+    'tiffany-blue': '3000-CCC (Tiffany Blue)',
+    'navy': '3000-G (Navy Blue)',
+    'dark-navy': 'Dark Navy',
+    'coral': '3000-FF (Coral)',
+    'orange': '3000-SS (Orange)',
+    'medium-orange': 'Medium Orange Bow + Tie',
+    'burnt-orange': 'Burnt Orange + Bow + Tie',
+    'yellow': '3000-J (Yellow)',
+    'gold': '3000-JJ (Gold)',
+    'red': '3000-O (Bright Red)',
+    'dark-red': 'darkred',
+    'burgundy': '3000-MM (Burgundy)',
+    'plum': '3000-LL (Plum)',
+    'medium-purple': '3000-HH (Medium Purple)',
+    'dark-grey': '3000-L (Dark Grey)',
+    'silver': '3000-E (Silver)',
+    'black': 'black',
+    'white': 'white',
+    'blue': 'blue-',
+    'hunter-green': 'Hunter Green + Bow + Tie',
+    'olive-green': '3000-Q (Olive Green)',
+    'dusty-pink': 'dustypink',
+    'blush-pink': 'blush-pink',
+    'fushia': '3000-K (Fuchsia)',
+    'moca': 'moca'
+  };
+
+  const baseUrl = 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts';
+  const colorDir = colorDirMap[colorData.id] || colorData.displayName;
+  
+  // Generate filename based on style
+  let filename = '';
+  const colorNameForFile = colorData.name.toLowerCase().replace(/ /g, '-');
+  
+  switch(styleId) {
+    case 'bowtie':
+      filename = `${colorNameForFile}-bow-tie.webp`;
+      break;
+    case 'classic':
+      filename = `${colorNameForFile}-classic-width-tie-3.25-inch.webp`;
+      break;
+    case 'skinny':
+      filename = `${colorNameForFile}-narrow-width-tie-2.75-inch.webp`;
+      break;
+    case 'slim':
+      filename = `${colorNameForFile}-slim-width-tie-2.25-inch.webp`;
+      break;
+    default:
+      // Fallback to original image
+      return colorData.imageUrl;
+  }
+  
+  // Construct the full URL
+  const fullUrl = `${baseUrl}/${encodeURIComponent(colorDir)}/${filename}`;
+  
+  // Return the new URL, with fallback to original if something goes wrong
+  return fullUrl;
+}
+
 interface BundleItem {
   color: string;
   style: string;
@@ -150,22 +223,57 @@ export default function TieProductPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Left: Product Image */}
-          <div>
+          {/* Left: Product Images */}
+          <div className="space-y-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className="relative aspect-square rounded-lg overflow-hidden bg-gray-100"
             >
               <Image
-                src={colorData.imageUrl}
+                src={getStyleSpecificImage(colorData, styleId)}
                 alt={`${colorData.name} ${styleData.name}`}
                 fill
                 className="object-cover"
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
+                onError={(e) => {
+                  // Fallback to original image if style-specific image fails
+                  (e.target as HTMLImageElement).src = colorData.imageUrl;
+                }}
               />
             </motion.div>
+            
+            {/* Style Options Preview */}
+            <div className="grid grid-cols-4 gap-3">
+              {Object.entries(tieProducts.styles).map(([key, style]) => {
+                const isActive = key === styleId;
+                return (
+                  <Link
+                    key={key}
+                    href={`/products/ties/${colorId}-${key}`}
+                    className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                      isActive ? 'border-gray-900' : 'border-gray-200 hover:border-gray-400'
+                    }`}
+                  >
+                    <Image
+                      src={getStyleSpecificImage(colorData, key)}
+                      alt={`${colorData.name} ${style.name}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 25vw, 12.5vw"
+                      onError={(e) => {
+                        // Fallback to original image if style-specific image fails
+                        (e.target as HTMLImageElement).src = colorData.imageUrl;
+                      }}
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                      <p className="text-xs text-white font-medium">{style.name.split(' ')[0]}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
           {/* Right: Product Details */}
