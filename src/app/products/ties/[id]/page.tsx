@@ -57,18 +57,53 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
   let filename = '';
   const colorNameForFile = colorData.name.toLowerCase().replace(/ /g, '-');
   
+  // Special handling for certain colors
+  const specialPrefixes: { [key: string]: string } = {
+    'powder-blue': 'oo',
+    'mermaid-green': 'tt',
+    'emerald-green': 'z',
+    'mint-green': 'v',
+    'light-lilac': 'vv',
+    'lilac': 'xx',
+    'pink': 'x',
+    'light-pink': 'uu',
+    'baby-blue': 'r',
+    'royal-blue': 'ee',
+    'tiffany-blue': 'ccc',
+    'navy': 'g',
+    'coral': 'ff',
+    'orange': 'ss',
+    'yellow': 'j',
+    'gold': 'jj',
+    'red': 'o',
+    'burgundy': 'mm',
+    'plum': 'll',
+    'medium-purple': 'hh',
+    'dark-grey': 'l',
+    'silver': 'e',
+    'olive-green': 'q',
+    'fushia': 'k'
+  };
+  
+  const prefix = specialPrefixes[colorData.id];
+  
   switch(styleId) {
     case 'bowtie':
-      filename = `${colorNameForFile}-bow-tie.webp`;
+      // Bowtie uses different naming pattern
+      if (prefix) {
+        filename = `${prefix}-${colorNameForFile}-bowtie.jpg`;
+      } else {
+        filename = `${colorNameForFile}-bowtie.jpg`;
+      }
       break;
     case 'classic':
       filename = `${colorNameForFile}-classic-width-tie-3.25-inch.webp`;
       break;
     case 'skinny':
-      filename = `${colorNameForFile}-narrow-width-tie-2.75-inch.webp`;
+      filename = `${colorNameForFile}-skinny-tie-2.75-inch.webp`;
       break;
     case 'slim':
-      filename = `${colorNameForFile}-slim-width-tie-2.25-inch.webp`;
+      filename = `${colorNameForFile}-ultra-skinny-tie-2.25-inch.webp`;
       break;
     default:
       // Fallback to original image
@@ -237,6 +272,7 @@ export default function TieProductPage() {
                 className="object-cover"
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
+                unoptimized
                 onError={(e) => {
                   // Fallback to original image if style-specific image fails
                   (e.target as HTMLImageElement).src = colorData.imageUrl;
@@ -262,6 +298,7 @@ export default function TieProductPage() {
                       fill
                       className="object-cover"
                       sizes="(max-width: 1024px) 25vw, 12.5vw"
+                      unoptimized
                       onError={(e) => {
                         // Fallback to original image if style-specific image fails
                         (e.target as HTMLImageElement).src = colorData.imageUrl;
