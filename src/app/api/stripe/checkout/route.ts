@@ -60,26 +60,52 @@ export async function POST(req: NextRequest) {
       };
     });
     
-    // Store detailed order information in metadata
-    const orderDetails = items.map((item: any) => ({
-      productId: item.id,
-      productName: item.name,
-      size: item.selectedSize || 'N/A',
-      color: item.selectedColor || 'N/A',
-      sku: `${item.id}-${item.selectedColor || 'default'}-${item.selectedSize || 'default'}`,
-      quantity: item.quantity,
-      price: item.price,
-      stripePriceId: item.stripePriceId,
-    }));
+    // Simplify metadata for Stripe's 500 character limit
+    // Group items by bundle or product type
+    const bundleGroups: { [key: string]: number } = {};
+    const individualItems: string[] = [];
+    
+    items.forEach((item: any) => {
+      if (item.bundleId) {
+        // For bundles, just count the bundle types
+        const bundleType = item.metadata?.bundleType || 'bundle';
+        bundleGroups[bundleType] = (bundleGroups[bundleType] || 0) + 1;
+      } else {
+        // For individual items, store minimal info
+        individualItems.push(`${item.id}:${item.quantity}`);
+      }
+    });
+    
+    // Create compact metadata
+    const metadata: { [key: string]: string } = {
+      itemCount: items.length.toString(),
+      timestamp: new Date().toISOString(),
+    };
+    
+    // Add bundle info if present
+    if (Object.keys(bundleGroups).length > 0) {
+      metadata.bundles = Object.entries(bundleGroups)
+        .map(([type, count]) => `${type}:${count}`)
+        .join(',');
+    }
+    
+    // Add individual items if present and within limit
+    if (individualItems.length > 0) {
+      const itemsString = individualItems.slice(0, 5).join(','); // Limit to 5 items
+      if (itemsString.length < 200) {
+        metadata.items = itemsString;
+      }
+    }
     
     console.log('About to create Stripe session with config:', {
       lineItemsCount: lineItems.length,
       firstLineItem: lineItems[0],
-      origin: req.headers.get('origin')
+      origin: req.headers.get('origin'),
+      metadata
     });
     
     // Create checkout session
-    const session = await stripe.checkout.sessions.create({
+    const sessionConfig: any = {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
@@ -96,10 +122,15 @@ export async function POST(req: NextRequest) {
       automatic_tax: {
         enabled: true,
       },
-      metadata: {
-        order_details: JSON.stringify(orderDetails),
-      },
-    });
+      metadata: metadata,
+    };
+    
+    // Add customer email if provided
+    if (customerEmail) {
+      sessionConfig.customer_email = customerEmail;
+    }
+    
+    const session = await stripe.checkout.sessions.create(sessionConfig);
     
     return NextResponse.json({ 
       sessionId: session.id, 
