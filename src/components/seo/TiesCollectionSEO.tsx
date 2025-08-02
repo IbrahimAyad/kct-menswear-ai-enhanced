@@ -1,5 +1,4 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import Script from 'next/script';
 
 export function TiesCollectionSEO() {
   const structuredData = {
@@ -126,40 +125,21 @@ export function TiesCollectionSEO() {
   };
 
   return (
-    <Helmet>
-      <title>Men's Ties & Bowties - 80+ Colors, 4 Styles | KCT Menswear</title>
-      <meta 
-        name="description" 
-        content="Shop premium silk ties and bowties in 80+ colors. Classic, Skinny, Slim & Bowtie styles. Bundle deals: Buy 4 Get 1 Free. Free shipping over $75. Detroit's premier menswear destination."
+    <>
+      <Script
+        id="ties-collection-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData)
+        }}
       />
-      <meta 
-        name="keywords" 
-        content="mens ties, silk ties, bowties, wedding ties, skinny ties, slim ties, classic ties, tie bundles, detroit menswear, formal accessories, tie colors, navy tie, burgundy tie, black tie"
+      <Script
+        id="ties-collection-faq-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqData)
+        }}
       />
-      
-      {/* Open Graph */}
-      <meta property="og:title" content="Men's Ties & Bowties Collection - 80+ Colors | KCT Menswear" />
-      <meta property="og:description" content="Discover our premium collection of silk ties and bowties in over 80 colors. Perfect for weddings, business, and special occasions." />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://kctmenswear.com/collections/ties" />
-      <meta property="og:image" content="https://kctmenswear.com/images/ties-collection-hero.jpg" />
-      
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Men's Ties & Bowties - 80+ Colors | KCT Menswear" />
-      <meta name="twitter:description" content="Premium silk ties in Classic, Skinny, Slim & Bowtie styles. Bundle deals available." />
-      
-      {/* Canonical URL */}
-      <link rel="canonical" href="https://kctmenswear.com/collections/ties" />
-      
-      {/* Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
-      
-      <script type="application/ld+json">
-        {JSON.stringify(faqData)}
-      </script>
-    </Helmet>
+    </>
   );
 }
