@@ -569,6 +569,29 @@ function BundleBuilderModal({
         </div>
 
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
+          {/* Selected Combination Preview */}
+          {selectedColor && selectedStyle && (
+            <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+              <div className="flex items-center space-x-4">
+                <div className="relative w-20 h-20 rounded-lg overflow-hidden">
+                  <Image
+                    src={getStyleSpecificImage(getTieColorById(selectedColor), selectedStyle)}
+                    alt="Selected combination"
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+                <div>
+                  <p className="font-medium text-lg">
+                    {getTieColorById(selectedColor)?.name} {tieProducts.styles[selectedStyle as keyof typeof tieProducts.styles]?.name}
+                  </p>
+                  <p className="text-sm text-gray-600">Ready to add to bundle</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Style Selection */}
           <div className="mb-8">
             <h3 className="text-lg font-medium mb-4">1. Select Style</h3>
@@ -577,14 +600,46 @@ function BundleBuilderModal({
                 <button
                   key={key}
                   onClick={() => setSelectedStyle(key)}
-                  className={`p-4 rounded-lg border-2 transition-all ${
+                  className={`relative rounded-lg border-2 transition-all overflow-hidden ${
                     selectedStyle === key
-                      ? 'border-blue-600 bg-blue-50'
+                      ? 'border-blue-600 shadow-lg'
                       : 'border-gray-200 hover:border-gray-400'
                   }`}
                 >
-                  <p className="font-medium">{style.name.split(' ')[0]}</p>
-                  <p className="text-sm text-gray-600">{style.width}</p>
+                  {/* Style Preview Image */}
+                  <div className="relative aspect-square bg-gray-100">
+                    {selectedColor && (
+                      <Image
+                        src={getStyleSpecificImage(getTieColorById(selectedColor), key)}
+                        alt={`${style.name} preview`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        unoptimized
+                        onError={(e) => {
+                          // Fallback to a default style image or placeholder
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                    )}
+                    {!selectedColor && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-center p-4">
+                          <p className="text-3xl mb-2">{key === 'bowtie' ? '🎀' : '👔'}</p>
+                          <p className="text-xs text-gray-500">Select a color first</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className={`p-3 ${selectedStyle === key ? 'bg-blue-50' : 'bg-white'}`}>
+                    <p className="font-medium">{style.name.split(' ')[0]}</p>
+                    <p className="text-sm text-gray-600">{style.width}</p>
+                  </div>
+                  {selectedStyle === key && (
+                    <div className="absolute top-2 right-2 bg-blue-600 text-white rounded-full p-1">
+                      <Check className="w-4 h-4" />
+                    </div>
+                  )}
                 </button>
               ))}
             </div>
@@ -603,19 +658,29 @@ function BundleBuilderModal({
                       ? 'border-blue-600 shadow-lg'
                       : 'border-gray-200 hover:border-gray-400'
                   }`}
+                  title={color.name}
                 >
                   <Image
-                    src={color.imageUrl}
+                    src={selectedStyle ? getStyleSpecificImage(color, selectedStyle) : color.imageUrl}
                     alt={color.name}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 25vw, 12.5vw"
+                    unoptimized
+                    onError={(e) => {
+                      // Fallback to original image if style-specific image fails
+                      (e.target as HTMLImageElement).src = color.imageUrl;
+                    }}
                   />
                   {selectedColor === color.id && (
                     <div className="absolute inset-0 bg-blue-600 bg-opacity-20 flex items-center justify-center">
                       <Check className="w-8 h-8 text-white" />
                     </div>
                   )}
+                  {/* Color name tooltip on hover */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-1 opacity-0 hover:opacity-100 transition-opacity">
+                    <p className="text-xs text-white text-center truncate">{color.name}</p>
+                  </div>
                 </button>
               ))}
             </div>
