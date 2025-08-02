@@ -299,7 +299,7 @@ export const tieProducts = {
       name: 'Blush Pink',
       displayName: 'blush-pink',
       hex: '#FFE4E1',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/blush.jpg'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/blush-pink.jpg'
     },
     {
       id: 'light-blush',
@@ -327,7 +327,7 @@ export const tieProducts = {
       name: 'Dusty Rose',
       displayName: 'Dusty-Rose',
       hex: '#DCAE96',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/dusty-rose.jpg'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/dustypink.jpg'
     },
     {
       id: 'french-rose',

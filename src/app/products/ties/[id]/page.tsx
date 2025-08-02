@@ -54,7 +54,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'rust': '3000-YY (Rust)',
     
     // Pinks & Roses
-    'blush-pink': 'Blush',
+    'blush-pink': 'blush-pink',
     'light-blush': '3000-III (Light Blush)',
     'pink': '3000-X (Pink)',
     'light-pink': '3000-UU (Light Pink)',
