@@ -121,7 +121,7 @@ export const tieProducts = {
       name: 'Charcoal',
       displayName: 'Charcoal',
       hex: '#36454F',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Charcoal-main.webp'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Charcoal-mian.webp'
     },
     {
       id: 'dark-grey',
@@ -192,7 +192,7 @@ export const tieProducts = {
       name: 'Turquoise',
       displayName: 'Turquoise',
       hex: '#40E0D0',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Turquoise-main.webp'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Turquoise-mian.webp'
     },
     {
       id: 'teal',
@@ -291,7 +291,7 @@ export const tieProducts = {
       name: 'Rust',
       displayName: 'Rust',
       hex: '#B7410E',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/rust.jpg'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/rust-main.jpg'
     },
     // Pinks & Roses
     {
@@ -299,7 +299,7 @@ export const tieProducts = {
       name: 'Blush Pink',
       displayName: 'blush-pink',
       hex: '#FFE4E1',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/blush-pink.jpg'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/blush.jpg'
     },
     {
       id: 'light-blush',
@@ -321,13 +321,6 @@ export const tieProducts = {
       displayName: 'light-pink',
       hex: '#FFB6C1',
       imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/light-pink.jpg'
-    },
-    {
-      id: 'dusty-pink',
-      name: 'Dusty Pink',
-      displayName: 'dustypink',
-      hex: '#DCAE96',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/dustypink.jpg'
     },
     {
       id: 'dusty-rose',
@@ -371,13 +364,6 @@ export const tieProducts = {
       hex: '#FF00FF',
       imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Magenta-main.webp'
     },
-    {
-      id: 'blush',
-      name: 'Blush',
-      displayName: 'Blush',
-      hex: '#DE5D83',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/blush.jpg'
-    },
     // Oranges
     {
       id: 'burnt-orange',
@@ -385,13 +371,6 @@ export const tieProducts = {
       displayName: 'Burnt Orange + Bow + Tie',
       hex: '#CC5500',
       imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Burnt%20Orange%20%2B%20Bow%20%2B%20Tie%20.jpg'
-    },
-    {
-      id: 'medium-orange',
-      name: 'Medium Orange',
-      displayName: 'Medium Orange Bow + Tie',
-      hex: '#FF8C00',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Medium%20Orange%20Bow%20%2B%20Tie.jpg'
     },
     {
       id: 'orange',
@@ -452,13 +431,6 @@ export const tieProducts = {
       imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Hunter%20Green%20%2B%20Bow%20%2B%20Tie.jpg'
     },
     {
-      id: 'forest-green',
-      name: 'Forest Green',
-      displayName: 'Forest-Green',
-      hex: '#228B22',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/forest-green.jpg'
-    },
-    {
       id: 'olive-green',
       name: 'Olive Green',
       displayName: 'Olive Green Bow + Tie',
@@ -470,7 +442,7 @@ export const tieProducts = {
       name: 'Dark Olive',
       displayName: 'Dark-Olive',
       hex: '#556B2F',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Dark-Olive-main.webp'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Dark%20Olive-main.webp'
     },
     {
       id: 'mint-green',
@@ -491,14 +463,14 @@ export const tieProducts = {
       name: 'Pastel Green',
       displayName: 'Pastel-Green',
       hex: '#77DD77',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Pastel-Green-main.webp'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Pastel-Gree-main.webp'
     },
     {
       id: 'lettuce-green',
       name: 'Lettuce Green',
       displayName: 'Lettuce-Green',
       hex: '#A8E4A0',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Lettuce-Green.webp'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/%20Lettuce-Green.webp'
     },
     {
       id: 'lime',
@@ -534,7 +506,7 @@ export const tieProducts = {
       name: 'Lavender',
       displayName: 'Lavender',
       hex: '#E6E6FA',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/lavender.jpg'
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Lavender-main.jpg'
     },
     {
       id: 'medium-purple',
@@ -607,13 +579,6 @@ export const tieProducts = {
       hex: '#483C32',
       imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Taupe-main.webp'
     },
-    {
-      id: 'cinnamon',
-      name: 'Cinnamon',
-      displayName: 'Cinnamon',
-      hex: '#D2691E',
-      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/cinnamon.jpg'
-    }
   ]
 };
 

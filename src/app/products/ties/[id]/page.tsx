@@ -54,22 +54,19 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'rust': '3000-YY (Rust)',
     
     // Pinks & Roses
-    'blush-pink': 'blush-pink',
+    'blush-pink': 'Blush',
     'light-blush': '3000-III (Light Blush)',
     'pink': '3000-X (Pink)',
     'light-pink': '3000-UU (Light Pink)',
-    'dusty-pink': 'dustypink',
     'dusty-rose': 'Dusty Rose',
     'french-rose': '3000-SSS (French Rose)',
     'rose-gold': '3000-LLL (Rose Gold)',
     'coral': '3000-FF (Coral)',
     'fushia': '3000-K (Fuchsia)',
     'magenta': '3000-PP (Magenta)',
-    'blush': 'Blush',
     
     // Oranges
     'burnt-orange': '3000-Z (Burnt Orange)',
-    'medium-orange': '3000-Y (Medium Orange)',
     'orange': '3000-SS (Orange)',
     'salmon-orange': '3000-GG (Salmon Orange)',
     
@@ -82,7 +79,6 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     // Greens
     'emerald-green': '3000-Z (Emerald Green)',
     'hunter-green': 'Hunter Green + Bow + Tie',
-    'forest-green': '3000-BB (Forest Green)',
     'olive-green': '3000-Q (Olive Green)',
     'dark-olive': '3000-DD (Dark Olive)',
     'mint-green': '3000-V (Mint)',
@@ -108,7 +104,6 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'medium-brown': '3000-OOO (Medium Brown)',
     'nutmeg': '3000-QQQ (Nutmeg)',
     'taupe': '3000-T (Taupe)',
-    'cinnamon': '3000-UUU (Cinnamon)'
   };
 
   const baseUrl = 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts';
@@ -171,7 +166,6 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     
     // Oranges
     'burnt-orange': 'z',
-    'medium-orange': 'y',
     'orange': 'ss',
     'salmon-orange': 'gg',
     
@@ -183,7 +177,6 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     
     // Greens
     'emerald-green': 'z',
-    'forest-green': 'bb',
     'olive-green': 'q',
     'dark-olive': 'dd',
     'mint-green': 'v',
@@ -208,8 +201,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'chocolate-brown': 'n',
     'medium-brown': 'ooo',
     'nutmeg': 'qqq',
-    'taupe': 't',
-    'cinnamon': 'uuu'
+    'taupe': 't'
   };
   
   const prefix = specialPrefixes[colorData.id];
