@@ -316,6 +316,259 @@ export const tieProducts = {
       displayName: 'moca',
       hex: '#967969',
       imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/moca.jpg'
+    },
+    // New colors added
+    {
+      id: 'champagne',
+      name: 'Champagne',
+      displayName: 'Champagne',
+      hex: '#F7E7CE',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Champagne-main.png'
+    },
+    {
+      id: 'deep-purple',
+      name: 'Deep Purple',
+      displayName: 'Deep-Purple',
+      hex: '#663399',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Deep-Purple-main.png'
+    },
+    {
+      id: 'ivory',
+      name: 'Ivory',
+      displayName: 'Ivory',
+      hex: '#FFFFF0',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Ivory-Main.png'
+    },
+    {
+      id: 'lettuce-green',
+      name: 'Lettuce Green',
+      displayName: 'Lettuce-Green',
+      hex: '#A8E4A0',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Lettuce-Green.webp'
+    },
+    {
+      id: 'apple-red',
+      name: 'Apple Red',
+      displayName: 'Apple-Red',
+      hex: '#FF4040',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Apple-Red-main.webp'
+    },
+    {
+      id: 'banana-yellow',
+      name: 'Banana Yellow',
+      displayName: 'Banana-Yellow',
+      hex: '#FFE135',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Banana-Yellow-main.webp'
+    },
+    {
+      id: 'beige',
+      name: 'Beige',
+      displayName: 'Beige',
+      hex: '#F5F5DC',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Beige-main.webp'
+    },
+    {
+      id: 'canary',
+      name: 'Canary',
+      displayName: 'Canary',
+      hex: '#FFFF99',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Canary-main.webp'
+    },
+    {
+      id: 'carolina-blue',
+      name: 'Carolina Blue',
+      displayName: 'Carolina-Blue',
+      hex: '#99BADD',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Carolina-Blue-main.webp'
+    },
+    {
+      id: 'charcoal',
+      name: 'Charcoal',
+      displayName: 'Charcoal',
+      hex: '#36454F',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Charcoal-main.webp'
+    },
+    {
+      id: 'chianti',
+      name: 'Chianti',
+      displayName: 'Chianti',
+      hex: '#B94E48',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Chianti-main.webp'
+    },
+    {
+      id: 'chocolate-brown',
+      name: 'Chocolate Brown',
+      displayName: 'Chocolate-Brown',
+      hex: '#7B3F00',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Chocolate-Brown-main.webp'
+    },
+    {
+      id: 'cobalt',
+      name: 'Cobalt',
+      displayName: 'Cobalt',
+      hex: '#0047AB',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Cobalt-main.webp'
+    },
+    {
+      id: 'dark-olive',
+      name: 'Dark Olive',
+      displayName: 'Dark-Olive',
+      hex: '#556B2F',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Dark-Olive-main.webp'
+    },
+    {
+      id: 'denim-blue',
+      name: 'Denim Blue',
+      displayName: 'Denim-Blue',
+      hex: '#1560BD',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Denim-Blue-main.webp'
+    },
+    {
+      id: 'dusty-sage',
+      name: 'Dusty Sage',
+      displayName: 'Dusty-Sage',
+      hex: '#9CAF88',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Dusty-Sage-main.webp'
+    },
+    {
+      id: 'french-rose',
+      name: 'French Rose',
+      displayName: 'French-Rose',
+      hex: '#F64A8A',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/French-Rose.webp'
+    },
+    {
+      id: 'light-blush',
+      name: 'Light Blush',
+      displayName: 'Light-Blush',
+      hex: '#FFE4E1',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Light-Blush-main.webp'
+    },
+    {
+      id: 'magenta',
+      name: 'Magenta',
+      displayName: 'Magenta',
+      hex: '#FF00FF',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Magenta-main.webp'
+    },
+    {
+      id: 'mauve',
+      name: 'Mauve',
+      displayName: 'Mauve',
+      hex: '#E0B0FF',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Mauve-main.webp'
+    },
+    {
+      id: 'medium-brown',
+      name: 'Medium Brown',
+      displayName: 'Medium-Brown',
+      hex: '#8B4513',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Medium-Brown.webp'
+    },
+    {
+      id: 'nutmeg',
+      name: 'Nutmeg',
+      displayName: 'Nutmeg',
+      hex: '#8B6F47',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Nutmeg-main.webp'
+    },
+    {
+      id: 'pastel-green',
+      name: 'Pastel Green',
+      displayName: 'Pastel-Green',
+      hex: '#77DD77',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Pastel-Green-main.webp'
+    },
+    {
+      id: 'pastel-purple',
+      name: 'Pastel Purple',
+      displayName: 'Pastel-Purple',
+      hex: '#B19CD9',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Pastel-Purple-main.webp'
+    },
+    {
+      id: 'peach',
+      name: 'Peach',
+      displayName: 'Peach',
+      hex: '#FFE5B4',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Peach-main.webp'
+    },
+    {
+      id: 'rose-gold',
+      name: 'Rose Gold',
+      displayName: 'Rose-Gold',
+      hex: '#B76E79',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Rose-Gold-main.webp'
+    },
+    {
+      id: 'salmon-orange',
+      name: 'Salmon Orange',
+      displayName: 'Salmon-Orange',
+      hex: '#FF8C69',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Salmon-Orange.webp'
+    },
+    {
+      id: 'sapphire-blue',
+      name: 'Sapphire Blue',
+      displayName: 'Sapphire-Blue',
+      hex: '#0F52BA',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Sapphire-Blue-main.webp'
+    },
+    {
+      id: 'taupe',
+      name: 'Taupe',
+      displayName: 'Taupe',
+      hex: '#483C32',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Taupe-main.webp'
+    },
+    {
+      id: 'teal',
+      name: 'Teal',
+      displayName: 'Teal',
+      hex: '#008080',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Teal-main.webp'
+    },
+    {
+      id: 'aqua',
+      name: 'Aqua',
+      displayName: 'Aqua',
+      hex: '#00FFFF',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/aqua-main.webp'
+    },
+    {
+      id: 'dark-silver',
+      name: 'Dark Silver',
+      displayName: 'Dark-Silver',
+      hex: '#71706E',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/dark-silver-main.webp'
+    },
+    {
+      id: 'true-red',
+      name: 'True Red',
+      displayName: 'True-Red',
+      hex: '#FF0000',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/True-Red-main.webp'
+    },
+    {
+      id: 'turquoise',
+      name: 'Turquoise',
+      displayName: 'Turquoise',
+      hex: '#40E0D0',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Turquoise-main.webp'
+    },
+    {
+      id: 'french-blue',
+      name: 'French Blue',
+      displayName: 'French-Blue',
+      hex: '#0072BB',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/french-blue-main.webp'
+    },
+    {
+      id: 'lime',
+      name: 'Lime',
+      displayName: 'Lime',
+      hex: '#BFFF00',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/lime-main.webp'
     }
   ]
 };
