@@ -224,33 +224,40 @@ export default function TieProductPage() {
       });
       console.log('Added to cart!');
     } else {
-      // Add bundle
+      // Add bundle as a single item
       const bundleId = `tie-bundle-${selectedBundle}-${Date.now()}`;
-      bundleItems.forEach((item, index) => {
+      
+      // Create a summary of bundle items for display
+      const bundleItemsSummary = bundleItems.map(item => {
         const itemColor = getTieColorById(item.color);
         const itemStyle = tieProducts.styles[item.style as keyof typeof tieProducts.styles];
-        
-        if (itemColor && itemStyle) {
-          addItem({
-            id: `${bundleId}-${item.color}-${item.style}-${index}`,
-            name: `${itemColor.name} ${itemStyle.name} (Bundle)`,
-            price: currentBundle.price / currentBundle.quantity, // Price per item in bundle
-            image: itemColor.imageUrl,
-            quantity: item.quantity,
-            stripePriceId: currentBundle.priceId,
-            stripeProductId: currentBundle.productId,
-            selectedColor: itemColor.name,
-            selectedSize: itemStyle.width,
-            category: 'tie-bundle',
-            bundleId: bundleId,
-            metadata: {
-              bundleType: selectedBundle,
-              itemStyle: itemStyle.name,
-              itemColor: itemColor.name
-            }
-          });
+        return `${item.quantity}x ${itemColor?.name} ${itemStyle?.name.split(' ')[0]}`;
+      }).join(', ');
+      
+      // Use the first item's image as the bundle image
+      const firstItem = bundleItems[0];
+      const firstItemColor = getTieColorById(firstItem.color);
+      
+      addItem({
+        id: bundleId,
+        name: `${currentBundle.name} - ${bundleItemsSummary}`,
+        price: currentBundle.price,
+        image: firstItemColor?.imageUrl || colorData.imageUrl,
+        quantity: 1,
+        stripePriceId: currentBundle.priceId,
+        stripeProductId: currentBundle.productId,
+        selectedColor: 'Mixed',
+        selectedSize: 'Bundle',
+        category: 'tie-bundle',
+        bundleId: bundleId,
+        metadata: {
+          bundleType: selectedBundle,
+          bundleItems: bundleItems,
+          itemsDescription: bundleItemsSummary,
+          stripePriceId: currentBundle.priceId
         }
       });
+      
       console.log(`${currentBundle.name} added to cart!`);
     }
   };

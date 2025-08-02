@@ -92,6 +92,22 @@ export function CheckoutButton() {
     try {
       // Prepare cart items for checkout
       const checkoutItems = items.map(item => {
+        // Check if it's a bundle item with bundleId
+        if (item.metadata?.bundleId || item.metadata?.bundleType) {
+          // For bundles, use the metadata directly
+          return {
+            stripePriceId: item.metadata.stripePriceId,
+            quantity: item.quantity,
+            name: item.name,
+            selectedSize: 'Bundle',
+            selectedColor: 'Mixed',
+            id: item.productId,
+            price: item.price,
+            bundleId: item.metadata.bundleId,
+            metadata: item.metadata
+          };
+        }
+        
         // Try to find product in store first
         let product = products.find(p => p.id === item.productId);
         
