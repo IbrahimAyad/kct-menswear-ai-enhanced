@@ -11,6 +11,7 @@ import { useCart } from '@/hooks/useCart';
 
 // Helper function to generate style-specific image URLs
 function getStyleSpecificImage(colorData: any, styleId: string): string {
+
   // Convert color directory name format (e.g., "3000-TT (Mermaid Green)")
   const colorDirMap: { [key: string]: string } = {
     'mermaid-green': '3000-TT (Mermaid Green)',
@@ -110,8 +111,10 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
       return colorData.imageUrl;
   }
   
-  // Construct the full URL
-  const fullUrl = `${baseUrl}/${encodeURIComponent(colorDir)}/${filename}`;
+  // Construct the full URL - Don't encode the directory if it has spaces in parentheses
+  const fullUrl = `${baseUrl}/${colorDir}/${filename}`;
+  
+  console.log('Generated URL:', fullUrl); // Debug log
   
   // Return the new URL, with fallback to original if something goes wrong
   return fullUrl;
@@ -128,8 +131,28 @@ export default function TieProductPage() {
   const id = params.id as string;
   const { addItem } = useCart();
   
-  // Parse id (e.g., "navy-bowtie" -> color: navy, style: bowtie)
-  const [colorId, styleId] = id.split('-');
+  // Parse id (e.g., "baby-blue-bowtie" -> color: baby-blue, style: bowtie)
+  const parts = id.split('-');
+  let colorId = '';
+  let styleId = '';
+  
+  // Handle multi-word colors (e.g., baby-blue, burnt-orange)
+  if (parts.length === 3) {
+    colorId = `${parts[0]}-${parts[1]}`;
+    styleId = parts[2];
+  } else if (parts.length === 2) {
+    colorId = parts[0];
+    styleId = parts[1];
+  } else {
+    // Handle edge cases
+    const possibleStyles = ['bowtie', 'classic', 'skinny', 'slim'];
+    const lastPart = parts[parts.length - 1];
+    if (possibleStyles.includes(lastPart)) {
+      styleId = lastPart;
+      colorId = parts.slice(0, -1).join('-');
+    }
+  }
+  
   const colorData = getTieColorById(colorId);
   const styleData = tieProducts.styles[styleId as keyof typeof tieProducts.styles];
   
