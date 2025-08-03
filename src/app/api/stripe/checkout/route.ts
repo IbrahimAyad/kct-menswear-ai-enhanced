@@ -104,9 +104,12 @@ export async function POST(req: NextRequest) {
       metadata
     });
     
-    // Create checkout session
+    // Create checkout session with optimized payment options
     const sessionConfig: any = {
-      payment_method_types: ['card'],
+      // Use automatic payment methods for best conversion
+      automatic_payment_methods: {
+        enabled: true,
+      },
       line_items: lineItems,
       mode: 'payment',
       success_url: `${req.headers.get('origin')}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -121,6 +124,18 @@ export async function POST(req: NextRequest) {
       ],
       automatic_tax: {
         enabled: true,
+      },
+      // Allow promotion codes
+      allow_promotion_codes: true,
+      // Save payment method for future use
+      payment_intent_data: {
+        setup_future_usage: 'off_session',
+      },
+      // Enable adjustable quantities in checkout
+      line_items_adjustable_quantity: {
+        enabled: true,
+        minimum: 1,
+        maximum: 10,
       },
       metadata: metadata,
     };

@@ -9,8 +9,8 @@ This guide outlines the complete backend integration for KCT Menswear's core pro
 - **Suits**: 14 colors × 2 types (2-piece/3-piece) × 29 sizes = **812 variants**
 - **Dress Shirts**: 17 colors × 2 fits × 12-17 sizes = **544 variants**
 - **Ties**: 80+ colors × 4 styles = **320 variants**
-- **Tuxedos**: 5 styles × 20 sizes = **100 variants**
-- **Total Core Products**: 116 unique products with **1,776 variants**
+- **Tuxedos**: 5 styles × 29 sizes = **145 variants**
+- **Total Core Products**: 116 unique products with **1,821 variants**
 
 ### Bundle Products
 - **Tie Bundles**: 3 options ($99.95, $149.95, $199.95)

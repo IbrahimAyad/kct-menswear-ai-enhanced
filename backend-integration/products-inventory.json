@@ -52,8 +52,9 @@
     },
     "tuxedos": {
       "total_count": 5,
-      "variants_per_product": 20,
+      "variants_per_product": 29,
       "styles": ["Classic Black", "Burgundy Velvet", "Emerald Velvet", "Navy Velvet", "Royal Blue Velvet"],
+      "sizes": ["34S", "34R", "36S", "36R", "38S", "38R", "38L", "40S", "40R", "40L", "42S", "42R", "42L", "44S", "44R", "44L", "46S", "46R", "46L", "48S", "48R", "48L", "50S", "50R", "50L", "52R", "52L", "54R", "54L"],
       "price_ranges": {
         "classic": 299.99,
         "velvet": 399.99
@@ -102,7 +103,8 @@
           "price": 199.99,
           "includes": ["2-piece suit", "dress shirt", "tie"],
           "savings": 35.00,
-          "description": "Perfect for first-time buyers"
+          "description": "Perfect for first-time buyers",
+          "sizes": ["34S", "34R", "36S", "36R", "38S", "38R", "38L", "40S", "40R", "40L", "42S", "42R", "42L", "44S", "44R", "44L", "46S", "46R", "46L", "48S", "48R", "48L", "50S", "50R", "50L", "52R", "52L", "54R", "54L"]
         },
         {
           "id": "professional",
@@ -110,7 +112,8 @@
           "price": 229.99,
           "includes": ["3-piece suit", "dress shirt", "tie"],
           "savings": 45.00,
-          "description": "Ideal for business professionals"
+          "description": "Ideal for business professionals",
+          "sizes": ["34S", "34R", "36S", "36R", "38S", "38R", "38L", "40S", "40R", "40L", "42S", "42R", "42L", "44S", "44R", "44L", "46S", "46R", "46L", "48S", "48R", "48L", "50S", "50R", "50L", "52R", "52L", "54R", "54L"]
         },
         {
           "id": "executive",
@@ -118,19 +121,22 @@
           "price": 249.99,
           "includes": ["3-piece suit", "2 dress shirts", "2 ties"],
           "savings": 65.00,
-          "description": "Complete wardrobe solution"
+          "description": "Complete wardrobe solution",
+          "sizes": ["34S", "34R", "36S", "36R", "38S", "38R", "38L", "40S", "40R", "40L", "42S", "42R", "42L", "44S", "44R", "44L", "46S", "46R", "46L", "48S", "48R", "48L", "50S", "50R", "50L", "52R", "52L", "54R", "54L"]
         }
       ]
     },
     "wedding_bundles": {
       "seasonal_collections": ["Summer", "Fall", "Modern", "Rustic"],
       "price_range": "199.99 - 249.99",
-      "total_bundles": 16
+      "total_bundles": 16,
+      "sizes": ["34S", "34R", "36S", "36R", "38S", "38R", "38L", "40S", "40R", "40L", "42S", "42R", "42L", "44S", "44R", "44L", "46S", "46R", "46L", "48S", "48R", "48L", "50S", "50R", "50L", "52R", "52L", "54R", "54L"]
     },
     "prom_bundles": {
       "styles": ["Classic Tuxedo", "Velvet Collection"],
       "price": 249.99,
-      "total_bundles": 5
+      "total_bundles": 5,
+      "sizes": ["34S", "34R", "36S", "36R", "38S", "38R", "38L", "40S", "40R", "40L", "42S", "42R", "42L", "44S", "44R", "44L", "46S", "46R", "46L", "48S", "48R", "48L", "50S", "50R", "50L", "52R", "52L", "54R", "54L"]
     }
   },
   "inventory_management": {
