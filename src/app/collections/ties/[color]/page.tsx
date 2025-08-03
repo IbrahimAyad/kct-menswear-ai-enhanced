@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Share2, Check } from 'lucide-react';
 import { tieProducts, getTieColorById } from '@/lib/products/tieProducts';
+import { getRelatedColors, getColorOccasions } from '@/lib/products/tieColorRecommendations';
 import TieStyleSelector from '@/components/products/TieStyleSelector';
 import TieBundleCalculator from '@/components/products/TieBundleCalculator';
 import SizeGuideModal from '@/components/products/SizeGuideModal';
@@ -39,6 +40,10 @@ export default function TieColorCollectionPage() {
 
   const selectedStyleData = tieProducts.styles[selectedStyle as keyof typeof tieProducts.styles];
   const pageTitle = `${colorData.name} Ties & Bowties Collection`;
+  
+  // Get smart color recommendations
+  const relatedColors = getRelatedColors(colorId, 6);
+  const colorOccasions = getColorOccasions(colorId);
 
   const handleAddToCart = () => {
     if (purchaseMode === 'single') {
@@ -190,26 +195,54 @@ export default function TieColorCollectionPage() {
 
             {/* Color Display */}
             <div>
-              <p className="font-medium text-gray-900 mb-2">
+              <p className="font-medium text-gray-900 mb-3">
                 Color: {colorData.name}
               </p>
-              <div className="flex items-center space-x-4">
-                <div
-                  className="w-12 h-12 rounded-full border-2 border-gray-300"
-                  style={{ backgroundColor: colorData.hex }}
-                />
-                <div className="flex space-x-2">
-                  {/* Show other popular colors */}
-                  {tieProducts.colors.slice(0, 4).map((color) => (
-                    <Link
-                      key={color.id}
-                      href={`/collections/ties/${color.id}-collection`}
-                      className="w-8 h-8 rounded-full border-2 border-gray-200 hover:border-gray-400 transition-colors"
-                      style={{ backgroundColor: color.hex }}
-                      title={color.name}
-                    />
-                  ))}
+              <div className="space-y-4">
+                {/* Current color and related colors */}
+                <div className="flex items-center space-x-3">
+                  <div
+                    className="w-14 h-14 rounded-full border-4 border-blue-500 shadow-lg"
+                    style={{ backgroundColor: colorData.hex }}
+                  />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-700">Related Colors:</p>
+                    <div className="flex space-x-2 mt-1">
+                      {relatedColors.map((color) => (
+                        <Link
+                          key={color.id}
+                          href={`/collections/ties/${color.id}-collection`}
+                          className="group relative"
+                        >
+                          <div
+                            className="w-10 h-10 rounded-full border-2 border-gray-200 hover:border-blue-400 transition-all hover:scale-110"
+                            style={{ backgroundColor: color.hex }}
+                          />
+                          <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                            {color.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+                
+                {/* Occasion tags */}
+                {colorOccasions.length > 0 && (
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1">Perfect for:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {colorOccasions.map((occasion) => (
+                        <span
+                          key={occasion}
+                          className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full capitalize"
+                        >
+                          {occasion}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -349,6 +382,50 @@ export default function TieColorCollectionPage() {
           productType="ties"
         />
       )}
+
+      {/* You May Also Like Section */}
+      <section className="bg-gray-100 py-12 mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">You May Also Like</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {relatedColors.map((color) => (
+              <Link
+                key={color.id}
+                href={`/collections/ties/${color.id}-collection`}
+                className="group"
+              >
+                <div className="relative aspect-square rounded-lg overflow-hidden bg-white shadow-md hover:shadow-xl transition-shadow">
+                  <Image
+                    src={color.imageUrl}
+                    alt={color.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16.66vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform">
+                    <h3 className="font-medium text-sm">{color.name}</h3>
+                    <p className="text-xs opacity-90">View Collection</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+          
+          {/* Call to Action */}
+          <div className="mt-8 text-center">
+            <Link
+              href="/collections/ties"
+              className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium"
+            >
+              <span>View All 80+ Colors</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
