@@ -127,15 +127,9 @@ export async function POST(req: NextRequest) {
       },
       // Allow promotion codes
       allow_promotion_codes: true,
-      // Save payment method for future use
-      payment_intent_data: {
-        setup_future_usage: 'off_session',
-      },
-      // Enable adjustable quantities in checkout
-      line_items_adjustable_quantity: {
+      // Phone number collection for better conversion
+      phone_number_collection: {
         enabled: true,
-        minimum: 1,
-        maximum: 10,
       },
       metadata: metadata,
     };
