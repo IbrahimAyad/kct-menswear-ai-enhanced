@@ -1,12 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Replicate from 'replicate';
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN,
-});
+// Initialize Replicate - safely handle missing token
+let replicate: Replicate | null = null;
+try {
+  if (process.env.REPLICATE_API_TOKEN) {
+    replicate = new Replicate({
+      auth: process.env.REPLICATE_API_TOKEN,
+    });
+  }
+} catch (error) {
+  console.log('Replicate initialization skipped - no API token configured');
+}
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Replicate is configured
+    if (!replicate) {
+      return NextResponse.json(
+        { 
+          error: 'Voice search not configured',
+          message: 'REPLICATE_API_TOKEN not found in environment variables'
+        },
+        { status: 503 }
+      );
+    }
+
     const formData = await request.formData();
     const audioFile = formData.get('audio') as File;
 

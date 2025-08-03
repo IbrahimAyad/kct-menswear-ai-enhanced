@@ -19,7 +19,7 @@ const navItems = [
   { href: "/wedding-guide", label: "Wedding Guide", highlight: true },
   { href: "/prom-collection", label: "Prom", highlight: true },
   { href: "/occasions", label: "Occasions" },
-  { href: "/builder", label: "Custom" },
+  { href: "/custom-suits", label: "Custom" },
   { href: "/cart", label: "Cart", mobileOnly: true },
 ];
 

@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Replicate from 'replicate';
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN,
-});
+// Initialize Replicate - safely handle missing token
+let replicate: Replicate | null = null;
+try {
+  if (process.env.REPLICATE_API_TOKEN) {
+    replicate = new Replicate({
+      auth: process.env.REPLICATE_API_TOKEN,
+    });
+  }
+} catch (error) {
+  console.log('Replicate initialization skipped - no API token configured');
+}
 
 interface WeddingVisualizationParams {
   venue: string;
@@ -50,6 +58,17 @@ const suitColorDescriptions = {
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Replicate is configured
+    if (!replicate) {
+      return NextResponse.json(
+        { 
+          error: 'Image generation not configured',
+          message: 'REPLICATE_API_TOKEN not found in environment variables'
+        },
+        { status: 503 }
+      );
+    }
+
     const { venue, suitColor, partySize, timeOfDay, season, accessories = [] }: WeddingVisualizationParams = await request.json();
 
     // Validate inputs
