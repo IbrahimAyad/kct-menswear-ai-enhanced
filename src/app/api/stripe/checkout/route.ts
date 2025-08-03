@@ -106,7 +106,7 @@ export async function POST(req: NextRequest) {
     
     // Create checkout session with optimized payment options
     const sessionConfig: any = {
-      payment_method_types: ['card', 'link', 'apple_pay', 'google_pay'],
+      payment_method_types: ['card', 'link'],
       line_items: lineItems,
       mode: 'payment',
       success_url: `${req.headers.get('origin')}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
