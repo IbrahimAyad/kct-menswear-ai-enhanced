@@ -66,6 +66,18 @@ const nextConfig: NextConfig = {
         hostname: 'via.placeholder.com',
         pathname: '/**',
       },
+      // Railway API service for product images
+      {
+        protocol: 'https',
+        hostname: 'kctmarketplaceapiservice-production.up.railway.app',
+        pathname: '/**',
+      },
+      // Generic Railway domains
+      {
+        protocol: 'https',
+        hostname: '*.railway.app',
+        pathname: '/**',
+      },
     ],
     // Add fallback for broken images
     dangerouslyAllowSVG: true,
