@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getProducts, getProductCategories, getProductBrands, getProductColors, getProductPriceRange } from '@/lib/supabase/products'
+import { getProducts, getProductCategories, getProductVendors, getProductColors, getProductPriceRange } from '@/lib/supabase/products'
 import { ProductSearchParams } from '@/lib/supabase/types'
 import { getMockProducts, getMockCategories, getMockBrands, getMockColors, getMockPriceRange } from '@/lib/supabase/mockData'
 
@@ -44,9 +44,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ categories })
     }
     
-    if (meta === 'brands') {
-      const brands = await getProductBrands()
-      return NextResponse.json({ brands })
+    if (meta === 'vendors') {
+      const vendors = await getProductVendors()
+      return NextResponse.json({ vendors })
     }
     
     if (meta === 'colors') {
@@ -88,8 +88,8 @@ export async function GET(request: NextRequest) {
       params.filters.categories = searchParams.get('categories')!.split(',')
     }
     
-    if (searchParams.get('brands')) {
-      params.filters.brands = searchParams.get('brands')!.split(',')
+    if (searchParams.get('vendors')) {
+      params.filters.vendors = searchParams.get('vendors')!.split(',')
     }
     
     if (searchParams.get('colors')) {

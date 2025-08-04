@@ -13,6 +13,14 @@ export type ProductImage = Database['public']['Tables']['product_images']['Row']
 export type ProductImageInsert = Database['public']['Tables']['product_images']['Insert']
 export type ProductImageUpdate = Database['public']['Tables']['product_images']['Update']
 
+export type Collection = Database['public']['Tables']['collections']['Row']
+export type CollectionInsert = Database['public']['Tables']['collections']['Insert']
+export type CollectionUpdate = Database['public']['Tables']['collections']['Update']
+
+export type ProductCollection = Database['public']['Tables']['product_collections']['Row']
+export type ProductCollectionInsert = Database['public']['Tables']['product_collections']['Insert']
+export type ProductCollectionUpdate = Database['public']['Tables']['product_collections']['Update']
+
 // Enhanced product types with relations
 export interface ProductWithVariants extends Product {
   product_variants: ProductVariant[]
@@ -23,51 +31,79 @@ export interface ProductWithImages extends Product {
   product_images: ProductImage[]
 }
 
+export interface ProductWithCollections extends Product {
+  product_collections: {
+    collection_id: string
+    collections: Collection
+  }[]
+}
+
 // Frontend-friendly product interface
 export interface EnhancedProduct {
   id: string
   name: string
   description: string | null
-  category: string
-  productType: string | null
-  brand: string | null
-  sku: string
+  category: string | null
+  vendor: string
+  productType: string
+  sku: string | null
+  handle: string | null
   price: number // base_price in cents
   compareAtPrice: number | null
   weight: number | null
-  status: 'active' | 'draft' | 'archived'
-  inStock: boolean
+  status: string
+  visibility: boolean
+  featured: boolean
+  requiresShipping: boolean
+  taxable: boolean
+  trackInventory: boolean
   tags: string[]
   metaTitle: string | null
   metaDescription: string | null
-  seoHandle: string | null
-  images: string[] // Combined primary_image and image_gallery
+  seoTitle: string | null
+  seoDescription: string | null
+  images: string[] // Array of image URLs from product_images
   primaryImage: string | null
-  colorFamily: string | null
-  isFeatured: boolean
-  trendingScore: number | null
-  occasionTags: string[]
-  styleAttributes: Record<string, any> | null
-  variants: ProductVariant[]
+  variants: EnhancedVariant[]
+  additionalInfo: Record<string, any> | null
+  viewCount: number
   createdAt: string
   updatedAt: string
+}
+
+export interface EnhancedVariant {
+  id: string
+  productId: string
+  title: string
+  price: number
+  compareAtPrice: number | null
+  costPrice: number | null
+  sku: string | null
+  barcode: string | null
+  inventoryQuantity: number
+  allowBackorders: boolean
+  weight: number | null
+  option1: string | null
+  option2: string | null
+  option3: string | null
+  available: boolean
 }
 
 // Product filters and search
 export interface ProductFilters {
   categories?: string[]
+  collections?: string[]
   priceRange?: { min: number; max: number }
   colors?: string[]
-  occasions?: string[]
-  brands?: string[]
+  vendors?: string[]
   tags?: string[]
-  inStock?: boolean
+  available?: boolean
   featured?: boolean
   search?: string
 }
 
 export interface ProductSortOptions {
-  field: 'name' | 'base_price' | 'created_at' | 'trending_score'
+  field: 'name' | 'base_price' | 'created_at' | 'view_count'
   direction: 'asc' | 'desc'
 }
 
@@ -80,47 +116,65 @@ export interface ProductSearchParams {
 
 // Product categories based on your database
 export const PRODUCT_CATEGORIES = [
-  'Vest & Accessory Sets',
-  'Formal Wear', 
-  'Footwear',
-  'Apparel',
-  'Other'
+  'Vest & Tie Sets',
+  'Sparkle Vest Sets',
+  'Suspender & Bowtie Sets'
 ] as const
 
 export type ProductCategory = typeof PRODUCT_CATEGORIES[number]
 
 // Helper function to convert database product to enhanced product
 export function toEnhancedProduct(product: ProductWithVariants): EnhancedProduct {
-  const images = [
-    ...(product.primary_image ? [product.primary_image] : []),
-    ...product.image_gallery
-  ].filter((img, index, arr) => arr.indexOf(img) === index) // Remove duplicates
+  const images = product.product_images
+    ?.sort((a, b) => a.position - b.position)
+    .map(img => img.image_url) || []
+
+  const primaryImage = images[0] || null
 
   return {
     id: product.id,
     name: product.name,
     description: product.description,
     category: product.category,
+    vendor: product.vendor,
     productType: product.product_type,
-    brand: product.brand,
     sku: product.sku,
+    handle: product.handle,
     price: product.base_price,
-    compareAtPrice: product.compare_at_price,
+    compareAtPrice: null, // Will come from variants
     weight: product.weight,
     status: product.status,
-    inStock: product.in_stock,
-    tags: product.tags,
+    visibility: product.visibility,
+    featured: product.featured,
+    requiresShipping: product.requires_shipping,
+    taxable: product.taxable,
+    trackInventory: product.track_inventory,
+    tags: product.tags || [],
     metaTitle: product.meta_title,
     metaDescription: product.meta_description,
-    seoHandle: product.seo_handle,
+    seoTitle: product.seo_title,
+    seoDescription: product.seo_description,
     images,
-    primaryImage: product.primary_image,
-    colorFamily: product.color_family,
-    isFeatured: product.is_featured,
-    trendingScore: product.trending_score,
-    occasionTags: product.occasion_tags,
-    styleAttributes: product.style_attributes as Record<string, any> | null,
-    variants: product.product_variants || [],
+    primaryImage,
+    variants: (product.product_variants || []).map(v => ({
+      id: v.id,
+      productId: v.product_id,
+      title: v.title,
+      price: v.price,
+      compareAtPrice: v.compare_at_price,
+      costPrice: v.cost_price,
+      sku: v.sku,
+      barcode: v.barcode,
+      inventoryQuantity: v.inventory_quantity,
+      allowBackorders: v.allow_backorders,
+      weight: v.weight,
+      option1: v.option1,
+      option2: v.option2,
+      option3: v.option3,
+      available: v.available
+    })),
+    additionalInfo: product.additional_info as Record<string, any> | null,
+    viewCount: product.view_count,
     createdAt: product.created_at,
     updatedAt: product.updated_at
   }

@@ -22,7 +22,7 @@ import { cn } from '@/lib/utils/cn'
 
 interface FilterMetadata {
   categories: string[]
-  brands: string[]
+  vendors: string[]
   colors: string[]
   priceRange: { min: number; max: number }
 }
@@ -160,7 +160,7 @@ export function ProductFiltersPanel({
     categories: true,
     price: true,
     colors: false,
-    brands: false,
+    vendors: false,
     occasions: false,
     availability: false
   })
@@ -187,14 +187,14 @@ export function ProductFiltersPanel({
     })
   }
 
-  const handleBrandChange = (brand: string, checked: boolean) => {
-    const currentBrands = filters.brands || []
-    const newBrands = checked
-      ? [...currentBrands, brand]
-      : currentBrands.filter(b => b !== brand)
+  const handleVendorChange = (vendor: string, checked: boolean) => {
+    const currentVendors = filters.vendors || []
+    const newVendors = checked
+      ? [...currentVendors, vendor]
+      : currentVendors.filter(v => v !== vendor)
     
     updateFilters({ 
-      brands: newBrands.length > 0 ? newBrands : undefined 
+      vendors: newVendors.length > 0 ? newVendors : undefined 
     })
   }
 
@@ -222,7 +222,7 @@ export function ProductFiltersPanel({
   const getActiveFilterCount = () => {
     let count = 0
     if (filters.categories?.length) count++
-    if (filters.brands?.length) count++
+    if (filters.vendors?.length) count++
     if (filters.colors?.length) count++
     if (filters.priceRange) count++
     if (filters.occasions?.length) count++
@@ -336,28 +336,28 @@ export function ProductFiltersPanel({
           </FilterSection>
         )}
 
-        {/* Brands */}
-        {metadata.brands.length > 0 && (
+        {/* Vendors */}
+        {metadata.vendors.length > 0 && (
           <FilterSection
-            title="Brands"
+            title="Vendors"
             icon={<Star className="h-4 w-4" />}
-            isOpen={openSections.brands}
-            onToggle={() => toggleSection('brands')}
-            count={filters.brands?.length}
+            isOpen={openSections.vendors}
+            onToggle={() => toggleSection('vendors')}
+            count={filters.vendors?.length}
           >
             <div className="space-y-3 max-h-48 overflow-y-auto">
-              {metadata.brands.map(brand => (
-                <div key={brand} className="flex items-center space-x-2">
+              {metadata.vendors.map(vendor => (
+                <div key={vendor} className="flex items-center space-x-2">
                   <Checkbox
-                    id={`brand-${brand}`}
-                    checked={filters.brands?.includes(brand) || false}
-                    onCheckedChange={(checked) => handleBrandChange(brand, checked as boolean)}
+                    id={`vendor-${vendor}`}
+                    checked={filters.vendors?.includes(vendor) || false}
+                    onCheckedChange={(checked) => handleVendorChange(vendor, checked as boolean)}
                   />
                   <label
-                    htmlFor={`brand-${brand}`}
+                    htmlFor={`vendor-${vendor}`}
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                   >
-                    {brand}
+                    {vendor}
                   </label>
                 </div>
               ))}

@@ -243,27 +243,26 @@ export interface Database {
           id: string
           name: string
           description: string | null
-          category: string
-          product_type: string | null
-          brand: string | null
-          sku: string
+          category: string | null
+          sku: string | null
+          handle: string | null
           base_price: number
-          compare_at_price: number | null
-          cost_per_unit: number | null
+          vendor: string
+          product_type: string
+          status: string
+          visibility: boolean
+          featured: boolean
+          requires_shipping: boolean
+          taxable: boolean
+          track_inventory: boolean
           weight: number | null
-          status: 'active' | 'draft' | 'archived'
-          in_stock: boolean
-          tags: string[]
           meta_title: string | null
           meta_description: string | null
-          seo_handle: string | null
-          primary_image: string | null
-          image_gallery: string[]
-          color_family: string | null
-          is_featured: boolean
-          trending_score: number | null
-          occasion_tags: string[]
-          style_attributes: Json | null
+          seo_title: string | null
+          seo_description: string | null
+          tags: string[] | null
+          additional_info: Json | null
+          view_count: number
           created_at: string
           updated_at: string
         }
@@ -271,27 +270,26 @@ export interface Database {
           id?: string
           name: string
           description?: string | null
-          category: string
-          product_type?: string | null
-          brand?: string | null
-          sku: string
+          category?: string | null
+          sku?: string | null
+          handle?: string | null
           base_price: number
-          compare_at_price?: number | null
-          cost_per_unit?: number | null
+          vendor?: string
+          product_type?: string
+          status?: string
+          visibility?: boolean
+          featured?: boolean
+          requires_shipping?: boolean
+          taxable?: boolean
+          track_inventory?: boolean
           weight?: number | null
-          status?: 'active' | 'draft' | 'archived'
-          in_stock?: boolean
-          tags?: string[]
           meta_title?: string | null
           meta_description?: string | null
-          seo_handle?: string | null
-          primary_image?: string | null
-          image_gallery?: string[]
-          color_family?: string | null
-          is_featured?: boolean
-          trending_score?: number | null
-          occasion_tags?: string[]
-          style_attributes?: Json | null
+          seo_title?: string | null
+          seo_description?: string | null
+          tags?: string[] | null
+          additional_info?: Json | null
+          view_count?: number
           created_at?: string
           updated_at?: string
         }
@@ -299,27 +297,26 @@ export interface Database {
           id?: string
           name?: string
           description?: string | null
-          category?: string
-          product_type?: string | null
-          brand?: string | null
-          sku?: string
+          category?: string | null
+          sku?: string | null
+          handle?: string | null
           base_price?: number
-          compare_at_price?: number | null
-          cost_per_unit?: number | null
+          vendor?: string
+          product_type?: string
+          status?: string
+          visibility?: boolean
+          featured?: boolean
+          requires_shipping?: boolean
+          taxable?: boolean
+          track_inventory?: boolean
           weight?: number | null
-          status?: 'active' | 'draft' | 'archived'
-          in_stock?: boolean
-          tags?: string[]
           meta_title?: string | null
           meta_description?: string | null
-          seo_handle?: string | null
-          primary_image?: string | null
-          image_gallery?: string[]
-          color_family?: string | null
-          is_featured?: boolean
-          trending_score?: number | null
-          occasion_tags?: string[]
-          style_attributes?: Json | null
+          seo_title?: string | null
+          seo_description?: string | null
+          tags?: string[] | null
+          additional_info?: Json | null
+          view_count?: number
           created_at?: string
           updated_at?: string
         }
@@ -329,52 +326,58 @@ export interface Database {
           id: string
           product_id: string
           title: string
+          price: number
+          compare_at_price: number | null
+          cost_price: number | null
+          sku: string | null
+          barcode: string | null
+          inventory_quantity: number
+          allow_backorders: boolean
+          weight: number | null
           option1: string | null
           option2: string | null
           option3: string | null
-          sku: string | null
-          price: number
-          compare_at_price: number | null
-          cost_per_unit: number | null
-          weight: number | null
-          barcode: string | null
-          image_url: string | null
-          requires_customization: boolean
-          customization_options: Json | null
+          available: boolean
+          created_at: string
+          updated_at: string
         }
         Insert: {
           id?: string
           product_id: string
           title: string
+          price: number
+          compare_at_price?: number | null
+          cost_price?: number | null
+          sku?: string | null
+          barcode?: string | null
+          inventory_quantity?: number
+          allow_backorders?: boolean
+          weight?: number | null
           option1?: string | null
           option2?: string | null
           option3?: string | null
-          sku?: string | null
-          price: number
-          compare_at_price?: number | null
-          cost_per_unit?: number | null
-          weight?: number | null
-          barcode?: string | null
-          image_url?: string | null
-          requires_customization?: boolean
-          customization_options?: Json | null
+          available?: boolean
+          created_at?: string
+          updated_at?: string
         }
         Update: {
           id?: string
           product_id?: string
           title?: string
+          price?: number
+          compare_at_price?: number | null
+          cost_price?: number | null
+          sku?: string | null
+          barcode?: string | null
+          inventory_quantity?: number
+          allow_backorders?: boolean
+          weight?: number | null
           option1?: string | null
           option2?: string | null
           option3?: string | null
-          sku?: string | null
-          price?: number
-          compare_at_price?: number | null
-          cost_per_unit?: number | null
-          weight?: number | null
-          barcode?: string | null
-          image_url?: string | null
-          requires_customization?: boolean
-          customization_options?: Json | null
+          available?: boolean
+          created_at?: string
+          updated_at?: string
         }
       }
       product_images: {
@@ -384,7 +387,11 @@ export interface Database {
           image_url: string
           alt_text: string | null
           position: number
-          is_primary: boolean
+          image_type: string | null
+          width: number | null
+          height: number | null
+          created_at: string
+          updated_at: string
         }
         Insert: {
           id?: string
@@ -392,7 +399,11 @@ export interface Database {
           image_url: string
           alt_text?: string | null
           position?: number
-          is_primary?: boolean
+          image_type?: string | null
+          width?: number | null
+          height?: number | null
+          created_at?: string
+          updated_at?: string
         }
         Update: {
           id?: string
@@ -400,7 +411,75 @@ export interface Database {
           image_url?: string
           alt_text?: string | null
           position?: number
-          is_primary?: boolean
+          image_type?: string | null
+          width?: number | null
+          height?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      collections: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          handle: string | null
+          image_url: string | null
+          seo_title: string | null
+          seo_description: string | null
+          sort_order: number
+          published: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          handle?: string | null
+          image_url?: string | null
+          seo_title?: string | null
+          seo_description?: string | null
+          sort_order?: number
+          published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          handle?: string | null
+          image_url?: string | null
+          seo_title?: string | null
+          seo_description?: string | null
+          sort_order?: number
+          published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      product_collections: {
+        Row: {
+          id: string
+          product_id: string
+          collection_id: string
+          position: number | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          product_id: string
+          collection_id: string
+          position?: number | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          product_id?: string
+          collection_id?: string
+          position?: number | null
+          created_at?: string
         }
       }
     }

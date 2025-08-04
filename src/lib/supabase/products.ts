@@ -42,7 +42,7 @@ export async function getProducts(params: ProductSearchParams = {}) {
     }
 
     if (filters.search) {
-      query = query.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%,tags.cs.{${filters.search}}`)
+      query = query.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%`)
     }
 
     if (filters.priceRange) {
@@ -50,32 +50,20 @@ export async function getProducts(params: ProductSearchParams = {}) {
       query = query.lte('base_price', filters.priceRange.max * 100)
     }
 
-    if (filters.colors?.length) {
-      query = query.in('color_family', filters.colors)
-    }
-
-    if (filters.occasions?.length) {
-      query = query.overlaps('occasion_tags', filters.occasions)
-    }
-
-    if (filters.brands?.length) {
-      query = query.in('brand', filters.brands)
+    if (filters.vendors?.length) {
+      query = query.in('vendor', filters.vendors)
     }
 
     if (filters.tags?.length) {
       query = query.overlaps('tags', filters.tags)
     }
 
-    if (filters.inStock !== undefined) {
-      query = query.eq('in_stock', filters.inStock)
-    }
-
     if (filters.featured !== undefined) {
-      query = query.eq('is_featured', filters.featured)
+      query = query.eq('featured', filters.featured)
     }
 
-    // Always filter for active products
-    query = query.eq('status', 'active')
+    // Always filter for active and visible products
+    query = query.eq('status', 'active').eq('visibility', true)
 
     // Apply sorting
     query = query.order(sort.field, { ascending: sort.direction === 'asc' })
@@ -210,6 +198,7 @@ export async function getProductCategories() {
       .from('products')
       .select('category')
       .eq('status', 'active')
+      .eq('visibility', true)
 
     if (error) {
       throw new Error(`Failed to fetch categories: ${error.message}`)
@@ -224,9 +213,9 @@ export async function getProductCategories() {
 }
 
 /**
- * Get all unique brands
+ * Get all unique vendors
  */
-export async function getProductBrands() {
+export async function getProductVendors() {
   try {
     if (!supabaseAdmin) {
       console.error('Supabase admin client is not configured')
@@ -235,24 +224,25 @@ export async function getProductBrands() {
 
     const { data, error } = await supabaseAdmin
       .from('products')
-      .select('brand')
+      .select('vendor')
       .eq('status', 'active')
-      .not('brand', 'is', null)
+      .eq('visibility', true)
+      .not('vendor', 'is', null)
 
     if (error) {
-      throw new Error(`Failed to fetch brands: ${error.message}`)
+      throw new Error(`Failed to fetch vendors: ${error.message}`)
     }
 
-    const brands = [...new Set(data?.map(item => item.brand))]
-    return brands.filter(Boolean)
+    const vendors = [...new Set(data?.map(item => item.vendor))]
+    return vendors.filter(Boolean)
   } catch (error) {
-    console.error('Error in getProductBrands:', error)
+    console.error('Error in getProductVendors:', error)
     throw error
   }
 }
 
 /**
- * Get all unique colors
+ * Get all unique product tags (colors extracted from tags)
  */
 export async function getProductColors() {
   try {
@@ -261,18 +251,26 @@ export async function getProductColors() {
       return []
     }
 
+    // Since color_family doesn't exist in new schema, extract from tags
     const { data, error } = await supabaseAdmin
       .from('products')
-      .select('color_family')
+      .select('tags')
       .eq('status', 'active')
-      .not('color_family', 'is', null)
+      .eq('visibility', true)
 
     if (error) {
-      throw new Error(`Failed to fetch colors: ${error.message}`)
+      throw new Error(`Failed to fetch product tags: ${error.message}`)
     }
 
-    const colors = [...new Set(data?.map(item => item.color_family))]
-    return colors.filter(Boolean)
+    const allTags = data?.flatMap(item => item.tags || []) || []
+    const colorTags = allTags.filter(tag => 
+      tag.includes('Blue') || tag.includes('Red') || tag.includes('Green') || 
+      tag.includes('Pink') || tag.includes('Yellow') || tag.includes('Purple') ||
+      tag.includes('Orange') || tag.includes('Brown') || tag.includes('Grey') ||
+      tag.includes('Gold') || tag.includes('Silver') || tag.includes('Black') ||
+      tag.includes('White') || tag.includes('Wine') || tag.includes('Turquoise')
+    )
+    return [...new Set(colorTags)]
   } catch (error) {
     console.error('Error in getProductColors:', error)
     throw error
@@ -293,6 +291,7 @@ export async function getProductPriceRange() {
       .from('products')
       .select('base_price')
       .eq('status', 'active')
+      .eq('visibility', true)
       .order('base_price', { ascending: true })
 
     if (error) {

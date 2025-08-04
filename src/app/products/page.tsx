@@ -31,7 +31,7 @@ interface ProductsResponse {
 
 interface FilterMetadata {
   categories: string[]
-  brands: string[]
+  vendors: string[]
   colors: string[]
   priceRange: { min: number; max: number }
 }
@@ -56,7 +56,7 @@ function ProductsContent() {
   
   const [filterMetadata, setFilterMetadata] = useState<FilterMetadata>({
     categories: [],
-    brands: [],
+    vendors: [],
     colors: [],
     priceRange: { min: 0, max: 1000 }
   })
@@ -65,23 +65,23 @@ function ProductsContent() {
   useEffect(() => {
     const loadFilterMetadata = async () => {
       try {
-        const [categoriesRes, brandsRes, colorsRes, priceRangeRes] = await Promise.all([
+        const [categoriesRes, vendorsRes, colorsRes, priceRangeRes] = await Promise.all([
           fetch('/api/supabase/products?meta=categories'),
-          fetch('/api/supabase/products?meta=brands'),
+          fetch('/api/supabase/products?meta=vendors'),
           fetch('/api/supabase/products?meta=colors'),
           fetch('/api/supabase/products?meta=price-range')
         ])
 
-        const [categoriesData, brandsData, colorsData, priceRangeData] = await Promise.all([
+        const [categoriesData, vendorsData, colorsData, priceRangeData] = await Promise.all([
           categoriesRes.json(),
-          brandsRes.json(),
+          vendorsRes.json(),
           colorsRes.json(),
           priceRangeRes.json()
         ])
 
         setFilterMetadata({
           categories: categoriesData.categories || [],
-          brands: brandsData.brands || [],
+          vendors: vendorsData.vendors || [],
           colors: colorsData.colors || [],
           priceRange: priceRangeData.priceRange || { min: 0, max: 1000 }
         })
@@ -113,7 +113,7 @@ function ProductsContent() {
         // Add filters
         if (filters.search) params.set('search', filters.search)
         if (filters.categories?.length) params.set('categories', filters.categories.join(','))
-        if (filters.brands?.length) params.set('brands', filters.brands.join(','))
+        if (filters.vendors?.length) params.set('vendors', filters.vendors.join(','))
         if (filters.colors?.length) params.set('colors', filters.colors.join(','))
         if (filters.occasions?.length) params.set('occasions', filters.occasions.join(','))
         if (filters.tags?.length) params.set('tags', filters.tags.join(','))
@@ -196,7 +196,7 @@ function ProductsContent() {
     let count = 0
     if (filters.search) count++
     if (filters.categories?.length) count++
-    if (filters.brands?.length) count++
+    if (filters.vendors?.length) count++
     if (filters.colors?.length) count++
     if (filters.occasions?.length) count++
     if (filters.tags?.length) count++
