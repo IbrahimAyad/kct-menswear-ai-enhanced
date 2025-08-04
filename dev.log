@@ -659,10 +659,10 @@ Import trace for requested module:
  ✓ Compiled in 362ms (916 modules)
  ✓ Compiled in 212ms (916 modules)
  ✓ Compiled in 328ms (916 modules)
-extjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
+ ✓ Compiled in 455ms (902 modules)
+ ✓ Compiled in 218ms (916 modules)
+ ✓ Compiled in 108ms (902 modules)
+.tsx
  ⨯ ./src/components/layout/UserMenu.tsx:4:1
 Module not found: Can't resolve '@headlessui/react'
   2 |
