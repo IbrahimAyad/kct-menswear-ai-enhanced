@@ -662,11 +662,10 @@ Import trace for requested module:
  ✓ Compiled in 455ms (902 modules)
  ✓ Compiled in 218ms (916 modules)
  ✓ Compiled in 108ms (902 modules)
-.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
+ ✓ Compiled in 335ms (916 modules)
+ ✓ Compiled in 191ms (916 modules)
+ ✓ Compiled in 203ms (916 modules)
+3 | import { Fragment } from 'react'
 > 4 | import { Menu, Transition } from '@headlessui/react'
     | ^
   5 | import { useAuth } from '@/hooks/useAuth'

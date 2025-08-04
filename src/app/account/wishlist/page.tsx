@@ -5,36 +5,9 @@ import { Heart, ShoppingBag, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-// Mock wishlist data - in production this would come from your database
-const mockWishlistItems = [
-  {
-    id: '1',
-    name: 'Classic Navy Suit',
-    price: 899,
-    image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80',
-    inStock: true,
-    addedDate: '2024-01-15'
-  },
-  {
-    id: '2', 
-    name: 'Burgundy Silk Tie',
-    price: 89,
-    image: 'https://images.unsplash.com/photo-1589756823695-278bc923f962?w=400&q=80',
-    inStock: true,
-    addedDate: '2024-01-10'
-  },
-  {
-    id: '3',
-    name: 'Italian Leather Oxfords',
-    price: 349,
-    image: 'https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=400&q=80',
-    inStock: false,
-    addedDate: '2024-01-08'
-  }
-]
-
 export default function WishlistPage() {
-  const [wishlistItems, setWishlistItems] = useState(mockWishlistItems)
+  // Start with empty wishlist - this would be populated from database/API in production
+  const [wishlistItems, setWishlistItems] = useState<any[]>([])
 
   const removeFromWishlist = (itemId: string) => {
     setWishlistItems(items => items.filter(item => item.id !== itemId))

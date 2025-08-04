@@ -3,30 +3,9 @@
 import { useState } from 'react'
 import { CreditCard, Plus, Trash2, Edit, Shield } from 'lucide-react'
 
-// Mock payment methods - in production this would come from Stripe/payment provider
-const mockPaymentMethods = [
-  {
-    id: 'pm_1',
-    type: 'card',
-    brand: 'visa',
-    last4: '4242',
-    expMonth: 12,
-    expYear: 2025,
-    isDefault: true
-  },
-  {
-    id: 'pm_2',
-    type: 'card', 
-    brand: 'mastercard',
-    last4: '8888',
-    expMonth: 8,
-    expYear: 2026,
-    isDefault: false
-  }
-]
-
 export default function PaymentMethodsPage() {
-  const [paymentMethods, setPaymentMethods] = useState(mockPaymentMethods)
+  // Start with empty payment methods - this would be populated from Stripe API in production
+  const [paymentMethods, setPaymentMethods] = useState<any[]>([])
   const [showAddForm, setShowAddForm] = useState(false)
 
   const removePaymentMethod = (methodId: string) => {
@@ -210,11 +189,18 @@ export default function PaymentMethodsPage() {
           )}
         </div>
 
-        {paymentMethods.length === 0 && (
-          <div className="text-center py-12">
+        {paymentMethods.length === 0 && !showAddForm && (
+          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
             <CreditCard className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Payment Methods</h3>
-            <p className="text-gray-600 mb-6">Add a payment method to make checkout faster</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No Payment Methods Saved</h3>
+            <p className="text-gray-600 mb-6">Save your payment methods for faster checkout</p>
+            <button
+              onClick={() => setShowAddForm(true)}
+              className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition-colors"
+            >
+              <Plus className="w-5 h-5" />
+              Add Your First Card
+            </button>
           </div>
         )}
       </div>
