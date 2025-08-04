@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600" fill="none">
+  <rect width="400" height="600" fill="#F8F9FA"/>
+  <rect x="50" y="50" width="300" height="500" rx="8" fill="#E9ECEF" stroke="#DEE2E6" stroke-width="2"/>
+  
+  <!-- Suit Icon -->
+  <g transform="translate(150, 200)">
+    <!-- Jacket -->
+    <path d="M50 0 L80 20 L95 15 L95 120 L5 120 L5 15 L20 20 L50 0 Z" fill="#D4AF37" opacity="0.3"/>
+    <!-- Lapels -->
+    <path d="M20 20 L35 35 L35 70 L20 70 Z" fill="#D4AF37" opacity="0.5"/>
+    <path d="M80 20 L65 35 L65 70 L80 70 Z" fill="#D4AF37" opacity="0.5"/>
+    <!-- Buttons -->
+    <circle cx="50" cy="45" r="3" fill="#D4AF37"/>
+    <circle cx="50" cy="60" r="3" fill="#D4AF37"/>
+    <!-- Tie -->
+    <path d="M45 20 L55 20 L52 80 L48 80 Z" fill="#D4AF37" opacity="0.7"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="200" y="380" text-anchor="middle" fill="#6C757D" font-family="system-ui, sans-serif" font-size="16" font-weight="500">
+    Product Image
+  </text>
+  <text x="200" y="400" text-anchor="middle" fill="#ADB5BD" font-family="system-ui, sans-serif" font-size="14">
+    Not Available
+  </text>
+  
+  <!-- KCT Monogram -->
+  <text x="200" y="450" text-anchor="middle" fill="#D4AF37" font-family="serif" font-size="24" font-weight="700">
+    KCT
+  </text>
+</svg>

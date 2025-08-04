@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { EnhancedProduct } from '@/lib/supabase/types'
 import { WishlistButton } from '@/components/products/WishlistButton'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { ProductImage } from '@/components/ui/ProductImage'
 import { ShoppingBag, Eye, Star } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
 import { cn } from '@/lib/utils/cn'
@@ -26,7 +26,6 @@ export function SupabaseProductCard({
   variant = 'default',
   className 
 }: SupabaseProductCardProps) {
-  const [imageError, setImageError] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
   const { addToCart } = useCart()
@@ -48,11 +47,7 @@ export function SupabaseProductCard({
     }
   }
 
-  const handleImageError = () => {
-    setImageError(true)
-  }
-
-  const primaryImage = product.images[0] || product.primaryImage || '/placeholder.jpg'
+  const primaryImage = product.images[0] || product.primaryImage
   const hoverImage = product.images[1] || primaryImage
   
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price
@@ -70,12 +65,10 @@ export function SupabaseProductCard({
           {/* Image */}
           <Link href={`/shop/products/${product.id}`} className="flex-shrink-0">
             <div className="relative w-32 h-40 bg-gray-100 rounded-md overflow-hidden">
-              <Image
-                src={imageError ? '/placeholder.jpg' : primaryImage}
+              <ProductImage
+                src={primaryImage}
                 alt={product.name}
-                fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                onError={handleImageError}
                 sizes="128px"
               />
               {!product.inStock && (
@@ -192,12 +185,10 @@ export function SupabaseProductCard({
           "relative bg-gray-100 overflow-hidden",
           variant === 'compact' ? "aspect-[3/4]" : "aspect-[3/4]"
         )}>
-          <Image
-            src={imageError ? '/placeholder.jpg' : (isHovered && hoverImage !== primaryImage ? hoverImage : primaryImage)}
+          <ProductImage
+            src={isHovered && hoverImage !== primaryImage ? hoverImage : primaryImage}
             alt={product.name}
-            fill
             className="object-cover transition-all duration-500 group-hover:scale-105"
-            onError={handleImageError}
             sizes={variant === 'compact' ? '200px' : '300px'}
           />
           

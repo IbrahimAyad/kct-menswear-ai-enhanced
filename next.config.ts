@@ -44,7 +44,32 @@ const nextConfig: NextConfig = {
         hostname: 'pub-46371bda6faf4910b74631159fc2dfd4.r2.dev',
         pathname: '/**',
       },
+      // Supabase storage domains
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'supabase.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.supabase.com',
+        pathname: '/**',
+      },
+      // Common image hosting domains
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+        pathname: '/**',
+      },
     ],
+    // Add fallback for broken images
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 

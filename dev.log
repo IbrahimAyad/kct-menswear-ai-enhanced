@@ -818,24 +818,23 @@ Import trace for requested module:
  ✓ Compiled in 299ms (918 modules)
  ✓ Compiled in 231ms (918 modules)
  ✓ Compiled in 214ms (918 modules)
-dlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
+ ✓ Compiled in 376ms (918 modules)
+ ✓ Compiled in 222ms (918 modules)
+ ✓ Compiled in 202ms (918 modules)
+ ✓ Compiled in 205ms (918 modules)
+ ✓ Compiled in 197ms (918 modules)
+ ✓ Compiled in 212ms (918 modules)
+ ✓ Compiled in 199ms (918 modules)
+ ✓ Compiled in 202ms (918 modules)
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.3.5
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.1.80:3001
+   - Environments: .env.local
 
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
+ ✓ Starting...
+ ✓ Ready in 1407ms
+om '@headlessui/react'
     | ^
   5 | import { useAuth } from '@/hooks/useAuth'
   6 | import Link from 'next/link'
