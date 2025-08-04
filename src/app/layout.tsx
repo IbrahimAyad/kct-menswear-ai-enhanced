@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/components/providers/Providers";
 import { AIStyleAssistant } from "@/components/ai/AIStyleAssistant";
 import { SimpleCartDrawer } from "@/components/cart/SimpleCartDrawer";
@@ -35,9 +36,10 @@ export default function RootLayout({
       <body className="antialiased">
         <Providers>
           <Navigation />
-          <main className="pt-16">
+          <main className="pt-16 min-h-screen">
             {children}
           </main>
+          <Footer />
           <AIStyleAssistant />
           <SimpleCartDrawer />
           <Suspense fallback={null}>
