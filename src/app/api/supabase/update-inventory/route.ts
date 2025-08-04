@@ -237,11 +237,27 @@ export async function POST(request: NextRequest) {
           }
         }
 
+        // Calculate total inventory from all variants
+        const totalInventory = variants?.reduce((sum, variant) => sum + 10, 0) || 0
+        
+        // Update product with total inventory
+        const { error: productUpdateError } = await supabaseAdmin
+          .from('products')
+          .update({ 
+            total_inventory: totalInventory,
+            in_stock: totalInventory > 0
+          })
+          .eq('id', product.id)
+        
+        if (productUpdateError) {
+          console.error(`Error updating product ${product.name}:`, productUpdateError)
+        }
+
         updatedProducts++
         results.push({ 
           name: product.name, 
           status: 'success', 
-          message: `Updated with ${variants?.length || 0} variants`,
+          message: `Updated with ${variants?.length || 0} variants (Total inventory: ${totalInventory})`,
           hasImages: !!images
         })
       } catch (error) {
