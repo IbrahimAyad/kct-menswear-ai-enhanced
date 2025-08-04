@@ -5,12 +5,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "@/lib/hooks/useCart";
 import { ShoppingBag } from "lucide-react";
+import { trackProductClick } from "@/lib/analytics/google-analytics";
 
 interface ProductCardProps {
   product: Product;
+  listName?: string;
+  index?: number;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, listName = 'product_list', index = 0 }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState("");
@@ -36,7 +39,12 @@ export function ProductCard({ product }: ProductCardProps) {
       onMouseEnter={() => setShowQuickAdd(true)}
       onMouseLeave={() => setShowQuickAdd(false)}
     >
-      <Link href={`/products/${product.id}`}>
+      <Link 
+        href={`/products/${product.id}`}
+        onClick={() => {
+          trackProductClick(product, listName, index);
+        }}
+      >
         <div className="relative aspect-[3/4] overflow-hidden rounded-t-lg">
           <Image
             src={imageError ? "/placeholder.jpg" : product.images[0] || "/placeholder.jpg"}

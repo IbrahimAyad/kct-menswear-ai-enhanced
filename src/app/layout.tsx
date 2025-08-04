@@ -4,6 +4,11 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Providers } from "@/components/providers/Providers";
 import { AIStyleAssistant } from "@/components/ai/AIStyleAssistant";
 import { SimpleCartDrawer } from "@/components/cart/SimpleCartDrawer";
+import { GoogleAnalytics, GoogleAnalyticsScript } from "@/components/analytics/GoogleAnalytics";
+import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
+import { FacebookPixel, FacebookPixelScript } from "@/components/analytics/FacebookPixel";
+import { FacebookMessenger } from "@/components/chat/FacebookMessenger";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "KCT Menswear - Premium Men's Formal Wear",
@@ -23,6 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <GoogleAnalyticsScript />
+        <FacebookPixelScript />
+      </head>
       <body className="antialiased">
         <Providers>
           <Navigation />
@@ -31,6 +40,12 @@ export default function RootLayout({
           </main>
           <AIStyleAssistant />
           <SimpleCartDrawer />
+          <Suspense fallback={null}>
+            <GoogleAnalytics />
+            <FacebookPixel />
+          </Suspense>
+          <FacebookMessenger />
+          {process.env.NODE_ENV === 'development' && <AnalyticsDashboard />}
         </Providers>
       </body>
     </html>

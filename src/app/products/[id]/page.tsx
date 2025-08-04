@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useProduct } from "@/lib/hooks/useProducts";
 import { useCart } from "@/lib/hooks/useCart";
+import { useInventory } from "@/hooks/useInventory";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatPrice, getSizeLabel } from "@/lib/utils/format";
@@ -18,7 +19,16 @@ import Link from "next/link";
 import { FashionClipRecommendations } from "@/components/recommendations/FashionClipRecommendations";
 import { Badge } from "@/components/ui/badge";
 import { SizeBot } from "@/components/products/SizeBot";
+import { SizeChart } from "@/components/products/SizeChart";
 import { AnimatePresence } from "framer-motion";
+import { trackViewItem, trackAddToCart, trackAddToWishlist, trackShare, trackEngagement } from "@/lib/analytics/google-analytics";
+import { useScrollTracking } from "@/hooks/useScrollTracking";
+import { 
+  trackViewContent as trackFBViewContent, 
+  trackAddToCart as trackFBAddToCart,
+  trackAddToWishlist as trackFBAddToWishlist,
+  trackCustomEvent
+} from "@/lib/analytics/facebook-pixel";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -31,12 +41,54 @@ export default function ProductDetailPage() {
   const [addSuccess, setAddSuccess] = useState(false);
   const [error, setError] = useState("");
   const [showSizeBot, setShowSizeBot] = useState(false);
+  const [showSizeChart, setShowSizeChart] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [viewCount, setViewCount] = useState(Math.floor(Math.random() * 100) + 50);
   const [recentPurchases] = useState(Math.floor(Math.random() * 20) + 5);
 
   const { product, isLoading, error: loadError } = useProduct(productId);
   const { addToCart } = useCart();
+  const { inventory, getAvailableStock, isLowStock } = useInventory(productId);
+
+  // Use scroll tracking
+  useScrollTracking();
+
+  // Track product view and engagement
+  useEffect(() => {
+    if (product) {
+      // Google Analytics tracking
+      trackViewItem({
+        item_id: product.id,
+        item_name: product.name,
+        category: product.category,
+        price: product.price / 100, // Convert cents to dollars
+      });
+
+      // Facebook Pixel tracking
+      trackFBViewContent({
+        content_ids: [product.id],
+        content_name: product.name,
+        content_category: product.category,
+        content_type: 'product',
+        value: product.price / 100,
+        currency: 'USD'
+      });
+
+      // Track time spent on product page
+      const startTime = Date.now();
+      return () => {
+        const timeSpent = Math.round((Date.now() - startTime) / 1000);
+        if (timeSpent > 10) { // Only track if user spent more than 10 seconds
+          trackEngagement('product_view_time', timeSpent);
+          trackCustomEvent('ProductEngagement', {
+            product_id: product.id,
+            time_spent: timeSpent,
+            product_name: product.name
+          });
+        }
+      };
+    }
+  }, [product]);
 
   if (isLoading) {
     return (
@@ -58,7 +110,8 @@ export default function ProductDetailPage() {
   }
 
   const selectedVariant = product.variants.find(v => v.size === selectedSize);
-  const maxQuantity = selectedVariant?.stock || 0;
+  const availableStock = selectedSize ? getAvailableStock(selectedSize) : 0;
+  const maxQuantity = Math.min(selectedVariant?.stock || 0, availableStock);
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -70,6 +123,27 @@ export default function ProductDetailPage() {
       addToCart(product, selectedSize, quantity);
       setAddSuccess(true);
       setError("");
+      
+      // Google Analytics tracking
+      trackAddToCart({
+        item_id: product.id,
+        item_name: product.name,
+        category: product.category,
+        price: product.price / 100,
+        quantity: quantity,
+        size: selectedSize,
+      });
+
+      // Facebook Pixel tracking
+      trackFBAddToCart({
+        content_ids: [product.id],
+        content_name: product.name,
+        content_type: 'product',
+        content_category: product.category,
+        value: (product.price / 100) * quantity,
+        currency: 'USD'
+      });
+      
       setTimeout(() => {
         setAddSuccess(false);
       }, 3000);
@@ -207,34 +281,47 @@ export default function ProductDetailPage() {
                       AI Size Bot
                     </button>
                   </h3>
-                  <button className="text-gold hover:underline text-sm flex items-center gap-1">
+                  <button 
+                    onClick={() => setShowSizeChart(true)}
+                    className="text-gold hover:underline text-sm flex items-center gap-1"
+                  >
                     <Ruler className="h-3 w-3" />
                     Size Guide
                   </button>
                 </div>
                 
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                  {product.variants.map((variant) => (
-                    <button
-                      key={variant.size}
-                      onClick={() => variant.stock > 0 && setSelectedSize(variant.size)}
-                      disabled={variant.stock === 0}
-                      className={cn(
-                        "py-3 px-4 border rounded-sm transition-all text-sm font-medium",
-                        variant.stock === 0 && "opacity-50 cursor-not-allowed bg-gray-50",
-                        selectedSize === variant.size
-                          ? "border-gold bg-gold text-black"
-                          : "border-gray-300 hover:border-gray-400"
-                      )}
-                    >
-                      <div>{variant.size}</div>
-                      {variant.stock <= 3 && variant.stock > 0 && (
-                        <div className="text-xs text-red-500 mt-1">
-                          {variant.stock} left
-                        </div>
-                      )}
-                    </button>
-                  ))}
+                  {product.variants.map((variant) => {
+                    const stock = getAvailableStock(variant.size);
+                    const lowStock = isLowStock(variant.size);
+                    
+                    return (
+                      <button
+                        key={variant.size}
+                        onClick={() => stock > 0 && setSelectedSize(variant.size)}
+                        disabled={stock === 0}
+                        className={cn(
+                          "py-3 px-4 border rounded-sm transition-all text-sm font-medium relative",
+                          stock === 0 && "opacity-50 cursor-not-allowed bg-gray-50",
+                          selectedSize === variant.size
+                            ? "border-gold bg-gold text-black"
+                            : "border-gray-300 hover:border-gray-400"
+                        )}
+                      >
+                        <div>{variant.size}</div>
+                        {lowStock && stock > 0 && (
+                          <div className="text-xs text-red-500 mt-1">
+                            {stock} left
+                          </div>
+                        )}
+                        {stock === 0 && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            Out of Stock
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
                 {selectedSize && (
                   <p className="text-sm text-gray-600 mt-2">
@@ -308,12 +395,49 @@ export default function ProductDetailPage() {
                   <Button 
                     size="lg" 
                     variant="outline"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
+                    onClick={() => {
+                      setIsWishlisted(!isWishlisted);
+                      if (!isWishlisted && product) {
+                        trackAddToWishlist({
+                          item_id: product.id,
+                          item_name: product.name,
+                          category: product.category,
+                          price: product.price / 100,
+                        });
+                        
+                        // Facebook tracking
+                        trackFBAddToWishlist({
+                          content_ids: [product.id],
+                          content_name: product.name,
+                          value: product.price / 100,
+                          currency: 'USD'
+                        });
+                      }
+                    }}
                     className={isWishlisted ? 'border-red-300 text-red-600' : ''}
                   >
                     <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-current' : ''}`} />
                   </Button>
-                  <Button size="lg" variant="outline">
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    onClick={() => {
+                      if (product) {
+                        // Simple share functionality
+                        if (navigator.share) {
+                          navigator.share({
+                            title: product.name,
+                            text: `Check out this ${product.name} at KCT Menswear`,
+                            url: window.location.href,
+                          });
+                        } else {
+                          // Fallback to copy URL
+                          navigator.clipboard.writeText(window.location.href);
+                        }
+                        trackShare('native_share', 'product', product.id);
+                      }
+                    }}
+                  >
                     <Share2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -330,15 +454,17 @@ export default function ProductDetailPage() {
                 </div>
                 
                 {/* Urgency Elements */}
-                <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                  <div className="flex items-center gap-2 text-orange-800">
-                    <Zap className="w-4 h-4" />
-                    <span className="font-medium">Limited Time Offer</span>
+                {selectedSize && availableStock > 0 && availableStock <= 5 && (
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                    <div className="flex items-center gap-2 text-orange-800">
+                      <Zap className="w-4 h-4" />
+                      <span className="font-medium">Limited Availability</span>
+                    </div>
+                    <p className="text-sm text-orange-700 mt-1">
+                      Only {availableStock} left in size {selectedSize}. Order within 2 hours for same-day tailoring.
+                    </p>
                   </div>
-                  <p className="text-sm text-orange-700 mt-1">
-                    Only 3 left in your size. Order within 2 hours for same-day tailoring.
-                  </p>
-                </div>
+                )}
               </div>
 
               {/* Trust & Value Props */}
@@ -650,6 +776,13 @@ export default function ProductDetailPage() {
           />
         )}
       </AnimatePresence>
+
+      {/* Size Chart Modal */}
+      <SizeChart
+        category={product.category}
+        isOpen={showSizeChart}
+        onClose={() => setShowSizeChart(false)}
+      />
     </div>
   );
 }

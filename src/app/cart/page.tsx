@@ -13,6 +13,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { loadStripe } from "@stripe/stripe-js";
 import { CheckoutBenefits } from "@/components/checkout/CheckoutBenefits";
 import { useCartPersistence } from "@/hooks/useCartPersistence";
+import { trackBeginCheckout, trackRemoveFromCart, trackViewCart } from "@/lib/analytics/google-analytics";
+import { trackInitiateCheckout } from "@/lib/analytics/facebook-pixel";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
@@ -43,8 +45,47 @@ export default function CartPage() {
 
   const validCartItems = cartItemsWithProducts.filter(item => item.product);
 
+  // Track cart view
+  useEffect(() => {
+    if (validCartItems.length > 0) {
+      const cartItems = validCartItems.map(item => ({
+        productId: item.product!.id,
+        name: item.product!.name,
+        category: item.product!.category,
+        price: item.product!.price / 100,
+        quantity: item.quantity,
+        size: item.size,
+      }));
+      trackViewCart(cartSummary.totalPrice / 100, cartItems);
+    }
+  }, [validCartItems.length]);
+
   const handleCheckout = async () => {
     setIsProcessingCheckout(true);
+    
+    // Track begin checkout
+    const checkoutItems = validCartItems.map(item => ({
+      productId: item.product!.id,
+      name: item.product!.name,
+      category: item.product!.category,
+      price: item.product!.price / 100,
+      quantity: item.quantity,
+      size: item.size,
+    }));
+    
+    // Google Analytics tracking
+    trackBeginCheckout(checkoutItems, cartSummary.totalPrice / 100);
+    
+    // Facebook Pixel tracking
+    const fbContentIds = validCartItems.map(item => item.product!.id);
+    trackInitiateCheckout({
+      content_ids: fbContentIds,
+      content_category: 'Apparel & Accessories > Clothing',
+      num_items: validCartItems.reduce((sum, item) => sum + item.quantity, 0),
+      value: cartSummary.totalPrice / 100,
+      currency: 'USD'
+    });
+    
     try {
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -215,7 +256,20 @@ export default function CartPage() {
                           </p>
                         </div>
                         <button
-                          onClick={() => removeFromCart(item.productId, item.size)}
+                          onClick={() => {
+                            // Track remove from cart
+                            if (item.product) {
+                              trackRemoveFromCart({
+                                item_id: item.product.id,
+                                item_name: item.product.name,
+                                category: item.product.category,
+                                price: item.product.price / 100,
+                                quantity: item.quantity,
+                                size: item.size,
+                              });
+                            }
+                            removeFromCart(item.productId, item.size);
+                          }}
                           className="text-red-500 hover:text-red-600 p-2 hover:bg-red-50 rounded-sm transition-colors duration-200"
                           disabled={isLoading}
                           title="Remove item"

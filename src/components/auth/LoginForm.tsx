@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
+import { trackLogin, trackFormStart, trackFormSubmit } from '@/lib/analytics/google-analytics'
 
 export default function LoginForm() {
   const [email, setEmail] = useState('')
@@ -11,15 +12,28 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false)
   const { signIn } = useAuth()
 
+  // Track form start when user begins typing
+  useEffect(() => {
+    if (email || password) {
+      trackFormStart('login_form');
+    }
+  }, [email, password]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setLoading(true)
 
+    // Track form submission
+    trackFormSubmit('login_form');
+    
     const { error } = await signIn(email, password)
     
     if (error) {
       setError(error.message)
+    } else {
+      // Track successful login
+      trackLogin('email')
     }
     
     setLoading(false)

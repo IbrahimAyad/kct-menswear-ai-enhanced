@@ -7,12 +7,20 @@ import { SearchFilters, FilterState } from "@/components/search/SearchFilters";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { useProducts } from "@/lib/hooks/useProducts";
 import { Product } from "@/lib/types";
+import { trackSearch } from "@/lib/analytics/google-analytics";
 
 export default function SearchPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get("search") || "";
   const { products, isLoading } = useProducts();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [currentFilters, setCurrentFilters] = useState<FilterState>({
+    categories: [],
+    sizes: [],
+    colors: [],
+    priceRange: [0, 2000],
+    sort: "featured",
+  });
 
   const applyFilters = (products: Product[], filters: FilterState) => {
     let filtered = [...products];
@@ -55,20 +63,19 @@ export default function SearchPageContent() {
 
     // Sort
     switch (filters.sort) {
-      case "price-asc":
+      case "price_asc":
         filtered.sort((a, b) => a.price - b.price);
         break;
-      case "price-desc":
+      case "price_desc":
         filtered.sort((a, b) => b.price - a.price);
         break;
-      case "name-asc":
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      case "newest":
+        // Sort by ID descending (assuming newer products have higher IDs)
+        filtered.sort((a, b) => parseInt(b.id) - parseInt(a.id));
         break;
-      case "name-desc":
-        filtered.sort((a, b) => b.name.localeCompare(a.name));
-        break;
+      case "featured":
       default:
-        // Default sort
+        // Keep original order for featured
         break;
     }
 
@@ -76,19 +83,19 @@ export default function SearchPageContent() {
   };
 
   const handleFilterChange = (filters: FilterState) => {
+    setCurrentFilters(filters);
     setFilteredProducts(applyFilters(products, filters));
   };
 
   useEffect(() => {
-    const initialFilters: FilterState = {
-      categories: [],
-      sizes: [],
-      colors: [],
-      priceRange: [0, 1000],
-      sort: "relevance",
-    };
-    setFilteredProducts(applyFilters(products, initialFilters));
-  }, [products, query]);
+    const filtered = applyFilters(products, currentFilters);
+    setFilteredProducts(filtered);
+    
+    // Track search when query changes
+    if (query) {
+      trackSearch(query, filtered.length);
+    }
+  }, [products, query, currentFilters]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -103,7 +110,10 @@ export default function SearchPageContent() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Filters Sidebar */}
           <div className="lg:col-span-1">
-            <SearchFilters onFilterChange={handleFilterChange} />
+            <SearchFilters 
+              onFilterChange={handleFilterChange} 
+              productCount={filteredProducts.length}
+            />
           </div>
 
           {/* Products Grid */}

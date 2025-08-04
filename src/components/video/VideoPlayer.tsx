@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import { cn } from "@/lib/utils/cn";
+import { trackVideoView } from "@/lib/analytics/google-analytics";
 
 interface VideoPlayerProps {
   videoId: string;
@@ -79,6 +80,10 @@ export function VideoPlayer({
       controls={controls}
       playsInline
       onError={() => setError(true)}
+      onPlay={() => {
+        // Track video play event
+        trackVideoView(`Cloudflare Video - ${videoId}`, videoId);
+      }}
     />
   );
 }

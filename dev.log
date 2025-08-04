@@ -665,80 +665,90 @@ Import trace for requested module:
  ✓ Compiled in 335ms (916 modules)
  ✓ Compiled in 191ms (916 modules)
  ✓ Compiled in 203ms (916 modules)
-3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
-<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/.next/cache/webpack/client-development/0.pack.gz_' -> '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/.next/cache/webpack/client-development/0.pack.gz'
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
-<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/.next/cache/webpack/client-development/0.pack.gz_' -> '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/.next/cache/webpack/client-development/0.pack.gz'
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
+ ✓ Compiled in 404ms (916 modules)
+ ✓ Compiled in 186ms (916 modules)
+ ✓ Compiled in 229ms (916 modules)
+ ✓ Compiled in 181ms (916 modules)
+ ✓ Compiled in 271ms (916 modules)
+ ✓ Compiled in 69ms (902 modules)
+ ✓ Compiled in 238ms (916 modules)
+ ✓ Compiled in 199ms (916 modules)
+ ✓ Compiled in 202ms (916 modules)
+ ✓ Compiled in 259ms (916 modules)
+ ✓ Compiled in 269ms (916 modules)
+ ✓ Compiled in 118ms (902 modules)
+ ✓ Compiled in 145ms (903 modules)
+ ✓ Compiled in 69ms (903 modules)
+ ✓ Compiled in 65ms (903 modules)
+ ✓ Compiled in 81ms (903 modules)
+ ✓ Compiled in 462ms (917 modules)
+ ✓ Compiled in 192ms (917 modules)
+ ✓ Compiled in 239ms (917 modules)
+ ✓ Compiled in 306ms (917 modules)
+ ✓ Compiled in 294ms (917 modules)
+ ✓ Compiled in 335ms (917 modules)
+ ✓ Compiled in 263ms (917 modules)
+ ✓ Compiled in 184ms (917 modules)
+ ✓ Compiled in 208ms (917 modules)
+ ✓ Compiled in 204ms (917 modules)
+ ✓ Compiled in 224ms (917 modules)
+ ✓ Compiled in 270ms (917 modules)
+ ✓ Compiled in 188ms (917 modules)
+ ✓ Compiled in 243ms (917 modules)
+ ✓ Compiled in 190ms (917 modules)
+ ✓ Compiled in 194ms (917 modules)
+ ✓ Compiled in 187ms (917 modules)
+ ✓ Compiled in 305ms (917 modules)
+ ✓ Compiled in 230ms (917 modules)
+ ✓ Compiled in 346ms (917 modules)
+ ✓ Compiled in 196ms (917 modules)
+ ✓ Compiled in 213ms (917 modules)
+ ✓ Compiled in 196ms (917 modules)
+ ✓ Compiled in 185ms (917 modules)
+ ✓ Compiled in 227ms (917 modules)
+ ✓ Compiled in 243ms (917 modules)
+ ✓ Compiled in 194ms (917 modules)
+ ✓ Compiled in 194ms (917 modules)
+ ✓ Compiled in 198ms (917 modules)
+ ✓ Compiled in 246ms (917 modules)
+ ✓ Compiled in 212ms (917 modules)
+ ✓ Compiled in 189ms (917 modules)
+ ✓ Compiled in 255ms (917 modules)
+ ✓ Compiled in 264ms (917 modules)
+ ✓ Compiled in 219ms (917 modules)
+ ✓ Compiled in 202ms (917 modules)
+ ✓ Compiled in 270ms (917 modules)
+ ✓ Compiled in 286ms (917 modules)
+ ✓ Compiled in 455ms (917 modules)
+ ✓ Compiled in 219ms (917 modules)
+ ✓ Compiled in 186ms (917 modules)
+ ✓ Compiled in 286ms (917 modules)
+ ✓ Compiled in 254ms (917 modules)
+ ✓ Compiled in 235ms (917 modules)
+ ✓ Compiled in 201ms (917 modules)
+ ✓ Compiled in 252ms (917 modules)
+ ✓ Compiled in 201ms (917 modules)
+ ✓ Compiled in 243ms (917 modules)
+ ✓ Compiled in 217ms (917 modules)
+ ✓ Compiled in 255ms (917 modules)
+ ✓ Compiled in 191ms (917 modules)
+ ✓ Compiled in 274ms (917 modules)
+ ✓ Compiled in 201ms (917 modules)
+ ✓ Compiled in 246ms (917 modules)
+ ✓ Compiled in 383ms (917 modules)
+ ✓ Compiled in 197ms (917 modules)
+ ✓ Compiled in 239ms (917 modules)
+ ✓ Compiled in 251ms (917 modules)
+ ✓ Compiled in 196ms (917 modules)
+ ✓ Compiled in 211ms (917 modules)
+ ✓ Compiled in 310ms (917 modules)
+ ✓ Compiled in 226ms (917 modules)
+ ✓ Compiled in 528ms (917 modules)
+ ✓ Compiled in 196ms (917 modules)
+ ✓ Compiled in 246ms (917 modules)
+ ✓ Compiled in 61ms (903 modules)
+ ✓ Compiled in 352ms (917 modules)
+ Transition } from '@headlessui/react'
     | ^
   5 | import { useAuth } from '@/hooks/useAuth'
   6 | import Link from 'next/link'

@@ -1,11 +1,34 @@
+'use client'
+
 import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { trackPurchase } from '@/lib/analytics/google-analytics';
+import { useCart } from '@/lib/hooks/useCart';
 
-export default async function CheckoutSuccess({ 
+export default function CheckoutSuccess({ 
   searchParams 
 }: { 
   searchParams: { session_id?: string } 
 }) {
+  const { clearCart } = useCart();
+
+  useEffect(() => {
+    // Track purchase completion
+    if (searchParams.session_id) {
+      // In a real implementation, you would fetch order details from your API
+      // For now, we'll use the session ID as transaction ID
+      trackPurchase({
+        transaction_id: searchParams.session_id,
+        value: 0, // This would come from the actual order
+        currency: 'USD',
+        items: [], // This would come from the actual order items
+      });
+
+      // Clear the cart after successful purchase
+      clearCart();
+    }
+  }, [searchParams.session_id, clearCart]);
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">

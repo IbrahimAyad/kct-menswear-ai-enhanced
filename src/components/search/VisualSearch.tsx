@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Upload, X, Search, Sparkles, ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/lib/types';
+import { facebookTracking } from '@/lib/analytics/FacebookTrackingService';
 
 interface VisualSearchProps {
   onResults?: (results: Product[]) => void;
@@ -121,6 +122,9 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
 
       setSearchResults(mockResults);
       onResults?.(mockResults.map(r => r.product));
+      
+      // Track visual search usage
+      facebookTracking.trackVisualSearchUsed(mockResults.length);
       
     } catch (error) {
       console.error('Fashion CLIP search error:', error);

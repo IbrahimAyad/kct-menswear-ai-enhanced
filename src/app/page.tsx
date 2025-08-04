@@ -8,10 +8,23 @@ import { VIDEO_IDS } from "@/lib/utils/constants";
 import { StyleSwiperPreview } from "@/components/style/StyleSwiperPreview";
 import { VisualSearch } from "@/components/search/VisualSearch";
 import { TrendingBundles } from "@/components/home/TrendingBundles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { trackPromoView, trackViewItemList } from "@/lib/analytics/google-analytics";
+import { useScrollTracking } from "@/hooks/useScrollTracking";
 
 export default function Home() {
   const [showVisualSearch, setShowVisualSearch] = useState(false);
+  
+  // Use scroll tracking
+  useScrollTracking();
+
+  // Track homepage promotions
+  useEffect(() => {
+    // Track hero banner view
+    trackPromoView('Homepage Hero - Elevate Your Style', 'hero_banner_2024');
+    
+    // You can add more promo tracking here as needed
+  }, []);
 
   return (
     <>

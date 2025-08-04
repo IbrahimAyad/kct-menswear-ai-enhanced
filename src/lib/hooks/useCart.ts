@@ -5,6 +5,7 @@ import { useProductStore } from "@/lib/store/productStore";
 import { Product } from "@/lib/types";
 import { useNotifications } from "./useNotifications";
 import { useTrackCart } from "@/lib/analytics/hooks/useAnalytics";
+import { useCartInventory } from "@/hooks/useInventory";
 
 export function useCart() {
   const {
@@ -24,6 +25,21 @@ export function useCart() {
   const { products } = useProductStore();
   const { notifySuccess, notifyError, notifyWarning } = useNotifications();
   const { trackAddToCart, trackRemoveFromCart } = useTrackCart();
+  const { reserveInventory, releaseCartReservations } = useCartInventory();
+
+  // Get or create cart ID
+  const getCartId = useCallback(() => {
+    if (customer?.id) {
+      return `user-${customer.id}`;
+    }
+    // For guest users, use session cart ID
+    let cartId = localStorage.getItem('guest-cart-id');
+    if (!cartId) {
+      cartId = `guest-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+      localStorage.setItem('guest-cart-id', cartId);
+    }
+    return cartId;
+  }, [customer?.id]);
 
   // Sync cart with server when customer logs in
   useEffect(() => {
@@ -33,12 +49,21 @@ export function useCart() {
   }, [customer?.id]);
 
   const handleAddToCart = useCallback(
-    (product: Product, size: string, quantity = 1) => {
+    async (product: Product, size: string, quantity = 1) => {
       try {
         // Check if size is in stock
         const variant = product.variants.find((v) => v.size === size);
         if (!variant || variant.stock < quantity) {
           notifyError("Out of Stock", `${product.name} in size ${size} is not available`);
+          return;
+        }
+
+        // Reserve inventory
+        const cartId = getCartId();
+        const reserved = await reserveInventory(cartId, product.id, size, quantity);
+        
+        if (!reserved) {
+          notifyError("Out of Stock", `${product.name} in size ${size} is no longer available`);
           return;
         }
 
@@ -64,7 +89,7 @@ export function useCart() {
         console.error("Add to cart error:", error);
       }
     },
-    [customer?.id, addItem, syncCart, notifySuccess, notifyError, trackAddToCart]
+    [customer?.id, addItem, syncCart, notifySuccess, notifyError, trackAddToCart, getCartId, reserveInventory]
   );
 
   const handleRemoveFromCart = useCallback(
@@ -120,6 +145,24 @@ export function useCart() {
     [customer?.id, products, updateQuantity, syncCart, notifyWarning, notifyError]
   );
 
+  const handleClearCart = useCallback(async () => {
+    try {
+      // Release all inventory reservations
+      const cartId = getCartId();
+      await releaseCartReservations(cartId);
+      
+      // Clear the cart
+      clearCart();
+      
+      // Clear guest cart ID if guest user
+      if (!customer?.id) {
+        localStorage.removeItem('guest-cart-id');
+      }
+    } catch (error) {
+      console.error("Clear cart error:", error);
+    }
+  }, [clearCart, getCartId, releaseCartReservations, customer?.id]);
+
   const cartSummary = {
     itemCount: getTotalItems(),
     totalPrice: getTotalPrice(products),
@@ -132,7 +175,7 @@ export function useCart() {
     addToCart: handleAddToCart,
     removeFromCart: handleRemoveFromCart,
     updateQuantity: handleUpdateQuantity,
-    clearCart,
+    clearCart: handleClearCart,
     restoreCart,
   };
 }

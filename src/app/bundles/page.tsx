@@ -11,6 +11,8 @@ import BundleFilters from '@/components/bundles/BundleFilters';
 import BundleHero from '@/components/bundles/BundleHero';
 import BundleQuickView from '@/components/bundles/BundleQuickView';
 import { useCart } from '@/hooks/useCart';
+import { facebookTracking } from '@/lib/analytics/FacebookTrackingService';
+import { useFacebookPageTracking } from '@/hooks/useFacebookTracking';
 
 export default function BundleCollectionPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -19,6 +21,20 @@ export default function BundleCollectionPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedBundle, setSelectedBundle] = useState<any>(null);
   const { addItem } = useCart();
+
+  // Track page views
+  useFacebookPageTracking();
+
+  // Track bundle views when quick view is opened
+  useEffect(() => {
+    if (selectedBundle) {
+      facebookTracking.trackBundleInteraction(
+        selectedBundle.name,
+        selectedBundle.bundlePrice / 100,
+        'view'
+      );
+    }
+  }, [selectedBundle]);
 
   // Filter and sort bundles
   const filteredBundles = bundleProductsWithImages.bundles.filter(bundle => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { StyleSwiper } from "@/components/style/StyleSwiper";
 import { StyleRecommendations } from "@/components/style/StyleRecommendations";
@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Product, StylePreferences } from '@/lib/types';
+import { facebookTracking } from '@/lib/analytics/FacebookTrackingService';
+import { useFacebookPageTracking } from '@/hooks/useFacebookTracking';
 
 // Mock products for the quiz
 const quizProducts: Product[] = [
@@ -73,6 +75,18 @@ export default function StyleQuizPage() {
     fit: 'modern',
     occasions: [],
   });
+  const [quizStarted, setQuizStarted] = useState(false);
+
+  // Track page views
+  useFacebookPageTracking();
+
+  // Track quiz start
+  useEffect(() => {
+    if (!quizStarted) {
+      facebookTracking.trackStyleQuizProgress('start');
+      setQuizStarted(true);
+    }
+  }, [quizStarted]);
 
   const handleSwipe = (product: Product, direction: 'left' | 'right') => {
     console.log(`Swiped ${direction} on ${product.name}`);
@@ -93,6 +107,13 @@ export default function StyleQuizPage() {
     
     setStylePreferences(preferences);
     setShowResults(true);
+
+    // Track quiz completion
+    const budget = liked.length > 3 ? '1000-plus' : liked.length > 1 ? '500-1000' : 'under-500';
+    facebookTracking.trackStyleQuizProgress('complete', {
+      styleType: preferences.stylePersona || 'Modern Professional',
+      budget: budget
+    });
   };
 
   const mockRecommendations = likedProducts.map((product, index) => ({
