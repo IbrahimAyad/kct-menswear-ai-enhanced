@@ -7,7 +7,7 @@ import { SimpleCartDrawer } from "@/components/cart/SimpleCartDrawer";
 import { GoogleAnalytics, GoogleAnalyticsScript } from "@/components/analytics/GoogleAnalytics";
 import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
 import { FacebookPixel, FacebookPixelScript } from "@/components/analytics/FacebookPixel";
-import { FacebookMessenger } from "@/components/chat/FacebookMessenger";
+// import { FacebookMessenger } from "@/components/chat/FacebookMessenger";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -44,7 +44,7 @@ export default function RootLayout({
             <GoogleAnalytics />
             <FacebookPixel />
           </Suspense>
-          <FacebookMessenger />
+          {/* <FacebookMessenger /> */}
           {process.env.NODE_ENV === 'development' && <AnalyticsDashboard />}
         </Providers>
       </body>

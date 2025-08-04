@@ -17,6 +17,17 @@ export async function getProducts(params: ProductSearchParams = {}) {
   const { filters = {}, sort = { field: 'created_at', direction: 'desc' }, page = 1, limit = 50 } = params
   
   try {
+    // Check if Supabase is configured
+    if (!supabaseAdmin) {
+      console.error('Supabase admin client is not configured')
+      return {
+        products: [],
+        totalCount: 0,
+        currentPage: 1,
+        totalPages: 0
+      }
+    }
+
     let query = supabaseAdmin
       .from('products')
       .select(`
@@ -101,6 +112,12 @@ export async function getProducts(params: ProductSearchParams = {}) {
  */
 export async function getProduct(id: string): Promise<EnhancedProduct | null> {
   try {
+    // Check if Supabase is configured
+    if (!supabaseAdmin) {
+      console.error('Supabase admin client is not configured')
+      return null
+    }
+
     const { data, error } = await supabaseAdmin
       .from('products')
       .select(`
@@ -184,6 +201,11 @@ export async function searchProducts(query: string, params: ProductSearchParams 
  */
 export async function getProductCategories() {
   try {
+    if (!supabaseAdmin) {
+      console.error('Supabase admin client is not configured')
+      return []
+    }
+
     const { data, error } = await supabaseAdmin
       .from('products')
       .select('category')
@@ -206,6 +228,11 @@ export async function getProductCategories() {
  */
 export async function getProductBrands() {
   try {
+    if (!supabaseAdmin) {
+      console.error('Supabase admin client is not configured')
+      return []
+    }
+
     const { data, error } = await supabaseAdmin
       .from('products')
       .select('brand')
@@ -229,6 +256,11 @@ export async function getProductBrands() {
  */
 export async function getProductColors() {
   try {
+    if (!supabaseAdmin) {
+      console.error('Supabase admin client is not configured')
+      return []
+    }
+
     const { data, error } = await supabaseAdmin
       .from('products')
       .select('color_family')
@@ -252,6 +284,11 @@ export async function getProductColors() {
  */
 export async function getProductPriceRange() {
   try {
+    if (!supabaseAdmin) {
+      console.error('Supabase admin client is not configured')
+      return { min: 0, max: 1000 }
+    }
+
     const { data, error } = await supabaseAdmin
       .from('products')
       .select('base_price')
