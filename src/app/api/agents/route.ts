@@ -4,7 +4,7 @@ import { agentSystem } from '@/lib/agents';
 // GET /api/agents - Get agent system status
 export async function GET(request: NextRequest) {
   try {
-    const health = agentSystem.getSystemHealth();
+    const health = await agentSystem.getSystemHealth();
     const isRunning = agentSystem.isSystemRunning();
     const decisions = agentSystem.getDecisionLog().slice(-10); // Last 10 decisions
 
@@ -22,7 +22,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       { 
         status: 'error', 
-        message: 'Failed to get agent system status' 
+        message: 'Failed to get agent system status',
+        error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );

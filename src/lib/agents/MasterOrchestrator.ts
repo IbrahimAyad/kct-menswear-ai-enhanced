@@ -413,6 +413,10 @@ export class MasterOrchestrator extends BaseAgent {
 
   // Public methods
   getSystemHealth(): SystemHealth {
+    // Ensure system health is initialized
+    if (!this.systemHealth.agents || Object.keys(this.systemHealth.agents).length === 0) {
+      this.performHealthCheck();
+    }
     return this.systemHealth;
   }
 

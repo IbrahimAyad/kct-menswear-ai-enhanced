@@ -748,13 +748,12 @@ Import trace for requested module:
  ✓ Compiled in 246ms (917 modules)
  ✓ Compiled in 61ms (903 modules)
  ✓ Compiled in 352ms (917 modules)
- Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
+ ✓ Compiled in 354ms (917 modules)
+ ✓ Compiled in 205ms (917 modules)
+ ✓ Compiled in 237ms (917 modules)
+ ✓ Compiled in 279ms (917 modules)
+ ✓ Compiled in 204ms (917 modules)
+js.org/docs/messages/module-not-found
 
 Import trace for requested module:
 ./src/components/layout/Navigation.tsx

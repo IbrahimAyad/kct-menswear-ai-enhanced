@@ -51,20 +51,27 @@ export function AgentMonitor() {
   const [health, setHealth] = useState<SystemHealth | null>(null);
   const [decisions, setDecisions] = useState<AgentDecision[]>([]);
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
   const fetchStatus = async () => {
     try {
+      console.log('Fetching agent status...');
       const response = await fetch('/api/agents');
       const data = await response.json();
+      console.log('Agent status response:', data);
       
       if (data.status === 'success') {
         setIsRunning(data.data.isRunning);
         setHealth(data.data.health);
         setDecisions(data.data.recentDecisions || []);
+      } else {
+        console.error('API error:', data);
       }
     } catch (error) {
       console.error('Failed to fetch agent status:', error);
+    } finally {
+      setInitialLoading(false);
     }
   };
 
@@ -160,6 +167,17 @@ export function AgentMonitor() {
         return <Badge>Unknown</Badge>;
     }
   };
+
+  if (initialLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading agent system...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
