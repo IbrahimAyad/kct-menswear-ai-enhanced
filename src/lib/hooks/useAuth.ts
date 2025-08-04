@@ -20,14 +20,14 @@ export function useAuth() {
     async (email: string, password: string) => {
       try {
         await login(email, password);
-        
+
         // Sync cart after login
         const authState = useAuthStore.getState();
         if (authState.customer?.id) {
           await syncCart(authState.customer.id);
         }
       } catch (error) {
-        console.error("Login failed:", error);
+
         throw error;
       }
     },
@@ -43,7 +43,7 @@ export function useAuth() {
       try {
         await updateProfile(data);
       } catch (error) {
-        console.error("Profile update failed:", error);
+
         throw error;
       }
     },

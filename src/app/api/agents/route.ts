@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    console.error('Error getting agent status:', error);
+
     return NextResponse.json(
       { 
         status: 'error', 
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     } else if (action === 'inject-task') {
       const body = await request.json();
       const task = body.task;
-      
+
       if (!task) {
         return NextResponse.json(
           { 
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      
+
       await agentSystem.injectTask(task);
       return NextResponse.json({
         status: 'success',
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error) {
-    console.error('Error controlling agent system:', error);
+
     return NextResponse.json(
       { 
         status: 'error', 

@@ -21,7 +21,7 @@ export async function uploadToCloudflareImages(
       type: 'style-swipe',
       ...metadata
     }));
-    
+
     // Create a custom ID for the image
     const customId = `style-swipe-${metadata.occasion}-${metadata.tieColor}-${metadata.suitColor}-${Date.now()}`;
     formData.append('id', customId);
@@ -38,17 +38,17 @@ export async function uploadToCloudflareImages(
     );
 
     const data = await response.json();
-    
+
     if (data.success) {
       // Return the Cloudflare Images delivery URL
       const imageId = data.result.id;
       return `https://imagedelivery.net/${ACCOUNT_HASH}/${imageId}/public`;
     } else {
-      console.error('Cloudflare Images upload failed:', data.errors);
+
       return null;
     }
   } catch (error) {
-    console.error('Error uploading to Cloudflare Images:', error);
+
     return null;
   }
 }
@@ -68,7 +68,7 @@ export async function getStyleSwipeImages(occasion?: string) {
     });
 
     const data = await response.json();
-    
+
     if (data.success) {
       return data.result.images.map((img: any) => ({
         id: img.id,
@@ -77,10 +77,10 @@ export async function getStyleSwipeImages(occasion?: string) {
         uploaded: img.uploaded
       }));
     }
-    
+
     return [];
   } catch (error) {
-    console.error('Error fetching style swipe images:', error);
+
     return [];
   }
 }

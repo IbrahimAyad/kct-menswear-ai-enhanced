@@ -35,10 +35,9 @@ export class EmailClient {
         throw new Error(`Email send failed: ${error.message}`);
       }
 
-      console.log(`Email sent successfully: ${data?.id}`);
       return data;
     } catch (error) {
-      console.error("Email send error:", error);
+
       throw error;
     }
   }
@@ -61,10 +60,9 @@ export class EmailClient {
         throw new Error(`Batch email send failed: ${error.message}`);
       }
 
-      console.log(`Batch emails sent: ${data?.data.length} emails`);
       return data;
     } catch (error) {
-      console.error("Batch email send error:", error);
+
       throw error;
     }
   }

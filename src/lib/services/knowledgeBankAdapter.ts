@@ -87,10 +87,9 @@ class KnowledgeBankAdapter {
         this.loadNeverCombineRules(),
         this.loadStyleProfiles()
       ]);
-      
-      console.log('Knowledge Bank Adapter initialized successfully');
+
     } catch (error) {
-      console.error('Failed to initialize Knowledge Bank Adapter:', error);
+
     }
   }
 
@@ -100,7 +99,7 @@ class KnowledgeBankAdapter {
    */
   async getColorRelationships(suitColor: string): Promise<ColorRelationship | null> {
     const cacheKey = `color_${suitColor}`;
-    
+
     if (this.cache.has(cacheKey)) {
       return this.cache.get(cacheKey);
     }
@@ -119,7 +118,7 @@ class KnowledgeBankAdapter {
         // Process rules to extract color relationships
         // For now, we'll use static data enhanced with rules
         const staticRelationship = this.getStaticColorRelationship(suitColor);
-        
+
         if (staticRelationship && rulesData.success) {
           // Enhance with never-combine rules
           const neverCombine = rulesData.data.absolute_never_combine || [];
@@ -130,10 +129,10 @@ class KnowledgeBankAdapter {
           return staticRelationship;
         }
       }
-      
+
       throw new Error('Failed to fetch from API');
     } catch (error) {
-      console.error('Error fetching color relationships:', error);
+
       // Fallback to static data
       return this.getStaticColorRelationship(suitColor);
     }
@@ -166,7 +165,7 @@ class KnowledgeBankAdapter {
         if (rulesData.success) {
           const warnings: string[] = [];
           let score = 100;
-          
+
           // Check against never-combine rules
           const neverCombine = rulesData.data.absolute_never_combine || [];
           for (const rule of neverCombine) {
@@ -175,7 +174,7 @@ class KnowledgeBankAdapter {
               score -= rule.severity === 'critical' ? 50 : 25;
             }
           }
-          
+
           return {
             valid: warnings.length === 0,
             score: Math.max(0, score),
@@ -184,10 +183,10 @@ class KnowledgeBankAdapter {
           };
         }
       }
-      
+
       throw new Error('Failed to fetch rules');
     } catch (error) {
-      console.error('Error validating combination:', error);
+
       // Fallback to basic validation
       return {
         valid: true,
@@ -238,7 +237,7 @@ class KnowledgeBankAdapter {
       const data = await response.json();
       return data.recommendations;
     } catch (error) {
-      console.error('Error getting recommendations:', error);
+
       // Fallback to mock recommendations
       return this.getMockRecommendations(options);
     }
@@ -249,7 +248,7 @@ class KnowledgeBankAdapter {
    */
   async getConversionData(combinationId: string): Promise<ConversionData | null> {
     const cacheKey = `conversion_${combinationId}`;
-    
+
     if (this.cache.has(cacheKey)) {
       return this.cache.get(cacheKey);
     }
@@ -268,12 +267,12 @@ class KnowledgeBankAdapter {
 
       const data = await response.json();
       this.cache.set(cacheKey, data);
-      
+
       setTimeout(() => this.cache.delete(cacheKey), this.cacheTimeout);
-      
+
       return data;
     } catch (error) {
-      console.error('Error fetching conversion data:', error);
+
       return null;
     }
   }
@@ -313,10 +312,10 @@ class KnowledgeBankAdapter {
           growth: parseFloat(item.growth?.replace('%', '').replace('+', '') || '0')
         }));
       }
-      
+
       return [];
     } catch (error) {
-      console.error('Error fetching trending combinations:', error);
+
       return [];
     }
   }
@@ -326,7 +325,7 @@ class KnowledgeBankAdapter {
    */
   async getStyleProfile(profileType: string): Promise<StyleProfile | null> {
     const cacheKey = `profile_${profileType}`;
-    
+
     if (this.cache.has(cacheKey)) {
       return this.cache.get(cacheKey);
     }
@@ -345,10 +344,10 @@ class KnowledgeBankAdapter {
 
       const data = await response.json();
       this.cache.set(cacheKey, data);
-      
+
       return data;
     } catch (error) {
-      console.error('Error fetching style profile:', error);
+
       // Fallback to static profile
       return this.getStaticStyleProfile(profileType);
     }
@@ -367,7 +366,7 @@ class KnowledgeBankAdapter {
   ): Promise<any[]> {
     // Get knowledge bank recommendations
     const kbRecommendations = await this.getRecommendations(context);
-    
+
     // Get conversion data for scoring
     const conversionPromises = fashionClipRecommendations.map(rec => 
       this.getConversionData(`${rec.suit}_${rec.shirt}_${rec.tie}`)
@@ -379,9 +378,9 @@ class KnowledgeBankAdapter {
       const kbMatch = kbRecommendations.find(kb => 
         kb.suit === rec.suit && kb.shirt === rec.shirt && kb.tie === rec.tie
       );
-      
+
       const conversion = conversionData[index];
-      
+
       return {
         ...rec,
         knowledgeBankScore: kbMatch?.score || 0,
@@ -417,7 +416,7 @@ class KnowledgeBankAdapter {
         }
       }
     };
-    
+
     Object.entries(colorData).forEach(([color, data]) => {
       this.cache.set(`color_${color}`, data);
     });
@@ -429,7 +428,7 @@ class KnowledgeBankAdapter {
       { suit: 'black', shirt: 'brown', tie: '*', reason: 'Color clash' },
       { suit: 'navy', shirt: 'navy', tie: 'navy', reason: 'Monochrome overload' }
     ];
-    
+
     this.cache.set('never_combine_rules', rules);
   }
 
@@ -455,7 +454,7 @@ class KnowledgeBankAdapter {
         }
       }
     };
-    
+
     this.cache.set('style_profiles', profiles);
   }
 
@@ -485,23 +484,23 @@ class KnowledgeBankAdapter {
     conversion: ConversionData | null
   ): number {
     let score = 0;
-    
+
     // Fashion-CLIP visual score (40% weight)
     score += (fashionClipRec.score || 0) * 0.4;
-    
+
     // Knowledge Bank rule score (30% weight)
     score += (kbMatch?.score || 50) * 0.3;
-    
+
     // Conversion rate score (20% weight)
     if (conversion) {
       score += (conversion.conversion_rate || 0) * 0.2;
     }
-    
+
     // Customer rating score (10% weight)
     if (conversion?.customer_rating) {
       score += (conversion.customer_rating / 5) * 100 * 0.1;
     }
-    
+
     return Math.round(score);
   }
 
@@ -560,7 +559,7 @@ class KnowledgeBankAdapter {
         }
       }
     };
-    
+
     return suitColor in staticRelationships 
       ? staticRelationships[suitColor as keyof typeof staticRelationships]
       : null;
@@ -628,7 +627,7 @@ class KnowledgeBankAdapter {
         }
       }
     };
-    
+
     return profileType in staticProfiles
       ? staticProfiles[profileType as keyof typeof staticProfiles]
       : null;

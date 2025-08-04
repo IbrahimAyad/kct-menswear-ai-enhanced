@@ -14,7 +14,7 @@ import { useScrollTracking } from "@/hooks/useScrollTracking";
 
 export default function Home() {
   const [showVisualSearch, setShowVisualSearch] = useState(false);
-  
+
   // Use scroll tracking
   useScrollTracking();
 
@@ -22,7 +22,7 @@ export default function Home() {
   useEffect(() => {
     // Track hero banner view
     trackPromoView('Homepage Hero - Elevate Your Style', 'hero_banner_2024');
-    
+
     // You can add more promo tracking here as needed
   }, []);
 
@@ -37,7 +37,7 @@ export default function Home() {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/60" />
         </div>
-        
+
         <div className="relative z-10 flex items-center justify-center h-full">
           <div className="text-center text-white px-4 max-w-5xl mx-auto">
             <div className="space-y-2 mb-8 animate-fade-up">
@@ -66,7 +66,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        
+
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
           <div className="flex flex-col items-center gap-2">
@@ -85,7 +85,7 @@ export default function Home() {
               Discover our comprehensive services designed to elevate your wardrobe
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Link href="/style-quiz" className="group">
               <div className="relative bg-white border border-gray-200 p-10 h-full transition-all duration-300 hover:border-gold hover:shadow-2xl hover:-translate-y-1">
@@ -291,7 +291,7 @@ export default function Home() {
           <div className="absolute top-20 left-20 w-72 h-72 bg-gold rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-gold rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="container-main relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 text-gold mb-6">
@@ -329,7 +329,7 @@ export default function Home() {
           <div className="absolute top-0 right-0 w-96 h-96 bg-gold/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-burgundy/10 rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="container-main text-center relative z-10">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-serif mb-8 leading-tight">
@@ -357,7 +357,7 @@ export default function Home() {
       {showVisualSearch && (
         <VisualSearch
           onResults={(results) => {
-            console.log('Visual search results:', results);
+
             setShowVisualSearch(false);
           }}
           onClose={() => setShowVisualSearch(false)}

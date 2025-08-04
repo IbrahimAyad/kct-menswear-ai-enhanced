@@ -35,8 +35,7 @@ export class ProductInventoryAgent extends BaseAgent {
   }
 
   async execute(task: AgentTask): Promise<any> {
-    console.log(`Product Inventory Agent executing: ${task.title}`);
-    
+
     try {
       switch (task.metadata?.type) {
         case 'stock-alert':
@@ -55,14 +54,14 @@ export class ProductInventoryAgent extends BaseAgent {
           return await this.generalInventoryTask(task);
       }
     } catch (error) {
-      console.error('Product Inventory Agent execution error:', error);
+
       throw error;
     }
   }
 
   async analyzeEnvironment(): Promise<AgentTask[]> {
     const tasks: AgentTask[] = [];
-    
+
     // Check low stock items
     const lowStockItems = await this.checkLowStock();
     if (lowStockItems.length > 0) {
@@ -175,7 +174,7 @@ export class ProductInventoryAgent extends BaseAgent {
   // Private helper methods
   private async handleStockAlert(task: AgentTask): Promise<any> {
     const items = task.metadata?.items || [];
-    
+
     return {
       completed: true,
       alerts: {
@@ -188,14 +187,14 @@ export class ProductInventoryAgent extends BaseAgent {
 
   private async generateReorderSuggestion(task: AgentTask): Promise<any> {
     const items = task.metadata?.items || [];
-    
+
     const reorderList = items.map((item: any) => ({
       productId: item.id,
       currentStock: item.stock,
       suggestedQuantity: Math.max(50, item.averageMonthlySales * 2),
       estimatedCost: item.unitCost * Math.max(50, item.averageMonthlySales * 2)
     }));
-    
+
     return {
       completed: true,
       reorderSuggestions: reorderList,
@@ -205,7 +204,7 @@ export class ProductInventoryAgent extends BaseAgent {
 
   private async updateProductInfo(task: AgentTask): Promise<any> {
     const products = task.metadata?.products || [];
-    
+
     return {
       completed: true,
       updated: products.length,
@@ -219,7 +218,7 @@ export class ProductInventoryAgent extends BaseAgent {
 
   private async manageCategoryStructure(task: AgentTask): Promise<any> {
     const category = task.metadata?.category;
-    
+
     return {
       completed: true,
       category,
@@ -233,14 +232,14 @@ export class ProductInventoryAgent extends BaseAgent {
 
   private async optimizePricing(task: AgentTask): Promise<any> {
     const opportunities = task.metadata?.opportunities || [];
-    
+
     const optimizations = opportunities.map((opp: any) => ({
       productId: opp.id,
       oldPrice: opp.currentPrice,
       newPrice: opp.suggestedPrice,
       expectedImpact: `${Math.round((opp.suggestedPrice - opp.currentPrice) / opp.currentPrice * 100)}% revenue increase`
     }));
-    
+
     return {
       completed: true,
       optimizations,
@@ -250,7 +249,7 @@ export class ProductInventoryAgent extends BaseAgent {
 
   private async analyzeTrends(task: AgentTask): Promise<any> {
     const trends = task.metadata?.trends || [];
-    
+
     return {
       completed: true,
       analysis: {

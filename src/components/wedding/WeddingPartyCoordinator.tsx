@@ -127,14 +127,14 @@ export function WeddingPartyCoordinator({ weddingId, groomName = 'Groom', onSave
         shirtColor: colors.perfectMatches.shirts[0],
         tieColor: colors.perfectMatches.ties[0]
       };
-      
+
       setPartyMembers(members =>
         members.map(member => ({ ...member, ...outfit }))
       );
     } else if (coordinationMode === 'coordinated') {
       // Groom gets primary, others get variations
       const primaryColors = colorCoordinationMatrix[primarySuitColor as keyof typeof colorCoordinationMatrix];
-      
+
       setPartyMembers(members =>
         members.map((member, index) => {
           if (member.role === 'Groom') {
@@ -161,8 +161,7 @@ export function WeddingPartyCoordinator({ weddingId, groomName = 'Groom', onSave
   const sendInvitations = () => {
     // In a real app, this would send emails
     const pendingMembers = partyMembers.filter(m => m.status === 'pending' && m.email);
-    console.log('Sending invitations to:', pendingMembers);
-    
+
     // Update status to show invitations sent
     setPartyMembers(members =>
       members.map(member =>
@@ -180,13 +179,13 @@ export function WeddingPartyCoordinator({ weddingId, groomName = 'Groom', onSave
       members: partyMembers,
       generatedDate: new Date().toISOString()
     };
-    
+
     // Create downloadable file
     const dataStr = JSON.stringify(plan, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
+
     const exportFileDefaultName = `wedding-party-${weddingId || 'plan'}.json`;
-    
+
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
@@ -412,7 +411,7 @@ export function WeddingPartyCoordinator({ weddingId, groomName = 'Groom', onSave
               Group discount available for 5+ members
             </p>
           </div>
-          
+
           <div className="flex gap-3">
             <Button
               onClick={sendInvitations}
@@ -422,7 +421,7 @@ export function WeddingPartyCoordinator({ weddingId, groomName = 'Groom', onSave
               <Mail className="w-4 h-4 mr-2" />
               Send Invitations
             </Button>
-            
+
             <Button
               onClick={exportCoordinationPlan}
               variant="outline"
@@ -430,7 +429,7 @@ export function WeddingPartyCoordinator({ weddingId, groomName = 'Groom', onSave
               <Download className="w-4 h-4 mr-2" />
               Export Plan
             </Button>
-            
+
             <SatisfyingButton onClick={() => onSave?.(partyMembers)}>
               <ShoppingBag className="w-4 h-4 mr-2" />
               Proceed to Order

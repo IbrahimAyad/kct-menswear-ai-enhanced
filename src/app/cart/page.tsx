@@ -28,7 +28,7 @@ export default function CartPage() {
   const [guestEmail, setGuestEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [savedForLater] = useState<any[]>([]);
-  
+
   // Enable cart persistence
   useCartPersistence();
 
@@ -62,7 +62,7 @@ export default function CartPage() {
 
   const handleCheckout = async () => {
     setIsProcessingCheckout(true);
-    
+
     // Track begin checkout
     const checkoutItems = validCartItems.map(item => ({
       productId: item.product!.id,
@@ -72,10 +72,10 @@ export default function CartPage() {
       quantity: item.quantity,
       size: item.size,
     }));
-    
+
     // Google Analytics tracking
     trackBeginCheckout(checkoutItems, cartSummary.totalPrice / 100);
-    
+
     // Facebook Pixel tracking
     const fbContentIds = validCartItems.map(item => item.product!.id);
     trackInitiateCheckout({
@@ -85,7 +85,7 @@ export default function CartPage() {
       value: cartSummary.totalPrice / 100,
       currency: 'USD'
     });
-    
+
     try {
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -103,7 +103,7 @@ export default function CartPage() {
       }
 
       const { sessionId, url } = await response.json();
-      
+
       if (url) {
         window.location.href = url;
       } else {
@@ -111,13 +111,13 @@ export default function CartPage() {
         if (stripe) {
           const { error } = await stripe.redirectToCheckout({ sessionId });
           if (error) {
-            console.error('Stripe redirect error:', error);
+
             alert('Unable to redirect to checkout. Please try again.');
           }
         }
       }
     } catch (error) {
-      console.error('Checkout error:', error);
+
       alert('Something went wrong. Please try again.');
     } finally {
       setIsProcessingCheckout(false);
@@ -126,7 +126,7 @@ export default function CartPage() {
 
   const handleGuestCheckout = async () => {
     if (!guestEmail) return;
-    
+
     setIsProcessingCheckout(true);
     try {
       const response = await fetch('/api/stripe/checkout', {
@@ -145,7 +145,7 @@ export default function CartPage() {
       }
 
       const { sessionId, url } = await response.json();
-      
+
       if (url) {
         window.location.href = url;
       } else {
@@ -153,13 +153,13 @@ export default function CartPage() {
         if (stripe) {
           const { error } = await stripe.redirectToCheckout({ sessionId });
           if (error) {
-            console.error('Stripe redirect error:', error);
+
             alert('Unable to redirect to checkout. Please try again.');
           }
         }
       }
     } catch (error) {
-      console.error('Checkout error:', error);
+
       alert('Something went wrong. Please try again.');
     } finally {
       setIsProcessingCheckout(false);
@@ -211,7 +211,7 @@ export default function CartPage() {
           <div className="lg:col-span-2 space-y-4">
             {validCartItems.map((item) => {
               if (!item.product) return null;
-              
+
               const variant = item.product.variants.find(v => v.size === item.size);
               const maxStock = variant?.stock || 0;
 

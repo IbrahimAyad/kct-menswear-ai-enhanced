@@ -43,7 +43,7 @@ export function StyleMatchingWidget({
         setStyleMatches(matches);
       }
     } catch (error) {
-      console.error('Failed to load style data:', error);
+
     } finally {
       setLoading(false);
     }
@@ -202,7 +202,7 @@ export function StyleMatchingWidget({
                     </div>
                     <ChevronRight className="w-4 h-4 text-gray-400" />
                   </div>
-                  
+
                   <div className="mt-2">
                     <div className="text-xs text-gray-700">
                       {match.recommendationReason}
@@ -219,7 +219,7 @@ export function StyleMatchingWidget({
                   </div>
                 </motion.div>
               ))}
-              
+
               {styleMatches.length > 4 && (
                 <Button variant="outline" className="w-full text-sm">
                   <Eye className="w-4 h-4 mr-2" />
@@ -238,7 +238,7 @@ export function StyleMatchingWidget({
           className="w-full text-sm"
           onClick={() => {
             // Could navigate to full social features page
-            console.log('Navigate to social features');
+
           }}
         >
           <Users className="w-4 h-4 mr-2" />

@@ -31,7 +31,7 @@ export async function createPaymentIntent(amount: number, metadata?: any) {
     const { clientSecret } = await response.json();
     return clientSecret;
   } catch (error) {
-    console.error("Error creating payment intent:", error);
+
     throw error;
   }
 }

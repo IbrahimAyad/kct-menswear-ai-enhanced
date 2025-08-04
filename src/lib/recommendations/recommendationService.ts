@@ -27,7 +27,7 @@ class RecommendationService {
     }
 
     let recommendations: Recommendation[] = [];
-    
+
     switch (type) {
       case "customers_also_bought":
         recommendations = await this.getCustomersAlsoBought(context);
@@ -66,13 +66,13 @@ class RecommendationService {
       const response = await fetch(
         `/api/recommendations/affinity?productId=${context.productId}`
       );
-      
+
       if (!response.ok) {
         return this.getMockCustomersAlsoBought(context);
       }
 
       const affinity: ProductAffinity = await response.json();
-      
+
       // Get top related products
       const recommendations = await Promise.all(
         affinity.relatedProducts
@@ -96,7 +96,7 @@ class RecommendationService {
       const resolvedRecommendations = await recommendations;
       return resolvedRecommendations.filter(r => r !== null) as Recommendation[];
     } catch (error) {
-      console.error("Error fetching customers also bought:", error);
+
       return this.getMockCustomersAlsoBought(context);
     }
   }
@@ -119,13 +119,13 @@ class RecommendationService {
       };
 
       const targetCategories = complementaryCategories[currentProduct.category] || [];
-      
+
       // Fetch products from complementary categories
       const recommendations: Recommendation[] = [];
-      
+
       for (const category of targetCategories) {
         const products = await this.fetchProductsByCategory(category);
-        
+
         // Score based on style compatibility
         const scored = products
           .map((product) => ({
@@ -136,13 +136,13 @@ class RecommendationService {
           }))
           .sort((a, b) => b.score - a.score)
           .slice(0, 2); // Get top 2 from each category
-        
+
         recommendations.push(...scored);
       }
 
       return recommendations.slice(0, context.limit || 6);
     } catch (error) {
-      console.error("Error fetching complete the look:", error);
+
       return [];
     }
   }
@@ -159,7 +159,7 @@ class RecommendationService {
 
       // Fetch products matching style preferences
       const products = await this.fetchAllProducts();
-      
+
       const recommendations = products
         .map((product) => {
           const score = this.calculateStyleMatch(product, preferences);
@@ -179,7 +179,7 @@ class RecommendationService {
 
       return recommendations;
     } catch (error) {
-      console.error("Error fetching style-based recommendations:", error);
+
       return [];
     }
   }
@@ -192,14 +192,14 @@ class RecommendationService {
     try {
       const trending = await this.getTrendingData();
       const sizeProducts = trending.bySize[context.size] || [];
-      
+
       const recommendations = await Promise.all(
         sizeProducts.slice(0, context.limit || 6).map(async (productId) => {
           const product = await this.fetchProduct(productId);
           if (!product) return null;
 
           const trendData = trending.products.find((p) => p.productId === productId);
-          
+
           return {
             product,
             score: trendData?.score || 0,
@@ -215,7 +215,7 @@ class RecommendationService {
       const resolvedRecommendations = await recommendations;
       return resolvedRecommendations.filter(r => r !== null) as Recommendation[];
     } catch (error) {
-      console.error("Error fetching trending in size:", error);
+
       return [];
     }
   }
@@ -231,7 +231,7 @@ class RecommendationService {
 
       // Fetch products from same category
       const products = await this.fetchProductsByCategory(currentProduct.category);
-      
+
       const recommendations = products
         .filter((p) => p.id !== currentProduct.id)
         .map((product) => ({
@@ -248,7 +248,7 @@ class RecommendationService {
 
       return recommendations;
     } catch (error) {
-      console.error("Error fetching similar products:", error);
+
       return [];
     }
   }
@@ -275,7 +275,7 @@ class RecommendationService {
       // Merge and deduplicate
       const allRecs = [...styleRecs, ...purchaseRecs, ...trendingRecs];
       const uniqueRecs = this.deduplicateRecommendations(allRecs);
-      
+
       // Re-score based on multiple factors
       const personalized = uniqueRecs
         .map((rec) => ({
@@ -289,7 +289,7 @@ class RecommendationService {
 
       return personalized;
     } catch (error) {
-      console.error("Error fetching personalized recommendations:", error);
+
       return [];
     }
   }
@@ -309,12 +309,12 @@ class RecommendationService {
 
   private calculateStyleMatch(product: Product, preferences: any): number {
     let score = 0;
-    
+
     // Match by occasions (if we had occasion data on products)
     if (preferences.occasions?.includes("business") && product.category === "suits") {
       score += 0.3;
     }
-    
+
     // Match by price range preference
     if (preferences.preferredPriceRange) {
       const [min, max] = preferences.preferredPriceRange;
@@ -322,7 +322,7 @@ class RecommendationService {
         score += 0.2;
       }
     }
-    
+
     // Base score for category match
     if (preferences.preferredCategories?.includes(product.category)) {
       score += 0.5;
@@ -333,18 +333,18 @@ class RecommendationService {
 
   private calculateSimilarity(product1: Product, product2: Product): number {
     let score = 0;
-    
+
     // Same category
     if (product1.category === product2.category) {
       score += 0.5;
     }
-    
+
     // Similar price range (within 20%)
     const priceDiff = Math.abs(product1.price - product2.price) / product1.price;
     if (priceDiff < 0.2) {
       score += 0.3;
     }
-    
+
     // Similar sizes available
     const sizes1 = new Set(product1.variants.map((v) => v.size));
     const sizes2 = new Set(product2.variants.map((v) => v.size));
@@ -359,19 +359,19 @@ class RecommendationService {
     context: RecommendationContext
   ): number {
     let score = recommendation.score;
-    
+
     // Boost if in preferred categories
     if (context.stylePreferences?.occasions?.includes("wedding") && 
         recommendation.product.category === "suits") {
       score *= 1.2;
     }
-    
+
     // Boost if matches size preference
     if (context.size && 
         recommendation.product.variants.some((v) => v.size === context.size && v.stock > 0)) {
       score *= 1.1;
     }
-    
+
     return Math.min(score, 1);
   }
 
@@ -452,7 +452,7 @@ class RecommendationService {
 
       this.trendingCache = await response.json();
       this.trendingCacheExpiry = Date.now() + 60 * 60 * 1000; // Cache for 1 hour
-      
+
       return this.trendingCache!;
     } catch {
       return this.getMockTrendingData();

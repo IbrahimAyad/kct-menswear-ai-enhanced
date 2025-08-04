@@ -61,25 +61,25 @@ export class MarketingAnalyticsSEOAgent extends BaseAgent {
     switch (task.title) {
       case 'analyze-page-performance':
         return await this.analyzePagePerformance();
-      
+
       case 'optimize-meta-tags':
         return await this.optimizeMetaTags(task.description);
-      
+
       case 'track-campaign-performance':
         return await this.trackCampaignPerformance();
-      
+
       case 'generate-seo-report':
         return await this.generateSEOReport();
-      
+
       case 'update-product-schema':
         return await this.updateProductSchema();
-      
+
       case 'analyze-user-behavior':
         return await this.analyzeUserBehavior();
-      
+
       case 'optimize-conversion-funnel':
         return await this.optimizeConversionFunnel();
-      
+
       default:
         throw new Error(`Unknown task: ${task.title}`);
     }
@@ -156,7 +156,7 @@ export class MarketingAnalyticsSEOAgent extends BaseAgent {
       'analyze-user-behavior',
       'optimize-conversion-funnel'
     ];
-    
+
     return task.agentRole === 'marketing-analytics-seo' && 
            validTasks.includes(task.title);
   }
@@ -165,7 +165,7 @@ export class MarketingAnalyticsSEOAgent extends BaseAgent {
   private async analyzePagePerformance(): Promise<AnalyticsData> {
     // In a real implementation, this would fetch data from GA4 API
     // For now, we'll simulate the analysis
-    
+
     const mockData: AnalyticsData = {
       pageViews: Math.floor(Math.random() * 10000) + 1000,
       conversionRate: Math.random() * 5 + 1, // 1-6%
@@ -222,7 +222,6 @@ export class MarketingAnalyticsSEOAgent extends BaseAgent {
       agent: 'marketing-analytics-seo'
     });
 
-    console.log(`Optimized meta tags for ${pagePath}:`, optimizations);
   }
 
   private async trackCampaignPerformance(): Promise<any> {
@@ -330,7 +329,6 @@ export class MarketingAnalyticsSEOAgent extends BaseAgent {
       }
     };
 
-    console.log('Updated product schema:', productSchema);
   }
 
   private async analyzeUserBehavior(): Promise<any> {

@@ -36,8 +36,7 @@ export class UIUXFrontendAgent extends BaseAgent {
   }
 
   async execute(task: AgentTask): Promise<any> {
-    console.log(`UI/UX Agent executing: ${task.title}`);
-    
+
     try {
       switch (task.metadata?.type) {
         case 'performance-optimization':
@@ -54,14 +53,14 @@ export class UIUXFrontendAgent extends BaseAgent {
           return await this.generalUIOptimization(task);
       }
     } catch (error) {
-      console.error('UI/UX Agent execution error:', error);
+
       throw error;
     }
   }
 
   async analyzeEnvironment(): Promise<AgentTask[]> {
     const tasks: AgentTask[] = [];
-    
+
     // Check Core Web Vitals
     const performanceScore = await this.checkPerformanceMetrics();
     if (performanceScore < 90) {

@@ -9,7 +9,7 @@ export function lazyWithRetry<T extends ComponentType<any>>(
       maxAttempts: 3,
       initialDelay: 1000,
       onRetry: (error, attempt) => {
-        console.warn(`Failed to load component, attempt ${attempt}:`, error);
+
       },
     })
   );

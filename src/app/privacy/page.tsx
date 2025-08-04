@@ -1,250 +1,206 @@
+'use client'
+
 import { Card } from "@/components/ui/card";
-import { Shield, Eye, Lock, Users, Cookie, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Shield, Eye, Lock, Users, Cookie, Mail, Phone, FileText, HelpCircle } from "lucide-react";
 
 export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-burgundy text-white py-16">
-        <div className="container-main text-center">
-          <h1 className="text-4xl md:text-5xl font-serif mb-4">Privacy Policy</h1>
-          <p className="text-xl max-w-2xl mx-auto">
-            Your privacy is important to us. Learn how we protect and use your information.
-          </p>
-          <p className="text-sm mt-4 text-white/70">
-            Last updated: January 2024
-          </p>
+      <section className="relative bg-black text-white py-16 md:py-24">
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">Privacy Policy</h1>
+            <p className="text-xl text-gray-300 mb-6">
+              Your privacy is important to us. Learn how we collect, use, and protect your information.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Privacy Overview */}
-      <section className="py-16">
-        <div className="container-main">
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <Card className="p-6 text-center hover:shadow-xl transition-shadow">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="font-semibold mb-2">Secure & Protected</h3>
-              <p className="text-sm text-gray-600">Your data is encrypted and stored securely</p>
-            </Card>
-
-            <Card className="p-6 text-center hover:shadow-xl transition-shadow">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Eye className="w-8 h-8 text-blue-600" />
-              </div>
-              <h3 className="font-semibold mb-2">Transparent</h3>
-              <p className="text-sm text-gray-600">Clear about what data we collect and why</p>
-            </Card>
-
-            <Card className="p-6 text-center hover:shadow-xl transition-shadow">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="font-semibold mb-2">Your Control</h3>
-              <p className="text-sm text-gray-600">You control your data and privacy settings</p>
-            </Card>
+      {/* Last Updated */}
+      <section className="py-8 -mt-8 relative z-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <p className="text-sm text-gray-600 mb-8">Last Updated: March 1, 2024</p>
           </div>
+        </div>
+      </section>
 
-          {/* Privacy Policy Content */}
-          <Card className="p-8">
-            <div className="max-w-4xl mx-auto prose prose-gray">
-              <h2 className="text-2xl font-serif mb-6 text-gray-900">Information We Collect</h2>
+      {/* Privacy Policy Content */}
+      <section className="pb-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <Card className="p-8 mb-8">
+              <p className="text-gray-700 mb-8">
+                At KCT Menswear, we are committed to protecting your privacy and ensuring the security of your personal 
+                information. This Privacy Policy explains our practices regarding the collection, use, and disclosure of your 
+                information through our website and services.
+              </p>
+            </Card>
+
+            {/* Information Collection */}
+            <Card className="p-8 mb-8">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <Eye className="h-6 w-6 text-gold" />
+                Information Collection
+              </h2>
               
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                  <Lock className="w-5 h-5 text-burgundy" />
-                  Personal Information
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  We collect personal information that you provide directly to us, such as:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                  <li>Name, email address, and phone number</li>
-                  <li>Billing and shipping addresses</li>
-                  <li>Payment information (processed securely by our payment processors)</li>
-                  <li>Account preferences and communication preferences</li>
-                  <li>Size and fit information for personalized recommendations</li>
+              <div className="space-y-4 text-gray-700">
+                <p className="font-semibold">We collect information when you:</p>
+                <ul className="list-disc list-inside ml-4 space-y-1">
+                  <li>Register on our site</li>
+                  <li>Place an order</li>
+                  <li>Subscribe to our newsletter</li>
+                  <li>Respond to a survey</li>
+                  <li>Fill out a form</li>
                 </ul>
-              </div>
-
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                  <Eye className="w-5 h-5 text-burgundy" />
-                  Usage Information
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  We automatically collect certain information about your use of our services:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                  <li>Device information (browser type, operating system, IP address)</li>
-                  <li>Usage patterns and preferences</li>
-                  <li>Pages visited and time spent on our website</li>
-                  <li>Referral sources and search terms</li>
-                  <li>Location data (if you enable location services)</li>
+                
+                <p className="font-semibold mt-6">Information collected may include:</p>
+                <ul className="list-disc list-inside ml-4 space-y-1">
+                  <li>Name</li>
+                  <li>Email address</li>
+                  <li>Mailing address</li>
+                  <li>Phone number</li>
                 </ul>
-              </div>
-
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-3 flex items-center gap-2">
-                  <Cookie className="w-5 h-5 text-burgundy" />
-                  Cookies and Tracking
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  We use cookies and similar technologies to:
+                
+                <p className="text-sm text-gray-600 mt-4">
+                  <strong>Note:</strong> You may visit our site anonymously.
                 </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                  <li>Remember your preferences and settings</li>
-                  <li>Provide personalized content and recommendations</li>
-                  <li>Analyze website traffic and usage patterns</li>
-                  <li>Improve our services and user experience</li>
-                  <li>Serve relevant advertising (with your consent)</li>
-                </ul>
               </div>
+            </Card>
 
-              <h2 className="text-2xl font-serif mb-6 text-gray-900">How We Use Your Information</h2>
+            {/* Information Usage */}
+            <Card className="p-8 mb-8">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <Users className="h-6 w-6 text-gold" />
+                Information Usage
+              </h2>
               
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-3">Service Delivery</h3>
-                <ul className="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                  <li>Process orders and payments</li>
-                  <li>Provide customer support</li>
-                  <li>Send order confirmations and shipping updates</li>
-                  <li>Manage your account and preferences</li>
-                  <li>Provide size and fit recommendations</li>
+              <div className="space-y-4 text-gray-700">
+                <p className="font-semibold">Your information helps us to:</p>
+                <ul className="list-disc list-inside ml-4 space-y-1">
+                  <li>Personalize your experience</li>
+                  <li>Improve our website</li>
+                  <li>Improve customer service</li>
+                  <li>Process transactions</li>
+                  <li>Send periodic emails</li>
                 </ul>
-              </div>
-
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-3">Communication</h3>
-                <ul className="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                  <li>Send promotional emails and newsletters (with your consent)</li>
-                  <li>Notify you about new products and services</li>
-                  <li>Respond to your inquiries and feedback</li>
-                  <li>Send important account and service updates</li>
-                </ul>
-              </div>
-
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold mb-3">Improvement and Analytics</h3>
-                <ul className="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                  <li>Analyze usage patterns to improve our services</li>
-                  <li>Conduct research and surveys</li>
-                  <li>Develop new features and products</li>
-                  <li>Personalize your shopping experience</li>
-                </ul>
-              </div>
-
-              <h2 className="text-2xl font-serif mb-6 text-gray-900">Information Sharing</h2>
-              
-              <div className="mb-8">
-                <p className="text-gray-600 mb-4">
-                  We do not sell, rent, or trade your personal information. We may share your information only in the following circumstances:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                  <li><strong>Service Providers:</strong> With trusted third-party vendors who help us operate our business</li>
-                  <li><strong>Legal Requirements:</strong> When required by law or to protect our rights</li>
-                  <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets</li>
-                  <li><strong>Consent:</strong> When you explicitly consent to sharing</li>
-                </ul>
-              </div>
-
-              <h2 className="text-2xl font-serif mb-6 text-gray-900">Data Security</h2>
-              
-              <div className="mb-8">
-                <p className="text-gray-600 mb-4">
-                  We implement appropriate security measures to protect your personal information:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                  <li>SSL encryption for all data transmission</li>
-                  <li>Secure payment processing through PCI-compliant processors</li>
-                  <li>Regular security audits and updates</li>
-                  <li>Limited access to personal information on a need-to-know basis</li>
-                  <li>Employee training on data protection and privacy</li>
-                </ul>
-              </div>
-
-              <h2 className="text-2xl font-serif mb-6 text-gray-900">Your Rights and Choices</h2>
-              
-              <div className="mb-8">
-                <p className="text-gray-600 mb-4">
-                  You have several rights regarding your personal information:
-                </p>
-                <ul className="list-disc list-inside space-y-1 text-gray-600 ml-4">
-                  <li><strong>Access:</strong> Request access to your personal information</li>
-                  <li><strong>Correction:</strong> Update or correct inaccurate information</li>
-                  <li><strong>Deletion:</strong> Request deletion of your personal information</li>
-                  <li><strong>Portability:</strong> Request a copy of your data in a portable format</li>
-                  <li><strong>Opt-out:</strong> Unsubscribe from marketing communications</li>
-                  <li><strong>Cookie Control:</strong> Manage your cookie preferences</li>
-                </ul>
-              </div>
-
-              <h2 className="text-2xl font-serif mb-6 text-gray-900">Children's Privacy</h2>
-              
-              <div className="mb-8">
-                <p className="text-gray-600">
-                  Our services are not directed to children under 13. We do not knowingly collect 
-                  personal information from children under 13. If you become aware that a child has 
-                  provided us with personal information, please contact us immediately.
+                
+                <p className="mt-6">
+                  Your information, whether public or private, will not be sold, exchanged, transferred, or given to any other 
+                  company without your consent, other than for the express purpose of delivering purchased products or 
+                  services.
                 </p>
               </div>
+            </Card>
 
-              <h2 className="text-2xl font-serif mb-6 text-gray-900">Changes to This Policy</h2>
+            {/* Information Protection */}
+            <Card className="p-8 mb-8">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <Shield className="h-6 w-6 text-gold" />
+                Information Protection
+              </h2>
               
-              <div className="mb-8">
-                <p className="text-gray-600">
-                  We may update this Privacy Policy from time to time. We will notify you of any 
-                  material changes by email or by posting a notice on our website. Your continued 
-                  use of our services after any changes constitutes acceptance of the updated policy.
+              <div className="space-y-4 text-gray-700">
+                <p className="font-semibold">We implement various security measures to maintain the safety of your personal information when you:</p>
+                <ul className="list-disc list-inside ml-4 space-y-1">
+                  <li>Place an order</li>
+                  <li>Enter, submit, or access your information</li>
+                </ul>
+                
+                <p className="mt-6">
+                  After a transaction, your private information (credit cards, social security numbers, financials, etc.) will not be 
+                  kept on file for more than 60 days.
                 </p>
               </div>
+            </Card>
 
-              <h2 className="text-2xl font-serif mb-6 text-gray-900">Contact Us</h2>
+            {/* Policy Updates */}
+            <Card className="p-8 mb-8">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <FileText className="h-6 w-6 text-gold" />
+                Policy Updates
+              </h2>
               
-              <div className="mb-8">
-                <p className="text-gray-600 mb-4">
-                  If you have any questions about this Privacy Policy or our privacy practices, 
-                  please contact us:
+              <div className="space-y-4 text-gray-700">
+                <p className="font-semibold">We may update this privacy policy at any time. We will notify you of any changes by:</p>
+                <ul className="list-disc list-inside ml-4 space-y-1">
+                  <li>Posting the new privacy policy on this page</li>
+                  <li>Sending an email notification</li>
+                  <li>Displaying a prominent notice on our website</li>
+                </ul>
+              </div>
+            </Card>
+
+            {/* COPPA Compliance */}
+            <Card className="p-8 mb-8">
+              <h2 className="text-2xl font-bold mb-6">Children's Online Privacy Protection Act Compliance</h2>
+              
+              <div className="text-gray-700">
+                <p>
+                  We are in compliance with the requirements of COPPA (Children's Online Privacy Protection Act). We do not 
+                  collect any information from anyone under 13 years of age. Our website, products, and services are all 
+                  directed to people who are at least 13 years old or older.
                 </p>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-gray-700 mb-2">
-                    <strong>KCT Menswear</strong><br />
-                    213 S Kalamazoo Mall<br />
-                    Kalamazoo, MI 49007
+              </div>
+            </Card>
+
+            {/* Your Consent */}
+            <Card className="p-8 mb-8">
+              <h2 className="text-2xl font-bold mb-6">Your Consent</h2>
+              
+              <div className="text-gray-700">
+                <p>By using our site, you consent to our privacy policy.</p>
+              </div>
+            </Card>
+
+            {/* Contact Us */}
+            <Card className="p-8 mb-8">
+              <h2 className="text-2xl font-bold mb-6">Contact Us</h2>
+              
+              <div className="text-gray-700 space-y-4">
+                <p>If you have any questions regarding this privacy policy, you may contact us using the information below:</p>
+                
+                <div className="space-y-2">
+                  <p>
+                    <strong>Phone:</strong> 
+                    <a href="tel:269-342-1234" className="text-blue-600 hover:underline ml-1">(269) 342-1234</a>
                   </p>
-                  <p className="text-gray-700 mb-2">
-                    <strong>Email:</strong> <a href="mailto:privacy@kctmenswear.com" className="text-burgundy hover:underline">privacy@kctmenswear.com</a>
-                  </p>
-                  <p className="text-gray-700">
-                    <strong>Phone:</strong> <a href="tel:2693421234" className="text-burgundy hover:underline">(269) 342-1234</a>
+                  <p>
+                    <strong>Email:</strong> 
+                    <a href="mailto:KCTMenswear@gmail.com" className="text-blue-600 hover:underline ml-1">KCTMenswear@gmail.com</a>
                   </p>
                 </div>
               </div>
-            </div>
-          </Card>
+            </Card>
 
-          {/* Quick Actions */}
-          <Card className="p-8 mt-12 text-center">
-            <h3 className="text-2xl font-serif mb-4">Manage Your Privacy</h3>
-            <p className="text-gray-600 mb-6">
-              Take control of your privacy settings and data preferences.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="inline-flex items-center gap-2 px-6 py-3 bg-burgundy text-white rounded-lg hover:bg-burgundy/90 transition-colors">
-                <Mail className="w-4 h-4" />
-                Email Preferences
-              </button>
-              <button className="inline-flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                <Cookie className="w-4 h-4" />
-                Cookie Settings
-              </button>
-              <button className="inline-flex items-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                <Shield className="w-4 h-4" />
-                Data Request
-              </button>
-            </div>
-          </Card>
+            {/* Quick Links */}
+            <Card className="p-8 mb-8 bg-gray-50">
+              <h3 className="text-xl font-bold mb-6">Quick Links</h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Button 
+                  variant="outline" 
+                  className="justify-start"
+                  onClick={() => window.location.href = '/terms'}
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  Terms of Service
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="justify-start"
+                  onClick={() => window.location.href = '/contact'}
+                >
+                  <HelpCircle className="h-4 w-4 mr-2" />
+                  Contact Support
+                </Button>
+              </div>
+            </Card>
+          </div>
         </div>
       </section>
     </div>

@@ -54,14 +54,13 @@ export class MasterOrchestrator extends BaseAgent {
   registerAgent(agent: BaseAgent): void {
     const agentConfig = agent.getConfig();
     this.agents.set(agentConfig.role, agent);
-    
+
     // Subscribe to agent events
     agent.on('agent:error', (data) => this.handleAgentError(data));
     agent.on('task:completed', (data) => this.handleTaskCompleted(data));
     agent.on('task:failed', (data) => this.handleTaskFailed(data));
     agent.on('message:sent', (message) => this.routeMessage(message));
 
-    console.log(`Registered agent: ${agentConfig.name}`);
   }
 
   async execute(task: AgentTask): Promise<any> {
@@ -69,16 +68,16 @@ export class MasterOrchestrator extends BaseAgent {
     switch (task.title) {
       case 'system-health-check':
         return await this.performHealthCheck();
-      
+
       case 'balance-workload':
         return await this.balanceWorkload();
-      
+
       case 'resolve-conflict':
         return await this.resolveConflict(task.description);
-      
+
       case 'emergency-response':
         return await this.handleEmergency(task.description);
-      
+
       default:
         // Delegate to appropriate agent
         return await this.delegateTask(task);
@@ -168,7 +167,7 @@ export class MasterOrchestrator extends BaseAgent {
     // Calculate overall system metrics
     const allQueues = agents.map(([_, agent]) => agent.getTaskQueue());
     const totalTasks = allQueues.reduce((sum, queue) => sum + queue.length, 0);
-    
+
     this.systemHealth.metrics.tasksInQueue = totalTasks;
     this.systemHealth.metrics.systemLoad = totalTasks / (agents.length * 10); // Normalized load
 
@@ -191,7 +190,7 @@ export class MasterOrchestrator extends BaseAgent {
 
   private async balanceWorkload(): Promise<void> {
     const workloadByAgent = new Map<AgentRole, number>();
-    
+
     // Calculate current workload
     for (const [role, agent] of this.agents) {
       const queue = agent.getTaskQueue();
@@ -207,7 +206,7 @@ export class MasterOrchestrator extends BaseAgent {
     for (const [overloadedRole, _] of overloaded) {
       const agent = this.agents.get(overloadedRole)!;
       const tasks = agent.getTaskQueue().filter(t => t.status === 'pending');
-      
+
       // Move some tasks to underutilized agents
       const tasksToMove = tasks.slice(0, Math.floor(tasks.length / 3));
       for (const task of tasksToMove) {
@@ -241,7 +240,7 @@ export class MasterOrchestrator extends BaseAgent {
   private async resolveConflict(description: string): Promise<void> {
     // Implement conflict resolution logic
     // This could involve analyzing task dependencies, priorities, etc.
-    console.log(`Resolving conflict: ${description}`);
+
   }
 
   private async handleEmergency(description: string): Promise<void> {
@@ -294,7 +293,7 @@ export class MasterOrchestrator extends BaseAgent {
         if (task.status === 'in-progress' && task.startedAt) {
           const duration = now.getTime() - task.startedAt.getTime();
           const expectedDuration = task.estimatedDuration || 30; // default 30 minutes
-          
+
           if (duration > expectedDuration * 60 * 1000 * 2) { // 2x expected duration
             stuckTasks.push(task);
           }
@@ -341,8 +340,7 @@ export class MasterOrchestrator extends BaseAgent {
   }
 
   private handleAgentError(data: any): void {
-    console.error(`Agent error from ${data.agent}:`, data.error);
-    
+
     // Log the error as a decision
     this.logDecision({
       agent: 'orchestrator',
@@ -371,7 +369,7 @@ export class MasterOrchestrator extends BaseAgent {
   private handleTaskCompleted(data: any): void {
     // Update metrics
     this.systemHealth.metrics.tasksCompleted24h++;
-    
+
     // Check if this completion affects other tasks
     if (data.task.dependencies) {
       // Notify agents that might be waiting
@@ -393,7 +391,7 @@ export class MasterOrchestrator extends BaseAgent {
         status: 'pending' as const,
         createdAt: new Date()
       };
-      
+
       const agent = this.agents.get(task.agentRole);
       if (agent) {
         agent.addTask(retryTask);
@@ -404,7 +402,7 @@ export class MasterOrchestrator extends BaseAgent {
   private logDecision(decision: AgentDecision): void {
     this.decisionLog.push(decision);
     this.emit('decision:made', decision);
-    
+
     // Keep only recent decisions
     if (this.decisionLog.length > 1000) {
       this.decisionLog = this.decisionLog.slice(-500);
@@ -425,32 +423,28 @@ export class MasterOrchestrator extends BaseAgent {
   }
 
   async startAllAgents(): Promise<void> {
-    console.log('Starting all agents...');
-    
+
     // Start orchestrator first
     await this.start();
-    
+
     // Then start all other agents
     for (const [role, agent] of this.agents) {
-      console.log(`Starting ${role} agent...`);
+
       await agent.start();
     }
-    
-    console.log('All agents started successfully');
+
   }
 
   async stopAllAgents(): Promise<void> {
-    console.log('Stopping all agents...');
-    
+
     // Stop all other agents first
     for (const [role, agent] of this.agents) {
-      console.log(`Stopping ${role} agent...`);
+
       await agent.stop();
     }
-    
+
     // Stop orchestrator last
     await this.stop();
-    
-    console.log('All agents stopped');
+
   }
 }

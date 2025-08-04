@@ -137,7 +137,7 @@ export function WeddingStudio() {
   const generateWeddingVisualization = async (customParams?: WeddingVisualizationParams) => {
     setIsGenerating(true);
     const useParams = customParams || params;
-    
+
     try {
       // Call the API endpoint
       const response = await fetch('/api/wedding-studio/generate', {
@@ -181,8 +181,7 @@ export function WeddingStudio() {
         throw new Error(data.error || 'Failed to generate images');
       }
     } catch (error) {
-      console.error('Error generating images:', error);
-      
+
       // Fallback to mock images for demo purposes
       const mockImages = [
         '/api/placeholder/1024/768?text=Wedding+Visualization+1',
@@ -300,7 +299,7 @@ export function WeddingStudio() {
           <div className="space-y-8">
             <div>
               <h3 className="text-2xl font-serif text-center mb-6">Party Size & Timing</h3>
-              
+
               {/* Party Size */}
               <div className="mb-8">
                 <label className="block text-lg font-semibold mb-4">Wedding Party Size</label>
@@ -385,7 +384,7 @@ export function WeddingStudio() {
               <p className="text-gray-600 mb-6">
                 Ready to see your {params.partySize} groomsmen in {params.suitColor} suits at your {params.venue} wedding?
               </p>
-              
+
               <SatisfyingButton
                 onClick={() => generateWeddingVisualization()}
                 disabled={isGenerating}
@@ -418,7 +417,7 @@ export function WeddingStudio() {
                         alt="Wedding visualization"
                         className="w-full h-64 object-cover rounded-lg shadow-lg"
                       />
-                      
+
                       {/* Image Overlay */}
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-4">
                         <button
@@ -429,7 +428,7 @@ export function WeddingStudio() {
                         >
                           <Heart className={`w-5 h-5 ${image.liked ? 'fill-current' : ''}`} />
                         </button>
-                        
+
                         <button
                           onClick={() => saveToBoard(image)}
                           className={`p-3 rounded-full transition-colors ${
@@ -438,11 +437,11 @@ export function WeddingStudio() {
                         >
                           <Star className={`w-5 h-5 ${image.saved ? 'fill-current' : ''}`} />
                         </button>
-                        
+
                         <button className="p-3 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors">
                           <Download className="w-5 h-5" />
                         </button>
-                        
+
                         <button className="p-3 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors">
                           <Share2 className="w-5 h-5" />
                         </button>
@@ -550,7 +549,7 @@ export function WeddingStudio() {
         >
           Previous
         </Button>
-        
+
         {currentStep < steps.length - 1 ? (
           <Button
             onClick={() => setCurrentStep(Math.min(steps.length - 1, currentStep + 1))}

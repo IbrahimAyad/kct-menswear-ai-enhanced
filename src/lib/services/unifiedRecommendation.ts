@@ -61,13 +61,13 @@ class UnifiedRecommendationService {
    */
   async initialize() {
     if (this.initialized) return;
-    
+
     try {
       await knowledgeBankAdapter.initialize();
       this.initialized = true;
-      console.log('Unified Recommendation Service initialized');
+
     } catch (error) {
-      console.error('Failed to initialize Unified Recommendation Service:', error);
+
     }
   }
 
@@ -159,7 +159,7 @@ class UnifiedRecommendationService {
       const shirtMatch = 
         colorRelations.perfect_matches.shirts.includes(mappedShirt) ||
         colorRelations.good_matches.shirts.includes(mappedShirt);
-      
+
       const tieMatch = 
         colorRelations.perfect_matches.ties.includes(mappedTie) ||
         colorRelations.good_matches.ties.includes(mappedTie);
@@ -191,7 +191,7 @@ class UnifiedRecommendationService {
   ): Promise<UnifiedRecommendation[]> {
     // Get style profile data
     const profile = await knowledgeBankAdapter.getStyleProfile(styleProfile);
-    
+
     if (!profile) {
       // Fallback to general recommendations
       return this.getRecommendations({
@@ -250,7 +250,7 @@ class UnifiedRecommendationService {
     // Process Knowledge Bank recommendations
     for (const kbRec of kbRecommendations) {
       const id = `${kbRec.suit}_${kbRec.shirt}_${kbRec.tie}`;
-      
+
       if (recommendationMap.has(id)) {
         // Merge with existing
         const existing = recommendationMap.get(id)!;
@@ -264,7 +264,7 @@ class UnifiedRecommendationService {
     // Add trending data
     for (const trending of trendingCombos) {
       const id = `${trending.combination.suit}_${trending.combination.shirt}_${trending.combination.tie}`;
-      
+
       if (recommendationMap.has(id)) {
         const existing = recommendationMap.get(id)!;
         existing.scores.trending = trending.trendScore;
@@ -348,15 +348,15 @@ class UnifiedRecommendationService {
   ) {
     for (const [id, rec] of recommendationMap) {
       const conversionData = await knowledgeBankAdapter.getConversionData(id);
-      
+
       if (conversionData) {
         rec.scores.conversion = conversionData.conversion_rate;
         rec.scores.customerRating = conversionData.customer_rating;
-        
+
         if (conversionData.conversion_rate > 20) {
           rec.metadata.insights.push(`High conversion rate: ${conversionData.conversion_rate}%`);
         }
-        
+
         if (conversionData.customer_rating >= 4.5) {
           rec.metadata.insights.push(`Highly rated: ${conversionData.customer_rating}/5 stars`);
         }
@@ -380,7 +380,7 @@ class UnifiedRecommendationService {
         if (validation.warnings && validation.warnings.length > 0) {
           rec.metadata.warnings = validation.warnings;
         }
-        
+
         validatedRecs.push(rec);
       }
     }

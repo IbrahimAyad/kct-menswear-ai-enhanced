@@ -47,10 +47,10 @@ function AudioVisualizer({ isRecording, audioStream }: AudioVisualizerProps) {
     const audioContext = new AudioContext();
     const analyser = audioContext.createAnalyser();
     const microphone = audioContext.createMediaStreamSource(audioStream);
-    
+
     microphone.connect(analyser);
     analyser.fftSize = 256;
-    
+
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
@@ -58,32 +58,32 @@ function AudioVisualizer({ isRecording, audioStream }: AudioVisualizerProps) {
       if (!ctx) return;
 
       analyser.getByteFrequencyData(dataArray);
-      
+
       ctx.fillStyle = 'rgb(249, 250, 251)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
+
       const barWidth = (canvas.width / bufferLength) * 2.5;
       let barHeight;
       let x = 0;
-      
+
       for (let i = 0; i < bufferLength; i++) {
         barHeight = (dataArray[i] / 255) * canvas.height * 0.8;
-        
+
         const gradient = ctx.createLinearGradient(0, canvas.height - barHeight, 0, canvas.height);
         gradient.addColorStop(0, '#f59e0b'); // gold
         gradient.addColorStop(1, '#d97706'); // darker gold
-        
+
         ctx.fillStyle = gradient;
         ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-        
+
         x += barWidth + 1;
       }
-      
+
       animationRef.current = requestAnimationFrame(draw);
     };
-    
+
     draw();
-    
+
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
@@ -116,7 +116,7 @@ export function VoiceSearch({
   const [isPlaying, setIsPlaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
-  
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -143,42 +143,42 @@ export function VoiceSearch({
           sampleRate: 44100
         } 
       });
-      
+
       setAudioStream(stream);
-      
+
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm;codecs=opus'
       });
-      
+
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
-      
+
       mediaRecorder.ondataavailable = (event) => {
         audioChunksRef.current.push(event.data);
       };
-      
+
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         const url = URL.createObjectURL(audioBlob);
         setAudioUrl(url);
         transcribeAudio(audioBlob);
-        
+
         // Stop all tracks
         stream.getTracks().forEach(track => track.stop());
         setAudioStream(null);
       };
-      
+
       mediaRecorder.start();
       setIsRecording(true);
       setRecordingTime(0);
-      
+
       // Start timer
       intervalRef.current = setInterval(() => {
         setRecordingTime(prev => prev + 1);
       }, 1000);
-      
+
     } catch (err) {
-      console.error('Error starting recording:', err);
+
       setError('Unable to access microphone. Please check permissions.');
     }
   };
@@ -187,7 +187,7 @@ export function VoiceSearch({
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      
+
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
@@ -196,26 +196,26 @@ export function VoiceSearch({
 
   const transcribeAudio = async (audioBlob: Blob) => {
     setIsProcessing(true);
-    
+
     try {
       const formData = new FormData();
       formData.append('audio', audioBlob, 'recording.webm');
-      
+
       const response = await fetch('/api/voice-search', {
         method: 'POST',
         body: formData,
       });
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         setTranscribedText(data.text);
         onTranscription?.(data.text);
-        
+
         // Track analytics
         if (typeof window !== 'undefined' && (window as any).gtag) {
           (window as any).gtag('event', 'voice_search_transcription', {
@@ -228,7 +228,7 @@ export function VoiceSearch({
         throw new Error(data.error || 'Transcription failed');
       }
     } catch (error) {
-      console.error('Error transcribing audio:', error);
+
       setError('Failed to transcribe audio. Please try again.');
     } finally {
       setIsProcessing(false);
@@ -250,7 +250,7 @@ export function VoiceSearch({
   const handleSearch = () => {
     if (transcribedText.trim()) {
       onSearchSubmit?.(transcribedText);
-      
+
       // Track search submission
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', 'voice_search_submit', {
@@ -275,9 +275,9 @@ export function VoiceSearch({
             <Volume2 className="w-6 h-6 text-gold" />
             <h3 className="text-xl font-semibold">Voice Search</h3>
           </div>
-          
+
           <p className="text-gray-600 text-sm">{placeholder}</p>
-          
+
           {/* Recording Button */}
           <div className="flex justify-center">
             <motion.div
@@ -333,7 +333,7 @@ export function VoiceSearch({
               </SatisfyingButton>
             </motion.div>
           </div>
-          
+
           {/* Audio Visualizer */}
           {isRecording && (
             <motion.div
@@ -353,7 +353,7 @@ export function VoiceSearch({
               <AudioVisualizer isRecording={isRecording} audioStream={audioStream} />
             </motion.div>
           )}
-          
+
           {/* Error Display */}
           {error && (
             <motion.div
@@ -367,7 +367,7 @@ export function VoiceSearch({
           )}
         </div>
       </Card>
-      
+
       {/* Transcription Results */}
       {(transcribedText || audioUrl) && (
         <motion.div
@@ -380,7 +380,7 @@ export function VoiceSearch({
                 <CheckCircle className="w-5 h-5 text-green-600" />
                 <h4 className="font-semibold">Transcription Result</h4>
               </div>
-              
+
               {/* Audio Playback */}
               {audioUrl && (
                 <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
@@ -404,14 +404,14 @@ export function VoiceSearch({
                   />
                 </div>
               )}
-              
+
               {/* Transcribed Text */}
               {transcribedText && (
                 <div className="space-y-3">
                   <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <p className="text-gray-800 font-medium">"{transcribedText}"</p>
                   </div>
-                  
+
                   <div className="flex gap-3">
                     <SatisfyingButton
                       onClick={handleSearch}
@@ -420,7 +420,7 @@ export function VoiceSearch({
                       <AudioLines className="w-4 h-4" />
                       Search for This
                     </SatisfyingButton>
-                    
+
                     <Button
                       variant="outline"
                       onClick={() => {

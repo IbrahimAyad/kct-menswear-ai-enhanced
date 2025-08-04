@@ -38,26 +38,26 @@ export function VideoPlayer({
       } else if (Hls.isSupported()) {
         // HLS.js for other browsers
         const hls = new Hls();
-        
+
         hls.on(Hls.Events.ERROR, (event, data) => {
-          console.error("HLS Error:", data);
+
           if (data.fatal) {
             setError(true);
           }
         });
-        
+
         hls.loadSource(src);
         hls.attachMedia(video);
-        
+
         return () => {
           hls.destroy();
         };
       } else {
-        console.error("HLS is not supported in this browser");
+
         setError(true);
       }
     } catch (err) {
-      console.error("Video player error:", err);
+
       setError(true);
     }
   }, [videoId]);

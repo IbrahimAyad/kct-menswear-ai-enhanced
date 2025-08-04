@@ -20,7 +20,8 @@ import {
   ShoppingBag,
   Bookmark,
   Star,
-  ArrowLeft
+  ArrowLeft,
+  Youtube
 } from 'lucide-react';
 import { Product } from '@/lib/types';
 import Link from 'next/link';
@@ -299,7 +300,7 @@ export default function WeddingVideoLookbook() {
     if (controlsTimeoutRef.current) {
       clearTimeout(controlsTimeoutRef.current);
     }
-    
+
     if (isPlaying) {
       controlsTimeoutRef.current = setTimeout(() => {
         setShowControls(false);
@@ -380,12 +381,12 @@ export default function WeddingVideoLookbook() {
   };
 
   const handleProductClick = (product: Product) => {
-    console.log('Product clicked:', product);
+
     // Handle product click (open modal, add to cart, etc.)
   };
 
   const addCompleteSetToCart = () => {
-    console.log('Adding complete set to cart:', currentProducts);
+
     // Calculate bundle discount and add to cart
   };
 
@@ -404,7 +405,7 @@ export default function WeddingVideoLookbook() {
           url: window.location.href
         });
       } catch (error) {
-        console.log('Share cancelled');
+
       }
     }
   };
@@ -425,22 +426,32 @@ export default function WeddingVideoLookbook() {
               <ArrowLeft className="h-4 w-4" />
               Back to Weddings
             </Link>
-            
+
             <div className="flex items-center gap-4">
+              <a
+                href="https://www.youtube.com/@kctmenswear"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-full bg-red-600/20 text-red-400 hover:bg-red-600/30 hover:text-red-300 transition-colors"
+                title="Subscribe on YouTube"
+              >
+                <Youtube className="w-5 h-5" />
+              </a>
+
               <button
                 onClick={() => setLiked(!liked)}
                 className={`p-2 rounded-full transition-colors ${liked ? 'bg-red-500/20 text-red-400' : 'bg-white/10 text-white/70 hover:text-white'}`}
               >
                 <Heart className={`w-5 h-5 ${liked ? 'fill-current' : ''}`} />
               </button>
-              
+
               <button
                 onClick={() => setSavedToWishlist(!savedToWishlist)}
                 className={`p-2 rounded-full transition-colors ${savedToWishlist ? 'bg-gold/20 text-gold' : 'bg-white/10 text-white/70 hover:text-white'}`}
               >
                 <Bookmark className={`w-5 h-5 ${savedToWishlist ? 'fill-current' : ''}`} />
               </button>
-              
+
               <button
                 onClick={handleShare}
                 className="p-2 rounded-full bg-white/10 text-white/70 hover:text-white transition-colors"
@@ -550,7 +561,7 @@ export default function WeddingVideoLookbook() {
                           >
                             {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6 ml-1" />}
                           </button>
-                          
+
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -619,7 +630,7 @@ export default function WeddingVideoLookbook() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="p-4">
                     <h4 className="font-semibold text-white mb-2">{product.name}</h4>
                     <p className="text-2xl font-bold text-gold mb-3">
@@ -663,6 +674,20 @@ export default function WeddingVideoLookbook() {
             >
               Add Complete Look to Cart
             </Button>
+
+            {/* YouTube CTA */}
+            <div className="mt-6 pt-6 border-t border-gold/20">
+              <p className="text-white/70 mb-3">Want to see more wedding looks and styling tips?</p>
+              <a
+                href="https://www.youtube.com/@kctmenswear"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-colors"
+              >
+                <Youtube className="w-5 h-5" />
+                Subscribe on YouTube
+              </a>
+            </div>
           </Card>
         </motion.div>
       </div>
@@ -673,7 +698,7 @@ export default function WeddingVideoLookbook() {
         onClose={() => setShowPartyBuilder(false)}
         availableProducts={currentProducts}
         onSaveParty={(party) => {
-          console.log('Saved party:', party);
+
         }}
       />
     </div>

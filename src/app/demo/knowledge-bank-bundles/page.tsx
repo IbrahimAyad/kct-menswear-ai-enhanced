@@ -32,12 +32,12 @@ export default function KnowledgeBankBundlesPage() {
         knowledgeBankBundles.generateTrendingBundles(),
         knowledgeBankBundles.generateSeasonalBundles('spring')
       ]);
-      
+
       setTopBundles(top);
       setTrendingBundles(trending);
       setSeasonalBundles(seasonal);
     } catch (error) {
-      console.error('Failed to load bundles:', error);
+
     } finally {
       setLoading(false);
     }
@@ -155,121 +155,5 @@ export default function KnowledgeBankBundlesPage() {
                   bundle={bundle}
                   showCompatibilityDetails={true}
                   onAddToCart={() => alert(`Added ${bundle.name} to cart!`)}
-                  onViewDetails={() => console.log('View details:', bundle)}
-                  onSaveBundle={() => alert(`Saved ${bundle.name} to wishlist!`)}
-                />
-              </motion.div>
-            ))}
-          </div>
-        )}
-
-        {/* Knowledge Bank Insights */}
-        <div className="mt-12 grid md:grid-cols-2 gap-8">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Star className="w-5 h-5 text-yellow-500" />
-              Top Combination Insights
-            </h3>
-            <div className="space-y-3">
-              {TOP_COMBINATIONS.slice(0, 3).map((combo, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <div className="font-medium text-sm">
-                      {combo.combination.suit} + {combo.combination.shirt} + {combo.combination.tie}
-                    </div>
-                    <div className="text-xs text-gray-600">{combo.best_for}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm font-bold text-green-600">
-                      {combo.usage_rate} adoption
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      {combo.popularity_score}/100 score
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Users className="w-5 h-5 text-blue-600" />
-              Customer Success Stories
-            </h3>
-            <div className="space-y-3">
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <ShoppingCart className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="font-medium">11,100 units sold</div>
-                    <div className="text-sm text-gray-600">Navy + White + Burgundy</div>
-                  </div>
-                </div>
-                <div className="text-sm text-blue-700">
-                  "The most versatile combination - works for any formal occasion"
-                </div>
-              </div>
-              
-              <div className="p-3 bg-green-50 rounded-lg">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <div className="font-medium">+30% growth YoY</div>
-                    <div className="text-sm text-gray-600">Sage Green combinations</div>
-                  </div>
-                </div>
-                <div className="text-sm text-green-700">
-                  "Nature-inspired colors are the fastest growing trend"
-                </div>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* Feature Highlights */}
-        <div className="mt-12 bg-white rounded-xl p-8 shadow-sm">
-          <h3 className="text-2xl font-bold text-center mb-8">
-            Why Knowledge Bank Bundles Convert Better
-          </h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Brain className="w-8 h-8 text-purple-600" />
-              </div>
-              <h4 className="font-semibold mb-2">Data-Driven Selection</h4>
-              <p className="text-sm text-gray-600">
-                Every combination is backed by real conversion data from thousands 
-                of successful purchases
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-blue-600" />
-              </div>
-              <h4 className="font-semibold mb-2">Social Validation</h4>
-              <p className="text-sm text-gray-600">
-                Show customers exactly how many others have chosen and loved 
-                these exact combinations
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-8 h-8 text-green-600" />
-              </div>
-              <h4 className="font-semibold mb-2">Instant Confidence</h4>
-              <p className="text-sm text-gray-600">
-                Remove decision paralysis with pre-validated combinations that 
-                are guaranteed to work
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+                  onViewDetails={() => 
 }

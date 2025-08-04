@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(trendingData);
   } catch (error) {
-    console.error("Trending calculation error:", error);
+
     return NextResponse.json(
       { error: "Failed to calculate trending products" },
       { status: 500 }

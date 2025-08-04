@@ -7,19 +7,19 @@ export function useInventory(sku: string) {
   const [stock, setStock] = useState<StockLevel>({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { subscribeToInventory, unsubscribeFromInventory } = useProductStore();
 
   const fetchInventory = useCallback(async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const inventory = await adminClient.fetchInventory(sku);
       setStock(inventory);
     } catch (error) {
       setError("Failed to fetch inventory");
-      console.error("Error fetching inventory:", error);
+
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +82,7 @@ export function useInventoryAlerts() {
     };
 
     ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
+
     };
 
     return () => {

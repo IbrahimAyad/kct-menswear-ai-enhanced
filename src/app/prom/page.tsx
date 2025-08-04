@@ -175,15 +175,15 @@ export default function PromPage() {
   const [selectedSchool, setSelectedSchool] = useState(null);
 
   const handleSchoolSelect = (school: any) => {
-    console.log('Selected school:', school);
+
   };
 
   const handlePackageSelect = (pkg: any, groupSize: number) => {
-    console.log('Selected package:', pkg, 'for group size:', groupSize);
+
   };
 
   const handleAddToCart = (products: Product[]) => {
-    console.log('Adding to cart:', products);
+
   };
 
   return (
@@ -196,7 +196,7 @@ export default function PromPage() {
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               Back to Home
             </Link>
-            
+
             <Link 
               href="/prom/guides" 
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
@@ -217,7 +217,7 @@ export default function PromPage() {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-purple-900/60 via-purple-600/40 to-indigo-900/70" />
         </div>
-        
+
         <div className="relative z-10 h-full flex items-center justify-center text-white">
           <div className="text-center px-4 max-w-5xl mx-auto">
             <div className="space-y-2 mb-8 animate-fade-up">
@@ -242,7 +242,7 @@ export default function PromPage() {
             </div>
           </div>
         </div>
-        
+
         {/* Scroll Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
           <div className="flex flex-col items-center gap-2">
@@ -261,7 +261,7 @@ export default function PromPage() {
               We make prom planning easy with everything you need in one place
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center group">
               <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
@@ -272,7 +272,7 @@ export default function PromPage() {
                 Official partnerships with local schools for coordinated group looks and exclusive pricing
               </p>
             </div>
-            
+
             <div className="text-center group">
               <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
                 <span className="text-3xl text-white">✨</span>
@@ -282,7 +282,7 @@ export default function PromPage() {
                 Stay current with the latest prom trends and social media-worthy looks that photograph beautifully
               </p>
             </div>
-            
+
             <div className="text-center group">
               <div className="w-20 h-20 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
                 <span className="text-3xl text-white">💰</span>

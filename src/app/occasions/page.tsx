@@ -224,7 +224,7 @@ export default function OccasionsPage() {
   const [showBundles, setShowBundles] = useState(false);
 
   const handleAddToCart = (bundle: any, selectedProducts: any[]) => {
-    console.log('Adding bundle to cart:', bundle, selectedProducts);
+
     // Implement cart functionality
   };
 
@@ -235,7 +235,7 @@ export default function OccasionsPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-gold/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-burgundy/10 rounded-full blur-3xl"></div>
-        
+
         <div className="container-main text-center relative z-10">
           <div className="max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 text-gold mb-6">
@@ -462,7 +462,7 @@ export default function OccasionsPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-gold/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-burgundy/10 rounded-full blur-3xl"></div>
-        
+
         <div className="container-main text-center relative z-10">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-5xl md:text-6xl font-serif mb-8 leading-tight">

@@ -10,7 +10,7 @@ try {
     });
   }
 } catch (error) {
-  console.log('Replicate initialization skipped - no API token configured');
+
 }
 
 export async function POST(request: NextRequest) {
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     // Convert file to base64 or upload to temporary storage
     const bytes = await audioFile.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    
+
     // For demo purposes, we'll use a data URL
     // In production, you'd upload to cloud storage and use the URL
     const audioDataUrl = `data:${audioFile.type};base64,${buffer.toString('base64')}`;
@@ -63,12 +63,6 @@ export async function POST(request: NextRequest) {
     const transcribedText = typeof outputData === 'string' ? outputData : outputData?.text || '';
 
     // Log for analytics
-    console.log('Voice search transcription:', {
-      originalFileName: audioFile.name,
-      fileSize: audioFile.size,
-      transcribedText,
-      timestamp: new Date().toISOString()
-    });
 
     return NextResponse.json({
       success: true,
@@ -79,8 +73,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error transcribing audio:', error);
-    
+
     return NextResponse.json(
       { 
         error: 'Failed to transcribe audio',

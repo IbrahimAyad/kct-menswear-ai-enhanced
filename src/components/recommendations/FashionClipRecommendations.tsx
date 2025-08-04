@@ -36,7 +36,7 @@ export function FashionClipRecommendations({
 
   const loadRecommendations = async () => {
     setIsLoading(true);
-    
+
     try {
       const sections: RecommendationSection[] = [];
 
@@ -58,7 +58,7 @@ export function FashionClipRecommendations({
           ...outfit.shoes,
           ...outfit.accessories
         ];
-        
+
         if (outfitItems.length > 0) {
           sections.push({
             title: 'Complete the Look',
@@ -113,7 +113,7 @@ export function FashionClipRecommendations({
 
       setRecommendations(sections);
     } catch (error) {
-      console.error('Failed to load recommendations:', error);
+
     } finally {
       setIsLoading(false);
     }
@@ -254,7 +254,7 @@ export function FashionClipRecommendations({
                   <p className="text-xs text-gray-500 mb-2 line-clamp-2">
                     {item.reason}
                   </p>
-                  
+
                   {/* Match Score */}
                   <div className="flex items-center justify-between">
                     <span className="text-lg font-bold text-gray-900">

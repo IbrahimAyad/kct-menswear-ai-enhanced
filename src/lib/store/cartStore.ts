@@ -93,39 +93,39 @@ export const useCartStore = create<CartStore>()(
           if (item.price) {
             return total + item.price * item.quantity;
           }
-          
+
           // Fallback to product lookup if no price on item
           if (products) {
             const product = products.find((p) => p.id === item.productId);
             if (!product) return total;
-            
+
             const variant = product.variants?.find((v) => v.size === item.size);
             const price = variant?.price || product.price;
-            
+
             return total + price * item.quantity;
           }
-          
+
           return total;
         }, 0);
       },
 
       syncCart: async (customerId: string) => {
         if (!customerId) return;
-        
+
         set({ isLoading: true });
         try {
           const { items } = get();
-          
+
           // Sync each item with the server
           for (const item of items) {
             await adminClient.updateCart(customerId, item);
           }
-          
+
           // Fetch the latest cart from server
           const serverCart = await adminClient.getCart(customerId);
           set({ items: serverCart });
         } catch (error) {
-          console.error("Failed to sync cart:", error);
+
         } finally {
           set({ isLoading: false });
         }

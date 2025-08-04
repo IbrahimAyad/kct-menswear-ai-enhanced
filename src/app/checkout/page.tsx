@@ -65,13 +65,13 @@ export default function CheckoutPage() {
         if (stripe) {
           const { error } = await stripe.redirectToCheckout({ sessionId });
           if (error) {
-            console.error('Stripe redirect error:', error);
+
             alert('Unable to redirect to checkout. Please try again.');
           }
         }
       }
     } catch (error) {
-      console.error("Checkout error:", error);
+
       alert('Something went wrong. Please try again.');
       setIsProcessing(false);
     }
@@ -104,7 +104,7 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
-      
+
       <div className="container-main py-12">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 text-gold mb-4">
@@ -282,7 +282,7 @@ export default function CheckoutPage() {
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto">
                 {cartItemsWithProducts.map((item) => {
                   if (!item.product) return null;
-                  
+
                   return (
                     <div key={`${item.productId}-${item.size}`} className="flex gap-4 p-3 bg-white rounded-sm border border-gray-100 hover:border-gold/30 transition-colors">
                       <div className="relative w-16 h-20 bg-gray-100 rounded-sm overflow-hidden shadow-sm">

@@ -17,7 +17,7 @@ export function FacebookMessenger({
   useEffect(() => {
     // Only load in production
     if (process.env.NODE_ENV !== 'production') {
-      console.log('Facebook Messenger Chat: Disabled in development');
+
       return;
     }
 

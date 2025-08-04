@@ -24,30 +24,4 @@ export const supabaseAdmin = (() => {
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!supabaseUrl || !supabaseServiceKey) {
-      console.warn('Missing Supabase environment variables for admin client')
-      return null as any
-    }
-
-    // Validate URL format
-    try {
-      new URL(supabaseUrl)
-    } catch {
-      console.error('Invalid NEXT_PUBLIC_SUPABASE_URL format:', supabaseUrl)
-      return null as any
-    }
-
-    return createSupabaseClient<Database>(
-      supabaseUrl,
-      supabaseServiceKey,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
-  } catch (error) {
-    console.error('Failed to create Supabase admin client:', error)
-    return null as any
-  }
-})()
+      

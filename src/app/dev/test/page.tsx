@@ -112,7 +112,7 @@ function AnalyticsTestSection() {
           >
             Fire Add to Cart
           </button>
-          
+
           <button
             onClick={() => fireEvent("Remove from Cart", () => {
               analytics.removeFromCart({
@@ -227,7 +227,7 @@ function RecommendationsTestSection({ products }: { products: any[] }) {
       });
       setRecommendations(recs);
     } catch (error) {
-      console.error("Recommendation error:", error);
+
     } finally {
       setLoading(false);
     }
@@ -374,7 +374,7 @@ function EmailTestSection() {
   const loadTemplate = async (templateKey: string) => {
     // Import the template and generate HTML
     const templateData = templates[templateKey as keyof typeof templates];
-    
+
     // In a real implementation, we'd render the template
     // For now, show the template data
     setEmailPreview(`
@@ -509,9 +509,9 @@ function WebhookTestSection() {
       const logEntry = `[${new Date().toLocaleTimeString()}] ${type.toUpperCase()} webhook: ${
         response.ok ? "SUCCESS" : "FAILED"
       } - ${JSON.stringify(result)}`;
-      
+
       setWebhookLog((prev) => [logEntry, ...prev].slice(0, 10));
-      
+
       if (response.ok) {
         notifySuccess("Webhook Test", `${type} webhook processed successfully`);
       } else {
@@ -578,7 +578,7 @@ function InventoryTestSection() {
     };
 
     setInventoryUpdates((prev) => [update, ...prev].slice(0, 10));
-    
+
     if (update.currentStock <= 5 && update.currentStock > 0) {
       notifyInfo("Low Stock Alert", `Size ${update.size} has only ${update.currentStock} items left`);
     } else if (update.currentStock === 0) {

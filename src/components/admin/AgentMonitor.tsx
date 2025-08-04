@@ -63,20 +63,19 @@ export function AgentMonitor() {
 
   const fetchStatus = async () => {
     try {
-      console.log('Fetching agent status...');
+
       const response = await fetch('/api/agents');
       const data = await response.json();
-      console.log('Agent status response:', data);
-      
+
       if (data.status === 'success') {
         setIsRunning(data.data.isRunning);
         setHealth(data.data.health);
         setDecisions(data.data.recentDecisions || []);
       } else {
-        console.error('API error:', data);
+
       }
     } catch (error) {
-      console.error('Failed to fetch agent status:', error);
+
     } finally {
       setInitialLoading(false);
     }
@@ -84,7 +83,7 @@ export function AgentMonitor() {
 
   useEffect(() => {
     fetchStatus();
-    
+
     if (autoRefresh) {
       const interval = setInterval(fetchStatus, 5000); // Refresh every 5 seconds
       return () => clearInterval(interval);
@@ -99,12 +98,12 @@ export function AgentMonitor() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'start' })
       });
-      
+
       if (response.ok) {
         await fetchStatus();
       }
     } catch (error) {
-      console.error('Failed to start agents:', error);
+
     } finally {
       setLoading(false);
     }
@@ -118,12 +117,12 @@ export function AgentMonitor() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'stop' })
       });
-      
+
       if (response.ok) {
         await fetchStatus();
       }
     } catch (error) {
-      console.error('Failed to stop agents:', error);
+
     } finally {
       setLoading(false);
     }
@@ -139,14 +138,14 @@ export function AgentMonitor() {
           task 
         })
       });
-      
+
       if (response.ok) {
         await fetchStatus();
         // Show success message
-        console.log('Task assigned successfully:', task);
+
       }
     } catch (error) {
-      console.error('Failed to assign task:', error);
+
     }
   };
 
@@ -159,7 +158,7 @@ export function AgentMonitor() {
       'customer-experience': Users,
       'marketing-analytics-seo': BarChart3
     };
-    
+
     const Icon = icons[role] || Bot;
     return <Icon className="h-5 w-5" />;
   };
@@ -262,7 +261,7 @@ export function AgentMonitor() {
             <h2 className="text-2xl font-bold">Agent System Monitor</h2>
             {health && getHealthBadge(health.overall)}
           </div>
-          
+
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <input
@@ -274,7 +273,7 @@ export function AgentMonitor() {
               />
               <label htmlFor="autoRefresh" className="text-sm">Auto-refresh</label>
             </div>
-            
+
             <Button
               onClick={fetchStatus}
               variant="outline"
@@ -283,7 +282,7 @@ export function AgentMonitor() {
             >
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             </Button>
-            
+
             {!isRunning ? (
               <Button onClick={handleStart} disabled={loading}>
                 <Play className="h-4 w-4 mr-2" />
@@ -337,7 +336,7 @@ export function AgentMonitor() {
                   </div>
                   <div className={`w-3 h-3 rounded-full ${getStatusColor(agent.status)}`} />
                 </div>
-                
+
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Status:</span>
@@ -422,24 +421,24 @@ export function AgentMonitor() {
               The agent memory system stores decisions, learnings, and patterns discovered by the agents.
               This allows them to improve over time and maintain context between sessions.
             </p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-gray-50 rounded-lg p-4">
                 <h4 className="font-medium mb-2">System Insights</h4>
                 <p className="text-sm text-gray-600">Performance patterns and optimization opportunities</p>
               </div>
-              
+
               <div className="bg-gray-50 rounded-lg p-4">
                 <h4 className="font-medium mb-2">Customer Patterns</h4>
                 <p className="text-sm text-gray-600">Behavioral insights and preferences</p>
               </div>
-              
+
               <div className="bg-gray-50 rounded-lg p-4">
                 <h4 className="font-medium mb-2">Performance Metrics</h4>
                 <p className="text-sm text-gray-600">Historical performance data and trends</p>
               </div>
             </div>
-            
+
             <div className="flex gap-2">
               <Button variant="outline" className="flex items-center gap-2">
                 <Download className="h-4 w-4" />

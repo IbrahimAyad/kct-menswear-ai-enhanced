@@ -23,7 +23,7 @@ export const initializeFacebookSDK = () => {
       xfbml: true,
       version: FB_API_VERSION
     });
-    
+
     window.FB.AppEvents.logPageView();
   };
 
@@ -320,7 +320,7 @@ export const shareOnFacebook = (url: string, quote?: string) => {
   }, (response: any) => {
     // Handle response
     if (response && !response.error_message) {
-      console.log('Shared successfully');
+
     }
   });
 };

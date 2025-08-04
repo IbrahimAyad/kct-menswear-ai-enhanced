@@ -53,7 +53,7 @@ export function PersonalStylistChat({
     if (!inputValue.trim() && selectedFiles.length === 0) return;
 
     setIsTyping(true);
-    
+
     try {
       const response = await personalStylistChat.processMessage(
         customerId,
@@ -64,11 +64,11 @@ export function PersonalStylistChat({
       // Update messages with the complete conversation history
       const updatedHistory = personalStylistChat.getConversationHistory(customerId);
       setMessages(updatedHistory);
-      
+
       setInputValue('');
       setSelectedFiles([]);
     } catch (error) {
-      console.error('Failed to send message:', error);
+
       // Add error message
       const errorMessage: ChatMessage = {
         id: `error_${Date.now()}`,
@@ -117,7 +117,7 @@ export function PersonalStylistChat({
             <Bot className="w-4 h-4 text-white" />
           </div>
         )}
-        
+
         <div className={`max-w-[80%] ${isUser ? 'order-first' : ''}`}>
           <div
             className={`px-4 py-3 rounded-2xl ${
@@ -129,7 +129,7 @@ export function PersonalStylistChat({
             <p className="text-sm leading-relaxed whitespace-pre-wrap">
               {message.content}
             </p>
-            
+
             {/* Fashion-CLIP Analysis */}
             {message.fashionClipAnalysis && (
               <div className="mt-3 p-3 bg-white/10 rounded-lg">
@@ -144,7 +144,7 @@ export function PersonalStylistChat({
                 </div>
               </div>
             )}
-            
+
             {/* File Attachments */}
             {message.attachments?.map((attachment, index) => (
               <div key={index} className="mt-2">
@@ -160,7 +160,7 @@ export function PersonalStylistChat({
               </div>
             ))}
           </div>
-          
+
           <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
             <span>{message.timestamp.toLocaleTimeString()}</span>
             {isUser && (
@@ -169,7 +169,7 @@ export function PersonalStylistChat({
               </div>
             )}
           </div>
-          
+
           {/* Quick Suggestions */}
           {message.suggestions && message.suggestions.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
@@ -213,7 +213,7 @@ export function PersonalStylistChat({
             </Button>
           </div>
         </div>
-        
+
         <div className="p-4">
           <p className="text-sm text-gray-600 mb-3">
             Ready to help you find the perfect style!
@@ -270,7 +270,7 @@ export function PersonalStylistChat({
         className="flex-1 overflow-y-auto p-4 space-y-4 bg-white"
       >
         {messages.map(renderMessage)}
-        
+
         {/* Typing Indicator */}
         {isTyping && (
           <motion.div
@@ -290,7 +290,7 @@ export function PersonalStylistChat({
             </div>
           </motion.div>
         )}
-        
+
         <div ref={messagesEndRef} />
       </div>
 
@@ -333,7 +333,7 @@ export function PersonalStylistChat({
               style={{ minHeight: '40px', maxHeight: '120px' }}
             />
           </div>
-          
+
           <div className="flex gap-1">
             <Button
               variant="ghost"
@@ -344,7 +344,7 @@ export function PersonalStylistChat({
             >
               <Camera className="w-4 h-4" />
             </Button>
-            
+
             <Button
               onClick={handleSendMessage}
               disabled={!inputValue.trim() && selectedFiles.length === 0}
@@ -354,7 +354,7 @@ export function PersonalStylistChat({
             </Button>
           </div>
         </div>
-        
+
         <input
           ref={fileInputRef}
           type="file"

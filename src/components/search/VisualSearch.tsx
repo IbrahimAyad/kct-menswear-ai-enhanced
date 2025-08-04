@@ -24,7 +24,7 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState<string | null>(null);
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -73,7 +73,7 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
       }
 
       const result = await response.json();
-      
+
       // Process Fashion CLIP results and match to our products
       const mockResults: SearchResult[] = [
         {
@@ -122,12 +122,12 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
 
       setSearchResults(mockResults);
       onResults?.(mockResults.map(r => r.product));
-      
+
       // Track visual search usage
       facebookTracking.trackVisualSearchUsed(mockResults.length);
-      
+
     } catch (error) {
-      console.error('Fashion CLIP search error:', error);
+
       setError('Unable to search. Please try again.');
     } finally {
       setIsSearching(false);
@@ -191,7 +191,7 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
                 <p className="text-gray-600 mb-6">
                   Upload a photo of clothing or an outfit to find similar items in our collection
                 </p>
-                
+
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <Button
                     onClick={() => fileInputRef.current?.click()}
@@ -253,7 +253,7 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
                     placeholder="e.g., 'navy blue suit for wedding', 'casual blazer'"
                     className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:border-gold mb-4"
                   />
-                  
+
                   <Button
                     onClick={handleSearch}
                     disabled={isSearching}
@@ -293,7 +293,7 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
                       <Sparkles className="w-5 h-5 text-gold" />
                       Similar Items Found
                     </h3>
-                    
+
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {searchResults.map((result, index) => (
                         <motion.div
@@ -313,7 +313,7 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
                               {Math.round(result.similarity * 100)}% match
                             </div>
                           </div>
-                          
+
                           <div className="p-4">
                             <h4 className="font-semibold mb-1">{result.product.name}</h4>
                             <p className="text-gray-600 text-sm mb-2">SKU: {result.product.sku}</p>

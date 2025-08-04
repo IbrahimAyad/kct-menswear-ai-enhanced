@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ lowStockItems: data });
     }
   } catch (error) {
-    console.error('Inventory API error:', error);
+
     return NextResponse.json(
       { error: 'Failed to fetch inventory' },
       { status: 500 }
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
 
       case 'bulk_update': {
         const { updates } = body;
-        
+
         // Process each update
         const results = [];
         for (const update of updates) {
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
             .select();
 
           if (error) {
-            console.error('Bulk update error:', error);
+
             results.push({ productId: update.productId, size: update.size, error });
           } else {
             results.push({ productId: update.productId, size: update.size, success: true });
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
         );
     }
   } catch (error) {
-    console.error('Inventory API error:', error);
+
     return NextResponse.json(
       { error: 'Failed to update inventory' },
       { status: 500 }

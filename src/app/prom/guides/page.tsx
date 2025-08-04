@@ -115,11 +115,11 @@ const mockGuides = [
 
 export default function PromGuidesPage() {
   const handleGuideView = (guide: any) => {
-    console.log('Viewing guide:', guide);
+
   };
 
   const handleGuideShare = (guide: any) => {
-    console.log('Sharing guide:', guide);
+
   };
 
   return (

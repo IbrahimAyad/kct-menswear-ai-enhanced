@@ -225,7 +225,7 @@ What would you like to work on today?`,
         confidence: analysis.confidence || 0.8
       } : undefined;
     } catch (error) {
-      console.error('Failed to analyze image:', error);
+
       return undefined;
     }
   }
@@ -235,19 +235,19 @@ What would you like to work on today?`,
     context: StylistContext
   ): StylistContext['currentIntent'] {
     const lowerMessage = message.toLowerCase();
-    
+
     if (lowerMessage.includes('outfit') || lowerMessage.includes('look') || lowerMessage.includes('complete')) {
       return 'outfit-planning';
     }
-    
+
     if (lowerMessage.includes('buy') || lowerMessage.includes('purchase') || lowerMessage.includes('cart')) {
       return 'shopping';
     }
-    
+
     if (lowerMessage.includes('style') || lowerMessage.includes('advice') || lowerMessage.includes('help')) {
       return 'style-advice';
     }
-    
+
     return 'browse';
   }
 
@@ -358,11 +358,11 @@ Based on this analysis, I can help you find similar items or create complete out
   ): Promise<StylistResponse> {
     // Extract occasion from message
     const occasion = this.extractOccasion(message);
-    
+
     try {
       // Generate outfit bundles
       const recommendations = await this.getPersonalizedRecommendations(context.customerId);
-      
+
       return {
         message: `Perfect! I've curated some ${occasion ? `${occasion} ` : ''}outfit options for you. Each outfit is carefully selected to work together harmoniously.`,
         outfitBundles: recommendations.outfits.slice(0, 3).map(bundle => ({
@@ -578,7 +578,7 @@ Based on this analysis, I can help you find similar items or create complete out
       "Statement accessories",
       "Sustainable and ethical fashion choices"
     ];
-    
+
     return {
       message: `Fashion trends are constantly evolving! Here's what's trending in men's fashion right now:\n\n${trendList.map((trend, i) => `${i + 1}. ${trend}`).join('\n')}`,
       suggestions: [

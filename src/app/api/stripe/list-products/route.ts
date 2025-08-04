@@ -6,23 +6,23 @@ export async function GET(req: NextRequest) {
     if (!process.env.STRIPE_SECRET_KEY) {
       return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 });
     }
-    
+
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
       apiVersion: '2024-10-28.acacia',
     });
-    
+
     // List all products with their prices
     const products = await stripe.products.list({
       limit: 100,
       expand: ['data.default_price']
     });
-    
+
     // Get all prices for these products
     const prices = await stripe.prices.list({
       limit: 100,
       expand: ['data.product']
     });
-    
+
     // Format the response
     const formattedProducts = products.data.map(product => ({
       id: product.id,
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
           active: price.active
         }))
     }));
-    
+
     return NextResponse.json({
       success: true,
       products: formattedProducts,
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
       totalPrices: prices.data.length
     });
   } catch (error) {
-    console.error('Error listing products:', error);
+
     return NextResponse.json(
       { error: 'Failed to list products', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }

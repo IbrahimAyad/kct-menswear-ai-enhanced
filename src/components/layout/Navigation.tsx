@@ -31,11 +31,20 @@ export function Navigation() {
 
   return (
     <>
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gold/10 shadow-sm">
+    <nav 
+      id="navigation"
+      className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gold/10 shadow-sm"
+      role="navigation"
+      aria-label="Main navigation"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center group">
+          <Link 
+            href="/" 
+            className="flex items-center group"
+            aria-label="KCT Menswear - Home"
+          >
             <h1 className="text-2xl font-serif font-bold text-black transition-all duration-300">
               <span className="inline-block transition-transform group-hover:scale-105">KCT</span>
               <span className="text-gold ml-1">Menswear</span>
@@ -51,14 +60,15 @@ export function Navigation() {
                 className={`relative text-black hover:text-gold transition-colors font-medium group ${
                   item.highlight ? 'flex items-center gap-1' : ''
                 }`}
+                aria-label={`Navigate to ${item.label}${item.highlight ? ' - New' : ''}`}
               >
                 {item.label}
                 {item.highlight && (
-                  <span className="text-xs bg-gold text-black px-1.5 py-0.5 rounded-full font-semibold">
+                  <span className="text-xs bg-gold text-black px-1.5 py-0.5 rounded-full font-semibold" aria-label="New section">
                     NEW
                   </span>
                 )}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full" aria-hidden="true"></span>
               </Link>
             ))}
           </div>
@@ -72,6 +82,7 @@ export function Navigation() {
                 const searchElement = document.querySelector('[data-search-trigger]') as HTMLElement;
                 searchElement?.click();
               }}
+              aria-label="Search products"
             >
               <Search className="h-5 w-5 group-hover:text-gold transition-colors" />
             </button>
@@ -81,6 +92,7 @@ export function Navigation() {
               size="icon"
               className="relative hover:text-gold transition-colors"
               onClick={() => setIsCartOpen(true)}
+              aria-label={`Shopping cart with ${cartSummary.itemCount} items`}
             >
               <ShoppingBag className="h-5 w-5" />
               {cartSummary.itemCount > 0 && (
@@ -89,7 +101,10 @@ export function Navigation() {
                 </span>
               )}
             </Button>
-            <Button className="bg-black hover:bg-gray-900 text-white px-6 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+            <Button 
+              className="bg-black hover:bg-gray-900 text-white px-6 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+              aria-label="Book an appointment for custom fitting"
+            >
               Book Appointment
             </Button>
           </div>
@@ -100,18 +115,24 @@ export function Navigation() {
             size="icon"
             className="md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-navigation"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
           </Button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       <div
+        id="mobile-navigation"
         className={cn(
           "md:hidden absolute top-16 left-0 w-full bg-white/98 backdrop-blur-md border-b border-gold/10 shadow-lg transition-all duration-300 ease-in-out",
           isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
         )}
+        role="navigation"
+        aria-label="Mobile navigation menu"
       >
         <div className="px-4 py-4 space-y-2">
           {navItems.map((item) => (
@@ -120,14 +141,15 @@ export function Navigation() {
               href={item.href}
               className="block px-4 py-3 text-black hover:bg-gold/10 hover:text-gold rounded-sm transition-all duration-200 font-medium"
               onClick={() => setIsMenuOpen(false)}
+              aria-label={`Navigate to ${item.label}`}
             >
               {item.label}
             </Link>
           ))}
           <div className="pt-4 border-t border-gold/20 flex flex-col space-y-2">
-            <Link href="/account" className="w-full">
+            <Link href="/account" className="w-full" aria-label="Go to your account">
               <Button variant="outline" className="w-full border-gold/20 hover:bg-gold/10 hover:border-gold transition-all duration-200">
-                <User className="h-4 w-4 mr-2" />
+                <User className="h-4 w-4 mr-2" aria-hidden="true" />
                 Account
               </Button>
             </Link>
@@ -146,7 +168,12 @@ export function Navigation() {
                 <span className="ml-1">({cartSummary.itemCount})</span>
               )}
             </Button> */}
-            <Button className="w-full bg-gold hover:bg-gold/90 text-black font-semibold shadow-md">Book Appointment</Button>
+            <Button 
+              className="w-full bg-gold hover:bg-gold/90 text-black font-semibold shadow-md"
+              aria-label="Book an appointment for custom fitting"
+            >
+              Book Appointment
+            </Button>
           </div>
         </div>
       </div>

@@ -35,8 +35,7 @@ export class ECommerceOperationsAgent extends BaseAgent {
   }
 
   async execute(task: AgentTask): Promise<any> {
-    console.log(`E-Commerce Agent executing: ${task.title}`);
-    
+
     try {
       switch (task.metadata?.type) {
         case 'abandoned-cart':
@@ -55,14 +54,14 @@ export class ECommerceOperationsAgent extends BaseAgent {
           return await this.generalOperations(task);
       }
     } catch (error) {
-      console.error('E-Commerce Agent execution error:', error);
+
       throw error;
     }
   }
 
   async analyzeEnvironment(): Promise<AgentTask[]> {
     const tasks: AgentTask[] = [];
-    
+
     // Check for abandoned carts
     const abandonedCarts = await this.checkAbandonedCarts();
     if (abandonedCarts.length > 0) {
@@ -175,10 +174,10 @@ export class ECommerceOperationsAgent extends BaseAgent {
   // Private helper methods
   private async handleAbandonedCart(task: AgentTask): Promise<any> {
     const carts = task.metadata?.carts || [];
-    
+
     // Implement abandoned cart recovery logic
     const recovered = carts.filter(() => Math.random() > 0.7).length;
-    
+
     return {
       completed: true,
       results: {
@@ -192,7 +191,7 @@ export class ECommerceOperationsAgent extends BaseAgent {
 
   private async processOrders(task: AgentTask): Promise<any> {
     const count = task.metadata?.count || 0;
-    
+
     return {
       completed: true,
       processed: count,
@@ -206,7 +205,7 @@ export class ECommerceOperationsAgent extends BaseAgent {
 
   private async syncInventory(task: AgentTask): Promise<any> {
     const discrepancies = task.metadata?.discrepancies || 0;
-    
+
     return {
       completed: true,
       synced: discrepancies,
@@ -219,7 +218,7 @@ export class ECommerceOperationsAgent extends BaseAgent {
 
   private async updatePrices(task: AgentTask): Promise<any> {
     const products = task.metadata?.products || [];
-    
+
     return {
       completed: true,
       updated: products.length,
@@ -232,7 +231,7 @@ export class ECommerceOperationsAgent extends BaseAgent {
 
   private async managePromotions(task: AgentTask): Promise<any> {
     const promotion = task.metadata?.promotion;
-    
+
     return {
       completed: true,
       promotion: promotion?.name,

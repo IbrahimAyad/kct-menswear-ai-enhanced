@@ -35,7 +35,7 @@ export function useWishlist(): UseWishlistReturn {
             addedAt: new Date(item.addedAt)
           })));
         } catch (error) {
-          console.error('Failed to parse wishlist:', error);
+
         }
       }
     };
@@ -67,7 +67,7 @@ export function useWishlist(): UseWishlistReturn {
     const updatedItems = [...wishlistItems, newItem];
     setWishlistItems(updatedItems);
     saveWishlist(updatedItems);
-    
+
     toast.success('Added to wishlist', {
       action: {
         label: 'View',
@@ -89,7 +89,7 @@ export function useWishlist(): UseWishlistReturn {
     const updatedItems = wishlistItems.filter(item => item.productId !== productId);
     setWishlistItems(updatedItems);
     saveWishlist(updatedItems);
-    
+
     toast.success('Removed from wishlist');
 
     // Track event
@@ -138,14 +138,14 @@ export function useWishlistWithProducts() {
         // In a real app, this would be an API call
         // For now, we'll get products from the store
         const { products: allProducts } = await import('@/lib/store/productStore').then(m => m.useProductStore.getState());
-        
+
         const wishlistProducts = wishlistItems
           .map(item => allProducts.find(p => p.id === item.productId))
           .filter(Boolean) as Product[];
-        
+
         setProducts(wishlistProducts);
       } catch (error) {
-        console.error('Failed to fetch wishlist products:', error);
+
       } finally {
         setIsLoading(false);
       }

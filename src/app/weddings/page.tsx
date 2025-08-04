@@ -66,11 +66,11 @@ export default function WeddingsPage() {
 
   const handleUpdateWedding = (updatedWedding: Wedding) => {
     setWedding(updatedWedding);
-    console.log('Wedding updated:', updatedWedding);
+
   };
 
   const handleSendMessage = (message: string, recipientId?: string) => {
-    console.log('Sending message:', message, 'to:', recipientId || 'all');
+
   };
 
   return (
@@ -83,7 +83,7 @@ export default function WeddingsPage() {
               <ArrowLeft className="h-4 w-4" />
               Back to Home
             </Link>
-            
+
             <div className="flex gap-4">
               <Link 
                 href="/weddings/collections" 

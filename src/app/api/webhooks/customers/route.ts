@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     // Verify webhook signature
     const headersList = await headers();
     const signature = headersList.get("x-webhook-signature");
-    
+
     if (!signature || signature !== WEBHOOK_SECRET) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
@@ -30,20 +30,19 @@ export async function POST(request: NextRequest) {
         await handleStylePreferencesUpdated(data);
         break;
       default:
-        console.log(`Unhandled customer event: ${event}`);
+
     }
 
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
-    console.error("Webhook error:", error);
+
     return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
   }
 }
 
 async function handleCustomerCreated(data: any) {
   const { customerId, email, firstName, lastName } = data;
-  console.log(`New customer created: ${customerId} - ${firstName} ${lastName}`);
-  
+
   // Send welcome email
   // Create initial style profile
   // Add to CRM
@@ -51,24 +50,21 @@ async function handleCustomerCreated(data: any) {
 
 async function handleCustomerUpdated(data: any) {
   const { customerId, changes } = data;
-  console.log(`Customer ${customerId} updated:`, changes);
-  
+
   // Update local cache
   // Sync with CRM
 }
 
 async function handleMeasurementsUpdated(data: any) {
   const { customerId, measurements } = data;
-  console.log(`Measurements updated for customer ${customerId}`);
-  
+
   // Update size recommendations
   // Notify of better fitting products
 }
 
 async function handleStylePreferencesUpdated(data: any) {
   const { customerId, preferences } = data;
-  console.log(`Style preferences updated for customer ${customerId}`);
-  
+
   // Update product recommendations
   // Send personalized style suggestions
 }

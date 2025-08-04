@@ -12,7 +12,7 @@ try {
     });
   }
 } catch (error) {
-  console.log('Replicate initialization skipped - no API token configured');
+
 }
 
 interface BundleOutfitParams {
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       prom: 'stylish prom photography with modern youthful energy',
       casual: 'relaxed lifestyle photography with natural lighting'
     };
-    
+
     const seasonModifiers = {
       spring: 'fresh spring setting with blooming flowers in background',
       summer: 'bright summer day with clear blue sky',
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     };
 
     const seasonSetting = season ? `, ${seasonModifiers[season]}` : '';
-    
+
     const prompt = `Professional fashion photography of a well-dressed male model wearing:
     - A perfectly fitted ${suitColor} colored suit jacket and matching pants (NOT ${tieColor})
     - Crisp ${shirtColor} dress shirt underneath the suit jacket
@@ -83,8 +83,7 @@ export async function POST(request: NextRequest) {
     const negativePrompt = "blurry, amateur, bad quality, wrinkled clothes, poor fit, messy, dark shadows, overexposed, text, watermark, logo";
 
     // Generate image using SDXL
-    console.log('Generating image with SDXL...');
-    
+
     // Use predictions API which returns URLs properly
     const prediction = await replicate.predictions.create({
       version: "39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b",
@@ -100,26 +99,24 @@ export async function POST(request: NextRequest) {
         refine_steps: 10
       }
     });
-    
+
     // Wait for the prediction to complete
     let finalPrediction = await replicate.predictions.get(prediction.id);
-    
+
     while (finalPrediction.status !== 'succeeded' && finalPrediction.status !== 'failed') {
       await new Promise(resolve => setTimeout(resolve, 1000));
       finalPrediction = await replicate.predictions.get(prediction.id);
-      console.log('Prediction status:', finalPrediction.status);
+
     }
-    
+
     if (finalPrediction.status === 'failed') {
       throw new Error('Image generation failed: ' + finalPrediction.error);
     }
-    
+
     // Get the image URL from the output
     const imageUrl = Array.isArray(finalPrediction.output) 
       ? finalPrediction.output[0] 
       : finalPrediction.output;
-    
-    console.log('Generated image URL:', imageUrl);
 
     // Optionally save to style swipe
     let savedUrl = null;
@@ -134,16 +131,16 @@ export async function POST(request: NextRequest) {
           tieStyle,
           season
         });
-        
+
         if (cfImageUrl) {
           savedUrl = cfImageUrl;
-          console.log('Saved to Cloudflare Images:', savedUrl);
+
         } else {
           // Fallback to R2 if CF Images fails
           try {
             const imageResponse = await fetch(imageUrl);
             const imageBuffer = await imageResponse.arrayBuffer();
-            
+
             savedUrl = await uploadGeneratedOutfit(imageBuffer, {
               occasion,
               tieColor,
@@ -152,14 +149,13 @@ export async function POST(request: NextRequest) {
               tieStyle,
               season
             });
-            
-            console.log('Saved to R2:', savedUrl);
+
           } catch (r2Error) {
-            console.error('R2 upload also failed:', r2Error);
+
           }
         }
       } catch (error) {
-        console.error('Failed to save to style swipe:', error);
+
         // Don't fail the whole request if upload fails
       }
     }
@@ -181,8 +177,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error generating bundle outfit:', error);
-    
+
     return NextResponse.json(
       { 
         error: 'Failed to generate outfit',

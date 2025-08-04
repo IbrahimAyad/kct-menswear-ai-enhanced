@@ -82,7 +82,7 @@ class SmartBundlesService {
 
     // Get complementary products
     const candidates = await this.findComplementaryProducts(coreProduct, options);
-    
+
     // Score and select best combinations
     const selectedItems = await this.selectOptimalCombination(
       coreProduct,
@@ -92,7 +92,7 @@ class SmartBundlesService {
 
     // Create bundle
     const bundle = this.createBundle(coreProduct, selectedItems, options);
-    
+
     this.bundles.set(bundle.id, bundle);
     return bundle;
   }
@@ -105,7 +105,7 @@ class SmartBundlesService {
     count: number = 3
   ): Promise<SmartBundle[]> {
     const variations: SmartBundle[] = [];
-    
+
     const baseOptions: BundleGenerationOptions = {
       coreProductId,
       maxItems: 4,
@@ -146,7 +146,7 @@ class SmartBundlesService {
   ): Promise<number> {
     const cacheKey = `${productA.id}_${productB.id}`;
     const cachedScore = this.compatibilityCache.get(cacheKey);
-    
+
     if (cachedScore !== undefined) {
       return cachedScore;
     }
@@ -195,14 +195,14 @@ class SmartBundlesService {
   ): Promise<SmartBundle[]> {
     // In production, this would use the customer's style profile
     const personalizedBundles: SmartBundle[] = [];
-    
+
     // Get products that match customer preferences
     const matchingProducts = Array.from(this.products.values()).filter(product => {
       if (preferences.priceRange) {
         const [min, max] = preferences.priceRange;
         if (product.price < min || product.price > max) return false;
       }
-      
+
       if (preferences.colors?.length) {
         const hasMatchingColor = product.colors.some(color => 
           preferences.colors!.some(prefColor => 
@@ -226,7 +226,7 @@ class SmartBundlesService {
         });
         personalizedBundles.push(bundle);
       } catch (error) {
-        console.warn(`Failed to generate bundle for product ${product.id}:`, error);
+
       }
     }
 
@@ -243,7 +243,7 @@ class SmartBundlesService {
     competitorPricing?: number;
   }): SmartBundle {
     let discountPercentage = 10; // Base discount
-    
+
     // Adjust based on customer segment
     switch (context.customerSegment) {
       case 'luxury':
@@ -266,7 +266,7 @@ class SmartBundlesService {
     if (context.inventory) {
       const avgInventory = Array.from(context.inventory.values())
         .reduce((sum, inv) => sum + inv, 0) / context.inventory.size;
-      
+
       if (avgInventory > 50) {
         discountPercentage += 5; // Higher discount for overstocked items
       }
@@ -290,7 +290,7 @@ class SmartBundlesService {
       if (product.id === coreProduct.id) return false;
       if (!product.inStock) return false;
       if (options.excludeProducts?.includes(product.id)) return false;
-      
+
       if (options.includeCategories?.length) {
         if (!options.includeCategories.includes(product.category)) return false;
       }
@@ -335,16 +335,16 @@ class SmartBundlesService {
 
     // Select complementary products by category priority
     const categoryPriority = this.getCategoryPriority(coreProduct.category);
-    
+
     for (const category of categoryPriority) {
       if (items.length >= maxItems) break;
-      
+
       const categoryProducts = candidates.filter(p => p.category === category);
       if (categoryProducts.length === 0) continue;
 
       const bestMatch = categoryProducts[0];
       const compatibility = await this.calculateProductCompatibility(coreProduct, bestMatch);
-      
+
       items.push({
         product: bestMatch,
         compatibilityScore: compatibility,
@@ -416,7 +416,7 @@ class SmartBundlesService {
   private calculateStyleCompatibility(tagsA: string[], tagsB: string[]): number {
     const commonTags = tagsA.filter(tag => tagsB.includes(tag));
     const totalUniqueTags = new Set([...tagsA, ...tagsB]).size;
-    
+
     return commonTags.length / totalUniqueTags;
   }
 
@@ -438,7 +438,7 @@ class SmartBundlesService {
     const dotProduct = vectorA.reduce((sum, a, i) => sum + a * vectorB[i], 0);
     const magnitudeA = Math.sqrt(vectorA.reduce((sum, a) => sum + a * a, 0));
     const magnitudeB = Math.sqrt(vectorB.reduce((sum, b) => sum + b * b, 0));
-    
+
     return dotProduct / (magnitudeA * magnitudeB) || 0;
   }
 
@@ -463,7 +463,7 @@ class SmartBundlesService {
 
   private calculateOverallCompatibility(items: BundleItem[]) {
     const avgCompatibility = items.reduce((sum, item) => sum + item.compatibilityScore, 0) / items.length;
-    
+
     return {
       overall: avgCompatibility,
       color: avgCompatibility * 0.9, // Mock individual scores
@@ -491,7 +491,7 @@ class SmartBundlesService {
     const seasons = items
       .map(item => item.product.seasonality)
       .filter((season): season is NonNullable<Product['seasonality']> => season !== undefined);
-    
+
     return [...new Set(seasons)];
   }
 
@@ -513,7 +513,7 @@ class SmartBundlesService {
   private extractFit(items: BundleItem[]): string {
     const fitTags = items.flatMap(item => item.product.tags)
       .filter(tag => ['slim', 'regular', 'relaxed'].includes(tag));
-    
+
     return fitTags[0] || 'regular';
   }
 
@@ -527,14 +527,14 @@ class SmartBundlesService {
   private generateBundleName(coreProduct: Product, items: BundleItem[]): string {
     const occasion = this.extractOccasions(items)[0] || 'professional';
     const style = this.extractStyles(items)[0] || 'classic';
-    
+
     return `${style.charAt(0).toUpperCase() + style.slice(1)} ${occasion.charAt(0).toUpperCase() + occasion.slice(1)} Bundle`;
   }
 
   private generateBundleDescription(items: BundleItem[], occasions: string[]): string {
     const itemTypes = items.map(item => item.product.category).join(', ');
     const occasionText = occasions.length > 0 ? occasions.join(' and ') : 'professional';
-    
+
     return `Complete ${occasionText} outfit with ${itemTypes}. Curated by AI for perfect style harmony.`;
   }
 
@@ -553,7 +553,7 @@ class SmartBundlesService {
   private initializeMockProducts() {
     // Import top combinations from Knowledge Bank
     const { TOP_COMBINATIONS, COMBINATION_CONVERSION_DATA } = require('@/lib/data/knowledgeBank/topCombinations');
-    
+
     const mockProducts: Product[] = [
       // Navy suits - most popular
       {

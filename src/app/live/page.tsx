@@ -121,7 +121,7 @@ export default function LiveShoppingPage() {
   const [selectedEvent, setSelectedEvent] = useState(liveEvents[0]);
   const [showCelebration, setShowCelebration] = useState(false);
   const [eventRating, setEventRating] = useState(0);
-  
+
   const { analytics, updateAnalytics } = useVideoAnalytics(selectedEvent.id);
 
   // Mock analytics data
@@ -146,7 +146,7 @@ export default function LiveShoppingPage() {
   }, [selectedEvent.id]);
 
   const handleProductClick = (product: Product) => {
-    console.log('Product clicked:', product);
+
     // Add product click analytics
     updateAnalytics({
       heatmapData: [
@@ -164,9 +164,9 @@ export default function LiveShoppingPage() {
   };
 
   const handlePurchase = (productId: string, price: number) => {
-    console.log('Purchase:', productId, price);
+
     setShowCelebration(true);
-    
+
     // Track conversion
     setTimeout(() => {
       setShowCelebration(false);
@@ -185,12 +185,12 @@ export default function LiveShoppingPage() {
   const formatTimeUntilEvent = (startTime: Date) => {
     const now = new Date();
     const diff = startTime.getTime() - now.getTime();
-    
+
     if (diff <= 0) return 'Live Now';
-    
+
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
+
     if (hours > 0) return `${hours}h ${minutes}m`;
     return `${minutes}m`;
   };
@@ -327,7 +327,7 @@ export default function LiveShoppingPage() {
                 onProductClick={handleProductClick}
                 onPurchase={handlePurchase}
               />
-              
+
               {/* Video Analytics Overlay */}
               <VideoHeatmap
                 videoElement={null}

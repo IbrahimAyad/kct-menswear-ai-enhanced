@@ -29,12 +29,7 @@ export async function uploadToR2(
   contentType: string = 'image/png'
 ): Promise<string> {
   if (!r2Client) {
-    console.log('R2 not configured. To enable:');
-    console.log('1. Go to Cloudflare R2 > Manage R2 API tokens');
-    console.log('2. Create a token with Admin Read & Write permissions');
-    console.log('3. Add to .env.local:');
-    console.log('   CLOUDFLARE_R2_ACCESS_KEY_ID=<32-character-key>');
-    console.log('   CLOUDFLARE_R2_SECRET_ACCESS_KEY=<64-character-secret>');
+
     throw new Error('R2 credentials not properly configured');
   }
 
@@ -47,11 +42,11 @@ export async function uploadToR2(
     });
 
     await r2Client.send(command);
-    
+
     // Return the public URL
     return `${R2_PUBLIC_URL}/${key}`;
   } catch (error) {
-    console.error('Error uploading to R2:', error);
+
     throw error;
   }
 }
@@ -71,6 +66,6 @@ export async function uploadGeneratedOutfit(
   const timestamp = Date.now();
   const seasonPrefix = outfit.season ? `${outfit.season}-` : '';
   const filename = `${outfit.occasion}/${seasonPrefix}${outfit.tieColor}-${outfit.suitColor}-${outfit.tieStyle}-${timestamp}.png`;
-  
+
   return uploadToR2(imageBuffer, filename);
 }

@@ -40,14 +40,14 @@ export class AgentSystem {
     const ecommerceAgent = new ECommerceOperationsAgent();
     const inventoryAgent = new ProductInventoryAgent();
     const customerAgent = new CustomerExperienceAgent();
-    
+
     // Register agents with orchestrator
     this.orchestrator.registerAgent(marketingAgent);
     this.orchestrator.registerAgent(uiuxAgent);
     this.orchestrator.registerAgent(ecommerceAgent);
     this.orchestrator.registerAgent(inventoryAgent);
     this.orchestrator.registerAgent(customerAgent);
-    
+
     // Store references
     this.agents.set('marketing-analytics-seo', marketingAgent);
     this.agents.set('ui-ux-frontend', uiuxAgent);
@@ -58,26 +58,24 @@ export class AgentSystem {
 
   async start(): Promise<void> {
     if (this.isRunning) {
-      console.log('Agent system is already running');
+
       return;
     }
 
-    console.log('Starting KCT Agent System...');
     this.isRunning = true;
-    
+
     try {
       // Load predefined tasks if this is the first run
       this.loadInitialTasks();
-      
+
       // Start the orchestrator and all agents
       await this.orchestrator.startAllAgents();
-      
+
       // Set up system monitoring
       this.setupMonitoring();
-      
-      console.log('Agent system started successfully');
+
     } catch (error) {
-      console.error('Failed to start agent system:', error);
+
       this.isRunning = false;
       throw error;
     }
@@ -85,17 +83,16 @@ export class AgentSystem {
 
   private loadInitialTasks(): void {
     const memory = AgentMemory.getInstance();
-    
+
     // Check if we already have tasks in memory
     const existingTasks = [];
     this.agents.forEach((agent, role) => {
       existingTasks.push(...memory.getTasks(role));
     });
-    
+
     // If no tasks exist, load predefined ones
     if (existingTasks.length === 0) {
-      console.log('Loading predefined tasks for agents...');
-      
+
       // Load tasks for each agent
       Object.entries(predefinedTasks).forEach(([role, tasks]) => {
         const agent = this.agents.get(role as AgentRole);
@@ -103,7 +100,7 @@ export class AgentSystem {
           tasks.forEach(task => {
             agent.addTask(task);
           });
-          console.log(`Loaded ${tasks.length} tasks for ${role}`);
+
         }
       });
     }
@@ -111,18 +108,16 @@ export class AgentSystem {
 
   async stop(): Promise<void> {
     if (!this.isRunning) {
-      console.log('Agent system is not running');
+
       return;
     }
 
-    console.log('Stopping KCT Agent System...');
-    
     try {
       await this.orchestrator.stopAllAgents();
       this.isRunning = false;
-      console.log('Agent system stopped successfully');
+
     } catch (error) {
-      console.error('Error stopping agent system:', error);
+
       throw error;
     }
   }
@@ -132,15 +127,14 @@ export class AgentSystem {
     setInterval(() => {
       const health = this.orchestrator.getSystemHealth();
       if (health.overall === 'critical') {
-        console.error('CRITICAL: System health degraded', health);
+
         // Could trigger alerts here
       }
     }, 60000); // Check every minute
 
     // Log agent decisions
     this.orchestrator.on('decision:made', (decision) => {
-      console.log('Agent Decision:', decision);
-      
+
       // Store important decisions
       if (decision.requiredApproval) {
         // Handle decisions that need human approval
@@ -150,15 +144,14 @@ export class AgentSystem {
 
     // Monitor task failures
     this.orchestrator.on('task:failed', (data) => {
-      console.error('Task Failed:', data);
+
       // Could send notifications here
     });
   }
 
   private handleApprovalRequired(decision: any): void {
     // In a real system, this would notify administrators
-    console.log('APPROVAL REQUIRED:', decision);
-    
+
     // Store pending approvals
     // Send notifications
     // Wait for human input

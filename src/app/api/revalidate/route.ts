@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     // Verify the revalidation token
     const headersList = await headers();
     const token = headersList.get("x-revalidate-token");
-    
+
     if (token !== process.env.REVALIDATE_TOKEN) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     if (paths && Array.isArray(paths)) {
       for (const path of paths) {
         revalidatePath(path);
-        console.log(`Revalidated path: ${path}`);
+
       }
     }
 
@@ -26,13 +26,13 @@ export async function POST(request: NextRequest) {
     if (tags && Array.isArray(tags)) {
       for (const tag of tags) {
         revalidateTag(tag);
-        console.log(`Revalidated tag: ${tag}`);
+
       }
     }
 
     return NextResponse.json({ revalidated: true, now: Date.now() });
   } catch (error) {
-    console.error("Revalidation error:", error);
+
     return NextResponse.json({ error: "Revalidation failed" }, { status: 500 });
   }
 }

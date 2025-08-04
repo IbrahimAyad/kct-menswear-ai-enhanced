@@ -28,15 +28,13 @@ export async function POST(request: NextRequest) {
     const headersList = await headers();
     const signature = headersList.get("x-admin-signature");
     const timestamp = headersList.get("x-admin-timestamp");
-    
+
     if (!verifyWebhookSignature(signature, timestamp, await request.text())) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
     const payload: ProductWebhookPayload = await request.json();
     const { event, data } = payload;
-
-    console.log(`Received admin webhook: ${event} for product ${data.sku}`);
 
     switch (event) {
       case "product.created":
@@ -52,7 +50,7 @@ export async function POST(request: NextRequest) {
         await handleProductPublished(data);
         break;
       default:
-        console.log(`Unhandled product event: ${event}`);
+
     }
 
     // Invalidate relevant caches
@@ -60,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
-    console.error("Admin webhook error:", error);
+
     return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
   }
 }
@@ -90,8 +88,7 @@ function verifyWebhookSignature(
 }
 
 async function handleProductCreated(product: any) {
-  console.log(`New product created: ${product.name} (${product.sku})`);
-  
+
   // Update local database
   // Send notification to subscribed customers about new arrival
   // Update search index
@@ -99,24 +96,21 @@ async function handleProductCreated(product: any) {
 }
 
 async function handleProductUpdated(product: any) {
-  console.log(`Product updated: ${product.name} (${product.sku})`);
-  
+
   // Update local cache and database
   // Check if price changed and notify customers with it in cart
   // Update related product recommendations
 }
 
 async function handleProductDeleted(product: any) {
-  console.log(`Product deleted: ${product.sku}`);
-  
+
   // Remove from local database
   // Remove from customer carts
   // Update search index
 }
 
 async function handleProductPublished(product: any) {
-  console.log(`Product published: ${product.name} (${product.sku})`);
-  
+
   // Make product visible on website
   // Send new arrival notifications
   // Update homepage featured products
@@ -128,7 +122,7 @@ async function invalidateProductCaches(productId: string, category: string) {
   // - Category pages
   // - Search results
   // - Homepage if featured
-  
+
   try {
     await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/revalidate`, {
       method: "POST",
@@ -147,6 +141,6 @@ async function invalidateProductCaches(productId: string, category: string) {
       }),
     });
   } catch (error) {
-    console.error("Cache invalidation failed:", error);
+
   }
 }

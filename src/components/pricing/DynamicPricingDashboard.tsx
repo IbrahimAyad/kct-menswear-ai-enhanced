@@ -39,7 +39,7 @@ export function DynamicPricingDashboard({
 
   useEffect(() => {
     loadPricingData();
-    
+
     if (autoRefresh) {
       const interval = setInterval(loadPricingData, 5 * 60 * 1000); // Refresh every 5 minutes
       return () => clearInterval(interval);
@@ -106,7 +106,7 @@ export function DynamicPricingDashboard({
       for (const product of mockProducts) {
         const recommendation = await dynamicPricing.calculateOptimalPrice(product.context);
         const trendAnalysis = await dynamicPricing.analyzeTrend(product.id, product.context);
-        
+
         const status = Math.abs(recommendation.adjustmentPercentage) > 10 
           ? 'adjustment-needed'
           : Math.abs(recommendation.adjustmentPercentage) > 5
@@ -126,7 +126,7 @@ export function DynamicPricingDashboard({
       setInsights(insightsData);
       setLastUpdated(new Date());
     } catch (error) {
-      console.error('Failed to load pricing data:', error);
+
     } finally {
       setLoading(false);
     }
@@ -223,12 +223,12 @@ export function DynamicPricingDashboard({
               <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
               Refresh
             </Button>
-            
+
             <Button variant="outline" size="sm">
               <Download className="w-4 h-4 mr-2" />
               Export
             </Button>
-            
+
             <Button variant="outline" size="sm">
               <Settings className="w-4 h-4 mr-2" />
               Settings
@@ -244,21 +244,21 @@ export function DynamicPricingDashboard({
             </div>
             <div className="text-sm text-gray-600">Products Analyzed</div>
           </div>
-          
+
           <div className="text-center">
             <div className="text-2xl font-bold text-green-600">
               ${calculateTotalImpact().toFixed(0)}
             </div>
             <div className="text-sm text-gray-600">Potential Revenue Impact</div>
           </div>
-          
+
           <div className="text-center">
             <div className="text-2xl font-bold text-blue-600">
               {insights.filter(i => i.status === 'adjustment-needed').length}
             </div>
             <div className="text-sm text-gray-600">Need Adjustment</div>
           </div>
-          
+
           <div className="text-center">
             <div className="text-2xl font-bold text-gray-600">
               {lastUpdated?.toLocaleTimeString() || '--'}
@@ -283,7 +283,7 @@ export function DynamicPricingDashboard({
               <option value="adjustment">Adjustment %</option>
             </select>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-700">Timeframe:</span>
             <div className="flex rounded-lg border border-gray-300 overflow-hidden">
@@ -320,7 +320,7 @@ export function DynamicPricingDashboard({
                   <div className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden">
                     <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500"></div>
                   </div>
-                  
+
                   <div>
                     <h3 className="font-semibold text-gray-900">{insight.productName}</h3>
                     <div className="flex items-center gap-2 mt-1">
@@ -442,12 +442,12 @@ export function DynamicPricingDashboard({
                   <Zap className="w-4 h-4 mr-2" />
                   Apply Pricing
                 </Button>
-                
+
                 <Button variant="outline" size="sm">
                   <BarChart3 className="w-4 h-4 mr-2" />
                   View Analytics
                 </Button>
-                
+
                 <Button variant="outline" size="sm">
                   <Calendar className="w-4 h-4 mr-2" />
                   Schedule Review

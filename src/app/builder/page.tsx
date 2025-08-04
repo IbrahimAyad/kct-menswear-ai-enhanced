@@ -15,12 +15,12 @@ function BuilderContent() {
 
   useEffect(() => {
     const preset = searchParams.get('preset');
-    
+
     if (preset === 'wedding-swiper') {
       const preferencesStr = localStorage.getItem('weddingStylePreferences');
       if (preferencesStr) {
         const preferences = JSON.parse(preferencesStr);
-        
+
         // Map preferences to suit configuration with avoidance logic
         const config: Partial<SuitConfiguration> = {
           fabric: {
@@ -42,7 +42,7 @@ function BuilderContent() {
             rise: preferences.preferredStyle === 'classic' ? 'high' : 'medium',
           },
         };
-        
+
         setInitialConfig(config);
       }
     }
@@ -51,12 +51,12 @@ function BuilderContent() {
   const mapColorPreferenceToHex = (colorFamily: string, avoidedColors?: Array<{color: string, count: number}>): string => {
     // Check if primary preference is strongly avoided
     const isStronglyAvoided = avoidedColors?.some(avoided => avoided.color === colorFamily && avoided.count >= 2);
-    
+
     if (isStronglyAvoided) {
       // Fall back to a safe neutral if their preference is contradicted by strong dislikes
       return '#1a1a1a'; // Charcoal as safe fallback
     }
-    
+
     switch (colorFamily) {
       case 'neutral':
         return '#1a1a1a'; // Charcoal
@@ -70,11 +70,11 @@ function BuilderContent() {
         return '#1a1a1a';
     }
   };
-  
+
   const isStyleAvoided = (preferences: any, style: string): boolean => {
     return preferences.avoidedStyles?.some((avoided: any) => avoided.style === style && avoided.count >= 2) || false;
   };
-  
+
   const getPreferredFabricType = (preferences: any): 'wool' | 'cotton' | 'linen' | 'cashmere' => {
     // Base on formality and season preferences
     if (preferences.preferredFormality === 'Black Tie') return 'wool';
@@ -82,49 +82,49 @@ function BuilderContent() {
     if (preferences.preferredFormality === 'Casual') return 'cotton';
     return 'wool'; // Safe default
   };
-  
+
   const getPreferredPattern = (preferences: any): 'solid' | 'pinstripe' | 'plaid' | 'herringbone' => {
     // Avoid patterns if user consistently rejected patterned looks
     const stronglyPrefersClassic = preferences.preferredStyle === 'classic' && preferences.styleConfidence > 0.7;
     const avoidsBold = isStyleAvoided(preferences, 'bold');
-    
+
     if (stronglyPrefersClassic || avoidsBold) return 'solid';
     if (preferences.preferredStyle === 'trendy') return 'herringbone';
     if (preferences.preferredStyle === 'modern') return 'pinstripe';
     return 'solid';
   };
-  
+
   const getPreferredJacketStyle = (preferences: any): 'single-breasted' | 'double-breasted' => {
     if (preferences.preferredFormality === 'Black Tie' && !isStyleAvoided(preferences, 'bold')) {
       return 'double-breasted';
     }
     return 'single-breasted'; // Safe default, works for most
   };
-  
+
   const getPreferredLapel = (preferences: any): 'notch' | 'peak' | 'shawl' => {
     if (preferences.preferredFormality === 'Black Tie') return 'peak';
     if (preferences.preferredStyle === 'modern' && !isStyleAvoided(preferences, 'modern')) return 'peak';
     return 'notch'; // Classic safe choice
   };
-  
+
   const getPreferredTrouserFit = (preferences: any): 'slim' | 'classic' | 'relaxed' => {
     const avoidsSlim = preferences.avoidedStyles?.some((style: any) => 
       (style.style === 'modern' || style.style === 'trendy') && style.count >= 2
     );
-    
+
     if (avoidsSlim) return 'classic';
     if (preferences.preferredStyle === 'modern' || preferences.preferredStyle === 'trendy') return 'slim';
     return 'classic';
   };
 
   const handleSave = (config: SuitConfiguration) => {
-    console.log('Saving configuration:', config);
+
     setSavedConfigs([...savedConfigs, config]);
     // In a real app, this would save to a database
   };
 
   const handleAddToCart = (config: SuitConfiguration) => {
-    console.log('Adding to cart:', config);
+
     // In a real app, this would add the custom suit to the cart
     router.push('/cart');
   };
@@ -139,7 +139,7 @@ function BuilderContent() {
               <ArrowLeft className="h-4 w-4" />
               Back to Home
             </Link>
-            
+
             {savedConfigs.length > 0 && (
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Save className="h-4 w-4" />
@@ -192,7 +192,7 @@ function BuilderContent() {
                 Tailored precisely to your measurements for unmatched comfort and style
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🎨</span>
@@ -202,7 +202,7 @@ function BuilderContent() {
                 Choose from countless fabric, color, and style combinations
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">⚡</span>

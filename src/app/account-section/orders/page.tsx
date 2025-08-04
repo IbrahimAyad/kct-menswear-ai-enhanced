@@ -50,7 +50,7 @@ export default function OrderHistoryPage() {
           },
         ]);
       } catch (error) {
-        console.error("Failed to fetch orders:", error);
+
       } finally {
         setIsLoading(false);
       }
@@ -101,7 +101,7 @@ export default function OrderHistoryPage() {
     <div className="space-y-4">
       <div className="bg-white rounded-lg shadow-sm p-6">
         <h2 className="text-2xl font-semibold text-gray-900 mb-6">Order History</h2>
-        
+
         <div className="space-y-4">
           {orders.map((order) => (
             <Link
@@ -117,7 +117,7 @@ export default function OrderHistoryPage() {
                     </h3>
                     {getStatusBadge(order.status)}
                   </div>
-                  
+
                   <p className="text-sm text-gray-600">
                     Placed on {new Date(order.createdAt).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -125,7 +125,7 @@ export default function OrderHistoryPage() {
                       day: "numeric",
                     })}
                   </p>
-                  
+
                   <div className="mt-3 flex items-center space-x-6">
                     <p className="text-sm text-gray-600">
                       <span className="font-medium">{order.itemCount}</span>
@@ -136,7 +136,7 @@ export default function OrderHistoryPage() {
                     </p>
                   </div>
                 </div>
-                
+
                 <ChevronRight className="h-5 w-5 text-gray-400" />
               </div>
             </Link>

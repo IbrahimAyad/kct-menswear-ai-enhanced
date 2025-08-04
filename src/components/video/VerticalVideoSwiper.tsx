@@ -23,6 +23,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Product } from '@/lib/types';
+import { TikTokIcon } from '@/components/icons/SocialIcons';
 
 interface PromVideo {
   id: string;
@@ -155,7 +156,7 @@ export function VerticalVideoSwiper({
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const threshold = 50;
-    
+
     if (info.offset.y > threshold) {
       handlePrevious();
     } else if (info.offset.y < -threshold) {
@@ -192,7 +193,7 @@ export function VerticalVideoSwiper({
           url: window.location.href
         });
       } catch (error) {
-        console.log('Share cancelled');
+
       }
     } else {
       // Fallback: copy to clipboard
@@ -315,6 +316,17 @@ export function VerticalVideoSwiper({
                   <p className="text-xs text-gray-300">
                     @{currentVideo.creator} • {currentVideo.views.toLocaleString()} views
                   </p>
+
+                  {/* TikTok Follow Button */}
+                  <a
+                    href="https://www.tiktok.com/@kctmenswear"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 mt-3 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-white/30 transition-colors"
+                  >
+                    <TikTokIcon className="w-4 h-4" />
+                    Follow on TikTok
+                  </a>
                 </div>
 
                 {/* Action Buttons */}

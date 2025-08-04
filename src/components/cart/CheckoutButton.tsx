@@ -14,29 +14,29 @@ export function CheckoutButton() {
   const { products } = useProductStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Helper function to get Stripe price ID for a product
   const getStripePriceId = (product: any) => {
     // First check if product has metadata with stripePriceId
     if (product.metadata?.stripePriceId) {
       return product.metadata.stripePriceId;
     }
-    
+
     // Also check direct stripePriceId property
     if (product.stripePriceId) {
       return product.stripePriceId;
     }
-    
+
     // Check if it's a suit
     const category = product.category?.toLowerCase();
-    
+
     if (category === 'suits') {
       // Find the color in our stripe products mapping
       const colorKey = product.metadata?.suitColor || 
         Object.keys(stripeProducts.suits).find(key => 
           product.name.toLowerCase().includes(key.toLowerCase().replace(/([A-Z])/g, ' $1').trim())
         );
-      
+
       if (colorKey) {
         const suitData = stripeProducts.suits[colorKey as keyof typeof stripeProducts.suits];
         // Check if it's 2-piece or 3-piece
@@ -44,7 +44,7 @@ export function CheckoutButton() {
         return is3Piece ? suitData.threePiece : suitData.twoPiece;
       }
     }
-    
+
     // Check if it's a dress shirt
     if (category === 'dress-shirts') {
       // Dress shirts have fixed price IDs based on fit
@@ -54,7 +54,7 @@ export function CheckoutButton() {
         return 'price_1RpvXACHc12x7sCz2Ngkmp64';
       }
     }
-    
+
     // Check if it's a tie
     if (category === 'ties') {
       // Ties have fixed price IDs based on style
@@ -68,7 +68,7 @@ export function CheckoutButton() {
         return 'price_1RpvHlCHc12x7sCzp0TVNS92';
       }
     }
-    
+
     // Check if it's a tie bundle
     if (category === 'tie-bundle') {
       if (product.metadata?.bundleType === 'five') {
@@ -79,16 +79,16 @@ export function CheckoutButton() {
         return 'price_1RpvRSCHc12x7sCzpo0fgH6A';
       }
     }
-    
+
     // For other products, you would add similar mappings
     // For now, return null if we can't find a mapping
     return null;
   };
-  
+
   const handleCheckout = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       // Prepare cart items for checkout
       const checkoutItems = items.map(item => {
@@ -107,10 +107,10 @@ export function CheckoutButton() {
             metadata: item.metadata
           };
         }
-        
+
         // Try to find product in store first
         let product = products.find(p => p.id === item.productId);
-        
+
         // If not in store, use the cart item data directly
         if (!product && item.metadata) {
           product = {
@@ -123,20 +123,18 @@ export function CheckoutButton() {
             stripePriceId: item.metadata.stripePriceId,
           } as any;
         }
-        
+
         if (!product) {
-          console.error('Cart item:', item);
-          console.error('Available products:', products.length);
+
           throw new Error(`Product ${item.productId} not found`);
         }
-        
+
         const stripePriceId = item.metadata?.stripePriceId || getStripePriceId(product);
         if (!stripePriceId) {
-          console.error('Product metadata:', product.metadata);
-          console.error('Item metadata:', item.metadata);
+
           throw new Error(`No Stripe price found for ${product.name}. Please clear your cart and add items again.`);
         }
-        
+
         return {
           stripePriceId,
           quantity: item.quantity,
@@ -147,14 +145,9 @@ export function CheckoutButton() {
           price: item.price || product.price,
         };
       });
-      
+
       // Log what we're sending to checkout
-      console.log('Sending to checkout API:', {
-        items: checkoutItems,
-        itemsCount: checkoutItems.length,
-        firstItem: checkoutItems[0]
-      });
-      
+
       // Create checkout session
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -164,16 +157,15 @@ export function CheckoutButton() {
           customerEmail: '', // Optional: collect email before checkout
         }),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('Checkout API error response:', errorData);
-        console.error('Full error details:', JSON.stringify(errorData, null, 2));
+
         throw new Error(errorData.error || errorData.details || 'Checkout failed');
       }
-      
+
       const { sessionId, url } = await response.json();
-      
+
       // Redirect to Stripe Checkout
       if (url) {
         // Clear cart only after successful redirect starts
@@ -183,18 +175,18 @@ export function CheckoutButton() {
         // Fallback to Stripe.js redirect
         const stripe = await stripePromise;
         if (!stripe) throw new Error('Stripe failed to load');
-        
+
         const { error } = await stripe.redirectToCheckout({ sessionId });
         if (error) throw error;
       }
     } catch (err) {
-      console.error('Checkout error:', err);
+
       setError(err instanceof Error ? err.message : 'Checkout failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className="space-y-2">
       <button
@@ -214,11 +206,11 @@ export function CheckoutButton() {
           `Checkout - $${cartSummary.totalPrice.toFixed(2)}`
         )}
       </button>
-      
+
       {error && (
         <p className="text-sm text-red-600 text-center">{error}</p>
       )}
-      
+
       <p className="text-xs text-gray-500 text-center">
         Secure checkout powered by Stripe
       </p>

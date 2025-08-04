@@ -37,13 +37,6 @@ export function useCart() {
         category: item.category,
       }
     } as any;
-    
-    console.log('Adding to cart:', {
-      name: item.name,
-      stripePriceId: item.stripePriceId,
-      category: item.category,
-      metadata: product.metadata
-    });
 
     store.addItem(product, item.selectedSize || '', item.quantity);
   };

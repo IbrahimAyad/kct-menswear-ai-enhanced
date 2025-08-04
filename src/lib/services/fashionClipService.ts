@@ -44,7 +44,7 @@ class FashionClipService {
 
       return await response.json();
     } catch (error) {
-      console.error('Fashion CLIP analysis failed:', error);
+
       return null;
     }
   }
@@ -60,7 +60,7 @@ class FashionClipService {
     // 1. Use Fashion CLIP embeddings to find similar products
     // 2. Query your product database for matches
     // 3. Rank by similarity scores
-    
+
     return [
       {
         productId: 'navy-suit-001',
@@ -181,7 +181,7 @@ class FashionClipService {
     // This would use Fashion CLIP's text encoder to find matching products
     // For now, return mock based on keywords
     const keywords = description.toLowerCase();
-    
+
     if (keywords.includes('wedding')) {
       return [
         {
@@ -217,7 +217,7 @@ class FashionClipService {
     skinToneMatch?: 'warm' | 'cool' | 'neutral';
   }> {
     const analysis = await this.analyzeImage(file);
-    
+
     // Mock color analysis - in production, this would extract actual colors
     return {
       dominantColors: ['navy', 'white', 'silver'],

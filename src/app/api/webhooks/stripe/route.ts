@@ -5,42 +5,40 @@ import Stripe from 'stripe';
 export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
-  console.log('=== WEBHOOK RECEIVED at /api/webhooks/stripe ===');
-  console.log('Timestamp:', new Date().toISOString());
-  
+
   // Initialize Stripe inside the function to ensure env vars are available
   if (!process.env.STRIPE_SECRET_KEY) {
-    console.error('STRIPE_SECRET_KEY not found in environment variables');
+
     return NextResponse.json(
       { error: 'Webhook configuration error' },
       { status: 500 }
     );
   }
-  
+
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    console.error('STRIPE_WEBHOOK_SECRET not found');
+
     return NextResponse.json(
       { error: 'Webhook secret not configured' },
       { status: 500 }
     );
   }
-  
+
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2024-10-28.acacia',
   });
-  
+
   const body = await req.text();
   const signature = req.headers.get('stripe-signature');
-  
+
   if (!signature) {
     return NextResponse.json(
       { error: 'Missing stripe-signature header' },
       { status: 400 }
     );
   }
-  
+
   let event: Stripe.Event;
-  
+
   try {
     event = stripe.webhooks.constructEvent(
       body,
@@ -48,33 +46,26 @@ export async function POST(req: NextRequest) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err) {
-    console.error('Webhook signature verification failed:', err);
+
     return NextResponse.json(
       { error: 'Invalid signature' },
       { status: 400 }
     );
   }
-  
+
   // Handle the event
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session;
-      
+
       try {
         // Parse order details from metadata
         const orderDetails = session.metadata?.order_details 
           ? JSON.parse(session.metadata.order_details) 
           : [];
-        
+
         // Log the order for now (replace with Supabase save)
-        console.log('Order completed:', {
-          sessionId: session.id,
-          customerEmail: session.customer_email,
-          customerPhone: session.customer_details?.phone,
-          amount: (session.amount_total || 0) / 100,
-          items: orderDetails,
-        });
-        
+
         // TODO: Save to Supabase
         // const { error } = await supabase.from('orders').insert({
         //   stripe_session_id: session.id,
@@ -90,64 +81,60 @@ export async function POST(req: NextRequest) {
         //   status: 'paid',
         //   created_at: new Date().toISOString(),
         // });
-        
+
         // TODO: Send confirmation email
         // await sendOrderConfirmation(session, orderDetails);
-        
+
       } catch (error) {
-        console.error('Error processing order:', error);
+
         // Don't return error to Stripe, log it instead
       }
       break;
     }
-    
+
     case 'payment_intent.succeeded': {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      console.log('Payment succeeded:', paymentIntent.id);
+
       break;
     }
-    
+
     case 'payment_intent.payment_failed': {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      console.log('Payment failed:', paymentIntent.id);
+
       break;
     }
-    
+
     case 'charge.refunded': {
       const charge = event.data.object as Stripe.Charge;
-      console.log('Charge refunded:', charge.id);
-      console.log('Amount refunded:', charge.amount_refunded);
+
       // TODO: Update order status in database
       break;
     }
 
     case 'refund.created': {
       const refund = event.data.object as Stripe.Refund;
-      console.log('Refund created:', refund.id);
-      console.log('Amount:', refund.amount);
-      console.log('Reason:', refund.reason || 'No reason provided');
+
       break;
     }
 
     case 'refund.updated': {
       const refund = event.data.object as Stripe.Refund;
-      console.log('Refund updated:', refund.id);
-      console.log('Status:', refund.status);
+
       break;
     }
 
     case 'charge.updated': {
       const charge = event.data.object as Stripe.Charge;
-      console.log('Charge updated:', charge.id);
+
       if (charge.refunded) {
-        console.log('Charge has been refunded');
+
       }
       break;
     }
-    
+
     default:
-      console.log(`Unhandled event type ${event.type}`);
+
   }
-  
+
   return NextResponse.json({ received: true });
 }

@@ -70,22 +70,26 @@ function CheckoutFormInner({ amount, onComplete, isProcessing, setIsProcessing }
       }
     } catch (err) {
       setError("Failed to process order");
-      console.error("Checkout error:", err);
+
     } finally {
       setIsProcessing(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6" aria-label="Checkout form">
       <div className="bg-white shadow rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
+        <label htmlFor="email" className="sr-only">Email address</label>
         <input
+          id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           required
+          aria-required="true"
+          aria-label="Email address"
           className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-gold focus:border-gold"
         />
       </div>
@@ -93,11 +97,16 @@ function CheckoutFormInner({ amount, onComplete, isProcessing, setIsProcessing }
       <div className="bg-white shadow rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
         <div className="grid grid-cols-2 gap-4">
-          <input
-            type="text"
-            value={shippingInfo.firstName}
-            onChange={(e) => setShippingInfo({ ...shippingInfo, firstName: e.target.value })}
-            placeholder="First Name"
+          <div>
+            <label htmlFor="firstName" className="sr-only">First name</label>
+            <input
+              id="firstName"
+              type="text"
+              value={shippingInfo.firstName}
+              onChange={(e) => setShippingInfo({ ...shippingInfo, firstName: e.target.value })}
+              placeholder="First Name"
+              aria-label="First name"
+              aria-required="true"
             required
             className="px-4 py-2 border border-gray-300 rounded-md focus:ring-gold focus:border-gold"
           />

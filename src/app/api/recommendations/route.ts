@@ -5,7 +5,7 @@ import { RecommendationType, RecommendationContext } from "@/lib/recommendations
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    
+
     const type = searchParams.get("type") as RecommendationType;
     const productId = searchParams.get("productId");
     const customerId = searchParams.get("customerId");
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       count: recommendations.length,
     });
   } catch (error) {
-    console.error("Recommendation error:", error);
+
     return NextResponse.json(
       { error: "Failed to fetch recommendations" },
       { status: 500 }

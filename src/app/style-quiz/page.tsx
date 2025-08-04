@@ -89,12 +89,12 @@ export default function StyleQuizPage() {
   }, [quizStarted]);
 
   const handleSwipe = (product: Product, direction: 'left' | 'right') => {
-    console.log(`Swiped ${direction} on ${product.name}`);
+
   };
 
   const handleComplete = (liked: Product[]) => {
     setLikedProducts(liked);
-    
+
     // Generate style preferences based on liked products
     const preferences: StylePreferences = {
       colors: liked.map(p => p.name.toLowerCase().includes('navy') ? 'navy' : 
@@ -104,7 +104,7 @@ export default function StyleQuizPage() {
       occasions: liked.some(p => p.name.toLowerCase().includes('tuxedo')) ? ['formal', 'wedding'] : ['business', 'casual'],
       stylePersona: 'Modern Professional',
     };
-    
+
     setStylePreferences(preferences);
     setShowResults(true);
 
@@ -132,11 +132,11 @@ export default function StyleQuizPage() {
   };
 
   const handleAddToCart = (product: Product) => {
-    console.log('Adding to cart:', product);
+
   };
 
   const handleAddOutfitToCart = (outfit: Product[]) => {
-    console.log('Adding outfit to cart:', outfit);
+
   };
 
   return (

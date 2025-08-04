@@ -20,14 +20,14 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'beige': '3000-MMM (Beige)',
     'champagne': '3000-H (Champagne)',
     'peach': '3000-ii (Peach)',
-    
+
     // Blacks & Greys
     'black': '3000-B (Black)',
     'charcoal': '3000-NN (Charcoal)',
     'dark-grey': '3000-L (Dark Grey)',
     'silver': '3000-E (Silver)',
     'dark-silver': '3000-ZZ (Dark Silver)',
-    
+
     // Blues
     'navy': '3000-G (Navy Blue)',
     'dark-navy': '3000-BBB (Dark Navy)',
@@ -43,7 +43,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'cobalt': '3000-HHH (Cobalt)',
     'sapphire-blue': '3000-KK (Sapphire Blue)',
     'denim-blue': '3000-RRR (Denim Blue)',
-    
+
     // Reds
     'red': '3000-O (Bright Red)',
     'true-red': '3000-GGG (True Red)',
@@ -52,7 +52,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'burgundy': '3000-MM (Burgundy)',
     'chianti': '3000-NNN (Chianti)',
     'rust': '3000-YY (Rust)',
-    
+
     // Pinks & Roses
     'blush-pink': 'blush-pink',
     'light-blush': '3000-III (Light Blush)',
@@ -64,18 +64,18 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'coral': '3000-FF (Coral)',
     'fushia': '3000-K (Fuchsia)',
     'magenta': '3000-PP (Magenta)',
-    
+
     // Oranges
     'burnt-orange': '3000-Z (Burnt Orange)',
     'orange': '3000-SS (Orange)',
     'salmon-orange': '3000-GG (Salmon Orange)',
-    
+
     // Yellows
     'yellow': '3000-J (Yellow)',
     'banana-yellow': '3000-M (Banana Yellow)',
     'canary': '3000-D (Canary)',
     'gold': '3000-JJ (Gold)',
-    
+
     // Greens
     'emerald-green': '3000-Z (Emerald Green)',
     'hunter-green': 'Hunter Green + Bow + Tie',
@@ -87,7 +87,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'lettuce-green': '3000-WW (Lettuce Green)',
     'lime': '3000-F (Lime)',
     'dusty-sage': '3000-PPP (Dusty Sage)',
-    
+
     // Purples
     'light-lilac': '3000-VV (Light Lilac)',
     'lilac': '3000-XX (Lilac)',
@@ -97,7 +97,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'deep-purple': '3000-P (Deep Purple)',
     'pastel-purple': '3000-EEE (Pastel Purple)',
     'mauve': '3000-KKK (Mauve)',
-    
+
     // Browns
     'moca': '3000-CC (Moca)',
     'chocolate-brown': '3000-N (Chocolate Brown)',
@@ -108,11 +108,11 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
 
   const baseUrl = 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts';
   const colorDir = colorDirMap[colorData.id] || colorData.displayName;
-  
+
   // Generate filename based on style
   let filename = '';
   const colorNameForFile = colorData.name.toLowerCase().replace(/ /g, '-');
-  
+
   // Special handling for certain colors
   const specialPrefixes: { [key: string]: string } = {
     // Whites & Neutrals
@@ -121,14 +121,14 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'beige': 'mmm',
     'champagne': 'h',
     'peach': 'ii',
-    
+
     // Blacks & Greys
     'black': 'b',
     'charcoal': 'nn',
     'dark-grey': 'l',
     'silver': 'e',
     'dark-silver': 'zz',
-    
+
     // Blues
     'navy': 'g',
     'dark-navy': 'bbb',
@@ -144,7 +144,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'cobalt': 'hhh',
     'sapphire-blue': 'kk',
     'denim-blue': 'rrr',
-    
+
     // Reds
     'red': 'o',
     'true-red': 'ggg',
@@ -153,7 +153,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'burgundy': 'mm',
     'chianti': 'nnn',
     'rust': 'yy',
-    
+
     // Pinks & Roses
     'light-blush': 'iii',
     'pink': 'x',
@@ -163,18 +163,18 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'coral': 'ff',
     'fushia': 'k',
     'magenta': 'pp',
-    
+
     // Oranges
     'burnt-orange': 'z',
     'orange': 'ss',
     'salmon-orange': 'gg',
-    
+
     // Yellows
     'yellow': 'j',
     'banana-yellow': 'm',
     'canary': 'd',
     'gold': 'jj',
-    
+
     // Greens
     'emerald-green': 'z',
     'olive-green': 'q',
@@ -185,7 +185,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'lettuce-green': 'ww',
     'lime': 'f',
     'dusty-sage': 'ppp',
-    
+
     // Purples
     'light-lilac': 'vv',
     'lilac': 'xx',
@@ -195,7 +195,7 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'deep-purple': 'p',
     'pastel-purple': 'eee',
     'mauve': 'kkk',
-    
+
     // Browns
     'moca': 'cc',
     'chocolate-brown': 'n',
@@ -203,9 +203,9 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
     'nutmeg': 'qqq',
     'taupe': 't'
   };
-  
+
   const prefix = specialPrefixes[colorData.id];
-  
+
   switch(styleId) {
     case 'bowtie':
       // Bowtie uses different naming pattern
@@ -228,12 +228,12 @@ function getStyleSpecificImage(colorData: any, styleId: string): string {
       // Fallback to original image
       return colorData.imageUrl;
   }
-  
+
   // Construct the full URL - Don't encode the directory if it has spaces in parentheses
   const fullUrl = `${baseUrl}/${colorDir}/${filename}`;
-  
-  console.log('Generated URL:', fullUrl); // Debug log
-  
+
+   // Debug log
+
   // Return the new URL, with fallback to original if something goes wrong
   return fullUrl;
 }
@@ -248,12 +248,12 @@ export default function TieProductPage() {
   const params = useParams();
   const id = params.id as string;
   const { addItem } = useCart();
-  
+
   // Parse id (e.g., "baby-blue-bowtie" -> color: baby-blue, style: bowtie)
   const parts = id.split('-');
   let colorId = '';
   let styleId = '';
-  
+
   // Handle multi-word colors (e.g., baby-blue, burnt-orange)
   if (parts.length === 3) {
     colorId = `${parts[0]}-${parts[1]}`;
@@ -270,10 +270,10 @@ export default function TieProductPage() {
       colorId = parts.slice(0, -1).join('-');
     }
   }
-  
+
   const colorData = getTieColorById(colorId);
   const styleData = tieProducts.styles[styleId as keyof typeof tieProducts.styles];
-  
+
   const [purchaseMode, setPurchaseMode] = useState<'single' | 'bundle'>('bundle');
   const [selectedBundle, setSelectedBundle] = useState<'five' | 'eight' | 'eleven'>('five');
   const [bundleItems, setBundleItems] = useState<BundleItem[]>([
@@ -294,7 +294,7 @@ export default function TieProductPage() {
 
   const handleAddBundleItem = (color: string, style: string) => {
     const existingItem = bundleItems.find(item => item.color === color && item.style === style);
-    
+
     if (existingItem) {
       setBundleItems(bundleItems.map(item => 
         item.color === color && item.style === style 
@@ -340,22 +340,22 @@ export default function TieProductPage() {
           width: styleData.width
         }
       });
-      console.log('Added to cart!');
+
     } else {
       // Add bundle as a single item
       const bundleId = `tie-bundle-${selectedBundle}-${Date.now()}`;
-      
+
       // Create a summary of bundle items for display
       const bundleItemsSummary = bundleItems.map(item => {
         const itemColor = getTieColorById(item.color);
         const itemStyle = tieProducts.styles[item.style as keyof typeof tieProducts.styles];
         return `${item.quantity}x ${itemColor?.name} ${itemStyle?.name.split(' ')[0]}`;
       }).join(', ');
-      
+
       // Use the first item's image as the bundle image
       const firstItem = bundleItems[0];
       const firstItemColor = getTieColorById(firstItem.color);
-      
+
       addItem({
         id: bundleId,
         name: `${currentBundle.name} - ${bundleItemsSummary}`,
@@ -375,8 +375,7 @@ export default function TieProductPage() {
           stripePriceId: currentBundle.priceId
         }
       });
-      
-      console.log(`${currentBundle.name} added to cart!`);
+
     }
   };
 
@@ -427,7 +426,7 @@ export default function TieProductPage() {
                 }}
               />
             </motion.div>
-            
+
             {/* Style Options Preview */}
             <div className="grid grid-cols-4 gap-3">
               {Object.entries(tieProducts.styles).map(([key, style]) => {
@@ -552,13 +551,13 @@ export default function TieProductPage() {
                         Total: {bundleItems.reduce((sum, item) => sum + item.quantity, 0)} items
                         {remainingItems > 0 && ` (${remainingItems} more needed)`}
                       </p>
-                      
+
                       {/* Bundle Items List */}
                       <div className="space-y-2 mb-4">
                         {bundleItems.map((item, index) => {
                           const itemColor = getTieColorById(item.color);
                           const itemStyle = tieProducts.styles[item.style as keyof typeof tieProducts.styles];
-                          
+
                           return (
                             <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
                               <div className="flex items-center space-x-3">

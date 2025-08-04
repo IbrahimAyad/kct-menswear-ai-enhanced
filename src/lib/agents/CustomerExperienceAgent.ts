@@ -36,8 +36,7 @@ export class CustomerExperienceAgent extends BaseAgent {
   }
 
   async execute(task: AgentTask): Promise<any> {
-    console.log(`Customer Experience Agent executing: ${task.title}`);
-    
+
     try {
       switch (task.metadata?.type) {
         case 'personalization':
@@ -56,14 +55,14 @@ export class CustomerExperienceAgent extends BaseAgent {
           return await this.generalCustomerTask(task);
       }
     } catch (error) {
-      console.error('Customer Experience Agent execution error:', error);
+
       throw error;
     }
   }
 
   async analyzeEnvironment(): Promise<AgentTask[]> {
     const tasks: AgentTask[] = [];
-    
+
     // Check personalization effectiveness
     const personalizationScore = await this.checkPersonalizationEffectiveness();
     if (personalizationScore < 75) {
@@ -176,7 +175,7 @@ export class CustomerExperienceAgent extends BaseAgent {
   // Private helper methods
   private async enhancePersonalization(task: AgentTask): Promise<any> {
     const currentScore = task.metadata?.currentScore || 0;
-    
+
     return {
       completed: true,
       improvements: {
@@ -193,13 +192,13 @@ export class CustomerExperienceAgent extends BaseAgent {
 
   private async analyzeFeedback(task: AgentTask): Promise<any> {
     const feedback = task.metadata?.feedback || [];
-    
+
     const categorized = {
       shipping: feedback.filter((f: any) => f.category === 'shipping').length,
       product: feedback.filter((f: any) => f.category === 'product').length,
       service: feedback.filter((f: any) => f.category === 'service').length
     };
-    
+
     return {
       completed: true,
       analysis: {
@@ -216,7 +215,7 @@ export class CustomerExperienceAgent extends BaseAgent {
 
   private async monitorSupport(task: AgentTask): Promise<any> {
     const supportData = task.metadata || {};
-    
+
     return {
       completed: true,
       improvements: {
@@ -234,7 +233,7 @@ export class CustomerExperienceAgent extends BaseAgent {
 
   private async recommendFeatures(task: AgentTask): Promise<any> {
     const requests = task.metadata?.requests || [];
-    
+
     return {
       completed: true,
       recommendations: requests.map((req: any) => ({
@@ -247,7 +246,7 @@ export class CustomerExperienceAgent extends BaseAgent {
 
   private async optimizeJourney(task: AgentTask): Promise<any> {
     const journeyData = task.metadata || {};
-    
+
     return {
       completed: true,
       optimizations: {
@@ -264,7 +263,7 @@ export class CustomerExperienceAgent extends BaseAgent {
 
   private async manageLoyaltyProgram(task: AgentTask): Promise<any> {
     const metrics = task.metadata?.metrics || {};
-    
+
     return {
       completed: true,
       improvements: {

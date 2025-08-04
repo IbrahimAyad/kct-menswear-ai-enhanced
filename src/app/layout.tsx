@@ -10,6 +10,8 @@ import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
 import { FacebookPixel, FacebookPixelScript } from "@/components/analytics/FacebookPixel";
 // import { FacebookMessenger } from "@/components/chat/FacebookMessenger";
 import { Suspense } from "react";
+import { socialMediaSchema } from "./layout/social-schema";
+import { SkipLinks } from "@/components/accessibility/SkipLinks";
 
 export const metadata: Metadata = {
   title: "KCT Menswear - Premium Men's Formal Wear",
@@ -19,6 +21,42 @@ export const metadata: Metadata = {
     title: "KCT Menswear - Premium Men's Formal Wear",
     description: "Elevate your style with premium men's formal wear and expert tailoring",
     type: "website",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "KCT Menswear - Premium Men's Formal Wear",
+      },
+    ],
+    locale: "en_US",
+    siteName: "KCT Menswear",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KCT Menswear - Premium Men's Formal Wear",
+    description: "Elevate your style with premium men's formal wear and expert tailoring",
+    images: ["/og-image.jpg"],
+    site: "@KCTMenswear",
+    creator: "@KCTMenswear",
+  },
+  alternates: {
+    canonical: "https://kctmenswear.com",
+  },
+  other: {
+    "fb:app_id": process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || "",
+    "pinterest-rich-pin": "true",
+  },
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png" },
+    ],
   },
 };
 
@@ -32,11 +70,16 @@ export default function RootLayout({
       <head>
         <GoogleAnalyticsScript />
         <FacebookPixelScript />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(socialMediaSchema) }}
+        />
       </head>
       <body className="antialiased">
+        <SkipLinks />
         <Providers>
           <Navigation />
-          <main className="pt-16 min-h-screen">
+          <main id="main-content" className="pt-16 min-h-screen" role="main" aria-label="Main content">
             {children}
           </main>
           <Footer />

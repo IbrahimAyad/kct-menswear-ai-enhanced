@@ -23,7 +23,7 @@ export function ProductFormExample() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted with data:', formData);
+
     alert('Product saved! Check console for data.');
   };
 
@@ -31,7 +31,7 @@ export function ProductFormExample() {
     <div className="max-w-4xl mx-auto p-6">
       <Card className="p-8">
         <h2 className="text-2xl font-bold mb-6">Product Form with Smart Tagging</h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Product Name */}
           <div>

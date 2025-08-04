@@ -22,15 +22,13 @@ export async function POST(request: NextRequest) {
     // Verify webhook signature
     const headersList = await headers();
     const signature = headersList.get("x-admin-signature");
-    
+
     if (!signature || signature !== process.env.ADMIN_WEBHOOK_SECRET) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
     const payload: PriceWebhookPayload = await request.json();
     const { event, data } = payload;
-
-    console.log(`Received price webhook: ${event} for SKU ${data.sku}`);
 
     switch (event) {
       case "price.updated":
@@ -46,20 +44,20 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
-    console.error("Price webhook error:", error);
+
     return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
   }
 }
 
 async function handlePriceUpdated(data: any) {
   const { sku, productId, changes } = data;
-  
+
   // Check if price decreased
   if (changes.currentPrice < changes.previousPrice) {
     const discount = Math.round(
       ((changes.previousPrice - changes.currentPrice) / changes.previousPrice) * 100
     );
-    
+
     // Notify customers who have this in wishlist or cart
     await notifyPriceDropSubscribers(sku, productId, {
       previousPrice: changes.previousPrice,
@@ -67,32 +65,28 @@ async function handlePriceUpdated(data: any) {
       discountPercentage: discount,
     });
   }
-  
+
   // Update all caches
   await invalidatePriceCaches(productId);
 }
 
 async function handleSaleStarted(data: any) {
   const { sku, productId, changes } = data;
-  
-  console.log(`Sale started for ${sku}: ${changes.salePrice}`);
-  
+
   // Send sale notifications
   await notifySaleSubscribers(productId, {
     regularPrice: changes.previousPrice,
     salePrice: changes.salePrice!,
     endDate: changes.saleEndDate,
   });
-  
+
   // Update homepage banners if featured
   await updateSaleBanners(productId);
 }
 
 async function handleSaleEnded(data: any) {
   const { sku, productId } = data;
-  
-  console.log(`Sale ended for ${sku}`);
-  
+
   // Remove from sale sections
   // Update caches
   await invalidatePriceCaches(productId);
@@ -105,12 +99,12 @@ async function notifyPriceDropSubscribers(
 ) {
   // Query customers with price drop alerts
   // Send personalized emails
-  console.log(`Notifying price drop for ${sku}:`, priceInfo);
+
 }
 
 async function notifySaleSubscribers(productId: string, saleInfo: any) {
   // Send sale notifications to subscribers
-  console.log(`Notifying sale for product ${productId}:`, saleInfo);
+
 }
 
 async function updateSaleBanners(productId: string) {
@@ -132,6 +126,6 @@ async function invalidatePriceCaches(productId: string) {
       }),
     });
   } catch (error) {
-    console.error("Price cache invalidation failed:", error);
+
   }
 }

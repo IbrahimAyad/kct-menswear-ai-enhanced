@@ -264,7 +264,7 @@ export default function PromVideosPage() {
 
   const handleVideoChange = (index: number) => {
     // Analytics tracking
-    console.log(`Video changed to index: ${index}`);
+
   };
 
   const handleLike = (videoId: string) => {
@@ -289,8 +289,7 @@ export default function PromVideosPage() {
 
   const handleShare = async (video: any) => {
     // Analytics tracking
-    console.log(`Video shared: ${video.id}`);
-    
+
     // Custom OG tags could be set here for social sharing
     if (navigator.share) {
       try {
@@ -300,14 +299,14 @@ export default function PromVideosPage() {
           url: `${window.location.origin}/prom/videos?v=${video.id}`
         });
       } catch (error) {
-        console.log('Share cancelled or failed');
+
       }
     }
   };
 
   const handleProductClick = (product: Product) => {
     // Navigate to product page or open quick view
-    console.log(`Product clicked: ${product.name}`);
+
     // Could navigate to product page: router.push(`/products/${product.id}`);
   };
 

@@ -45,12 +45,12 @@ export class AgentMemory {
         },
         lastSaved: new Date().toISOString()
       };
-      
+
       if (typeof window !== 'undefined') {
         localStorage.setItem('kct-agent-memory', JSON.stringify(memoryData));
       }
     } catch (error) {
-      console.error('Failed to save agent memory:', error);
+
     }
   }
 
@@ -61,7 +61,7 @@ export class AgentMemory {
         const saved = localStorage.getItem('kct-agent-memory');
         if (saved) {
           const data = JSON.parse(saved);
-          
+
           // Restore agent memory
           Object.entries(data.agentMemory || {}).forEach(([role, memory]) => {
             this.memoryStore.set(role as AgentRole, {
@@ -79,7 +79,7 @@ export class AgentMemory {
         }
       }
     } catch (error) {
-      console.error('Failed to load agent memory:', error);
+
     }
   }
 
@@ -87,12 +87,12 @@ export class AgentMemory {
   storeTask(agentRole: AgentRole, task: AgentTask): void {
     const memory = this.getAgentMemory(agentRole);
     memory.tasks.push(task);
-    
+
     // Keep only last 100 tasks per agent
     if (memory.tasks.length > 100) {
       memory.tasks = memory.tasks.slice(-100);
     }
-    
+
     this.saveToStorage();
   }
 
@@ -100,12 +100,12 @@ export class AgentMemory {
   storeDecision(agentRole: AgentRole, decision: AgentDecision): void {
     const memory = this.getAgentMemory(agentRole);
     memory.decisions.push(decision);
-    
+
     // Keep only last 50 decisions per agent
     if (memory.decisions.length > 50) {
       memory.decisions = memory.decisions.slice(-50);
     }
-    
+
     this.saveToStorage();
   }
 
@@ -144,13 +144,13 @@ export class AgentMemory {
       const memory = this.getAgentMemory(agentRole);
       return memory.decisions.slice(-limit);
     }
-    
+
     // Get decisions from all agents
     const allDecisions: AgentDecision[] = [];
     this.memoryStore.forEach((memory) => {
       allDecisions.push(...memory.decisions);
     });
-    
+
     // Sort by timestamp and return most recent
     return allDecisions
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
@@ -222,7 +222,7 @@ export class AgentMemory {
       },
       exportedAt: new Date().toISOString()
     };
-    
+
     return JSON.stringify(data, null, 2);
   }
 
@@ -230,13 +230,13 @@ export class AgentMemory {
   importMemory(jsonData: string): void {
     try {
       const data = JSON.parse(jsonData);
-      
+
       // Clear existing memory
       this.memoryStore.clear();
       this.globalMemory.systemInsights.clear();
       this.globalMemory.customerPatterns.clear();
       this.globalMemory.performanceMetrics.clear();
-      
+
       // Import agent memory
       Object.entries(data.agentMemory || {}).forEach(([role, memory]: [string, any]) => {
         this.memoryStore.set(role as AgentRole, {
@@ -246,23 +246,23 @@ export class AgentMemory {
           lastSaved: new Date(memory.lastSaved)
         });
       });
-      
+
       // Import global memory
       Object.entries(data.globalMemory?.systemInsights || {}).forEach(([key, value]) => {
         this.globalMemory.systemInsights.set(key, value);
       });
-      
+
       Object.entries(data.globalMemory?.customerPatterns || {}).forEach(([key, value]) => {
         this.globalMemory.customerPatterns.set(key, value);
       });
-      
+
       Object.entries(data.globalMemory?.performanceMetrics || {}).forEach(([key, value]) => {
         this.globalMemory.performanceMetrics.set(key, value);
       });
-      
+
       this.saveToStorage();
     } catch (error) {
-      console.error('Failed to import memory:', error);
+
       throw error;
     }
   }

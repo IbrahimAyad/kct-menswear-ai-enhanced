@@ -55,7 +55,7 @@ export default function BundleGenerator() {
   const [error, setError] = useState<string | null>(null);
   const [savedImages, setSavedImages] = useState<Array<{url: string, config: OutfitConfig, timestamp: Date}>>([]);
   const [saveToStyleSwipe, setSaveToStyleSwipe] = useState(false);
-  
+
   const [config, setConfig] = useState<OutfitConfig>({
     tieColor: 'navy',
     tieStyle: 'classic',
@@ -68,41 +68,40 @@ export default function BundleGenerator() {
   const handleGenerate = async () => {
     setGenerating(true);
     setError(null);
-    
+
     try {
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
       if (saveToStyleSwipe) {
         headers['x-save-to-style-swipe'] = 'true';
       }
-      
+
       const response = await fetch('/api/bundle-generator', {
         method: 'POST',
         headers,
         body: JSON.stringify(config)
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Failed to generate outfit');
       }
-      
-      console.log('Generated image URL:', data.imageUrl);
+
       setImageUrl(data.imageUrl);
-      
+
       // Save to history
       setSavedImages(prev => [{
         url: data.imageUrl,
         config: {...config},
         timestamp: new Date()
       }, ...prev].slice(0, 10)); // Keep last 10
-      
+
       // Show R2 save status
       if (saveToStyleSwipe) {
         if (data.r2Url) {
           alert(`✅ Saved to Style Swipe Library!\n\nCategory: ${config.occasion}\nR2 URL: ${data.r2Url}`);
         } else {
-          console.log('Image generated but not saved to R2. Check console for setup instructions.');
+
         }
       }
     } catch (err) {
@@ -115,7 +114,7 @@ export default function BundleGenerator() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Bundle Outfit Generator</h2>
-      
+
       {/* Quick Presets */}
       <div className="mb-6">
         <p className="text-sm font-medium mb-3">Quick Presets:</p>
@@ -137,7 +136,7 @@ export default function BundleGenerator() {
           ))}
         </div>
       </div>
-      
+
       {/* Configuration Form */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="grid md:grid-cols-2 gap-4">
@@ -166,7 +165,7 @@ export default function BundleGenerator() {
               ))}
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">Tie Style</label>
             <div className="grid grid-cols-2 gap-2">
@@ -191,7 +190,7 @@ export default function BundleGenerator() {
               ))}
             </div>
           </div>
-          
+
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-2">Suit Color</label>
             <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
@@ -217,7 +216,7 @@ export default function BundleGenerator() {
               ))}
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">Shirt Color</label>
             <div className="grid grid-cols-3 gap-2">
@@ -243,7 +242,7 @@ export default function BundleGenerator() {
               ))}
             </div>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-2">Occasion</label>
             <div className="grid grid-cols-3 gap-2">
@@ -272,7 +271,7 @@ export default function BundleGenerator() {
               ))}
             </div>
           </div>
-          
+
           <div className="md:col-span-2">
             <label className="block text-sm font-medium mb-2">Season (Optional)</label>
             <div className="grid grid-cols-5 gap-2">
@@ -316,7 +315,7 @@ export default function BundleGenerator() {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-4 flex items-center justify-between">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -329,14 +328,14 @@ export default function BundleGenerator() {
               Save to Style Swipe Library
             </span>
           </label>
-          
+
           {saveToStyleSwipe && (
             <span className="text-xs text-blue-600">
               Will be saved to {config.occasion} category
             </span>
           )}
         </div>
-        
+
         <button
           onClick={handleGenerate}
           disabled={generating}
@@ -355,14 +354,14 @@ export default function BundleGenerator() {
           )}
         </button>
       </div>
-      
+
       {/* Error Display */}
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
           {error}
         </div>
       )}
-      
+
       {/* Generated Image */}
       {imageUrl && (
         <div className="bg-white rounded-lg shadow-md p-6">
@@ -403,7 +402,7 @@ export default function BundleGenerator() {
               alt="Generated outfit"
               className="w-full h-full object-contain rounded-lg"
               onError={(e) => {
-                console.error('Image failed to load:', imageUrl);
+
               }}
             />
           </div>
@@ -419,7 +418,7 @@ export default function BundleGenerator() {
           </div>
         </div>
       )}
-      
+
       {/* Generation History */}
       {savedImages.length > 0 && (
         <div className="mt-8">

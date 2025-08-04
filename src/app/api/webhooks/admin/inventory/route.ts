@@ -23,15 +23,13 @@ export async function POST(request: NextRequest) {
     // Verify webhook signature
     const headersList = await headers();
     const signature = headersList.get("x-admin-signature");
-    
+
     if (!signature || signature !== ADMIN_WEBHOOK_SECRET) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
     const payload: InventoryWebhookPayload = await request.json();
     const { event, data } = payload;
-
-    console.log(`Received inventory webhook: ${event} for SKU ${data.sku}`);
 
     switch (event) {
       case "inventory.adjusted":
@@ -47,7 +45,7 @@ export async function POST(request: NextRequest) {
         await handleInventorySync(data);
         break;
       default:
-        console.log(`Unhandled inventory event: ${event}`);
+
     }
 
     // Notify connected clients via SSE
@@ -55,25 +53,25 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
-    console.error("Inventory webhook error:", error);
+
     return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });
   }
 }
 
 async function handleInventoryAdjusted(data: any) {
   const { sku, changes } = data;
-  
+
   for (const change of changes) {
     // Check for low stock situations
     if (change.currentStock > 0 && change.currentStock <= 5) {
       await notifyLowStock(sku, change.size, change.currentStock);
     }
-    
+
     // Check for out of stock
     if (change.previousStock > 0 && change.currentStock === 0) {
       await notifyOutOfStock(sku, change.size);
     }
-    
+
     // Check for back in stock
     if (change.previousStock === 0 && change.currentStock > 0) {
       await notifyBackInStock(sku, change.size);
@@ -82,19 +80,19 @@ async function handleInventoryAdjusted(data: any) {
 }
 
 async function handleInventoryReserved(data: any) {
-  console.log(`Inventory reserved for SKU ${data.sku}`);
+
   // Update available stock in real-time
   // Prevent overselling
 }
 
 async function handleInventoryReleased(data: any) {
-  console.log(`Inventory released for SKU ${data.sku}`);
+
   // Return stock from cancelled/abandoned orders
   // Notify customers if item is back in stock
 }
 
 async function handleInventorySync(data: any) {
-  console.log(`Full inventory sync for SKU ${data.sku}`);
+
   // Complete inventory reconciliation
   // Update all stock levels
 }
@@ -114,7 +112,7 @@ async function notifyLowStock(sku: string, size: string, currentStock: number) {
 async function notifyOutOfStock(sku: string, size: string) {
   // Notify customers who have this item in cart
   await notifyCustomersWithItemInCart(sku, size, "out_of_stock");
-  
+
   // Send admin notification
   await sendAdminNotification({
     type: "out_of_stock",
@@ -150,17 +148,17 @@ async function sendAdminNotification(notification: any) {
   // Send email to admin
   // Send push notification
   // Log to monitoring system
-  console.log("Admin notification:", notification);
+
 }
 
 async function notifyCustomersWithItemInCart(sku: string, size: string, type: string) {
   // Query customers with this item in cart
   // Send email notifications
-  console.log(`Notifying customers about ${type} for ${sku} size ${size}`);
+
 }
 
 async function notifyBackInStockSubscribers(sku: string, size: string) {
   // Query back-in-stock subscribers
   // Send email notifications
-  console.log(`Notifying subscribers that ${sku} size ${size} is back in stock`);
+
 }

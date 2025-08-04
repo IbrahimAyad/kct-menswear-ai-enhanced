@@ -21,7 +21,7 @@ export function useWedding() {
       try {
         await loadWedding(code);
       } catch (error) {
-        console.error("Failed to load wedding:", error);
+
         throw error;
       }
     },
@@ -40,11 +40,11 @@ export function useWedding() {
       if (!currentMember) {
         throw new Error("No member selected");
       }
-      
+
       try {
         await updateMemberMeasurements(measurements);
       } catch (error) {
-        console.error("Failed to update measurements:", error);
+
         throw error;
       }
     },
@@ -67,7 +67,7 @@ export function useWedding() {
 
 export function useWeddingMember(memberId: string) {
   const { wedding, setCurrentMember } = useWeddingStore();
-  
+
   const member = wedding?.partyMembers.find((m) => m.id === memberId);
 
   useEffect(() => {

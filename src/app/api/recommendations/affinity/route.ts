@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(affinity);
   } catch (error) {
-    console.error("Affinity calculation error:", error);
+
     return NextResponse.json(
       { error: "Failed to calculate product affinity" },
       { status: 500 }

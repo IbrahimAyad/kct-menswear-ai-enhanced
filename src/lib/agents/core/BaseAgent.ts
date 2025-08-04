@@ -15,7 +15,7 @@ export abstract class BaseAgent extends EventEmitter {
     super();
     this.config = config;
     this.memory = AgentMemory.getInstance();
-    
+
     // Load tasks from memory
     this.loadTasksFromMemory();
   }
@@ -28,7 +28,7 @@ export abstract class BaseAgent extends EventEmitter {
   // Common agent lifecycle methods
   async start(): Promise<void> {
     if (this.isRunning) {
-      console.log(`${this.config.name} is already running`);
+
       return;
     }
 
@@ -50,7 +50,7 @@ export abstract class BaseAgent extends EventEmitter {
   async stop(): Promise<void> {
     this.isRunning = false;
     this.status = 'idle';
-    
+
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.intervalId = null;
@@ -132,7 +132,7 @@ export abstract class BaseAgent extends EventEmitter {
     } catch (error) {
       task.status = 'failed';
       task.error = error instanceof Error ? error.message : String(error);
-      
+
       this.emit('task:failed', { agent: this.config.role, task, error });
       this.updateSuccessRate(false);
 
@@ -148,7 +148,7 @@ export abstract class BaseAgent extends EventEmitter {
   protected loadTasksFromMemory(): void {
     const pendingTasks = this.memory.getTasks(this.config.role, 'pending');
     const inProgressTasks = this.memory.getTasks(this.config.role, 'in_progress');
-    
+
     // Add pending and in-progress tasks back to queue
     this.taskQueue = [...inProgressTasks, ...pendingTasks];
   }
@@ -183,7 +183,7 @@ export abstract class BaseAgent extends EventEmitter {
 
   protected areDependenciesMet(task: AgentTask): boolean {
     if (!task.dependencies || task.dependencies.length === 0) return true;
-    
+
     // Check if all dependencies are completed
     return task.dependencies.every(depId => {
       const depTask = this.taskQueue.find(t => t.id === depId);

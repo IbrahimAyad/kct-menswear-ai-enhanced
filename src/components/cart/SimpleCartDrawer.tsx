@@ -17,9 +17,10 @@ export function SimpleCartDrawer() {
       <button
         onClick={() => setIsOpen(true)}
         className="fixed top-4 right-4 bg-black text-white p-3 rounded-full shadow-lg z-50"
+        aria-label={`Open shopping cart with ${items.length} items`}
       >
-        <ShoppingCart size={20} />
-        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">
+        <ShoppingCart size={20} aria-hidden="true" />
+        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center" aria-hidden="true">
           {items.length}
         </span>
       </button>
@@ -27,12 +28,22 @@ export function SimpleCartDrawer() {
       {/* Cart Drawer */}
       {isOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden">
-          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 top-0 h-full w-96 bg-white shadow-xl">
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50" 
+            onClick={() => setIsOpen(false)}
+            role="button"
+            tabIndex={0}
+            aria-label="Close cart drawer"
+            onKeyDown={(e) => e.key === 'Enter' && setIsOpen(false)}
+          />
+          <div className="absolute right-0 top-0 h-full w-96 bg-white shadow-xl" role="dialog" aria-label="Shopping cart" aria-modal="true">
             <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-lg font-semibold">Shopping Cart ({items.length})</h2>
-              <button onClick={() => setIsOpen(false)}>
-                <X size={20} />
+              <button 
+                onClick={() => setIsOpen(false)}
+                aria-label="Close cart drawer"
+              >
+                <X size={20} aria-hidden="true" />
               </button>
             </div>
             
@@ -58,8 +69,9 @@ export function SimpleCartDrawer() {
                     <button
                       onClick={() => removeFromCart(item.productId, item.size)}
                       className="text-red-500 hover:text-red-700"
+                      aria-label={`Remove ${item.name || `Product ${item.productId}`} size ${item.size} from cart`}
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={16} aria-hidden="true" />
                     </button>
                   </div>
                 </div>
@@ -72,6 +84,7 @@ export function SimpleCartDrawer() {
                 <button
                   onClick={clearCart}
                   className="text-sm text-red-600 hover:text-red-700"
+                  aria-label="Clear all items from cart"
                 >
                   Clear All
                 </button>

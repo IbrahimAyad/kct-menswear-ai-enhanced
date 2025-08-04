@@ -97,15 +97,15 @@ export default function VoiceSearchPage() {
   const handleSearch = (query: string, type: 'text' | 'visual' | 'voice') => {
     setLastQuery(query);
     setSearchType(type);
-    
+
     // Simulate search results
     const filteredResults = mockSearchResults.filter(item => 
       item.name.toLowerCase().includes(query.toLowerCase()) ||
       item.category.toLowerCase().includes(query.toLowerCase())
     );
-    
+
     setSearchResults(filteredResults.length > 0 ? filteredResults : mockSearchResults);
-    
+
     // Track analytics
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'search', {
@@ -194,7 +194,7 @@ export default function VoiceSearchPage() {
                 Use voice, text, or visual search to find your perfect style
               </p>
             </div>
-            
+
             <SmartSearchBar 
               onSearch={handleSearch}
               placeholder="Search with voice, text, or images..."
@@ -208,7 +208,7 @@ export default function VoiceSearchPage() {
               <h3 className="text-xl font-semibold mb-2">Try These Voice Commands</h3>
               <p className="text-gray-600">Click any example to hear how natural voice search works</p>
             </div>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {voiceSearchExamples.map((example, index) => (
                 <button
@@ -243,131 +243,7 @@ export default function VoiceSearchPage() {
                 Experience our advanced voice recognition with real-time audio visualization
               </p>
             </div>
-            
+
             <VoiceSearch
-              onTranscription={(text) => console.log('Transcribed:', text)}
-              onSearchSubmit={(query) => handleSearch(query, 'voice')}
-              placeholder="Try saying: 'I need a navy blue suit for my wedding in size 42'"
-              className="max-w-2xl mx-auto"
-            />
-          </Card>
-
-          {/* Search Results */}
-          {searchResults.length > 0 && (
-            <Card className="p-8">
-              <div className="mb-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                  <h3 className="text-xl font-semibold">Search Results</h3>
-                  {searchType && (
-                    <Badge variant="outline" className="capitalize">
-                      {searchType} Search
-                    </Badge>
-                  )}
-                </div>
-                {lastQuery && (
-                  <p className="text-gray-600">
-                    Found {searchResults.length} results for: <span className="font-medium">"{lastQuery}"</span>
-                  </p>
-                )}
-              </div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {searchResults.map((product) => (
-                  <div
-                    key={product.id}
-                    className="group border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-                  >
-                    <div className="aspect-square bg-gray-100 relative overflow-hidden">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                    
-                    <div className="p-4">
-                      <div className="mb-2">
-                        <Badge variant="outline" className="text-xs mb-2">
-                          {product.category}
-                        </Badge>
-                        <h4 className="font-semibold text-gray-900">{product.name}</h4>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="text-lg font-bold text-gray-900">
-                          {formatPrice(product.price)}
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-gray-600">
-                          <span className="text-yellow-500">★</span>
-                          {product.rating} ({product.reviews})
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          )}
-
-          {/* Features Showcase */}
-          <div className="grid md:grid-cols-2 gap-8 mt-8">
-            <Card className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Mic className="w-5 h-5 text-blue-600" />
-                </div>
-                <h3 className="text-lg font-semibold">Advanced Voice Recognition</h3>
-              </div>
-              <ul className="space-y-2 text-gray-600">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  Powered by Replicate's Incredibly Fast Whisper
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  Real-time audio visualization
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  Multi-language support
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  Natural conversation understanding
-                </li>
-              </ul>
-            </Card>
-
-            <Card className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-purple-600" />
-                </div>
-                <h3 className="text-lg font-semibold">Smart Search Integration</h3>
-              </div>
-              <ul className="space-y-2 text-gray-600">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  Seamless text and voice combination
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  Context-aware suggestions
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  Visual search integration
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  Analytics and performance tracking
-                </li>
-              </ul>
-            </Card>
-          </div>
-        </div>
-      </div>
-    </PageTransition>
-  );
+              onTranscription={(text) => 
 }

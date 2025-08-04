@@ -197,7 +197,7 @@ export function WeddingStyleSwiper() {
     // Generate images in batches to avoid overwhelming the API
     for (let i = 0; i < weddingOutfits.length; i += 3) {
       const batch = weddingOutfits.slice(i, i + 3);
-      
+
       await Promise.all(
         batch.map(async (outfit) => {
           try {
@@ -221,7 +221,7 @@ export function WeddingStyleSwiper() {
               }
             }
           } catch (error) {
-            console.error(`Failed to generate image for outfit ${outfit.id}:`, error);
+
           }
         })
       );
@@ -258,7 +258,7 @@ export function WeddingStyleSwiper() {
     // Check if we've reached 6 RIGHT swipes
     const allSwipes = [...swipes, swipeData];
     const rightSwipes = allSwipes.filter(s => s.liked).length;
-    
+
     if (rightSwipes >= 6 || currentIndex + 1 >= weddingOutfits.length) {
       analyzePreferences(allSwipes);
     }
@@ -267,7 +267,7 @@ export function WeddingStyleSwiper() {
   const analyzePreferences = (allSwipes: SwipeData[]) => {
     const likedSwipes = allSwipes.filter(s => s.liked);
     const dislikedSwipes = allSwipes.filter(s => !s.liked);
-    
+
     // Analyze LIKED preferences
     const likedStyleCount = likedSwipes.reduce((acc, swipe) => {
       acc[swipe.style] = (acc[swipe.style] || 0) + 1;
@@ -316,23 +316,23 @@ export function WeddingStyleSwiper() {
       preferredStyle: Object.entries(likedStyleCount).sort((a, b) => b[1] - a[1])[0]?.[0] || 'classic',
       preferredColors: Object.entries(likedColorCount).sort((a, b) => b[1] - a[1])[0]?.[0] || 'neutral',
       preferredFormality: Object.entries(likedFormalityCount).sort((a, b) => b[1] - a[1])[0]?.[0] || 'Semi-Formal',
-      
+
       // Negative preferences (what to avoid)
       avoidedStyles: Object.entries(dislikedStyleCount).sort((a, b) => b[1] - a[1]).map(([style, count]) => ({ style, count })),
       avoidedColors: Object.entries(dislikedColorCount).sort((a, b) => b[1] - a[1]).map(([color, count]) => ({ color, count })),
       avoidedFormality: Object.entries(dislikedFormalityCount).sort((a, b) => b[1] - a[1]).map(([formality, count]) => ({ formality, count })),
-      
+
       // Venue and season insights
       preferredVenues: [...new Set(likedVenues)],
       avoidedVenues: [...new Set(dislikedVenues)],
       preferredSeasons: [...new Set(likedSeasons)],
       avoidedSeasons: [...new Set(dislikedSeasons)],
-      
+
       // Confidence metrics
       styleConfidence: getTotalLikes(likedStyleCount) / Math.max(1, getTotalLikes(likedStyleCount) + getTotalDislikes(dislikedStyleCount)),
       colorConfidence: getTotalLikes(likedColorCount) / Math.max(1, getTotalLikes(likedColorCount) + getTotalDislikes(dislikedColorCount)),
       formalityConfidence: getTotalLikes(likedFormalityCount) / Math.max(1, getTotalLikes(likedFormalityCount) + getTotalDislikes(dislikedFormalityCount)),
-      
+
       // Original data for analysis
       likedOutfits: likedSwipes.map(s => weddingOutfits.find(o => o.id === s.outfitId)).filter(Boolean),
       dislikedOutfits: dislikedSwipes.map(s => weddingOutfits.find(o => o.id === s.outfitId)).filter(Boolean),
@@ -348,11 +348,11 @@ export function WeddingStyleSwiper() {
     const threshold = 50;
     const voteThreshold = 100;
     const velocity = info.velocity.x;
-    
+
     if (Math.abs(info.offset.x) > threshold) {
       setExitX(info.offset.x > 0 ? 200 : -200);
       setExitY(info.offset.y);
-      
+
       if (info.offset.x > voteThreshold || velocity > 500) {
         handleSwipe('right');
       } else if (info.offset.x < -voteThreshold || velocity < -500) {
@@ -386,16 +386,16 @@ export function WeddingStyleSwiper() {
   if (showResults) {
     const preferences = JSON.parse(localStorage.getItem('weddingStylePreferences') || '{}');
     const likedCount = swipes.filter(s => s.liked).length;
-    
+
     return (
       <Card className="max-w-4xl mx-auto p-8">
         <div className="text-center space-y-6">
           <div className="w-20 h-20 bg-gold/20 rounded-full flex items-center justify-center mx-auto">
             <Sparkles className="w-10 h-10 text-gold" />
           </div>
-          
+
           <h2 className="text-3xl font-serif">Your Wedding Style Profile</h2>
-          
+
           {/* Preferences Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
             {/* What You Love */}
@@ -425,7 +425,7 @@ export function WeddingStyleSwiper() {
                 )}
               </div>
             </div>
-            
+
             {/* What You Avoid */}
             <div className="p-6 bg-red-50 rounded-lg border border-red-200">
               <h3 className="text-lg font-semibold text-red-800 mb-4 flex items-center gap-2">
@@ -457,7 +457,7 @@ export function WeddingStyleSwiper() {
               </div>
             </div>
           </div>
-          
+
           {/* Confidence Score */}
           <div className="bg-blue-50 rounded-lg p-4 mb-6">
             <h4 className="font-semibold text-blue-800 mb-2">Preference Confidence</h4>
@@ -476,12 +476,12 @@ export function WeddingStyleSwiper() {
               </div>
             </div>
           </div>
-          
+
           <p className="text-gray-600">
             You liked {likedCount} styles after reviewing {swipes.length} options ({Math.round(preferences.likeRatio * 100)}% approval rate). 
             We've analyzed both your likes and dislikes to create your perfect wedding look!
           </p>
-          
+
           <div className="flex gap-4 justify-center">
             <SatisfyingButton onClick={resetSwiper} variant="secondary">
               <RefreshCw className="w-4 h-4 mr-2" />
@@ -492,7 +492,7 @@ export function WeddingStyleSwiper() {
               <ChevronRight className="w-4 h-4 ml-2" />
             </SatisfyingButton>
           </div>
-          
+
           {/* Insight Summary */}
           <div className="mt-6 p-4 bg-gray-50 rounded-lg text-left max-w-2xl mx-auto">
             <h4 className="font-semibold mb-2 text-center">💡 Your Style Insights</h4>
@@ -634,10 +634,10 @@ export function WeddingStyleSwiper() {
                   alt={`${currentOutfit.suit} wedding outfit`}
                   className="w-full h-full object-cover"
                 />
-                
+
                 {/* Overlay with outfit details */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                
+
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                   <div className="flex items-start justify-between mb-4">
                     <div>
@@ -657,7 +657,7 @@ export function WeddingStyleSwiper() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 bg-white rounded-full" />
@@ -710,7 +710,7 @@ export function WeddingStyleSwiper() {
         >
           <XIcon className="w-10 h-10 text-red-500" />
         </motion.button>
-        
+
         <motion.button
           onClick={() => handleSwipe('right')}
           className="w-20 h-20 bg-white border-4 border-green-500 hover:bg-green-50 rounded-full flex items-center justify-center transition-all shadow-xl hover:scale-110 active:scale-95"

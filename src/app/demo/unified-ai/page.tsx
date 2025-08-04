@@ -33,7 +33,7 @@ export default function UnifiedAIPage() {
       await knowledgeBankAdapter.initialize();
       setStats(prev => ({ ...prev, knowledgeBankActive: true }));
     } catch (error) {
-      console.log('Knowledge Bank not connected - using fallback data');
+
     }
   };
 
@@ -47,7 +47,7 @@ export default function UnifiedAIPage() {
       });
       setRecommendations(recs);
     } catch (error) {
-      console.error('Failed to load recommendations:', error);
+
     } finally {
       setLoading(false);
     }
@@ -129,7 +129,7 @@ export default function UnifiedAIPage() {
             Test how the unified AI validates suit combinations using both visual analysis 
             and business rules.
           </p>
-          
+
           <div className="flex gap-4 mb-4">
             <div className="flex-1">
               <label className="block text-sm font-medium mb-1">Suit</label>
@@ -183,7 +183,7 @@ export default function UnifiedAIPage() {
                   Score: {validationResult.score}/100
                 </span>
               </div>
-              
+
               {validationResult.warnings && validationResult.warnings.length > 0 && (
                 <div className="mt-2">
                   <p className="text-sm font-medium text-yellow-700">Warnings:</p>
@@ -194,7 +194,7 @@ export default function UnifiedAIPage() {
                   </ul>
                 </div>
               )}
-              
+
               {validationResult.suggestions && validationResult.suggestions.length > 0 && (
                 <div className="mt-2">
                   <p className="text-sm font-medium text-blue-700">Suggestions:</p>
@@ -248,11 +248,11 @@ export default function UnifiedAIPage() {
                     <div className="w-16 h-20 bg-gray-100 rounded"></div>
                     <div className="w-16 h-20 bg-gray-200 rounded"></div>
                   </div>
-                  
+
                   <h3 className="font-medium mb-2">
                     {rec.suit.name} + {rec.shirt.name} + {rec.tie.name}
                   </h3>
-                  
+
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Unified Score:</span>
@@ -260,7 +260,7 @@ export default function UnifiedAIPage() {
                         {rec.scores.unified}/100
                       </span>
                     </div>
-                    
+
                     <div className="flex gap-2 text-xs">
                       <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded">
                         Visual: {rec.scores.fashionClip}
@@ -274,13 +274,13 @@ export default function UnifiedAIPage() {
                         </span>
                       )}
                     </div>
-                    
+
                     {rec.metadata.insights.length > 0 && (
                       <div className="text-xs text-gray-600 mt-2">
                         {rec.metadata.insights[0]}
                       </div>
                     )}
-                    
+
                     <div className="pt-2 border-t">
                       <div className="flex justify-between items-center">
                         <span className="text-gray-600">Bundle Price:</span>
@@ -311,7 +311,7 @@ export default function UnifiedAIPage() {
               combinations that actually convert.
             </p>
           </Card>
-          
+
           <Card className="p-6">
             <TrendingUp className="w-8 h-8 text-green-600 mb-3" />
             <h3 className="font-semibold mb-2">87% Accuracy Rate</h3>
@@ -320,7 +320,7 @@ export default function UnifiedAIPage() {
               accuracy than either system alone.
             </p>
           </Card>
-          
+
           <Card className="p-6">
             <Users className="w-8 h-8 text-purple-600 mb-3" />
             <h3 className="font-semibold mb-2">8 Style Profiles</h3>

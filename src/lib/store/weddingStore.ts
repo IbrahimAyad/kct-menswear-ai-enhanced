@@ -8,7 +8,7 @@ interface WeddingStore {
   currentMember: WeddingMember | null;
   isLoading: boolean;
   error: string | null;
-  
+
   loadWedding: (code: string) => Promise<void>;
   setCurrentMember: (memberId: string) => void;
   updateMemberMeasurements: (measurements: Measurements) => Promise<void>;
@@ -35,7 +35,7 @@ export const useWeddingStore = create<WeddingStore>()(
           set({ wedding });
         } catch (error) {
           set({ error: error instanceof Error ? error.message : "Failed to load wedding" });
-          console.error("Error loading wedding:", error);
+
         } finally {
           set({ isLoading: false });
         }
@@ -79,7 +79,7 @@ export const useWeddingStore = create<WeddingStore>()(
           }));
         } catch (error) {
           set({ error: "Failed to update measurements" });
-          console.error("Error updating measurements:", error);
+
           throw error;
         } finally {
           set({ isLoading: false });
@@ -93,7 +93,7 @@ export const useWeddingStore = create<WeddingStore>()(
         set({ isLoading: true, error: null });
         try {
           const newMember = await weddingClient.addWeddingMember(wedding.id, member);
-          
+
           set((state) => ({
             wedding: state.wedding
               ? {
@@ -104,7 +104,7 @@ export const useWeddingStore = create<WeddingStore>()(
           }));
         } catch (error) {
           set({ error: "Failed to add member" });
-          console.error("Error adding member:", error);
+
           throw error;
         } finally {
           set({ isLoading: false });
@@ -118,7 +118,7 @@ export const useWeddingStore = create<WeddingStore>()(
         set({ isLoading: true, error: null });
         try {
           await weddingClient.removeWeddingMember(wedding.id, memberId);
-          
+
           set((state) => ({
             wedding: state.wedding
               ? {
@@ -133,7 +133,7 @@ export const useWeddingStore = create<WeddingStore>()(
           }));
         } catch (error) {
           set({ error: "Failed to remove member" });
-          console.error("Error removing member:", error);
+
           throw error;
         } finally {
           set({ isLoading: false });

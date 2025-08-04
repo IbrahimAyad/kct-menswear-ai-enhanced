@@ -7,7 +7,6 @@ export async function POST(request: NextRequest) {
     const { events } = await request.json() as { events: AnalyticsEvent[] };
 
     // Log events for development
-    console.log(`Received ${events.length} analytics events`);
 
     // Process events
     for (const event of events) {
@@ -24,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, processed: events.length });
   } catch (error) {
-    console.error("Analytics error:", error);
+
     return NextResponse.json(
       { error: "Failed to process analytics events" },
       { status: 500 }
@@ -63,24 +62,24 @@ async function handlePurchaseEvent(event: AnalyticsEvent) {
   // Track conversion attribution
   // Update product popularity scores
   // Trigger post-purchase automation
-  console.log("Processing purchase event:", event);
+
 }
 
 async function handleAddToCartEvent(event: AnalyticsEvent) {
   // Track cart abandonment
   // Update product affinity scores
   // Trigger abandoned cart emails
-  console.log("Processing add to cart event:", event);
+
 }
 
 async function handleStyleQuizCompletion(event: AnalyticsEvent) {
   // Update user style profile
   // Generate personalized recommendations
   // Trigger welcome series
-  console.log("Processing style quiz completion:", event);
+
 }
 
 async function storeEvent(event: AnalyticsEvent) {
   // In production, store in database or data warehouse
-  console.log("Storing event:", event.name);
+
 }

@@ -184,7 +184,7 @@ class AnalyticsClient {
 
   identify(userId: string, traits?: UserProfile["traits"]) {
     this.userId = userId;
-    
+
     if (traits) {
       this.track("identify", {
         userId,
@@ -217,7 +217,7 @@ class AnalyticsClient {
         body: JSON.stringify({ events }),
       });
     } catch (error) {
-      console.error("Failed to send analytics events:", error);
+
       // Re-add events to queue
       this.queue.unshift(...events);
     }

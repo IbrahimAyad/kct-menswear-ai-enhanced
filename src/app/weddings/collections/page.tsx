@@ -210,11 +210,11 @@ export default function WeddingCollectionsPage() {
   const [selectedTheme, setSelectedTheme] = useState(null);
 
   const handleThemeSelect = (theme: any) => {
-    console.log('Selected theme:', theme);
+
   };
 
   const handleAddToCart = (products: Product[]) => {
-    console.log('Adding to cart:', products);
+
   };
 
   return (

@@ -39,14 +39,14 @@ export const useAuthStore = create<AuthStore>()(
           }
 
           const { customer, token } = await response.json();
-          
+
           // Store token in httpOnly cookie (handled by API)
           set({ 
             customer, 
             isAuthenticated: true 
           });
         } catch (error) {
-          console.error("Login failed:", error);
+
           throw error;
         } finally {
           set({ isLoading: false });
@@ -59,10 +59,10 @@ export const useAuthStore = create<AuthStore>()(
           customer: null, 
           isAuthenticated: false 
         });
-        
+
         // Clear cart data
         localStorage.removeItem("kct-cart-storage");
-        
+
         // In a real app, also clear httpOnly cookies via API call
       },
 
@@ -75,7 +75,7 @@ export const useAuthStore = create<AuthStore>()(
           const updatedCustomer = await adminClient.updateCustomer(customer.id, data);
           set({ customer: updatedCustomer });
         } catch (error) {
-          console.error("Profile update failed:", error);
+
           throw error;
         } finally {
           set({ isLoading: false });
@@ -92,7 +92,7 @@ export const useAuthStore = create<AuthStore>()(
             set({ customer: freshCustomer });
           }
         } catch (error) {
-          console.error("Failed to refresh customer:", error);
+
         }
       },
     }),

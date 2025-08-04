@@ -61,7 +61,7 @@ export function useCart() {
         // Reserve inventory
         const cartId = getCartId();
         const reserved = await reserveInventory(cartId, product.id, size, quantity);
-        
+
         if (!reserved) {
           notifyError("Out of Stock", `${product.name} in size ${size} is no longer available`);
           return;
@@ -69,7 +69,7 @@ export function useCart() {
 
         addItem(product, size, quantity);
         notifySuccess("Added to Cart", `${product.name} (${size}) added to your cart`);
-        
+
         // Track analytics
         trackAddToCart({
           productId: product.id,
@@ -86,7 +86,7 @@ export function useCart() {
         }
       } catch (error) {
         notifyError("Error", "Failed to add item to cart");
-        console.error("Add to cart error:", error);
+
       }
     },
     [customer?.id, addItem, syncCart, notifySuccess, notifyError, trackAddToCart, getCartId, reserveInventory]
@@ -96,7 +96,7 @@ export function useCart() {
     (productId: string, size: string) => {
       const product = products.find((p) => p.id === productId);
       const item = items.find((i) => i.productId === productId && i.size === size);
-      
+
       if (product && item) {
         // Track analytics before removing
         trackRemoveFromCart({
@@ -107,7 +107,7 @@ export function useCart() {
           size,
         });
       }
-      
+
       removeItem(productId, size);
 
       // Sync with server if logged in
@@ -139,7 +139,7 @@ export function useCart() {
         }
       } catch (error) {
         notifyError("Error", "Failed to update quantity");
-        console.error("Update quantity error:", error);
+
       }
     },
     [customer?.id, products, updateQuantity, syncCart, notifyWarning, notifyError]
@@ -150,16 +150,16 @@ export function useCart() {
       // Release all inventory reservations
       const cartId = getCartId();
       await releaseCartReservations(cartId);
-      
+
       // Clear the cart
       clearCart();
-      
+
       // Clear guest cart ID if guest user
       if (!customer?.id) {
         localStorage.removeItem('guest-cart-id');
       }
     } catch (error) {
-      console.error("Clear cart error:", error);
+
     }
   }, [clearCart, getCartId, releaseCartReservations, customer?.id]);
 

@@ -29,19 +29,19 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
   const [addedToCart, setAddedToCart] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showZoom, setShowZoom] = useState(false);
-  
+
   // Product details
   const productName = `${color.charAt(0).toUpperCase() + color.slice(1).replace(/([A-Z])/g, ' $1')} Suit`;
   const price = selectedOption === 'twoPiece' ? 179.99 : 199.99;
   const stripePriceId = selectedOption === 'twoPiece' ? suitData.twoPiece : suitData.threePiece;
-  
+
   // Get suit images
   const suitImageData = getSuitImages(color);
-  
+
   // Filter images based on selected option
   const displayImages = useMemo(() => {
     const allImages = suitImageData.gallery;
-    
+
     // If we have specific 2-piece/3-piece images, filter them
     if (selectedOption === 'twoPiece') {
       // Show images without vest/3-piece references
@@ -57,13 +57,13 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
         img.includes('three') || 
         img.includes('3p')
       );
-      
+
       // If we have 3-piece specific images, show them first
       if (threePieceImages.length > 0) {
         return [...threePieceImages, ...allImages.filter(img => !threePieceImages.includes(img))];
       }
     }
-    
+
     return allImages;
   }, [selectedOption, suitImageData.gallery]);
 
@@ -83,13 +83,13 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
     regular: availableSizes.suits.filter(size => size.endsWith('R')),
     long: availableSizes.suits.filter(size => size.endsWith('L')),
   };
-  
+
   const handleAddToCart = () => {
     if (!selectedSize) {
       setShowSizeError(true);
       return;
     }
-    
+
     const product = {
       id: suitData.productId,
       name: `${productName} - ${selectedOption === 'twoPiece' ? '2 Piece' : '3 Piece'}`,
@@ -109,7 +109,7 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
         suitColor: color,
       }
     };
-    
+
     addToCart(product as any, selectedSize, 1);
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 3000);
@@ -135,7 +135,7 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
     <div className="min-h-screen bg-white">
       {/* Preload critical images */}
       <PreloadImages images={displayImages.slice(0, 3)} />
-      
+
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 py-4">
         <nav className="text-sm">
@@ -148,7 +148,7 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
           </ol>
         </nav>
       </div>
-      
+
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image Gallery */}
@@ -162,174 +162,7 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
                 fill
                 priority
                 className="w-full h-full"
-                onError={() => console.error('Image failed to load')}
-              />
-              
-              {/* Zoom button */}
-              <button
-                onClick={() => setShowZoom(true)}
-                className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <ZoomIn size={20} />
-              </button>
-              
-              {/* Navigation Arrows */}
-              <button
-                onClick={() => navigateImage('prev')}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white p-2 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                aria-label="Previous image"
-              >
-                <ChevronLeft size={20} />
-              </button>
-              <button
-                onClick={() => navigateImage('next')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm hover:bg-white p-2 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
-                aria-label="Next image"
-              >
-                <ChevronRight size={20} />
-              </button>
-              
-              {/* Image counter */}
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
-                {currentImageIndex + 1} / {displayImages.length}
-              </div>
-            </div>
-            
-            {/* Thumbnail Gallery */}
-            <div className="grid grid-cols-4 gap-2">
-              {displayImages.map((image, index) => (
-                <button
-                  key={`${selectedOption}-${index}`}
-                  onClick={() => setCurrentImageIndex(index)}
-                  className={`aspect-[3/4] bg-gray-100 rounded-md overflow-hidden border-2 transition-all ${
-                    currentImageIndex === index 
-                      ? 'border-black ring-2 ring-black ring-offset-2' 
-                      : 'border-transparent hover:border-gray-300'
-                  }`}
-                  aria-label={`View image ${index + 1}`}
-                >
-                  <OptimizedImage
-                    src={image || '/placeholder-suit.jpg'}
-                    alt={`${productName} - Thumbnail ${index + 1}`}
-                    preset="productThumb"
-                    lazy
-                    className="w-full h-full"
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          {/* Product Details */}
-          <div className="space-y-6">
-            {/* Title and Price */}
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{productName}</h1>
-              <div className="flex items-baseline space-x-2">
-                <span className="text-3xl font-semibold">${price}</span>
-                <span className="text-sm text-gray-500">USD</span>
-              </div>
-              
-              {/* Rating */}
-              <div className="flex items-center mt-2">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <span className="ml-2 text-sm text-gray-600">(127 reviews)</span>
-              </div>
-            </div>
-            
-            {/* Trust Badges */}
-            <div className="grid grid-cols-2 gap-3">
-              {trustBadges.map((badge, index) => (
-                <div key={index} className="flex items-center space-x-2 text-sm">
-                  <badge.icon className="h-4 w-4 text-gray-400" />
-                  <span className="text-gray-600">{badge.text}</span>
-                </div>
-              ))}
-            </div>
-            
-            {/* Style Options with Image Switching */}
-            <div>
-              <h3 className="text-sm font-medium text-gray-900 mb-3">Style</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  onClick={() => setSelectedOption('twoPiece')}
-                  className={`relative border-2 rounded-lg p-4 text-left transition-all ${
-                    selectedOption === 'twoPiece' 
-                      ? 'border-black bg-gray-50 ring-2 ring-black ring-offset-2' 
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="font-medium">2-Piece Suit</div>
-                  <div className="text-sm text-gray-500">Jacket & Pants</div>
-                  <div className="font-semibold mt-1">$179.99</div>
-                  {selectedOption === 'twoPiece' && (
-                    <div className="absolute top-2 right-2">
-                      <Check className="h-5 w-5" />
-                    </div>
-                  )}
-                </button>
-                
-                <button
-                  onClick={() => setSelectedOption('threePiece')}
-                  className={`relative border-2 rounded-lg p-4 text-left transition-all ${
-                    selectedOption === 'threePiece' 
-                      ? 'border-black bg-gray-50 ring-2 ring-black ring-offset-2' 
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="font-medium">3-Piece Suit</div>
-                  <div className="text-sm text-gray-500">Jacket, Vest & Pants</div>
-                  <div className="font-semibold mt-1">$199.99</div>
-                  {selectedOption === 'threePiece' && (
-                    <div className="absolute top-2 right-2">
-                      <Check className="h-5 w-5" />
-                    </div>
-                  )}
-                </button>
-              </div>
-            </div>
-            
-            {/* Size Selection - Desktop */}
-            <div className="hidden md:block">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                <button
-                  onClick={() => setShowSizeGuide(true)}
-                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center"
-                >
-                  <Ruler className="h-4 w-4 mr-1" />
-                  Size Guide
-                </button>
-              </div>
-              
-              {/* AI Size Recommendation */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-                <div className="flex items-start">
-                  <Info className="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-medium text-blue-900">Size Recommendation</p>
-                    <p className="text-blue-700">Based on your previous orders, we recommend size 40R</p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Size Grid */}
-              <div className="space-y-3">
-                {Object.entries(sizesByType).map(([type, sizes]) => (
-                  <div key={type}>
-                    <div className="text-xs font-medium text-gray-500 uppercase mb-2">
-                      {type} ({type === 'short' ? '5\'4" - 5\'7"' : type === 'regular' ? '5\'8" - 6\'1"' : '6\'2" +'})
-                    </div>
-                    <div className="grid grid-cols-6 gap-2">
-                      {sizes.map((size) => (
-                        <button
-                          key={size}
-                          onClick={() => {
-                            setSelectedSize(size);
+                onError={() => 
                             setShowSizeError(false);
                           }}
                           className={`py-2 px-3 text-sm font-medium rounded-md transition-all ${
@@ -345,12 +178,12 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
                   </div>
                 ))}
               </div>
-              
+
               {showSizeError && (
                 <p className="text-red-600 text-sm mt-2">Please select a size</p>
               )}
             </div>
-            
+
             {/* Mobile Size/Style Selection */}
             <div className="md:hidden">
               <MobileSuitSelector
@@ -360,7 +193,7 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
                 selectedStyle={selectedOption}
               />
             </div>
-            
+
             {/* Add to Cart & Checkout */}
             <div className="space-y-3">
               <button
@@ -380,7 +213,7 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
                   'Add to Cart'
                 )}
               </button>
-              
+
               {/* Quick Checkout Option */}
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -390,10 +223,10 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
                   <span className="px-2 bg-white text-gray-500">or</span>
                 </div>
               </div>
-              
+
               <CheckoutButton />
             </div>
-            
+
             {/* Urgency Indicators */}
             <div className="space-y-2">
               <div className="flex items-center text-sm text-green-600">
@@ -407,7 +240,7 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
                 </button>
               </div>
             </div>
-            
+
             {/* Product Details Accordion */}
             <div className="border-t pt-6 space-y-4">
               <details className="group">
@@ -430,7 +263,7 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
                   )}
                 </div>
               </details>
-              
+
               <details className="group">
                 <summary className="flex justify-between items-center cursor-pointer list-none">
                   <h3 className="font-medium">Shipping & Returns</h3>
@@ -444,7 +277,7 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
                   <p>• Free exchanges on sizing</p>
                 </div>
               </details>
-              
+
               <details className="group">
                 <summary className="flex justify-between items-center cursor-pointer list-none">
                   <h3 className="font-medium">Care Instructions</h3>
@@ -461,12 +294,12 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
           </div>
         </div>
       </div>
-      
+
       {/* Size Guide Modal */}
       {showSizeGuide && (
         <SizeGuideModal onClose={() => setShowSizeGuide(false)} />
       )}
-      
+
       {/* Zoom Modal */}
       {showZoom && (
         <div 

@@ -1,7 +1,7 @@
 import { Product, Customer, CartItem, Wedding, WeddingMember, ProductCategory } from "@/lib/types";
 
 const API_URL = process.env.NEXT_PUBLIC_ADMIN_API_URL || "/api";
-const API_KEY = process.env.NEXT_PUBLIC_ADMIN_API_KEY || "452a711bbfd449a28a98756b69e14560";
+const API_KEY = process.env.NEXT_PUBLIC_ADMIN_API_KEY || "";
 
 class AdminClient {
   private headers: HeadersInit;
@@ -26,8 +26,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching products:", error);
-      console.log("🔄 Using mock data - Make sure the macOS Admin Panel is running");
+
       // Return mock data as fallback
       return this.getMockProducts();
     }
@@ -46,7 +45,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching product:", error);
+
       return null;
     }
   }
@@ -64,7 +63,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching inventory:", error);
+
       return {};
     }
   }
@@ -82,7 +81,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching products by category:", error);
+
       return this.getMockProducts().filter(p => p.category === category);
     }
   }
@@ -100,7 +99,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error searching products:", error);
+
       return [];
     }
   }
@@ -117,7 +116,7 @@ class AdminClient {
         throw new Error(`Failed to update cart: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Error updating cart:", error);
+
       throw error;
     }
   }
@@ -135,7 +134,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching cart:", error);
+
       return [];
     }
   }
@@ -154,7 +153,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error creating order:", error);
+
       throw error;
     }
   }
@@ -171,7 +170,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching customer:", error);
+
       return null;
     }
   }
@@ -190,7 +189,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error updating customer:", error);
+
       throw error;
     }
   }
@@ -207,7 +206,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching wedding:", error);
+
       return null;
     }
   }
@@ -226,7 +225,7 @@ class AdminClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error creating wedding:", error);
+
       throw error;
     }
   }
@@ -243,21 +242,21 @@ class AdminClient {
         throw new Error(`Failed to update wedding member: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Error updating wedding member:", error);
+
       throw error;
     }
   }
 
   subscribeToInventoryUpdates(sku: string, callback: (stock: { [size: string]: number }) => void): () => void {
     const eventSource = new EventSource(`${API_URL}/inventory/${sku}/subscribe?apiKey=${API_KEY}`);
-    
+
     eventSource.onmessage = (event) => {
       const stock = JSON.parse(event.data);
       callback(stock);
     };
 
     eventSource.onerror = (error) => {
-      console.error("SSE error:", error);
+
       eventSource.close();
     };
 

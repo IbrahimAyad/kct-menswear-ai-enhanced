@@ -112,7 +112,7 @@ export function ShopPageExample({
   }, [products, filters, selectedCategory]);
 
   const handleQuickView = (product: EnhancedProduct) => {
-    console.log('Quick view:', product);
+
     // Implement quick view modal logic here
   };
 

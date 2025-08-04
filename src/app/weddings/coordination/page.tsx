@@ -69,12 +69,12 @@ export default function WeddingCoordinationPage() {
   const [wedding, setWedding] = useState<Wedding>(mockWedding);
 
   const handleSendInvitations = (memberIds: string[]) => {
-    console.log('Sending invitations to:', memberIds);
+
     // Implement invitation sending logic
   };
 
   const handleUpdateMeasurements = (memberId: string, measurements: Measurements) => {
-    console.log('Updating measurements for:', memberId, measurements);
+
     // Update the wedding state with new measurements
     setWedding(prev => ({
       ...prev,
@@ -85,12 +85,12 @@ export default function WeddingCoordinationPage() {
   };
 
   const handleCreateGroupOrder = (memberIds: string[], items: any[]) => {
-    console.log('Creating group order for:', memberIds, items);
+
     // Implement group order creation
   };
 
   const handleInitiatePaymentSplit = (amount: number, memberIds: string[]) => {
-    console.log('Initiating payment split:', amount, 'among:', memberIds);
+
     // Implement payment splitting logic
   };
 

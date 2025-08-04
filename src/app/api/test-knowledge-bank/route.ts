@@ -27,7 +27,7 @@ export async function GET() {
 
   try {
     // Test 1: Color Relationships (with fallback)
-    console.log('Testing color relationships...');
+
     const navyColors = await knowledgeBankAdapter.getColorRelationships('navy');
     results.tests.colorRelationships = {
       success: !!navyColors,
@@ -36,7 +36,7 @@ export async function GET() {
     };
 
     // Test 2: Validate Combination
-    console.log('Testing combination validation...');
+
     const validation = await knowledgeBankAdapter.validateCombination('navy', 'white', 'burgundy');
     results.tests.validation = {
       success: true,
@@ -44,7 +44,7 @@ export async function GET() {
     };
 
     // Test 3: Recommendations
-    console.log('Testing recommendations...');
+
     const recommendations = await knowledgeBankAdapter.getRecommendations({
       occasion: 'business',
       season: 'fall'
@@ -56,7 +56,7 @@ export async function GET() {
     };
 
     // Test 4: Trending Combinations
-    console.log('Testing trending combinations...');
+
     const trending = await knowledgeBankAdapter.getTrendingCombinations(5);
     results.tests.trending = {
       success: trending.length > 0,
@@ -65,7 +65,7 @@ export async function GET() {
     };
 
     // Test 5: Style Profile
-    console.log('Testing style profile...');
+
     const profile = await knowledgeBankAdapter.getStyleProfile('classic_conservative');
     results.tests.styleProfile = {
       success: !!profile,
@@ -76,7 +76,7 @@ export async function GET() {
     // Overall status
     const allTests = Object.values(results.tests);
     const successCount = allTests.filter((test: any) => test.success).length;
-    
+
     results.summary = {
       totalTests: allTests.length,
       passed: successCount,
@@ -92,7 +92,7 @@ export async function GET() {
       }
     });
   } catch (error) {
-    console.error('Test error:', error);
+
     return NextResponse.json({
       error: 'Test failed',
       message: error instanceof Error ? error.message : 'Unknown error',

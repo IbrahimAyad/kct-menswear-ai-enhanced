@@ -10,7 +10,7 @@ interface ProductStore {
   selectedCategory: ProductCategory | null;
   searchQuery: string;
   inventorySubscriptions: Map<string, () => void>;
-  
+
   fetchProducts: () => Promise<void>;
   fetchProductsByCategory: (category: ProductCategory) => Promise<void>;
   searchProducts: (query: string) => Promise<void>;
@@ -41,7 +41,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       });
     } catch (error) {
       set({ error: "Failed to fetch products" });
-      console.error("Error fetching products:", error);
+
     } finally {
       set({ isLoading: false });
     }
@@ -54,7 +54,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       set({ products });
     } catch (error) {
       set({ error: "Failed to fetch products by category" });
-      console.error("Error fetching products by category:", error);
+
     } finally {
       set({ isLoading: false });
     }
@@ -72,7 +72,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
       set({ products });
     } catch (error) {
       set({ error: "Failed to search products" });
-      console.error("Error searching products:", error);
+
     } finally {
       set({ isLoading: false });
     }
@@ -101,7 +101,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
 
   subscribeToInventory: (sku: string) => {
     const { inventorySubscriptions } = get();
-    
+
     // Don't subscribe if already subscribed
     if (inventorySubscriptions.has(sku)) return;
 
@@ -120,7 +120,7 @@ export const useProductStore = create<ProductStore>((set, get) => ({
   unsubscribeFromInventory: (sku: string) => {
     const { inventorySubscriptions } = get();
     const unsubscribe = inventorySubscriptions.get(sku);
-    
+
     if (unsubscribe) {
       unsubscribe();
       set((state) => {

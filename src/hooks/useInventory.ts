@@ -60,7 +60,7 @@ export function useInventory(productId: string) {
 
       setInventory(inventoryWithAvailable);
     } catch (err) {
-      console.error('Error fetching inventory:', err);
+
       setError(err instanceof Error ? err.message : 'Failed to fetch inventory');
     } finally {
       setLoading(false);
@@ -113,7 +113,7 @@ export function useCartInventory() {
       if (error) throw error;
       return data || false;
     } catch (err) {
-      console.error('Error reserving inventory:', err);
+
       return false;
     }
   };
@@ -126,7 +126,7 @@ export function useCartInventory() {
 
       if (error) throw error;
     } catch (err) {
-      console.error('Error releasing cart reservations:', err);
+
     }
   };
 

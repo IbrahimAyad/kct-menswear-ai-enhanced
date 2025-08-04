@@ -26,7 +26,7 @@ class WeddingClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching wedding by code:", error);
+
       throw error;
     }
   }
@@ -50,7 +50,7 @@ class WeddingClient {
         throw new Error(`Failed to update measurements: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Error updating member measurements:", error);
+
       throw error;
     }
   }
@@ -69,7 +69,7 @@ class WeddingClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error adding wedding member:", error);
+
       throw error;
     }
   }
@@ -88,7 +88,7 @@ class WeddingClient {
         throw new Error(`Failed to remove wedding member: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Error removing wedding member:", error);
+
       throw error;
     }
   }
@@ -105,7 +105,7 @@ class WeddingClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching wedding outfits:", error);
+
       return [];
     }
   }
@@ -124,7 +124,7 @@ class WeddingClient {
 
       return await response.json();
     } catch (error) {
-      console.error("Error creating wedding order:", error);
+
       throw error;
     }
   }
@@ -141,7 +141,7 @@ class WeddingClient {
         throw new Error(`Failed to send invitations: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Error sending invitations:", error);
+
       throw error;
     }
   }

@@ -10,7 +10,7 @@ try {
     });
   }
 } catch (error) {
-  console.log('Replicate initialization skipped - no API token configured');
+
 }
 
 interface WeddingVisualizationParams {
@@ -112,16 +112,6 @@ export async function POST(request: NextRequest) {
     const imageUrls = Array.isArray(output) ? output : [output];
 
     // Log for analytics
-    console.log('Wedding visualization generated:', {
-      venue,
-      suitColor,
-      partySize,
-      timeOfDay,
-      season,
-      accessories,
-      imageCount: imageUrls.length,
-      timestamp: new Date().toISOString()
-    });
 
     return NextResponse.json({
       success: true,
@@ -139,8 +129,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error generating wedding visualization:', error);
-    
+
     return NextResponse.json(
       { 
         error: 'Failed to generate wedding visualization',
@@ -156,7 +145,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get('userId');
-    
+
     // In a real implementation, you'd fetch from database
     // For now, return empty array
     return NextResponse.json({
@@ -166,8 +155,7 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching generation history:', error);
-    
+
     return NextResponse.json(
       { error: 'Failed to fetch generation history' },
       { status: 500 }

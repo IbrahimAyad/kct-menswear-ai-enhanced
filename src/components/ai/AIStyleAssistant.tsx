@@ -52,7 +52,7 @@ export function AIStyleAssistant({ customer, onProductRecommend, onStyleProfileU
   const [showImageUpload, setShowImageUpload] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [isExpanded, setIsExpanded] = useState(true);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -91,12 +91,12 @@ export function AIStyleAssistant({ customer, onProductRecommend, onStyleProfileU
 
   const generateAIResponse = (userInput: string, images: string[]): Message => {
     const lowerInput = userInput.toLowerCase();
-    
+
     // Enhanced image analysis with Fashion CLIP
     if (images.length > 0) {
       // In a real implementation, this would call Fashion CLIP API
       analyzeFashionImage(images[0]);
-      
+
       return {
         id: Date.now().toString(),
         role: 'assistant',
@@ -222,12 +222,12 @@ export function AIStyleAssistant({ customer, onProductRecommend, onStyleProfileU
 
       if (fashionResponse.ok) {
         const result = await fashionResponse.json();
-        console.log('Fashion CLIP analysis:', result);
+
         // Use this result to enhance recommendations
         return result;
       }
     } catch (error) {
-      console.error('Fashion CLIP analysis failed:', error);
+
     }
     return null;
   };
@@ -289,7 +289,7 @@ export function AIStyleAssistant({ customer, onProductRecommend, onStyleProfileU
                         : 'bg-gray-100 text-gray-800'
                     }`}>
                       <p className="text-sm">{message.content}</p>
-                      
+
                       {message.images && message.images.length > 0 && (
                         <div className="mt-2 flex gap-2">
                           {message.images.map((img, i) => (
@@ -410,7 +410,7 @@ export function AIStyleAssistant({ customer, onProductRecommend, onStyleProfileU
                 >
                   <Camera className="w-5 h-5 text-gray-600" />
                 </button>
-                
+
                 <input
                   type="text"
                   value={input}
@@ -419,7 +419,7 @@ export function AIStyleAssistant({ customer, onProductRecommend, onStyleProfileU
                   placeholder="Ask me anything about style..."
                   className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:border-gold"
                 />
-                
+
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}

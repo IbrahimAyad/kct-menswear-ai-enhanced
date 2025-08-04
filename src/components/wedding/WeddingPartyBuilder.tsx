@@ -127,7 +127,7 @@ export function WeddingPartyBuilder({
           url: window.location.href
         });
       } catch (error) {
-        console.log('Share cancelled');
+
       }
     } else {
       // Fallback: copy to clipboard
@@ -238,7 +238,7 @@ export function WeddingPartyBuilder({
                           </button>
                         </div>
                       ))}
-                      
+
                       {member.products.length === 0 && (
                         <p className="text-gray-500 text-sm italic">
                           Drag products here to add to {member.name}'s look
@@ -253,7 +253,7 @@ export function WeddingPartyBuilder({
             {/* Product Library */}
             <div className="w-80 bg-gray-50 p-6 border-l overflow-y-auto">
               <h3 className="text-lg font-semibold mb-4">Available Products</h3>
-              
+
               <div className="space-y-3">
                 {availableProducts.map((product) => (
                   <div
@@ -291,14 +291,14 @@ export function WeddingPartyBuilder({
                   <Users className="w-5 h-5 text-gray-600" />
                   <span className="font-medium">{partyMembers.length} Members</span>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <Percent className="w-5 h-5 text-green-600" />
                   <span className="font-medium text-green-600">
                     {getGroupDiscount()}% Group Discount
                   </span>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <DollarSign className="w-5 h-5 text-gray-600" />
                   <div>

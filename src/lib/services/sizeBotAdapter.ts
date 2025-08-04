@@ -40,12 +40,12 @@ interface SizeRecommendation {
 export class SizeBotAdapter {
   private apiUrl: string;
   private apiKey: string;
-  
+
   constructor(apiUrl: string = SIZE_BOT_API, apiKey: string = SIZE_BOT_KEY) {
     this.apiUrl = apiUrl;
     this.apiKey = apiKey;
   }
-  
+
   // Main recommendation method with API fallback
   async getSizeRecommendation(
     height: number,
@@ -67,7 +67,7 @@ export class SizeBotAdapter {
           fitPreference
         })
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         if (data.success && data.recommendation) {
@@ -80,13 +80,13 @@ export class SizeBotAdapter {
         }
       }
     } catch (error) {
-      console.warn('Size Bot API unavailable, using offline calculation:', error);
+
     }
-    
+
     // Fallback to offline calculation
     return this.calculateOffline(height, weight, fitPreference, isFirstTimeBuyer);
   }
-  
+
   // Offline size calculation using static data
   private calculateOffline(
     height: number,
@@ -95,22 +95,22 @@ export class SizeBotAdapter {
     isFirstTimeBuyer: boolean
   ): SizeRecommendation {
     const bmi = (weight / (height * height)) * 703;
-    
+
     // Determine body type
     const bodyType = determineBodyType(height, weight);
-    
+
     // Calculate size from matrices
     const sizeResult = calculateSizeFromMeasurements(height, weight, bodyType, fitPreference);
-    
+
     // Get confidence level
     const confidenceLevel = this.getConfidenceLevel(sizeResult.confidence);
-    
+
     // Get alterations
     const alterations = getAlterationRecommendations(bodyType);
     const alterationNames = alterations
       .filter(alt => alt.frequency > 0.5)
       .map(alt => alt.type);
-    
+
     // Get return risk
     const riskData = getReturnRisk(bodyType, sizeResult.confidence, isFirstTimeBuyer);
     const returnRisk = {
@@ -118,13 +118,13 @@ export class SizeBotAdapter {
       percentage: riskData.riskPercentage,
       recommendations: riskData.recommendations
     };
-    
+
     // Get alteration costs
     const alterationCosts = getCommonAlterations(bodyType);
-    
+
     // Build rationale
     const rationale = this.buildRationale(bodyType, sizeResult.size, fitPreference);
-    
+
     return {
       size: sizeResult.size,
       confidence: sizeResult.confidence,
@@ -143,7 +143,7 @@ export class SizeBotAdapter {
       alterationCosts
     };
   }
-  
+
   // Enhance API recommendation with additional data
   private enhanceRecommendation(
     recommendation: any,
@@ -151,7 +151,7 @@ export class SizeBotAdapter {
   ): SizeRecommendation {
     const bodyType = recommendation.bodyType || 'regular';
     const confidence = recommendation.confidence || 0.85;
-    
+
     // Add return risk analysis
     const riskData = getReturnRisk(bodyType, confidence, isFirstTimeBuyer);
     const returnRisk = {
@@ -159,10 +159,10 @@ export class SizeBotAdapter {
       percentage: riskData.riskPercentage,
       recommendations: riskData.recommendations
     };
-    
+
     // Add alteration costs
     const alterationCosts = getCommonAlterations(bodyType);
-    
+
     return {
       ...recommendation,
       returnRisk,
@@ -170,14 +170,14 @@ export class SizeBotAdapter {
       confidenceLevel: this.getConfidenceLevel(confidence)
     };
   }
-  
+
   // Get body type data
   async getBodyTypeInfo(bodyType: string) {
     const data = bodyType in BODY_TYPES 
       ? BODY_TYPES[bodyType as keyof typeof BODY_TYPES]
       : null;
     if (!data) return null;
-    
+
     return {
       ...data,
       returnAnalysis: bodyType in RETURN_ANALYSIS.body_type_patterns
@@ -185,7 +185,7 @@ export class SizeBotAdapter {
         : undefined
     };
   }
-  
+
   // Get all body types for UI
   async getAllBodyTypes() {
     return Object.entries(BODY_TYPES).map(([key, data]) => ({
@@ -198,7 +198,7 @@ export class SizeBotAdapter {
         : 0.09
     }));
   }
-  
+
   // Validate size recommendation
   async validateSize(
     size: string,
@@ -213,17 +213,17 @@ export class SizeBotAdapter {
   }> {
     const recommended = await this.getSizeRecommendation(height, weight, 'regular');
     const isValid = recommended.size === size;
-    
+
     const concerns: string[] = [];
     const suggestions: string[] = [];
-    
+
     if (!isValid) {
       concerns.push(`Recommended size is ${recommended.size}, not ${size}`);
-      
+
       // Check if size is too large or too small
       const recommendedNumber = parseInt(recommended.size);
       const selectedNumber = parseInt(size);
-      
+
       if (selectedNumber > recommendedNumber) {
         concerns.push('Selected size may be too large');
         suggestions.push('Consider the recommended size for better fit');
@@ -232,16 +232,16 @@ export class SizeBotAdapter {
         suggestions.push('Size up for comfort, especially in shoulders');
       }
     }
-    
+
     // Add body type specific concerns
     if (bodyType === 'athletic') {
       suggestions.push('Athletic builds typically benefit from waist suppression alterations');
     }
-    
+
     if (bodyType === 'broad') {
       suggestions.push('Broad builds may need shoulder adjustments');
     }
-    
+
     return {
       isValid,
       confidence: isValid ? recommended.confidence : recommended.confidence * 0.7,
@@ -249,14 +249,14 @@ export class SizeBotAdapter {
       suggestions
     };
   }
-  
+
   // Helper methods
   private getConfidenceLevel(confidence: number): 'low' | 'medium' | 'high' {
     if (confidence >= 0.9) return 'high';
     if (confidence >= 0.75) return 'medium';
     return 'low';
   }
-  
+
   private estimateDrop(bodyType: string): number {
     switch (bodyType) {
       case 'athletic': return 8;
@@ -265,28 +265,28 @@ export class SizeBotAdapter {
       default: return 6;
     }
   }
-  
+
   private buildRationale(bodyType: string, size: string, fitPreference: string): string {
     const bodyTypeData = bodyType in BODY_TYPES 
       ? BODY_TYPES[bodyType as keyof typeof BODY_TYPES]
       : null;
     const approach = bodyTypeData?.sizing_strategy.primary_approach || 'Standard sizing';
-    
+
     let rationale = `Based on your ${bodyType} build, we recommend size ${size}. `;
     rationale += `${approach}. `;
-    
+
     if (fitPreference === 'slim') {
       rationale += 'You selected a slim fit preference, which will provide a closer fit. ';
     } else if (fitPreference === 'relaxed') {
       rationale += 'You selected a relaxed fit preference for extra comfort. ';
     }
-    
+
     if (bodyType === 'athletic') {
       rationale += 'Your athletic build may require waist suppression for the best fit.';
     } else if (bodyType === 'slim') {
       rationale += 'Your slim build works best with our slim fit options.';
     }
-    
+
     return rationale;
   }
 }
