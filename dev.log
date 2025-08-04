@@ -656,9 +656,9 @@ Import trace for requested module:
  ✓ Compiled in 70ms (902 modules)
  ✓ Compiled in 317ms (916 modules)
  ✓ Compiled in 325ms (916 modules)
- from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
+ ✓ Compiled in 362ms (916 modules)
+ ✓ Compiled in 212ms (916 modules)
+User } from 'lucide-react'
 
 https://nextjs.org/docs/messages/module-not-found
 
@@ -1140,3 +1140,9 @@ Import trace for requested module:
  ✓ Compiled in 382ms (2361 modules)
  ✓ Compiled in 580ms (1213 modules)
  ✓ Compiled in 549ms (1213 modules)
+ ✓ Compiled /middleware in 478ms (179 modules)
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+ GET /?code=413094e2-9ef7-4361-ba52-a39b1b90134d 200 in 165ms
+ ○ Compiling /_not-found ...
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (108kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ GET /?error=access_denied&error_code=otp_expired&error_description=Email+link+is+invalid+or+has+expired 200 in 40ms

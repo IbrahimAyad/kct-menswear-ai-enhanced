@@ -25,11 +25,16 @@ function ResetPasswordForm() {
     
     if (accessToken && refreshToken) {
       setIsValid(true)
-      // Set the session
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken
-      })
+      // Set the session if Supabase client is available
+      if (supabase) {
+        supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken
+        }).catch(error => {
+          console.error('Failed to set session:', error)
+          setError('Failed to validate reset link. Please try again.')
+        })
+      }
     } else {
       setError('Invalid or expired reset link. Please request a new password reset.')
     }
@@ -56,6 +61,10 @@ function ResetPasswordForm() {
     setError('')
 
     try {
+      if (!supabase) {
+        throw new Error('Authentication service not available')
+      }
+
       const { error } = await supabase.auth.updateUser({
         password: password
       })
