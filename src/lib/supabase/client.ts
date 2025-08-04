@@ -19,22 +19,35 @@ export function createClient() {
 
 // Admin client for server-side operations (with service role key)
 export const supabaseAdmin = (() => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-  if (!supabaseUrl || !supabaseServiceKey) {
-    console.warn('Missing Supabase environment variables for admin client')
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.warn('Missing Supabase environment variables for admin client')
+      return null as any
+    }
+
+    // Validate URL format
+    try {
+      new URL(supabaseUrl)
+    } catch {
+      console.error('Invalid NEXT_PUBLIC_SUPABASE_URL format:', supabaseUrl)
+      return null as any
+    }
+
+    return createSupabaseClient<Database>(
+      supabaseUrl,
+      supabaseServiceKey,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+  } catch (error) {
+    console.error('Failed to create Supabase admin client:', error)
     return null as any
   }
-
-  return createSupabaseClient<Database>(
-    supabaseUrl,
-    supabaseServiceKey,
-    {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    }
-  )
 })()
