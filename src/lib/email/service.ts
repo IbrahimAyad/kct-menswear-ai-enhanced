@@ -2,7 +2,13 @@ import { Resend } from 'resend'
 import { OrderConfirmationEmail } from './templates/order-confirmation'
 import { ShippingNotificationEmail } from './templates/shipping-notification'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy initialize Resend to avoid build-time errors
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error('RESEND_API_KEY environment variable is required')
+  }
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 interface SendOrderConfirmationParams {
   to: string
@@ -50,6 +56,7 @@ interface SendShippingNotificationParams {
 
 export async function sendOrderConfirmation(params: SendOrderConfirmationParams) {
   try {
+    const resend = getResendClient()
     const { data, error } = await resend.emails.send({
       from: 'KCT Menswear <orders@kctmenswear.com>',
       to: params.to,
@@ -78,6 +85,7 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
 
 export async function sendShippingNotification(params: SendShippingNotificationParams) {
   try {
+    const resend = getResendClient()
     const { data, error } = await resend.emails.send({
       from: 'KCT Menswear <shipping@kctmenswear.com>',
       to: params.to,

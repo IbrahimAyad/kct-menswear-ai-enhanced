@@ -649,12 +649,13 @@ https://nextjs.org/docs/messages/module-not-found
 
 Import trace for requested module:
 ./src/components/layout/Navigation.tsx
-/layout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
+ ✓ Compiled in 401ms (916 modules)
+ ✓ Compiled in 146ms (902 modules)
+ ✓ Compiled in 130ms (902 modules)
+ ✓ Compiled in 69ms (902 modules)
+ ✓ Compiled in 70ms (902 modules)
+ ✓ Compiled in 317ms (916 modules)
+act'
     | ^
   5 | import { useAuth } from '@/hooks/useAuth'
   6 | import Link from 'next/link'
@@ -1133,3 +1134,9 @@ https://nextjs.org/docs/messages/module-not-found
 
 Import trace for requested module:
 ./src/components/layout/Navigation.tsx
+ ✓ Compiled in 958ms (2375 modules)
+ ✓ Compiled in 602ms (2361 modules)
+ ✓ Compiled in 482ms (2361 modules)
+ ✓ Compiled in 249ms (2361 modules)
+ ✓ Compiled in 382ms (2361 modules)
+ ✓ Compiled in 580ms (1213 modules)
