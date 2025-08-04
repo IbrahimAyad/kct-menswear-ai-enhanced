@@ -44,6 +44,12 @@ const nextConfig: NextConfig = {
         hostname: 'pub-46371bda6faf4910b74631159fc2dfd4.r2.dev',
         pathname: '/**',
       },
+      // Cloudflare R2 domain for vest & tie images
+      {
+        protocol: 'https',
+        hostname: 'pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev',
+        pathname: '/**',
+      },
       // Supabase storage domains
       {
         protocol: 'https',

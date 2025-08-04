@@ -842,14 +842,15 @@ Import trace for requested module:
 
  ✓ Starting...
  ✓ Ready in 1796ms
-ayout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
+ ⚠ Found a change in next.config.ts. Restarting the server to apply the changes...
+   ▲ Next.js 15.3.5
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.1.80:3001
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1782ms
+'@/hooks/useAuth'
   6 | import Link from 'next/link'
   7 | import { User } from 'lucide-react'
 
