@@ -812,14 +812,13 @@ Import trace for requested module:
  ✓ Compiled in 313ms (918 modules)
  ✓ Compiled in 223ms (918 modules)
  ✓ Compiled in 199ms (918 modules)
-ucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
+ ✓ Compiled in 541ms (918 modules)
+ ✓ Compiled in 288ms (918 modules)
+ ✓ Compiled in 239ms (918 modules)
+ ✓ Compiled in 299ms (918 modules)
+ ✓ Compiled in 231ms (918 modules)
+ ✓ Compiled in 214ms (918 modules)
+dlessui/react'
   2 |
   3 | import { Fragment } from 'react'
 > 4 | import { Menu, Transition } from '@headlessui/react'

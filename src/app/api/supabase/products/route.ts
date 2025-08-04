@@ -4,6 +4,21 @@ import { ProductSearchParams } from '@/lib/supabase/types'
 
 export async function GET(request: NextRequest) {
   try {
+    // Check if Supabase is configured
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return NextResponse.json({ 
+        error: 'Supabase not configured. Please add NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY to your environment variables.', 
+        products: [], 
+        totalCount: 0, 
+        currentPage: 1, 
+        totalPages: 0,
+        categories: [],
+        brands: [],
+        colors: [],
+        priceRange: { min: 0, max: 1000 }
+      }, { status: 503 })
+    }
+
     const { searchParams } = new URL(request.url)
     
     // Check if this is a request for metadata (categories, brands, colors, price range)

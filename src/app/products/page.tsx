@@ -19,6 +19,7 @@ import { EnhancedProduct, ProductFilters, ProductSortOptions } from "@/lib/supab
 import { SupabaseProductCard } from "@/components/shop/SupabaseProductCard";
 import { ProductFiltersPanel } from "@/components/shop/ProductFiltersPanel";
 import { CategoryPills, menswearCategories } from "@/components/shop/CategoryPills";
+import { SupabaseConfigError } from "@/components/ui/SupabaseConfigError";
 import { cn } from "@/lib/utils/cn";
 
 interface ProductsResponse {
@@ -126,6 +127,11 @@ function ProductsContent() {
         const response = await fetch(`/api/supabase/products?${params.toString()}`)
         
         if (!response.ok) {
+          if (response.status === 503) {
+            const errorData = await response.json()
+            setError(errorData.error || 'Service temporarily unavailable')
+            return
+          }
           throw new Error('Failed to fetch products')
         }
         
@@ -397,18 +403,24 @@ function ProductsContent() {
 
               {/* Error State */}
               {error && (
-                <div className="text-center py-20">
-                  <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <X className="h-8 w-8 text-red-600" />
-                  </div>
-                  <p className="text-red-600 mb-4 font-medium">{error}</p>
-                  <Button 
-                    onClick={() => window.location.reload()}
-                    variant="outline"
-                    className="border-red-200 text-red-600 hover:bg-red-50"
-                  >
-                    Try Again
-                  </Button>
+                <div className="py-8">
+                  {error.includes('Supabase not configured') ? (
+                    <SupabaseConfigError message={error} />
+                  ) : (
+                    <div className="text-center py-20">
+                      <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <X className="h-8 w-8 text-red-600" />
+                      </div>
+                      <p className="text-red-600 mb-4 font-medium">{error}</p>
+                      <Button 
+                        onClick={() => window.location.reload()}
+                        variant="outline"
+                        className="border-red-200 text-red-600 hover:bg-red-50"
+                      >
+                        Try Again
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
 
