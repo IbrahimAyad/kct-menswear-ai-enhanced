@@ -655,9 +655,8 @@ Import trace for requested module:
  ✓ Compiled in 69ms (902 modules)
  ✓ Compiled in 70ms (902 modules)
  ✓ Compiled in 317ms (916 modules)
-act'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
+ ✓ Compiled in 325ms (916 modules)
+ from '@/hooks/useAuth'
   6 | import Link from 'next/link'
   7 | import { User } from 'lucide-react'
 
@@ -1140,3 +1139,4 @@ Import trace for requested module:
  ✓ Compiled in 249ms (2361 modules)
  ✓ Compiled in 382ms (2361 modules)
  ✓ Compiled in 580ms (1213 modules)
+ ✓ Compiled in 549ms (1213 modules)
