@@ -39,16 +39,40 @@ export default function CheckoutPage() {
     setIsProcessing(true);
 
     try {
-      // In production, this would create a checkout session with your backend
-      const stripe = await stripePromise;
-      
-      // Simulate processing
-      setTimeout(() => {
-        alert("Demo checkout - In production this would process with Stripe");
-        setIsProcessing(false);
-      }, 2000);
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: items,
+          customerEmail: formData.email,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Checkout failed');
+      }
+
+      const { sessionId, url } = await response.json();
+
+      // Redirect to Stripe Checkout
+      if (url) {
+        window.location.href = url;
+      } else {
+        // Fallback to client-side redirect
+        const stripe = await stripePromise;
+        if (stripe) {
+          const { error } = await stripe.redirectToCheckout({ sessionId });
+          if (error) {
+            console.error('Stripe redirect error:', error);
+            alert('Unable to redirect to checkout. Please try again.');
+          }
+        }
+      }
     } catch (error) {
       console.error("Checkout error:", error);
+      alert('Something went wrong. Please try again.');
       setIsProcessing(false);
     }
   };

@@ -5,15 +5,36 @@ import { useProductStore } from "@/lib/store/productStore";
 import { formatPrice, getSizeLabel } from "@/lib/utils/format";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ShoppingBag, Plus, Minus, Trash2, ArrowRight, Tag } from "lucide-react";
+import { ShoppingBag, Plus, Minus, Trash2, ArrowRight, Tag, User, Lock, Clock, Gift } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { loadStripe } from "@stripe/stripe-js";
+import { CheckoutBenefits } from "@/components/checkout/CheckoutBenefits";
+import { useCartPersistence } from "@/hooks/useCartPersistence";
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
 export default function CartPage() {
   const { items, cartSummary, updateQuantity, removeFromCart, isLoading } = useCart();
   const { products } = useProductStore();
+  const { user } = useAuth();
   const [promoCode, setPromoCode] = useState("");
+  const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
+  const [showGuestCheckout, setShowGuestCheckout] = useState(false);
+  const [guestEmail, setGuestEmail] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [savedForLater] = useState<any[]>([]);
+  
+  // Enable cart persistence
+  useCartPersistence();
+
+  // Validate email
+  useEffect(() => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setIsEmailValid(emailRegex.test(guestEmail));
+  }, [guestEmail]);
 
   const cartItemsWithProducts = items.map((item) => ({
     ...item,
@@ -21,6 +42,88 @@ export default function CartPage() {
   }));
 
   const validCartItems = cartItemsWithProducts.filter(item => item.product);
+
+  const handleCheckout = async () => {
+    setIsProcessingCheckout(true);
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: items,
+          customerEmail: user?.email,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Checkout failed');
+      }
+
+      const { sessionId, url } = await response.json();
+      
+      if (url) {
+        window.location.href = url;
+      } else {
+        const stripe = await stripePromise;
+        if (stripe) {
+          const { error } = await stripe.redirectToCheckout({ sessionId });
+          if (error) {
+            console.error('Stripe redirect error:', error);
+            alert('Unable to redirect to checkout. Please try again.');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setIsProcessingCheckout(false);
+    }
+  };
+
+  const handleGuestCheckout = async () => {
+    if (!guestEmail) return;
+    
+    setIsProcessingCheckout(true);
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: items,
+          customerEmail: guestEmail,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Checkout failed');
+      }
+
+      const { sessionId, url } = await response.json();
+      
+      if (url) {
+        window.location.href = url;
+      } else {
+        const stripe = await stripePromise;
+        if (stripe) {
+          const { error } = await stripe.redirectToCheckout({ sessionId });
+          if (error) {
+            console.error('Stripe redirect error:', error);
+            alert('Unable to redirect to checkout. Please try again.');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setIsProcessingCheckout(false);
+    }
+  };
 
   if (items.length === 0) {
     return (
@@ -59,6 +162,9 @@ export default function CartPage() {
           </p>
         </div>
 
+        {/* Benefits Bar */}
+        <CheckoutBenefits />
+
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
@@ -69,7 +175,13 @@ export default function CartPage() {
               const maxStock = variant?.stock || 0;
 
               return (
-                <Card key={`${item.productId}-${item.size}`} className="p-8 border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                <Card key={`${item.productId}-${item.size}`} className="p-8 border-0 shadow-lg hover:shadow-xl transition-all duration-300 relative group">
+                  {/* Low Stock Badge */}
+                  {variant && variant.stock <= 3 && variant.stock > 0 && (
+                    <div className="absolute top-4 right-4 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                      Only {variant.stock} left!
+                    </div>
+                  )}
                   <div className="flex gap-6">
                     <div className="relative w-32 h-40 bg-gray-100 rounded-sm overflow-hidden shadow-md">
                       {item.product.images[0] ? (
@@ -201,6 +313,20 @@ export default function CartPage() {
                 </div>
               </div>
 
+              {/* Estimated Total */}
+              <div className="border-2 border-gold/30 rounded-sm p-4 mb-6 bg-gold/5">
+                <div className="flex justify-between text-xl font-bold">
+                  <span>Estimated Total</span>
+                  <span className="text-gold">
+                    {formatPrice(cartSummary.totalPrice + (cartSummary.totalPrice >= 50000 ? 0 : 1500))}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  <Lock className="inline w-3 h-3 mr-1" />
+                  Final total calculated at checkout with taxes
+                </p>
+              </div>
+
               <div className="border-t border-gold/20 pt-6 mb-8">
                 <div className="flex justify-between text-2xl font-bold">
                   <span>Total</span>
@@ -213,12 +339,88 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <Link href="/checkout">
-                <Button size="lg" className="w-full mb-4 bg-gold hover:bg-gold/90 text-black py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
-                  Proceed to Checkout
-                  <ArrowRight className="ml-2 h-5 w-5" />
+              {/* Checkout Options */}
+              {!user && !showGuestCheckout ? (
+                <div className="space-y-3">
+                  <Link href="/auth/login?redirectTo=/checkout">
+                    <Button size="lg" className="w-full bg-gold hover:bg-gold/90 text-black py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+                      <User className="mr-2 h-5 w-5" />
+                      Sign In & Checkout
+                    </Button>
+                  </Link>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    onClick={() => setShowGuestCheckout(true)}
+                    className="w-full py-4 border-gold/30 hover:border-gold hover:bg-gold/10 transition-all duration-300"
+                  >
+                    Continue as Guest
+                  </Button>
+                </div>
+              ) : showGuestCheckout && !user ? (
+                <div className="space-y-3">
+                  <div className="relative">
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      value={guestEmail}
+                      onChange={(e) => setGuestEmail(e.target.value)}
+                      className={`w-full px-4 py-3 border rounded-sm focus:outline-none focus:ring-2 transition-all ${
+                        guestEmail && !isEmailValid 
+                          ? 'border-red-500 focus:ring-red-500' 
+                          : 'border-gray-300 focus:ring-gold focus:border-gold'
+                      }`}
+                      required
+                    />
+                    {guestEmail && !isEmailValid && (
+                      <p className="text-xs text-red-500 mt-1">Please enter a valid email address</p>
+                    )}
+                  </div>
+                  <Button 
+                    size="lg" 
+                    className="w-full bg-gold hover:bg-gold/90 text-black py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                    onClick={handleGuestCheckout}
+                    disabled={!isEmailValid || isProcessingCheckout}
+                  >
+                    {isProcessingCheckout ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin mr-2"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        Proceed to Checkout
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </>
+                    )}
+                  </Button>
+                  <button
+                    onClick={() => setShowGuestCheckout(false)}
+                    className="text-sm text-gray-600 hover:text-black w-full text-center"
+                  >
+                    Back to options
+                  </button>
+                </div>
+              ) : (
+                <Button 
+                  size="lg" 
+                  className="w-full mb-4 bg-gold hover:bg-gold/90 text-black py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                  onClick={handleCheckout}
+                  disabled={isProcessingCheckout}
+                >
+                  {isProcessingCheckout ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin mr-2"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      Proceed to Checkout
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </>
+                  )}
                 </Button>
-              </Link>
+              )}
 
               <Link href="/products">
                 <Button variant="outline" size="lg" className="w-full py-4 border-gold/30 hover:border-gold hover:bg-gold/10 transition-all duration-300">

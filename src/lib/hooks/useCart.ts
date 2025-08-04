@@ -17,6 +17,7 @@ export function useCart() {
     getTotalItems,
     getTotalPrice,
     syncCart,
+    restoreCart,
   } = useCartStore();
 
   const { customer } = useAuthStore();
@@ -132,6 +133,7 @@ export function useCart() {
     removeFromCart: handleRemoveFromCart,
     updateQuantity: handleUpdateQuantity,
     clearCart,
+    restoreCart,
   };
 }
 

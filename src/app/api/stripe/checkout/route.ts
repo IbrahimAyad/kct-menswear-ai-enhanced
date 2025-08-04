@@ -60,41 +60,66 @@ export async function POST(req: NextRequest) {
       };
     });
     
-    // Simplify metadata for Stripe's 500 character limit
-    // Group items by bundle or product type
-    const bundleGroups: { [key: string]: number } = {};
-    const individualItems: string[] = [];
+    // Detect bundle information
+    let bundleInfo = null;
+    let totalDiscount = 0;
     
-    items.forEach((item: any) => {
-      if (item.bundleId) {
-        // For bundles, just count the bundle types
-        const bundleType = item.metadata?.bundleType || 'bundle';
-        bundleGroups[bundleType] = (bundleGroups[bundleType] || 0) + 1;
-      } else {
-        // For individual items, store minimal info
-        individualItems.push(`${item.id}:${item.quantity}`);
-      }
-    });
+    // Check if this is a bundle order
+    const isBundleOrder = items.some((item: any) => item.category === 'bundle' || item.bundleType);
+    if (isBundleOrder) {
+      const originalTotal = items.reduce((sum: number, item: any) => sum + (item.originalPrice || item.price) * item.quantity, 0);
+      const discountedTotal = items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+      totalDiscount = originalTotal - discountedTotal;
+      
+      bundleInfo = {
+        order_type: 'bundle',
+        bundle_type: items[0]?.bundleType || 'custom',
+        bundle_discount: totalDiscount.toFixed(2),
+      };
+    }
     
-    // Create compact metadata
+    // Create metadata for webhook processing
     const metadata: { [key: string]: string } = {
       itemCount: items.length.toString(),
       timestamp: new Date().toISOString(),
     };
     
-    // Add bundle info if present
-    if (Object.keys(bundleGroups).length > 0) {
-      metadata.bundles = Object.entries(bundleGroups)
-        .map(([type, count]) => `${type}:${count}`)
-        .join(',');
+    // Add bundle info to metadata
+    if (bundleInfo) {
+      Object.assign(metadata, bundleInfo);
     }
     
-    // Add individual items if present and within limit
-    if (individualItems.length > 0) {
-      const itemsString = individualItems.slice(0, 5).join(','); // Limit to 5 items
-      if (itemsString.length < 200) {
-        metadata.items = itemsString;
-      }
+    // Store full items data as JSON string (Stripe allows up to 500 chars per metadata value)
+    // We'll create a simplified version for the webhook
+    const itemsForWebhook = items.map((item: any) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      originalPrice: item.originalPrice,
+      quantity: item.quantity,
+      category: item.category,
+      color: item.color,
+      size: item.size,
+      image: item.image,
+      stripeProductId: item.stripeProductId,
+      stripePriceId: item.stripePriceId,
+      bundleItems: item.bundleItems,
+      metadata: item.metadata,
+    }));
+    
+    // Stringify and check length
+    const itemsJson = JSON.stringify(itemsForWebhook);
+    if (itemsJson.length <= 500) {
+      metadata.items = itemsJson;
+    } else {
+      // If too long, store essential info only
+      metadata.items = JSON.stringify(itemsForWebhook.map((item: any) => ({
+        id: item.id,
+        name: item.name.substring(0, 30),
+        price: item.price,
+        qty: item.quantity,
+        size: item.size,
+      })));
     }
     
     console.log('About to create Stripe session with config:', {

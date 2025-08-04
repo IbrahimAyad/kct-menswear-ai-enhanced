@@ -13,6 +13,7 @@ interface CartStore {
   getTotalItems: () => number;
   getTotalPrice: (products: Product[]) => number;
   syncCart: (customerId: string) => Promise<void>;
+  restoreCart: (items: CartItem[]) => void;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -128,6 +129,10 @@ export const useCartStore = create<CartStore>()(
         } finally {
           set({ isLoading: false });
         }
+      },
+
+      restoreCart: (items: CartItem[]) => {
+        set({ items });
       },
     }),
     {

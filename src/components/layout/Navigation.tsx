@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { CartDrawer } from "./CartDrawer";
 import { useCart } from "@/lib/hooks/useCart";
 import { SmartSearchBar } from "@/components/search/SmartSearchBar";
+import UserMenu from "./UserMenu";
 
 const navItems = [
   { href: "/products", label: "Shop" },
@@ -74,11 +75,7 @@ export function Navigation() {
             >
               <Search className="h-5 w-5 group-hover:text-gold transition-colors" />
             </button>
-            <Link href="/account">
-              <Button variant="ghost" size="icon" className="hover:text-gold transition-colors">
-                <User className="h-5 w-5" />
-              </Button>
-            </Link>
+            <UserMenu />
             {/* Cart button disabled - using SimpleCartDrawer instead */}
             {/* <Button 
               variant="ghost" 
