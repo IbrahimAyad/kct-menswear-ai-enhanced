@@ -4,11 +4,15 @@ import { MarketingAnalyticsSEOAgent } from './MarketingAnalyticsSEOAgent';
 import { BaseAgent } from './core/BaseAgent';
 import { AgentRole } from './types';
 
-// Placeholder agents - to be implemented
+// Agents
 import { UIUXFrontendAgent } from './UIUXFrontendAgent';
 import { ECommerceOperationsAgent } from './ECommerceOperationsAgent';
 import { ProductInventoryAgent } from './ProductInventoryAgent';
 import { CustomerExperienceAgent } from './CustomerExperienceAgent';
+
+// Persistence
+import { AgentMemory } from './persistence/AgentMemory';
+import { predefinedTasks, getAllPredefinedTasks } from './persistence/PredefinedTasks';
 
 export class AgentSystem {
   private static instance: AgentSystem;
@@ -62,6 +66,9 @@ export class AgentSystem {
     this.isRunning = true;
     
     try {
+      // Load predefined tasks if this is the first run
+      this.loadInitialTasks();
+      
       // Start the orchestrator and all agents
       await this.orchestrator.startAllAgents();
       
@@ -73,6 +80,32 @@ export class AgentSystem {
       console.error('Failed to start agent system:', error);
       this.isRunning = false;
       throw error;
+    }
+  }
+
+  private loadInitialTasks(): void {
+    const memory = AgentMemory.getInstance();
+    
+    // Check if we already have tasks in memory
+    const existingTasks = [];
+    this.agents.forEach((agent, role) => {
+      existingTasks.push(...memory.getTasks(role));
+    });
+    
+    // If no tasks exist, load predefined ones
+    if (existingTasks.length === 0) {
+      console.log('Loading predefined tasks for agents...');
+      
+      // Load tasks for each agent
+      Object.entries(predefinedTasks).forEach(([role, tasks]) => {
+        const agent = this.agents.get(role as AgentRole);
+        if (agent) {
+          tasks.forEach(task => {
+            agent.addTask(task);
+          });
+          console.log(`Loaded ${tasks.length} tasks for ${role}`);
+        }
+      });
     }
   }
 

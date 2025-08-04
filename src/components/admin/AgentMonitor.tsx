@@ -17,8 +17,14 @@ import {
   BarChart3,
   ShoppingCart,
   Package,
-  Users
+  Users,
+  ListTodo,
+  Database,
+  Download,
+  Upload
 } from 'lucide-react'
+import { TaskManager } from './TaskManager'
+import { AgentTask } from '@/lib/agents/types'
 
 interface AgentHealth {
   status: 'idle' | 'working' | 'error' | 'paused';
@@ -53,6 +59,7 @@ export function AgentMonitor() {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [activeTab, setActiveTab] = useState<'monitor' | 'tasks' | 'memory'>('monitor');
 
   const fetchStatus = async () => {
     try {
@@ -122,6 +129,27 @@ export function AgentMonitor() {
     }
   };
 
+  const handleTaskAssign = async (task: AgentTask) => {
+    try {
+      const response = await fetch('/api/agents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          action: 'inject-task',
+          task 
+        })
+      });
+      
+      if (response.ok) {
+        await fetchStatus();
+        // Show success message
+        console.log('Task assigned successfully:', task);
+      }
+    } catch (error) {
+      console.error('Failed to assign task:', error);
+    }
+  };
+
   const getAgentIcon = (role: string) => {
     const icons: Record<string, any> = {
       'orchestrator': Brain,
@@ -181,8 +209,54 @@ export function AgentMonitor() {
 
   return (
     <div className="space-y-6">
-      {/* Control Panel */}
-      <Card className="p-6">
+      {/* Tab Navigation */}
+      <div className="flex space-x-1 border-b">
+        <button
+          onClick={() => setActiveTab('monitor')}
+          className={`px-4 py-2 font-medium transition-colors ${
+            activeTab === 'monitor'
+              ? 'text-blue-600 border-b-2 border-blue-600'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Monitor
+          </div>
+        </button>
+        <button
+          onClick={() => setActiveTab('tasks')}
+          className={`px-4 py-2 font-medium transition-colors ${
+            activeTab === 'tasks'
+              ? 'text-blue-600 border-b-2 border-blue-600'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <ListTodo className="h-4 w-4" />
+            Task Management
+          </div>
+        </button>
+        <button
+          onClick={() => setActiveTab('memory')}
+          className={`px-4 py-2 font-medium transition-colors ${
+            activeTab === 'memory'
+              ? 'text-blue-600 border-b-2 border-blue-600'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <Database className="h-4 w-4" />
+            Agent Memory
+          </div>
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'monitor' && (
+        <>
+          {/* Control Panel */}
+          <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <h2 className="text-2xl font-bold">Agent System Monitor</h2>
@@ -331,6 +405,54 @@ export function AgentMonitor() {
           )}
         </div>
       </Card>
+        </>
+      )}
+
+      {/* Task Management Tab */}
+      {activeTab === 'tasks' && (
+        <TaskManager onTaskAssign={handleTaskAssign} />
+      )}
+
+      {/* Agent Memory Tab */}
+      {activeTab === 'memory' && (
+        <Card className="p-6">
+          <h3 className="text-lg font-semibold mb-4">Agent Memory System</h3>
+          <div className="space-y-4">
+            <p className="text-gray-600">
+              The agent memory system stores decisions, learnings, and patterns discovered by the agents.
+              This allows them to improve over time and maintain context between sessions.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="font-medium mb-2">System Insights</h4>
+                <p className="text-sm text-gray-600">Performance patterns and optimization opportunities</p>
+              </div>
+              
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="font-medium mb-2">Customer Patterns</h4>
+                <p className="text-sm text-gray-600">Behavioral insights and preferences</p>
+              </div>
+              
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h4 className="font-medium mb-2">Performance Metrics</h4>
+                <p className="text-sm text-gray-600">Historical performance data and trends</p>
+              </div>
+            </div>
+            
+            <div className="flex gap-2">
+              <Button variant="outline" className="flex items-center gap-2">
+                <Download className="h-4 w-4" />
+                Export Memory
+              </Button>
+              <Button variant="outline" className="flex items-center gap-2">
+                <Upload className="h-4 w-4" />
+                Import Memory
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }

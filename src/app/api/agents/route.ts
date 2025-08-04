@@ -48,11 +48,24 @@ export async function POST(request: NextRequest) {
         message: 'Agent system stopped successfully'
       });
     } else if (action === 'inject-task') {
-      const { task } = await request.json();
+      const body = await request.json();
+      const task = body.task;
+      
+      if (!task) {
+        return NextResponse.json(
+          { 
+            status: 'error', 
+            message: 'Task is required' 
+          },
+          { status: 400 }
+        );
+      }
+      
       await agentSystem.injectTask(task);
       return NextResponse.json({
         status: 'success',
-        message: 'Task injected successfully'
+        message: 'Task injected successfully',
+        task
       });
     } else {
       return NextResponse.json(

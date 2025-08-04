@@ -1,5 +1,6 @@
-import { AgentConfig, AgentRole, AgentStatus, AgentTask, AgentMessage } from '../types';
+import { AgentConfig, AgentRole, AgentStatus, AgentTask, AgentMessage, AgentDecision } from '../types';
 import { EventEmitter } from 'events';
+import { AgentMemory } from '../persistence/AgentMemory';
 
 export abstract class BaseAgent extends EventEmitter {
   protected config: AgentConfig;
@@ -8,10 +9,15 @@ export abstract class BaseAgent extends EventEmitter {
   protected taskQueue: AgentTask[] = [];
   protected isRunning: boolean = false;
   protected intervalId: NodeJS.Timeout | null = null;
+  protected memory: AgentMemory;
 
   constructor(config: AgentConfig) {
     super();
     this.config = config;
+    this.memory = AgentMemory.getInstance();
+    
+    // Load tasks from memory
+    this.loadTasksFromMemory();
   }
 
   // Abstract methods that each agent must implement
@@ -138,9 +144,19 @@ export abstract class BaseAgent extends EventEmitter {
   }
 
   // Task management
+  // Load tasks from memory
+  protected loadTasksFromMemory(): void {
+    const pendingTasks = this.memory.getTasks(this.config.role, 'pending');
+    const inProgressTasks = this.memory.getTasks(this.config.role, 'in_progress');
+    
+    // Add pending and in-progress tasks back to queue
+    this.taskQueue = [...inProgressTasks, ...pendingTasks];
+  }
+
   addTask(task: AgentTask): void {
     if (this.validateTask(task)) {
       this.taskQueue.push(task);
+      this.memory.storeTask(this.config.role, task);
       this.sortTaskQueue();
       this.emit('task:added', { agent: this.config.role, task });
     }

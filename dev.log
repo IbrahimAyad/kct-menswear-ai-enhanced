@@ -754,17 +754,15 @@ Import trace for requested module:
  ✓ Compiled in 279ms (917 modules)
  ✓ Compiled in 204ms (917 modules)
  ✓ Compiled in 396ms (917 modules)
-
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
+ ✓ Compiled in 355ms (917 modules)
+ ✓ Compiled in 195ms (917 modules)
+ ✓ Compiled in 306ms (917 modules)
+ ✓ Compiled in 192ms (917 modules)
+ ✓ Compiled in 237ms (917 modules)
+ ✓ Compiled in 344ms (917 modules)
+ ✓ Compiled in 235ms (917 modules)
+ ✓ Compiled in 248ms (917 modules)
+rt { useAuth } from '@/hooks/useAuth'
   6 | import Link from 'next/link'
   7 | import { User } from 'lucide-react'
 
