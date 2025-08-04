@@ -63,7 +63,7 @@ export function SupabaseProductCard({
       )}>
         <div className="flex gap-4 p-4">
           {/* Image */}
-          <Link href={`/shop/products/${product.id}`} className="flex-shrink-0">
+          <Link href={`/products/${product.id}`} className="flex-shrink-0">
             <div className="relative w-32 h-40 bg-gray-100 rounded-md overflow-hidden">
               <ProductImage
                 src={primaryImage}
@@ -86,7 +86,7 @@ export function SupabaseProductCard({
                 {product.brand && (
                   <p className="text-sm text-gray-600 mb-1">{product.brand}</p>
                 )}
-                <Link href={`/shop/products/${product.id}`}>
+                <Link href={`/products/${product.id}`}>
                   <h3 className="font-medium text-gray-900 group-hover:text-gold transition-colors line-clamp-2">
                     {product.name}
                   </h3>
@@ -180,7 +180,7 @@ export function SupabaseProductCard({
       </div>
 
       {/* Image */}
-      <Link href={`/shop/products/${product.id}`}>
+      <Link href={`/products/${product.id}`}>
         <div className={cn(
           "relative bg-gray-100 overflow-hidden",
           variant === 'compact' ? "aspect-[3/4]" : "aspect-[3/4]"
@@ -220,7 +220,7 @@ export function SupabaseProductCard({
           <p className="text-sm text-gray-600 mb-1">{product.brand}</p>
         )}
         
-        <Link href={`/shop/products/${product.id}`}>
+        <Link href={`/products/${product.id}`}>
           <h3 className={cn(
             "font-medium text-gray-900 group-hover:text-gold transition-colors line-clamp-2",
             variant === 'compact' ? "text-sm" : "text-base"
