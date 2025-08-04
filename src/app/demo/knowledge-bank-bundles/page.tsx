@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { SmartBundleCard } from '@/components/bundles/SmartBundleCard';
 import { knowledgeBankBundles } from '@/lib/services/knowledgeBankBundles';
 import { SmartBundle } from '@/lib/services/smartBundles';
@@ -155,5 +156,79 @@ export default function KnowledgeBankBundlesPage() {
                   bundle={bundle}
                   showCompatibilityDetails={true}
                   onAddToCart={() => alert(`Added ${bundle.name} to cart!`)}
-                  onViewDetails={() => 
+                  onViewDetails={() => alert(`Viewing details for ${bundle.name}`)}
+                />
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* Knowledge Bank Info */}
+        <Card className="mt-12 p-8 bg-gradient-to-r from-purple-50 to-blue-50">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold mb-2">About Our Knowledge Bank</h2>
+            <p className="text-gray-600 max-w-3xl mx-auto">
+              Our AI analyzes thousands of successful outfit combinations, customer preferences, 
+              and event photos to recommend the perfect ensemble for any occasion.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mt-8">
+            <div className="text-center">
+              <Zap className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
+              <h3 className="font-semibold mb-1">Real-Time Learning</h3>
+              <p className="text-sm text-gray-600">
+                Continuously updated with new trends and customer feedback
+              </p>
+            </div>
+            <div className="text-center">
+              <Users className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+              <h3 className="font-semibold mb-1">Customer-Driven</h3>
+              <p className="text-sm text-gray-600">
+                Based on real purchases and 5-star reviews
+              </p>
+            </div>
+            <div className="text-center">
+              <Package className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+              <h3 className="font-semibold mb-1">Complete Outfits</h3>
+              <p className="text-sm text-gray-600">
+                Every detail considered from suit to accessories
+              </p>
+            </div>
+          </div>
+        </Card>
+
+        {/* Top Combinations Display */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-center mb-8">Data-Backed Top Performers</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {TOP_COMBINATIONS.slice(0, 4).map((combo, index) => (
+              <Card key={combo.id} className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="font-semibold text-lg mb-1">{combo.occasion}</h3>
+                    <p className="text-sm text-gray-600">{combo.seasonality} Season</p>
+                  </div>
+                  <Badge className="bg-green-100 text-green-800">
+                    {COMBINATION_CONVERSION_DATA[combo.id] ? 
+                      `${(COMBINATION_CONVERSION_DATA[combo.id].conversion_rate * 100).toFixed(1)}% Conv.` : 
+                      'N/A'
+                    }
+                  </Badge>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm"><span className="font-medium">Suit:</span> {combo.primary_suit}</p>
+                  <p className="text-sm"><span className="font-medium">Accessories:</span> {combo.accessories?.join(', ') || 'N/A'}</p>
+                  <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
+                    <span>👥 {COMBINATION_CONVERSION_DATA[combo.id]?.purchase_count || 0} sold</span>
+                    <span>⭐ {COMBINATION_CONVERSION_DATA[combo.id]?.avg_rating || 0}/5</span>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

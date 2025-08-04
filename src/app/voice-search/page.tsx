@@ -245,5 +245,65 @@ export default function VoiceSearchPage() {
             </div>
 
             <VoiceSearch
-              onTranscription={(text) => 
+              onTranscription={(text) => handleSearch(text, 'voice')}
+              className="max-w-md mx-auto"
+            />
+          </Card>
+
+          {/* Search Results */}
+          {searchResults.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-semibold">
+                  {searchType === 'voice' && 'Voice'} Search Results
+                  {lastQuery && ` for "${lastQuery}"`}
+                </h3>
+                <Badge variant="secondary">
+                  {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'}
+                </Badge>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {searchResults.map((product) => (
+                  <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="aspect-[3/4] relative bg-gray-100">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <Badge className="absolute top-2 right-2">
+                        {product.category}
+                      </Badge>
+                    </div>
+                    <div className="p-4">
+                      <h4 className="font-semibold mb-2">{product.name}</h4>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          <span className="text-sm ml-1">{product.rating}</span>
+                        </div>
+                        <span className="text-sm text-gray-500">
+                          ({product.reviews} reviews)
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xl font-bold">
+                          {formatPrice(product.price)}
+                        </span>
+                        <Button size="sm">
+                          <ShoppingCart className="w-4 h-4 mr-1" />
+                          Add to Cart
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </PageTransition>
+  );
 }

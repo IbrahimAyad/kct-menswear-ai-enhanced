@@ -161,5 +161,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Supabase admin client not configured' }, { status: 500 })
     }
 
+    await updateVestTieProducts()
+    
+    return NextResponse.json({ 
+      success: true,
+      message: 'Vest and tie products updated successfully'
+    })
+  } catch (error) {
+    return NextResponse.json({ 
+      error: 'Failed to update vest and tie products',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 })
   }
 }

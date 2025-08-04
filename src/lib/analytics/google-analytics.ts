@@ -63,6 +63,16 @@ export const trackEvent = (
   });
 };
 
+// Track custom events (alias for trackEvent with more flexible parameters)
+export const trackCustomEvent = (
+  eventName: string,
+  parameters?: Record<string, any>
+) => {
+  if (!isGAEnabled() || !window.gtag) return;
+
+  window.gtag('event', eventName, parameters || {});
+};
+
 // E-commerce tracking functions
 export const trackViewItem = (item: {
   item_id: string;

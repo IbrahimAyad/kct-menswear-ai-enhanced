@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendOrderConfirmation, formatOrderDate, formatCurrency } from '@/lib/email/service'
 import { createClient } from '@/lib/supabase/server'
+import sgMail from '@sendgrid/mail'
+
+// Initialize SendGrid
+sgMail.setApiKey(process.env.SENDGRID_API_KEY!)
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,6 +37,34 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (orderError || !order) {
+      return NextResponse.json(
+        { error: 'Order not found' },
+        { status: 404 }
+      )
+    }
 
+    // Send email using SendGrid
+    const msg = {
+      to: order.email,
+      from: {
+        email: process.env.SENDGRID_FROM_EMAIL!,
+        name: process.env.SENDGRID_FROM_NAME!
+      },
+      subject: `Order Confirmation - ${order.order_number}`,
+      html: `
+        <h1>Thank you for your order!</h1>
+        <p>Your order ${order.order_number} has been confirmed.</p>
+        <p>Total: $${(order.total / 100).toFixed(2)}</p>
+      `
+    }
+
+    await sgMail.send(msg)
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to send email' },
+      { status: 500 }
+    )
   }
 }

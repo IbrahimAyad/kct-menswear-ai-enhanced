@@ -24,4 +24,16 @@ export const supabaseAdmin = (() => {
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!supabaseUrl || !supabaseServiceKey) {
-      
+      return null as any
+    }
+
+    return createSupabaseClient<Database>(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
+  } catch (error) {
+    return null as any
+  }
+})()

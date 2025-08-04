@@ -159,5 +159,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Supabase admin client not configured' }, { status: 500 })
     }
 
+    const fixedIds = await fixProductImages()
+    
+    return NextResponse.json({ 
+      success: true,
+      message: `Fixed ${fixedIds.length} products`,
+      fixedProducts: fixedIds
+    })
+  } catch (error) {
+    return NextResponse.json({ 
+      error: 'Failed to fix product images',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 })
   }
 }

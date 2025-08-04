@@ -72,5 +72,82 @@ export async function sendOrderConfirmation(params: SendOrderConfirmationParams)
     })
 
     if (error) {
-       // Assuming amount is in cents
+      throw error
+    }
+
+    return { success: true, data }
+  } catch (error) {
+    console.error('Failed to send order confirmation email:', error)
+    return { success: false, error }
+  }
+}
+
+export async function sendShippingNotification(params: SendShippingNotificationParams) {
+  try {
+    const resend = getResendClient()
+    const { data, error } = await resend.emails.send({
+      from: 'KCT Menswear <shipping@kctmenswear.com>',
+      to: params.to,
+      subject: `Your Order Has Shipped - ${params.orderNumber}`,
+      react: ShippingNotificationEmail({
+        customerName: params.customerName,
+        orderNumber: params.orderNumber,
+        trackingNumber: params.trackingNumber,
+        carrier: params.carrier,
+        estimatedDelivery: params.estimatedDelivery,
+        items: params.items,
+        shippingAddress: params.shippingAddress,
+      }),
+    })
+
+    if (error) {
+      throw error
+    }
+
+    return { success: true, data }
+  } catch (error) {
+    console.error('Failed to send shipping notification email:', error)
+    return { success: false, error }
+  }
+}
+
+export async function sendWelcomeEmail(to: string, name: string) {
+  try {
+    const resend = getResendClient()
+    const { data, error } = await resend.emails.send({
+      from: 'KCT Menswear <welcome@kctmenswear.com>',
+      to,
+      subject: 'Welcome to KCT Menswear',
+      html: `
+        <h1>Welcome to KCT Menswear, ${name}!</h1>
+        <p>Thank you for joining our community of distinguished gentlemen.</p>
+        <p>As a member, you'll enjoy:</p>
+        <ul>
+          <li>Early access to new collections</li>
+          <li>Exclusive member discounts</li>
+          <li>Personalized style recommendations</li>
+          <li>Priority customer service</li>
+        </ul>
+        <p>Start shopping our latest collection today!</p>
+      `,
+    })
+
+    if (error) {
+      throw error
+    }
+
+    return { success: true, data }
+  } catch (error) {
+    console.error('Failed to send welcome email:', error)
+    return { success: false, error }
+  }
+}
+
+export function formatCurrency(amount: number, currency: string = 'USD'): string {
+  // Assuming amount is in cents
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency,
+  })
+  return formatter.format(amount / 100)
 }
