@@ -76,8 +76,7 @@ export function Navigation() {
               <Search className="h-5 w-5 group-hover:text-gold transition-colors" />
             </button>
             <UserMenu />
-            {/* Cart button disabled - using SimpleCartDrawer instead */}
-            {/* <Button 
+            <Button 
               variant="ghost" 
               size="icon"
               className="relative hover:text-gold transition-colors"
@@ -89,7 +88,7 @@ export function Navigation() {
                   {cartSummary.itemCount}
                 </span>
               )}
-            </Button> */}
+            </Button>
             <Button className="bg-black hover:bg-gray-900 text-white px-6 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
               Book Appointment
             </Button>

@@ -1,26 +1,46 @@
 'use client'
 
-import { useState } from 'react'
+import { useWishlistWithProducts, useWishlist } from '@/lib/hooks/useWishlist'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Heart, ShoppingBag, Trash2 } from 'lucide-react'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
+import { formatPrice } from '@/lib/utils/format'
+import { useCart } from '@/lib/hooks/useCart'
+import { toast } from 'sonner'
+import { AccountSidebar } from '@/components/account/AccountSidebar'
 
 export default function WishlistPage() {
-  // Start with empty wishlist - this would be populated from database/API in production
-  const [wishlistItems, setWishlistItems] = useState<any[]>([])
+  const { products, isLoading } = useWishlistWithProducts()
+  const { removeFromWishlist, clearWishlist } = useWishlist()
+  const { addToCart } = useCart()
 
-  const removeFromWishlist = (itemId: string) => {
-    setWishlistItems(items => items.filter(item => item.id !== itemId))
+  const handleAddToCart = (product: any) => {
+    // Add the first available size
+    const availableVariant = product.variants.find((v: any) => v.stock > 0)
+    if (availableVariant) {
+      addToCart(product.id, availableVariant.size, 1)
+      toast.success('Added to cart', {
+        action: {
+          label: 'View Cart',
+          onClick: () => window.location.href = '/cart'
+        }
+      })
+    } else {
+      toast.error('Product is out of stock')
+    }
   }
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(price)
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold"></div>
+      </div>
+    )
   }
 
-  if (wishlistItems.length === 0) {
+  if (products.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,62 +62,88 @@ export default function WishlistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">My Wishlist</h1>
-          <p className="text-gray-600 mt-1">{wishlistItems.length} items saved</p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-1">
+            <AccountSidebar />
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {wishlistItems.map((item) => (
-            <div key={item.id} className="bg-white rounded-lg shadow-sm overflow-hidden group">
-              <div className="relative aspect-square">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-200"
-                />
-                <button
-                  onClick={() => removeFromWishlist(item.id)}
-                  className="absolute top-2 right-2 p-2 bg-white/80 hover:bg-white rounded-full transition-colors"
-                  title="Remove from wishlist"
-                >
-                  <Trash2 className="w-4 h-4 text-red-500" />
-                </button>
-                {!item.inStock && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <span className="text-white font-medium">Out of Stock</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-2">{item.name}</h3>
-                <p className="text-xl font-bold text-black mb-3">{formatPrice(item.price)}</p>
-                
-                <div className="flex gap-2">
-                  <Link
-                    href={`/products/${item.id}`}
-                    className="flex-1 text-center py-2 px-4 border border-gray-300 rounded hover:bg-gray-50 transition-colors text-sm"
-                  >
-                    View Details
-                  </Link>
-                  <button
-                    disabled={!item.inStock}
-                    className="flex-1 py-2 px-4 bg-black text-white rounded hover:bg-gray-800 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-sm"
-                  >
-                    {item.inStock ? 'Add to Cart' : 'Out of Stock'}
-                  </button>
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <Heart className="h-6 w-6 text-red-500 fill-current" />
+                  <h1 className="text-2xl font-semibold">My Wishlist</h1>
+                  <span className="text-gray-500">({products.length} items)</span>
                 </div>
                 
-                <p className="text-xs text-gray-500 mt-2">
-                  Added {new Date(item.addedDate).toLocaleDateString()}
-                </p>
+                {products.length > 0 && (
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      if (confirm('Are you sure you want to clear your wishlist?')) {
+                        clearWishlist()
+                      }
+                    }}
+                    className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                  >
+                    Clear All
+                  </Button>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {products.map((product) => (
+                  <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                    <Link href={`/products/${product.id}`}>
+                      <div className="relative h-64 bg-gray-100">
+                        {product.images[0] ? (
+                          <Image
+                            src={product.images[0]}
+                            alt={product.name}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <ShoppingBag className="h-12 w-12 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                    
+                    <div className="p-4">
+                      <Link href={`/products/${product.id}`}>
+                        <h3 className="font-medium hover:text-gold transition-colors">{product.name}</h3>
+                      </Link>
+                      <p className="text-lg font-bold text-gold mt-1">{formatPrice(product.price)}</p>
+                      
+                      <div className="flex gap-2 mt-4">
+                        <Button 
+                          size="sm" 
+                          className="flex-1"
+                          onClick={() => handleAddToCart(product)}
+                        >
+                          <ShoppingBag className="mr-2 h-4 w-4" />
+                          Add to Cart
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => removeFromWishlist(product.id)}
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>

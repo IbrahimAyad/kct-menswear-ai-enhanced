@@ -12,7 +12,7 @@ import { formatPrice, getSizeLabel } from "@/lib/utils/format";
 import { cn } from "@/lib/utils/cn";
 import { 
   ArrowLeft, Check, Loader2, ShoppingBag, Truck, Shield, Ruler, 
-  Star, Heart, Share2, Eye, Clock, Users, Award, Zap, 
+  Star, Share2, Eye, Clock, Users, Award, Zap, 
   MessageCircle, ThumbsUp, Camera, Bot, Sparkles, TrendingUp, Calendar
 } from "lucide-react";
 import Link from "next/link";
@@ -20,6 +20,7 @@ import { FashionClipRecommendations } from "@/components/recommendations/Fashion
 import { Badge } from "@/components/ui/badge";
 import { SizeBot } from "@/components/products/SizeBot";
 import { SizeChart } from "@/components/products/SizeChart";
+import { WishlistButton } from "@/components/products/WishlistButton";
 import { AnimatePresence } from "framer-motion";
 import { trackViewItem, trackAddToCart, trackAddToWishlist, trackShare, trackEngagement } from "@/lib/analytics/google-analytics";
 import { useScrollTracking } from "@/hooks/useScrollTracking";
@@ -42,7 +43,6 @@ export default function ProductDetailPage() {
   const [error, setError] = useState("");
   const [showSizeBot, setShowSizeBot] = useState(false);
   const [showSizeChart, setShowSizeChart] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [viewCount, setViewCount] = useState(Math.floor(Math.random() * 100) + 50);
   const [recentPurchases] = useState(Math.floor(Math.random() * 20) + 5);
 
@@ -392,32 +392,11 @@ export default function ProductDetailPage() {
                       </>
                     )}
                   </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    onClick={() => {
-                      setIsWishlisted(!isWishlisted);
-                      if (!isWishlisted && product) {
-                        trackAddToWishlist({
-                          item_id: product.id,
-                          item_name: product.name,
-                          category: product.category,
-                          price: product.price / 100,
-                        });
-                        
-                        // Facebook tracking
-                        trackFBAddToWishlist({
-                          content_ids: [product.id],
-                          content_name: product.name,
-                          value: product.price / 100,
-                          currency: 'USD'
-                        });
-                      }
-                    }}
-                    className={isWishlisted ? 'border-red-300 text-red-600' : ''}
-                  >
-                    <Heart className={`h-4 w-4 ${isWishlisted ? 'fill-current' : ''}`} />
-                  </Button>
+                  <WishlistButton 
+                    productId={product.id} 
+                    variant="icon" 
+                    className="h-12 w-12 border border-gray-300 hover:border-gray-400" 
+                  />
                   <Button 
                     size="lg" 
                     variant="outline"

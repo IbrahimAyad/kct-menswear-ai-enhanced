@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
-import { User, ChevronDown } from 'lucide-react'
+import { User, ChevronDown, Heart } from 'lucide-react'
 
 export default function UserMenu() {
   const { user, signOut, loading } = useAuth()
@@ -70,6 +70,14 @@ export default function UserMenu() {
               className="group flex w-full items-center rounded-md px-3 py-2 text-sm hover:bg-gray-100 transition-colors"
             >
               Order History
+            </Link>
+            <Link
+              href="/account/wishlist"
+              onClick={() => setIsOpen(false)}
+              className="group flex w-full items-center rounded-md px-3 py-2 text-sm hover:bg-gray-100 transition-colors"
+            >
+              <Heart className="w-4 h-4 mr-2" />
+              My Wishlist
             </Link>
             <Link
               href="/account/profile"

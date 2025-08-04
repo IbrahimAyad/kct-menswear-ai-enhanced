@@ -762,52 +762,57 @@ Import trace for requested module:
  ✓ Compiled in 344ms (917 modules)
  ✓ Compiled in 235ms (917 modules)
  ✓ Compiled in 248ms (917 modules)
-rt { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
-
-Import trace for requested module:
-./src/components/layout/Navigation.tsx
-<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/.next/cache/webpack/client-development/0.pack.gz_' -> '/Users/ibrahim/Desktop/Unified X/kct-menswear-v2/kct-menswear-v2/.next/cache/webpack/client-development/0.pack.gz'
- ⨯ ./src/components/layout/UserMenu.tsx:4:1
-Module not found: Can't resolve '@headlessui/react'
-  2 |
-  3 | import { Fragment } from 'react'
-> 4 | import { Menu, Transition } from '@headlessui/react'
-    | ^
-  5 | import { useAuth } from '@/hooks/useAuth'
-  6 | import Link from 'next/link'
-  7 | import { User } from 'lucide-react'
+ ✓ Compiled in 384ms (917 modules)
+ ✓ Compiled in 315ms (917 modules)
+ ✓ Compiled in 296ms (917 modules)
+ ✓ Compiled in 302ms (917 modules)
+ ✓ Compiled in 324ms (917 modules)
+ ✓ Compiled in 262ms (917 modules)
+ ✓ Compiled in 195ms (917 modules)
+ ✓ Compiled in 263ms (917 modules)
+ ✓ Compiled in 262ms (917 modules)
+ ✓ Compiled in 311ms (917 modules)
+ ✓ Compiled in 308ms (917 modules)
+ ✓ Compiled in 218ms (917 modules)
+ ✓ Compiled in 239ms (917 modules)
+ ✓ Compiled in 360ms (917 modules)
+ ✓ Compiled in 198ms (918 modules)
+ ✓ Compiled in 91ms (904 modules)
+   Reload env: .env.local
+ ✓ Compiled in 1890ms (918 modules)
+ ✓ Compiled in 141ms (904 modules)
+ ✓ Compiled in 193ms (904 modules)
+ ✓ Compiled in 230ms (918 modules)
+ ✓ Compiled in 95ms (904 modules)
+ ✓ Compiled in 237ms (918 modules)
+ ✓ Compiled in 202ms (918 modules)
+ ✓ Compiled in 270ms (918 modules)
+ ✓ Compiled in 210ms (918 modules)
+ ✓ Compiled in 196ms (918 modules)
+ ✓ Compiled in 89ms (904 modules)
+ ✓ Compiled in 332ms (918 modules)
+ ✓ Compiled in 381ms (918 modules)
+ ✓ Compiled in 286ms (918 modules)
+ ✓ Compiled in 256ms (918 modules)
+ ✓ Compiled in 286ms (918 modules)
+ ✓ Compiled in 266ms (918 modules)
+ ✓ Compiled in 274ms (918 modules)
+ ✓ Compiled in 346ms (918 modules)
+ ✓ Compiled in 284ms (918 modules)
+ ✓ Compiled in 202ms (918 modules)
+ ✓ Compiled in 288ms (918 modules)
+ ✓ Compiled in 284ms (918 modules)
+ ✓ Compiled in 204ms (918 modules)
+ ✓ Compiled in 285ms (918 modules)
+ ✓ Compiled in 362ms (918 modules)
+ ✓ Compiled in 305ms (918 modules)
+ ✓ Compiled in 267ms (918 modules)
+ ✓ Compiled in 923ms (918 modules)
+ ✓ Compiled in 208ms (918 modules)
+ ✓ Compiled in 313ms (918 modules)
+ ✓ Compiled in 223ms (918 modules)
+ ✓ Compiled in 199ms (918 modules)
+ucide-react'
 
 https://nextjs.org/docs/messages/module-not-found
 

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useCart } from "@/lib/hooks/useCart";
 import { ShoppingBag } from "lucide-react";
 import { trackProductClick } from "@/lib/analytics/google-analytics";
+import { WishlistButton } from "@/components/products/WishlistButton";
 
 interface ProductCardProps {
   product: Product;
@@ -58,6 +59,11 @@ export function ProductCard({ product, listName = 'product_list', index = 0 }: P
               <span className="text-white font-semibold text-lg">Out of Stock</span>
             </div>
           )}
+          
+          {/* Wishlist Button */}
+          <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            <WishlistButton productId={product.id} variant="icon" className="bg-white/90 backdrop-blur-sm" />
+          </div>
         </div>
       </Link>
 

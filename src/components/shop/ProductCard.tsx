@@ -11,6 +11,7 @@ import { ShoppingBag, Check, AlertCircle } from "lucide-react";
 import { useCart } from "@/lib/hooks/useCart";
 import { useProduct } from "@/lib/hooks/useProducts";
 import { cn } from "@/lib/utils/cn";
+import { WishlistButton } from "@/components/products/WishlistButton";
 
 interface ProductCardProps {
   product: Product;
@@ -90,6 +91,11 @@ export function ProductCard({ product: initialProduct }: ProductCardProps) {
               {availableSizes.length} sizes available
             </div>
           )}
+          
+          {/* Wishlist Button */}
+          <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity">
+            <WishlistButton productId={currentProduct.id} variant="icon" className="bg-white/90 backdrop-blur-sm" />
+          </div>
           
           {/* Quick view overlay */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
