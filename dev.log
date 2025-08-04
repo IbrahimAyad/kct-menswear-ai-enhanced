@@ -658,9 +658,8 @@ Import trace for requested module:
  ✓ Compiled in 325ms (916 modules)
  ✓ Compiled in 362ms (916 modules)
  ✓ Compiled in 212ms (916 modules)
-User } from 'lucide-react'
-
-https://nextjs.org/docs/messages/module-not-found
+ ✓ Compiled in 328ms (916 modules)
+extjs.org/docs/messages/module-not-found
 
 Import trace for requested module:
 ./src/components/layout/Navigation.tsx
