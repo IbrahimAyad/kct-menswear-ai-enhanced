@@ -30,7 +30,7 @@ export function ProductCard({ product: initialProduct }: ProductCardProps) {
   // Use real-time product data if available, fallback to initial
   const currentProduct = product || initialProduct;
 
-  const availableSizes = currentProduct.variants
+  const availableSizes = (currentProduct.variants || [])
     .filter((variant) => variant.stock > 0)
     .map((variant) => variant.size);
 
@@ -136,7 +136,7 @@ export function ProductCard({ product: initialProduct }: ProductCardProps) {
           <div className="mb-3">
             <p className="text-xs text-gray-600 mb-2 font-medium uppercase tracking-wider">Select Size:</p>
             <div className="grid grid-cols-4 gap-1">
-              {currentProduct.variants.map((variant) => (
+              {(currentProduct.variants || []).map((variant) => (
                 <button
                   key={variant.size}
                   className={cn(

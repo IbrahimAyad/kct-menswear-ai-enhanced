@@ -94,7 +94,7 @@ function ProductsContent() {
   }, [])
 
   // Load products function (extracted for reuse)
-  const loadProducts = useCallback(async (isRefresh = false) => {
+  const loadProducts = async (isRefresh = false) => {
     if (!isRefresh) setIsLoading(true)
     setError(null)
 
@@ -137,12 +137,12 @@ function ProductsContent() {
     } finally {
       if (!isRefresh) setIsLoading(false)
     }
-  }, [filters, sort, currentPage, searchQuery])
+  }
 
   // Load products on mount and when dependencies change
   useEffect(() => {
     loadProducts()
-  }, [loadProducts])
+  }, [filters, sort, currentPage, searchQuery, loadProducts])
 
   // Pull-to-refresh handler
   const handleRefresh = async () => {

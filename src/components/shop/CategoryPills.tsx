@@ -56,6 +56,11 @@ export function CategoryPills({
     }
   }, [categories])
 
+  // Don't render if no categories provided
+  if (!categories || categories.length === 0) {
+    return null
+  }
+
   const scroll = (direction: 'left' | 'right') => {
     const container = scrollContainerRef.current
     if (!container) return
@@ -143,7 +148,7 @@ export function CategoryPills({
           msOverflowStyle: 'none', // IE/Edge
         }}
       >
-        {categories.map((category) => (
+        {(categories || []).map((category) => (
           <button
             key={category.id}
             onClick={() => onCategoryChange(category.id)}

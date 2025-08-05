@@ -267,7 +267,7 @@ export function ProductFiltersPanel({
           count={filters.categories?.length}
         >
           <div className="space-y-3">
-            {metadata.categories.map(category => (
+            {(metadata.categories || []).map(category => (
               <div key={category} className="flex items-center space-x-2">
                 <Checkbox
                   id={`category-${category}`}
@@ -293,18 +293,18 @@ export function ProductFiltersPanel({
           onToggle={() => toggleSection('price')}
         >
           <PriceRangeSlider
-            min={metadata.priceRange.min}
-            max={metadata.priceRange.max}
+            min={metadata.priceRange?.min || 0}
+            max={metadata.priceRange?.max || 1000}
             value={[
-              filters.priceRange?.min || metadata.priceRange.min,
-              filters.priceRange?.max || metadata.priceRange.max
+              filters.priceRange?.min || metadata.priceRange?.min || 0,
+              filters.priceRange?.max || metadata.priceRange?.max || 1000
             ]}
             onChange={handlePriceRangeChange}
           />
         </FilterSection>
 
         {/* Colors */}
-        {metadata.colors.length > 0 && (
+        {metadata.colors && metadata.colors.length > 0 && (
           <FilterSection
             title="Colors"
             icon={<Palette className="h-4 w-4" />}
@@ -313,7 +313,7 @@ export function ProductFiltersPanel({
             count={filters.colors?.length}
           >
             <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto">
-              {metadata.colors.map(color => (
+              {(metadata.colors || []).map(color => (
                 <div key={color} className="flex items-center space-x-2">
                   <Checkbox
                     id={`color-${color}`}
@@ -337,7 +337,7 @@ export function ProductFiltersPanel({
         )}
 
         {/* Vendors */}
-        {metadata.vendors.length > 0 && (
+        {metadata.vendors && metadata.vendors.length > 0 && (
           <FilterSection
             title="Vendors"
             icon={<Star className="h-4 w-4" />}
@@ -346,7 +346,7 @@ export function ProductFiltersPanel({
             count={filters.vendors?.length}
           >
             <div className="space-y-3 max-h-48 overflow-y-auto">
-              {metadata.vendors.map(vendor => (
+              {(metadata.vendors || []).map(vendor => (
                 <div key={vendor} className="flex items-center space-x-2">
                   <Checkbox
                     id={`vendor-${vendor}`}

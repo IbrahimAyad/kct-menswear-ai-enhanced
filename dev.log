@@ -850,7 +850,8 @@ Import trace for requested module:
 
  ✓ Starting...
  ✓ Ready in 1782ms
-'@/hooks/useAuth'
+[?25h
+s/useAuth'
   6 | import Link from 'next/link'
   7 | import { User } from 'lucide-react'
 
@@ -1155,3 +1156,4 @@ Import trace for requested module:
  ○ Compiling /_not-found ...
 <w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (108kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
  GET /?error=access_denied&error_code=otp_expired&error_description=Email+link+is+invalid+or+has+expired 200 in 40ms
+[?25h

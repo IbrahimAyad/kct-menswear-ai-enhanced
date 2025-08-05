@@ -11,16 +11,18 @@ export async function GET(request: NextRequest) {
     if (!supabaseConfigured) {
       // Return mock data if Supabase is not configured
       const searchParams = request.nextUrl.searchParams
-      const action = searchParams.get('action')
+      const action = searchParams.get('action') || searchParams.get('meta')
 
       switch (action) {
         case 'categories':
           return NextResponse.json(getMockCategories())
         case 'brands':
+        case 'vendors':
           return NextResponse.json(getMockBrands())
         case 'colors':
           return NextResponse.json(getMockColors())
         case 'priceRange':
+        case 'price-range':
           return NextResponse.json(getMockPriceRange())
         default:
           return NextResponse.json(getMockProducts())
@@ -29,24 +31,25 @@ export async function GET(request: NextRequest) {
 
     // Use real Supabase data
     const searchParams = request.nextUrl.searchParams
-    const action = searchParams.get('action')
+    const action = searchParams.get('action') || searchParams.get('meta')
 
     switch (action) {
       case 'categories':
         const categories = await getProductCategories()
-        return NextResponse.json(categories)
+        return NextResponse.json({ categories: categories || [] })
       
       case 'vendors':
         const vendors = await getProductVendors()
-        return NextResponse.json(vendors)
+        return NextResponse.json({ vendors: vendors || [] })
       
       case 'colors':
         const colors = await getProductColors()
-        return NextResponse.json(colors)
+        return NextResponse.json({ colors: colors || [] })
       
       case 'priceRange':
+      case 'price-range':
         const priceRange = await getProductPriceRange()
-        return NextResponse.json(priceRange)
+        return NextResponse.json({ priceRange: priceRange || { min: 0, max: 1000 } })
       
       default:
         const params: ProductSearchParams = {
@@ -63,12 +66,37 @@ export async function GET(request: NextRequest) {
         }
 
         const result = await getProducts(params)
-        return NextResponse.json(result)
+        return NextResponse.json({
+          products: result?.products || [],
+          totalCount: result?.totalCount || 0,
+          currentPage: result?.currentPage || 1,
+          totalPages: result?.totalPages || 1
+        })
     }
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Failed to fetch products' },
-      { status: 500 }
-    )
+    console.error('Error in products API:', error)
+    const searchParams = request.nextUrl.searchParams
+    const action = searchParams.get('action') || searchParams.get('meta')
+    
+    // Return appropriate empty structure based on what was requested
+    switch (action) {
+      case 'categories':
+        return NextResponse.json({ categories: [] }, { status: 500 })
+      case 'vendors':
+        return NextResponse.json({ vendors: [] }, { status: 500 })
+      case 'colors':
+        return NextResponse.json({ colors: [] }, { status: 500 })
+      case 'priceRange':
+      case 'price-range':
+        return NextResponse.json({ priceRange: { min: 0, max: 1000 } }, { status: 500 })
+      default:
+        return NextResponse.json({
+          products: [],
+          totalCount: 0,
+          currentPage: 1,
+          totalPages: 1,
+          error: 'Failed to fetch products'
+        }, { status: 500 })
+    }
   }
 }

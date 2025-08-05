@@ -30,7 +30,7 @@ export function OccasionBundles({ bundles, onAddToCart }: OccasionBundlesProps) 
   const [selectedBundle, setSelectedBundle] = useState<Bundle | null>(null);
   const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
 
-  const occasions = Array.from(new Set(bundles.map(b => b.occasion)));
+  const occasions = Array.from(new Set((bundles || []).map(b => b.occasion)));
 
   const handleProductToggle = (productId: string, required: boolean) => {
     if (required) return;
@@ -45,13 +45,13 @@ export function OccasionBundles({ bundles, onAddToCart }: OccasionBundlesProps) 
   };
 
   const calculateBundleTotal = (bundle: Bundle) => {
-    return bundle.products
+    return (bundle.products || [])
       .filter(p => p.required || selectedProducts.has(p.id))
       .reduce((total, product) => total + product.bundlePrice, 0);
   };
 
   const handleAddBundle = (bundle: Bundle) => {
-    const productsToAdd = bundle.products.filter(
+    const productsToAdd = (bundle.products || []).filter(
       p => p.required || selectedProducts.has(p.id)
     );
     onAddToCart(bundle, productsToAdd);
@@ -67,7 +67,7 @@ export function OccasionBundles({ bundles, onAddToCart }: OccasionBundlesProps) 
       </div>
 
       <div className="flex justify-center gap-4 mb-8 flex-wrap">
-        {occasions.map((occasion) => (
+        {(occasions || []).map((occasion) => (
           <button
             key={occasion}
             className="px-6 py-2 border-2 border-black hover:bg-black hover:text-white transition-colors capitalize"
@@ -78,7 +78,7 @@ export function OccasionBundles({ bundles, onAddToCart }: OccasionBundlesProps) 
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {bundles.map((bundle, index) => (
+        {(bundles || []).map((bundle, index) => (
           <motion.div
             key={bundle.id}
             initial={{ opacity: 0, y: 20 }}
@@ -102,7 +102,7 @@ export function OccasionBundles({ bundles, onAddToCart }: OccasionBundlesProps) 
               <p className="text-gray-600 mb-4">{bundle.description}</p>
 
               <div className="space-y-2 mb-6">
-                {bundle.products.map((product) => (
+                {(bundle.products || []).map((product) => (
                   <div key={product.id} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <button

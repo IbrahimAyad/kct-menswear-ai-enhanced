@@ -96,9 +96,9 @@ export function SupabaseProductCard({
                 )}
                 
                 {/* Tags */}
-                {product.tags.length > 0 && (
+                {product.tags && product.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">
-                    {product.tags.slice(0, 3).map(tag => (
+                    {(product.tags || []).slice(0, 3).map(tag => (
                       <Badge key={tag} variant="secondary" className="text-xs">
                         {tag}
                       </Badge>
@@ -255,15 +255,15 @@ export function SupabaseProductCard({
         </div>
 
         {/* Available sizes preview */}
-        {product.variants.length > 0 && (
+        {product.variants && product.variants.length > 0 && (
           <div className="flex items-center gap-1 mt-2">
             <span className="text-xs text-gray-600">Sizes:</span>
-            {product.variants.slice(0, 4).map((variant, idx) => (
+            {(product.variants || []).slice(0, 4).map((variant, idx) => (
               <span key={idx} className="text-xs text-gray-600">
-                {variant.option1}{idx < Math.min(3, product.variants.length - 1) ? ',' : ''}
+                {variant.option1}{idx < Math.min(3, (product.variants || []).length - 1) ? ',' : ''}
               </span>
             ))}
-            {product.variants.length > 4 && <span className="text-xs text-gray-600">+more</span>}
+            {(product.variants || []).length > 4 && <span className="text-xs text-gray-600">+more</span>}
           </div>
         )}
 

@@ -12,11 +12,20 @@ import { FacebookPixel, FacebookPixelScript } from "@/components/analytics/Faceb
 import { Suspense } from "react";
 import { socialMediaSchema } from "./layout/social-schema";
 import { SkipLinks } from "@/components/accessibility/SkipLinks";
+import MobileBottomNav from "@/components/mobile/MobileBottomNav";
+import { ServiceWorkerRegistry } from "@/components/pwa/ServiceWorkerRegistry";
 
 export const metadata: Metadata = {
   title: "KCT Menswear - Premium Men's Formal Wear",
   description: "Elevate your style with premium men's formal wear and expert tailoring. Shop suits, wedding attire, and occasion-based bundles.",
   keywords: "mens suits, formal wear, wedding suits, tuxedos, dress shirts, tailoring, Detroit menswear",
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    themeColor: '#D4AF37'
+  },
   openGraph: {
     title: "KCT Menswear - Premium Men's Formal Wear",
     description: "Elevate your style with premium men's formal wear and expert tailoring",
@@ -85,6 +94,8 @@ export default function RootLayout({
           <Footer />
           <AIStyleAssistant />
           <SimpleCartDrawer />
+          <MobileBottomNav />
+          <ServiceWorkerRegistry />
           <Suspense fallback={null}>
             <GoogleAnalytics />
             <FacebookPixel />

@@ -76,13 +76,13 @@ export function SearchBar() {
 
             {query.length >= 2 && (
               <div className="max-h-96 overflow-y-auto">
-                {products.length === 0 ? (
+                {!products || products.length === 0 ? (
                   <div className="p-4 text-center text-gray-500 text-sm">
                     {isLoading ? "Searching..." : "No products found"}
                   </div>
                 ) : (
                   <div className="py-2">
-                    {products.slice(0, 5).map((product) => (
+                    {(products || []).slice(0, 5).map((product) => (
                       <Link
                         key={product.id}
                         href={`/products/${product.id}`}

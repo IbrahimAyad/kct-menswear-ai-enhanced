@@ -2,15 +2,25 @@
 
 import { Product } from "@/lib/types";
 import { ProductCard } from "./ProductCard";
+import { ProductGridSkeleton } from "@/components/ui/ProductCardSkeleton";
 import { cn } from "@/lib/utils/cn";
 
 interface ProductGridProps {
   products: Product[];
   className?: string;
+  isLoading?: boolean;
 }
 
-export function ProductGrid({ products, className }: ProductGridProps) {
-  if (products.length === 0) {
+export function ProductGrid({ products, className, isLoading = false }: ProductGridProps) {
+  if (isLoading) {
+    return (
+      <div className={className}>
+        <ProductGridSkeleton count={12} />
+      </div>
+    );
+  }
+
+  if (!products || products.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-gray-500 text-lg">No products found</p>
@@ -25,7 +35,7 @@ export function ProductGrid({ products, className }: ProductGridProps) {
         className
       )}
     >
-      {products.map((product) => (
+      {(products || []).map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </div>

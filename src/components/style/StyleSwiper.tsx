@@ -21,7 +21,7 @@ export function StyleSwiper({ products, onSwipe, onComplete }: StyleSwiperProps)
   const handleSwipe = (direction: 'left' | 'right') => {
     if (!currentProduct) return;
 
-    setExitX(direction === 'left' ? -300 : 300);
+    setExitX(direction === 'left' ? -window.innerWidth : window.innerWidth);
     onSwipe(currentProduct, direction);
 
     if (direction === 'right') {
@@ -68,11 +68,21 @@ export function StyleSwiper({ products, onSwipe, onComplete }: StyleSwiperProps)
           <motion.div
             key={currentProduct.id}
             className="absolute inset-0"
+            style={{
+              x: exitX === 0 ? undefined : exitX,
+              rotate: exitX === 0 ? undefined : exitX > 0 ? 20 : -20
+            }}
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ x: exitX, opacity: 0, scale: 0.8 }}
+            exit={{ 
+              x: exitX, 
+              opacity: 0, 
+              scale: 0.8,
+              rotate: exitX > 0 ? 30 : -30
+            }}
             drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
+            dragConstraints={{ left: -200, right: 200 }}
+            dragElastic={0.5}
             onDragEnd={handleDragEnd}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           >
