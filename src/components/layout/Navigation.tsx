@@ -128,49 +128,55 @@ export function Navigation() {
       <div
         id="mobile-navigation"
         className={cn(
-          "md:hidden absolute top-16 left-0 w-full bg-white/98 backdrop-blur-md border-b border-gold/10 shadow-lg transition-all duration-300 ease-in-out",
+          "md:hidden fixed top-16 left-0 w-full bg-white border-b border-gray-200 shadow-xl transition-all duration-300 ease-in-out z-40 max-h-[calc(100vh-4rem)] overflow-y-auto",
           isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
         )}
         role="navigation"
         aria-label="Mobile navigation menu"
       >
-        <div className="px-4 py-4 space-y-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="block px-4 py-3 text-black hover:bg-gold/10 hover:text-gold rounded-sm transition-all duration-200 font-medium"
-              onClick={() => setIsMenuOpen(false)}
-              aria-label={`Navigate to ${item.label}`}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <div className="pt-4 border-t border-gold/20 flex flex-col space-y-2">
-            <Link href="/account" className="w-full" aria-label="Go to your account">
-              <Button variant="outline" className="w-full border-gold/20 hover:bg-gold/10 hover:border-gold transition-all duration-200">
-                <User className="h-4 w-4 mr-2" aria-hidden="true" />
-                Account
+        <div className="px-4 py-6">
+          {/* Main Navigation Items */}
+          <div className="space-y-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "flex items-center justify-between px-4 py-3 text-base font-medium text-gray-900 hover:bg-amber-50 hover:text-amber-700 rounded-lg transition-all duration-200",
+                  item.highlight && "relative"
+                )}
+                onClick={() => setIsMenuOpen(false)}
+                aria-label={`Navigate to ${item.label}`}
+              >
+                <span>{item.label}</span>
+                {item.highlight && (
+                  <span className="text-xs bg-amber-600 text-white px-2 py-0.5 rounded-full font-semibold ml-2">
+                    NEW
+                  </span>
+                )}
+              </Link>
+            ))}
+          </div>
+          
+          {/* Divider */}
+          <div className="my-6 border-t border-gray-200"></div>
+          
+          {/* Action Buttons */}
+          <div className="space-y-3">
+            <Link href="/account" className="block" aria-label="Go to your account">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start border-gray-300 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 h-12"
+              >
+                <User className="h-5 w-5 mr-3" aria-hidden="true" />
+                <span className="text-base">Account</span>
               </Button>
             </Link>
-            {/* Mobile cart button disabled - using SimpleCartDrawer instead */}
-            {/* <Button 
-              variant="outline" 
-              className="w-full relative border-gold/20 hover:bg-gold/10 hover:border-gold transition-all duration-200"
-              onClick={() => {
-                setIsMenuOpen(false);
-                setIsCartOpen(true);
-              }}
-            >
-              <ShoppingBag className="h-4 w-4 mr-2" />
-              Cart
-              {cartSummary.itemCount > 0 && (
-                <span className="ml-1">({cartSummary.itemCount})</span>
-              )}
-            </Button> */}
+            
             <Button 
-              className="w-full bg-gold hover:bg-gold/90 text-black font-semibold shadow-md"
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-md h-12 text-base"
               aria-label="Book an appointment for custom fitting"
+              onClick={() => setIsMenuOpen(false)}
             >
               Book Appointment
             </Button>
