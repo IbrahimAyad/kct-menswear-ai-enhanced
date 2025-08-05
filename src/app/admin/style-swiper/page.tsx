@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Upload, Trash2, Eye, Loader2, FolderOpen } from 'lucide-react';
 import { StyleSwiperImage } from '@/lib/types';
 
@@ -114,9 +114,9 @@ export default function StyleSwiperAdminPage() {
   };
 
   // Load images when component mounts or category changes
-  useState(() => {
+  useEffect(() => {
     fetchImages();
-  });
+  }, [fetchImages]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">

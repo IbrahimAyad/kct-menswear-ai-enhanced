@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
@@ -15,17 +15,18 @@ import { SkipLinks } from "@/components/accessibility/SkipLinks";
 import MobileBottomNav from "@/components/mobile/MobileBottomNav";
 import { ServiceWorkerRegistry } from "@/components/pwa/ServiceWorkerRegistry";
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#D4AF37'
+};
+
 export const metadata: Metadata = {
   title: "KCT Menswear - Premium Men's Formal Wear",
   description: "Elevate your style with premium men's formal wear and expert tailoring. Shop suits, wedding attire, and occasion-based bundles.",
   keywords: "mens suits, formal wear, wedding suits, tuxedos, dress shirts, tailoring, Detroit menswear",
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    themeColor: '#D4AF37'
-  },
   openGraph: {
     title: "KCT Menswear - Premium Men's Formal Wear",
     description: "Elevate your style with premium men's formal wear and expert tailoring",
