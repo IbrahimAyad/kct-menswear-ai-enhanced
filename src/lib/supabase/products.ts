@@ -1,5 +1,6 @@
 import { createClient } from './client'
 import { supabaseAdmin } from './client'
+import { fetchProductsWithImages } from '@/lib/shared/supabase-products'
 import { 
   Product, 
   ProductWithVariants, 
@@ -91,32 +92,30 @@ export async function getProducts(params: ProductSearchParams = {}) {
  */
 export async function getProductById(id: string): Promise<EnhancedProduct | null> {
   try {
-    if (!supabaseAdmin) {
-      throw new Error('Supabase client not configured')
-    }
-
-    const { data, error } = await supabaseAdmin
-      .from('products')
-      .select(`
-        *,
-        product_variants (
-          id,
-          sku,
-          size,
-          color,
-          inventory_quantity,
-          price
-        )
-      `)
-      .eq('id', id)
-      .single()
-
-    if (error) {
-      console.error('Error fetching product:', error)
+    // Use shared service to fetch all products then find the one we need
+    const result = await fetchProductsWithImages({ 
+      limit: 1000,
+      status: 'active' 
+    })
+    
+    if (!result.success || !result.data) {
+      console.error('Error fetching products:', result.error)
       return null
     }
 
-    return data ? toEnhancedProduct(data) : null
+    // Find the specific product
+    const product = result.data.find(p => p.id === id)
+    
+    if (!product) {
+      return null
+    }
+
+    // Convert to enhanced product format
+    return toEnhancedProduct({
+      ...product,
+      product_variants: product.variants || [],
+      product_images: product.images || []
+    } as any)
   } catch (error) {
     console.error('Error in getProductById:', error)
     return null
