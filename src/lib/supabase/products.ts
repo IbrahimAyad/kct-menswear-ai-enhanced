@@ -92,29 +92,22 @@ export async function getProducts(params: ProductSearchParams = {}) {
  */
 export async function getProductById(id: string): Promise<EnhancedProduct | null> {
   try {
-    // Use shared service to fetch all products then find the one we need
-    const result = await fetchProductsWithImages({ 
-      limit: 1000,
-      status: 'active' 
-    })
+    // Import the shared service getProduct function
+    const { getProduct: getProductFromShared } = await import('@/lib/shared/supabase-products')
+    
+    // Use the optimized single product query
+    const result = await getProductFromShared(id)
     
     if (!result.success || !result.data) {
-      console.error('Error fetching products:', result.error)
-      return null
-    }
-
-    // Find the specific product
-    const product = result.data.find(p => p.id === id)
-    
-    if (!product) {
+      console.error('Error fetching product:', result.error)
       return null
     }
 
     // Convert to enhanced product format
     return toEnhancedProduct({
-      ...product,
-      product_variants: product.variants || [],
-      product_images: product.images || []
+      ...result.data,
+      product_variants: result.data.variants || [],
+      product_images: result.data.images || []
     } as any)
   } catch (error) {
     console.error('Error in getProductById:', error)
