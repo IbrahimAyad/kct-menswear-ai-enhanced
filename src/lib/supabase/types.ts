@@ -69,6 +69,10 @@ export interface EnhancedProduct {
   viewCount: number
   createdAt: string
   updatedAt: string
+  inStock: boolean
+  totalInventory: number
+  isFeatured: boolean
+  brand: string | null
 }
 
 export interface EnhancedVariant {
@@ -125,11 +129,41 @@ export type ProductCategory = typeof PRODUCT_CATEGORIES[number]
 
 // Helper function to convert database product to enhanced product
 export function toEnhancedProduct(product: ProductWithVariants): EnhancedProduct {
-  const images = product.product_images
-    ?.sort((a, b) => a.position - b.position)
-    .map(img => img.image_url) || []
+  // Handle both formats: product_images (old) and images (shared service)
+  let images: string[] = []
+  
+  if (product.product_images) {
+    // Old format
+    images = product.product_images
+      .sort((a, b) => a.position - b.position)
+      .map(img => img.image_url) || []
+  } else if ((product as any).images) {
+    // Shared service format
+    const productImages = (product as any).images
+    if (Array.isArray(productImages)) {
+      images = productImages
+        .sort((a: any, b: any) => (a.position || 0) - (b.position || 0))
+        .map((img: any) => img.url || img.image_url) || []
+    }
+  }
 
   const primaryImage = images[0] || null
+
+  // Calculate inventory from variants
+  const variants = product.product_variants || (product as any).variants || []
+  const totalInventory = variants.reduce((sum: number, v: any) => {
+    return sum + (v.inventory_quantity || 0)
+  }, 0)
+  
+  // Check if product is in stock (has inventory or doesn't track inventory)
+  const inStock = product.track_inventory === false || 
+    totalInventory > 0 || 
+    variants.some((v: any) => v.available && (!v.inventory_quantity || v.inventory_quantity > 0))
+
+  // Get compare at price from first variant if available
+  const compareAtPrice = variants.length > 0 && variants[0].compare_at_price 
+    ? variants[0].compare_at_price 
+    : null
 
   return {
     id: product.id,
@@ -141,7 +175,7 @@ export function toEnhancedProduct(product: ProductWithVariants): EnhancedProduct
     sku: product.sku,
     handle: product.handle,
     price: product.base_price,
-    compareAtPrice: null, // Will come from variants
+    compareAtPrice,
     weight: product.weight,
     status: product.status,
     visibility: product.visibility,
@@ -156,7 +190,7 @@ export function toEnhancedProduct(product: ProductWithVariants): EnhancedProduct
     seoDescription: product.seo_description,
     images,
     primaryImage,
-    variants: (product.product_variants || []).map(v => ({
+    variants: variants.map((v: any) => ({
       id: v.id,
       productId: v.product_id,
       title: v.title,
@@ -165,17 +199,21 @@ export function toEnhancedProduct(product: ProductWithVariants): EnhancedProduct
       costPrice: v.cost_price,
       sku: v.sku,
       barcode: v.barcode,
-      inventoryQuantity: v.inventory_quantity,
-      allowBackorders: v.allow_backorders,
+      inventoryQuantity: v.inventory_quantity || 0,
+      allowBackorders: v.allow_backorders || false,
       weight: v.weight,
       option1: v.option1,
       option2: v.option2,
       option3: v.option3,
-      available: v.available
+      available: v.available !== false
     })),
     additionalInfo: product.additional_info as Record<string, any> | null,
     viewCount: product.view_count,
     createdAt: product.created_at,
-    updatedAt: product.updated_at
+    updatedAt: product.updated_at,
+    inStock,
+    totalInventory,
+    isFeatured: product.featured,
+    brand: product.vendor
   }
 }

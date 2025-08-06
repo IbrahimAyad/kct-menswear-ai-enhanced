@@ -78,7 +78,7 @@ export function ProductImage({
   }
 
   return (
-    <div className="relative">
+    <div className={cn("relative", fill && "w-full h-full")}>
       {/* Loading skeleton */}
       {isLoading && (
         <div className={cn(
@@ -92,6 +92,7 @@ export function ProductImage({
         <Image
           {...imageProps}
           fill
+          style={{ objectFit: 'cover' }}
         />
       ) : (
         <Image

@@ -139,10 +139,15 @@ function ProductsContent() {
     }
   }, [filters, sort, currentPage, searchQuery])
 
-  // Load products on mount and when dependencies change
+  // Load products when dependencies change
   useEffect(() => {
     loadProducts()
   }, [loadProducts])
+
+  // Reset page when filters, search, or sort changes  
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [filters, searchQuery, sort.field, sort.direction])
 
   // Pull-to-refresh handler
   const handleRefresh = async () => {
@@ -159,7 +164,6 @@ function ProductsContent() {
         return rest
       })
     }
-    setCurrentPage(1)
   }, [selectedCategory])
 
   // Handle search params
@@ -349,32 +353,21 @@ function ProductsContent() {
                     <Button
                       variant="outline"
                       onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                      disabled={currentPage === 1}
+                      disabled={currentPage === 1 || isLoading}
                     >
                       Previous
                     </Button>
                     
                     <div className="flex items-center gap-2">
-                      {[...Array(Math.min(totalPages, 5))].map((_, i) => {
-                        const pageNum = i + 1
-                        return (
-                          <Button
-                            key={pageNum}
-                            variant={currentPage === pageNum ? 'default' : 'outline'}
-                            size="sm"
-                            onClick={() => setCurrentPage(pageNum)}
-                          >
-                            {pageNum}
-                          </Button>
-                        )
-                      })}
-                      {totalPages > 5 && <span>...</span>}
+                      <span className="text-sm text-gray-600">
+                        Page {currentPage} of {totalPages} ({totalCount} products)
+                      </span>
                     </div>
 
                     <Button
                       variant="outline"
                       onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                      disabled={currentPage === totalPages}
+                      disabled={currentPage === totalPages || isLoading}
                     >
                       Next
                     </Button>

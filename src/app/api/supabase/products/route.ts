@@ -1,76 +1,121 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getProducts, getProductCategories, getProductVendors, getProductColors, getProductPriceRange } from '@/lib/supabase/products'
-import { ProductSearchParams } from '@/lib/supabase/types'
-import { getMockProducts, getMockCategories, getMockBrands, getMockColors, getMockPriceRange } from '@/lib/supabase/mockData'
+import { fetchProductsWithImages, Product } from '@/lib/shared/supabase-products'
+import { toEnhancedProduct } from '@/lib/supabase/types'
 
 export async function GET(request: NextRequest) {
   try {
-    // Check if Supabase is configured
-    const supabaseConfigured = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    if (!supabaseConfigured) {
-      // Return mock data if Supabase is not configured
-      const searchParams = request.nextUrl.searchParams
-      const action = searchParams.get('action') || searchParams.get('meta')
-
-      switch (action) {
-        case 'categories':
-          return NextResponse.json(getMockCategories())
-        case 'brands':
-        case 'vendors':
-          return NextResponse.json(getMockBrands())
-        case 'colors':
-          return NextResponse.json(getMockColors())
-        case 'priceRange':
-        case 'price-range':
-          return NextResponse.json(getMockPriceRange())
-        default:
-          return NextResponse.json(getMockProducts())
-      }
-    }
-
-    // Use real Supabase data
     const searchParams = request.nextUrl.searchParams
     const action = searchParams.get('action') || searchParams.get('meta')
 
+    // Handle metadata requests
     switch (action) {
       case 'categories':
-        const categories = await getProductCategories()
-        return NextResponse.json({ categories: categories || [] })
+        // Return actual categories from products
+        const categoryResult = await fetchProductsWithImages({ limit: 1000 })
+        const categories = [...new Set(categoryResult.data.map(p => p.category).filter(Boolean))]
+        return NextResponse.json({ 
+          categories: categories.length > 0 ? categories : ['Suits', 'Shirts', 'Accessories', 'Shoes', 'Vest & Tie Sets'] 
+        })
       
       case 'vendors':
-        const vendors = await getProductVendors()
-        return NextResponse.json({ vendors: vendors || [] })
+      case 'brands':
+        // Return static brands for now
+        return NextResponse.json({ 
+          vendors: ['KCT', 'Premium Collection', 'Classic Line'] 
+        })
       
       case 'colors':
-        const colors = await getProductColors()
-        return NextResponse.json({ colors: colors || [] })
+        // Return common colors
+        return NextResponse.json({ 
+          colors: ['Black', 'Navy', 'Gray', 'Blue', 'White', 'Burgundy'] 
+        })
       
       case 'priceRange':
       case 'price-range':
-        const priceRange = await getProductPriceRange()
-        return NextResponse.json({ priceRange: priceRange || { min: 0, max: 1000 } })
+        return NextResponse.json({ 
+          priceRange: { min: 0, max: 1000 } 
+        })
       
       default:
-        const params: ProductSearchParams = {
-          category: searchParams.get('category') || undefined,
-          vendor: searchParams.get('vendor') || undefined,
-          minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
-          maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
-          color: searchParams.get('color') || undefined,
-          search: searchParams.get('search') || undefined,
-          sortBy: searchParams.get('sortBy') as any || 'created_at',
-          sortOrder: searchParams.get('sortOrder') as any || 'desc',
-          page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
-          limit: searchParams.get('limit') ? Number(searchParams.get('limit')) : 20
+        // Fetch products using shared service
+        const limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 24
+        const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
+        const category = searchParams.get('category')
+        const search = searchParams.get('search')
+        const sortBy = searchParams.get('sortBy') || 'created_at'
+        const sortOrder = searchParams.get('sortOrder') || 'desc'
+        
+        // First, fetch ALL products to get accurate count
+        const allResult = await fetchProductsWithImages({ 
+          limit: 1000, // Fetch all products for filtering/counting
+          offset: 0,
+          category: category || undefined,
+          status: 'active'
+        })
+        
+        if (!allResult.success) {
+          throw new Error(allResult.error || 'Failed to fetch products')
         }
-
-        const result = await getProducts(params)
+        
+        // Convert all products to enhanced format
+        let allEnhancedProducts = allResult.data.map(product => {
+          return toEnhancedProduct({
+            ...product,
+            product_variants: product.variants || [],
+            product_images: product.images || []
+          } as any)
+        })
+        
+        // Apply search filter if provided
+        if (search) {
+          const searchLower = search.toLowerCase()
+          allEnhancedProducts = allEnhancedProducts.filter(p => 
+            p.name.toLowerCase().includes(searchLower) ||
+            p.description?.toLowerCase().includes(searchLower) ||
+            p.category?.toLowerCase().includes(searchLower) ||
+            p.tags?.some(tag => tag.toLowerCase().includes(searchLower))
+          )
+        }
+        
+        // Sort all products
+        allEnhancedProducts.sort((a, b) => {
+          let aVal, bVal
+          
+          switch(sortBy) {
+            case 'price':
+              aVal = a.price
+              bVal = b.price
+              break
+            case 'title':
+            case 'name':
+              aVal = a.name.toLowerCase()
+              bVal = b.name.toLowerCase()
+              break
+            case 'created_at':
+            default:
+              aVal = new Date(a.createdAt || 0).getTime()
+              bVal = new Date(b.createdAt || 0).getTime()
+          }
+          
+          if (sortOrder === 'asc') {
+            return aVal > bVal ? 1 : -1
+          } else {
+            return aVal < bVal ? 1 : -1
+          }
+        })
+        
+        // Calculate pagination from sorted/filtered results
+        const totalCount = allEnhancedProducts.length
+        const totalPages = Math.ceil(totalCount / limit)
+        const offset = (page - 1) * limit
+        const paginatedProducts = allEnhancedProducts.slice(offset, offset + limit)
+        
+        // Return paginated response with correct total count
         return NextResponse.json({
-          products: result?.products || [],
-          totalCount: result?.totalCount || 0,
-          currentPage: result?.currentPage || 1,
-          totalPages: result?.totalPages || 1
+          products: paginatedProducts,
+          totalCount: totalCount,
+          currentPage: page,
+          totalPages: totalPages
         })
     }
   } catch (error) {
@@ -81,22 +126,22 @@ export async function GET(request: NextRequest) {
     // Return appropriate empty structure based on what was requested
     switch (action) {
       case 'categories':
-        return NextResponse.json({ categories: [] }, { status: 500 })
+        return NextResponse.json({ categories: [] })
       case 'vendors':
-        return NextResponse.json({ vendors: [] }, { status: 500 })
+        return NextResponse.json({ vendors: [] })
       case 'colors':
-        return NextResponse.json({ colors: [] }, { status: 500 })
+        return NextResponse.json({ colors: [] })
       case 'priceRange':
       case 'price-range':
-        return NextResponse.json({ priceRange: { min: 0, max: 1000 } }, { status: 500 })
+        return NextResponse.json({ priceRange: { min: 0, max: 1000 } })
       default:
         return NextResponse.json({
           products: [],
           totalCount: 0,
           currentPage: 1,
           totalPages: 1,
-          error: 'Failed to fetch products'
-        }, { status: 500 })
+          error: error instanceof Error ? error.message : 'Failed to fetch products'
+        })
     }
   }
 }
