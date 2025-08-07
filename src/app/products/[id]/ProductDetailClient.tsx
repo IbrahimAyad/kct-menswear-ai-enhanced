@@ -10,10 +10,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ProductImage } from '@/components/ui/ProductImage'
 import { WishlistButton } from '@/components/products/WishlistButton'
 import SizeGuideModal from '@/components/products/SizeGuideModal'
+import { SizeSelector } from '@/components/products/SizeSelector'
 import { formatPrice } from '@/lib/utils/format'
 import { useCart } from '@/lib/hooks/useCart'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils/cn'
+import { type UserMeasurements } from '@/lib/products/sizing'
 import { 
   ShoppingBag, 
   Check, 
@@ -79,7 +81,14 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
   const handleAddToCart = async () => {
     if (!selectedSize && availableSizes.length > 0) {
-      toast.error('Please select a size')
+      // Special message for dress shirts
+      const isDressShirt = product.category?.toLowerCase().includes('shirt') || 
+                          product.productType?.toLowerCase().includes('shirt')
+      if (isDressShirt) {
+        toast.error('Please select neck size and sleeve length')
+      } else {
+        toast.error('Please select a size')
+      }
       return
     }
 
@@ -303,36 +312,16 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
               </div>
             </div>
 
-            {/* Variant Selection */}
+            {/* Smart Size Selection */}
             {availableSizes.length > 0 && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-gray-900">Size</label>
-                  <button
-                    onClick={() => setShowSizeGuide(true)}
-                    className="text-sm text-gold hover:underline flex items-center gap-1"
-                  >
-                    <Ruler className="h-4 w-4" />
-                    Size Guide
-                  </button>
-                </div>
-                <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
-                  {availableSizes.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={cn(
-                        "py-2 px-4 border rounded-md text-sm font-medium transition-all",
-                        selectedSize === size
-                          ? "border-gold bg-gold/10 text-gray-900"
-                          : "border-gray-300 text-gray-700 hover:border-gray-400"
-                      )}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <SizeSelector
+                category={product.category || product.productType}
+                availableSizes={availableSizes}
+                selectedSize={selectedSize}
+                onSizeSelect={setSelectedSize}
+                onSizeGuideClick={() => setShowSizeGuide(true)}
+                userMeasurements={undefined} // TODO: Get from user profile
+              />
             )}
 
             {/* Color Selection */}
