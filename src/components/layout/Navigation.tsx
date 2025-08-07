@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { CartDrawer } from "./CartDrawer";
 import { useCart } from "@/lib/hooks/useCart";
 import { SmartSearchBar } from "@/components/search/SmartSearchBar";
-import { SearchOverlay } from "@/components/search/SearchOverlay";
+import { InstantSearch } from "@/components/search/InstantSearch";
 import { MegaMenu } from "./MegaMenu";
 import UserMenu from "./UserMenu";
 import { useStoreInfo } from "@/contexts/SettingsContext";
@@ -60,7 +60,7 @@ export function Navigation() {
             className="flex items-center group"
             aria-label={`${storeInfo.name} - Home`}
           >
-            {storeInfo.logo && storeInfo.logo !== '/kct-logo.png' ? (
+            {storeInfo.logo && storeInfo.logo !== '/KCTLogo.jpg' ? (
               <img 
                 src={storeInfo.logo} 
                 alt={storeInfo.name}
@@ -78,36 +78,9 @@ export function Navigation() {
             )}
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.filter(item => !item.mobileOnly).map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`relative text-black hover:text-black transition-colors font-medium group ${
-                  item.highlight ? 'flex items-center gap-1' : ''
-                }`}
-                aria-label={`Navigate to ${item.label}${item.highlight ? ' - New' : ''}`}
-              >
-                {item.label}
-                {item.highlight && (
-                  <span className="text-xs bg-gold text-black px-1.5 py-0.5 rounded-full font-semibold" aria-label="New section">
-                    NEW
-                  </span>
-                )}
-                <span 
-                  className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-burgundy to-gold transition-all duration-300 group-hover:w-full" 
-                  aria-hidden="true"
-                  style={{
-                    background: 'linear-gradient(90deg, var(--burgundy) 0%, var(--gold) 100%)'
-                  }}
-                ></span>
-              </Link>
-            ))}
-            
-            {/* MegaMenu Components */}
-            <MegaMenu menuKey="weddings" />
-            <MegaMenu menuKey="prom" />
+          {/* Desktop Navigation with MegaMenu */}
+          <div className="hidden md:flex items-center">
+            <MegaMenu />
           </div>
 
           {/* Right Side Actions */}
@@ -251,8 +224,8 @@ export function Navigation() {
       </div>
     </nav>
     
-    {/* Search Overlay */}
-    <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+    {/* Instant Search */}
+    <InstantSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     
     {/* Cart Drawer - Disabled in favor of SimpleCartDrawer */}
     {/* <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} /> */}

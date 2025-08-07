@@ -17,12 +17,16 @@ import {
   ChevronLeft, 
   ChevronRight,
   Sparkles,
-  TrendingUp
+  TrendingUp,
+  Heart,
+  MoveRight
 } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
 import { cn } from '@/lib/utils/cn'
 import { useCart } from '@/lib/hooks/useCart'
 import { toast } from 'sonner'
+import { useProductCardGestures } from '@/hooks/useMobileGestures'
+import { useWishlist } from '@/lib/hooks/useWishlist'
 
 interface EnhancedProductCardProps {
   product: EnhancedProduct
@@ -43,7 +47,22 @@ export function EnhancedProductCard({
   const [selectedSize, setSelectedSize] = useState<string>('')
   const [showSizeSelector, setShowSizeSelector] = useState(false)
   const { addToCart } = useCart()
+  const { toggleWishlist, isWishlisted } = useWishlist()
   const imageInterval = useRef<NodeJS.Timeout>()
+  
+  // Mobile gesture support
+  const { ref: gestureRef, showHint, hints } = useProductCardGestures(
+    product.id,
+    () => {
+      toggleWishlist(product.id)
+      toast.success(isWishlisted(product.id) ? 'Removed from wishlist' : 'Added to wishlist', {
+        icon: <Heart className={cn("h-4 w-4", isWishlisted(product.id) ? "" : "fill-burgundy text-burgundy")} />,
+        description: product.name
+      })
+    },
+    () => setShowQuickView(true),
+    handleQuickAdd
+  )
 
   // Auto-cycle images on hover
   const startImageCycle = () => {
@@ -115,6 +134,7 @@ export function EnhancedProductCard({
     return (
       <>
         <motion.div
+          ref={gestureRef}
           className={cn(
             "group relative bg-white rounded-lg overflow-hidden",
             "border border-gray-200 hover:border-gold/30",
@@ -224,6 +244,27 @@ export function EnhancedProductCard({
                 Only {totalInventory} left!
               </div>
             )}
+            
+            {/* Mobile Gesture Hints */}
+            <AnimatePresence>
+              {showHint && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-sm md:hidden pointer-events-none"
+                >
+                  <div className="bg-white rounded-lg p-4 mx-4 text-center">
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      <Heart className="h-5 w-5 text-burgundy fill-burgundy" />
+                      <MoveRight className="h-4 w-4 text-gray-400" />
+                    </div>
+                    <p className="text-sm font-medium">Added to Wishlist!</p>
+                    <p className="text-xs text-gray-500 mt-1">Swipe right for quick view</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </Link>
 
           {/* Content */}

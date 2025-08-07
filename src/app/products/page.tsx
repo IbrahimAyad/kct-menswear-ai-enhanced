@@ -25,6 +25,7 @@ import { PullToRefresh } from "@/components/mobile/PullToRefresh";
 import { MobileFilterDrawer } from "@/components/shop/MobileFilterDrawer";
 import { MobileFilterTabs, ActiveFilterPills } from "@/components/shop/MobileFilterTabs";
 import { InlineFilterSection } from "@/components/shop/InlineFilterSection";
+import { GestureTutorial } from "@/components/mobile/GestureTutorial";
 import { cn } from "@/lib/utils/cn";
 
 interface ProductsResponse {
@@ -457,6 +458,9 @@ function ProductsContent() {
         onClear={clearFilters}
         activeCount={activeFilterCount}
       />
+      
+      {/* Mobile Gesture Tutorial */}
+      <GestureTutorial />
     </PullToRefresh>
   )
 }

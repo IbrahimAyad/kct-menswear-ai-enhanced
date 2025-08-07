@@ -57,7 +57,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-up" style={{ animationDelay: '0.6s' }}>
               <Link href="/products">
-                <Button size="lg" className="group bg-gold hover:bg-gold/90 text-black px-8 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                <Button size="lg" className="group bg-burgundy hover:bg-burgundy-700 text-white px-8 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                   Shop Collection
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-2" />
                 </Button>
@@ -183,7 +183,7 @@ export default function Home() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link href="/style-quiz">
-                    <Button size="lg" className="bg-gold hover:bg-gold/90 text-black px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <Button size="lg" className="bg-burgundy hover:bg-burgundy-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
                       Start Style Quiz
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
@@ -312,7 +312,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link href="/builder">
-                <Button size="lg" className="bg-gold hover:bg-gold/90 text-black px-10 py-6 text-lg font-semibold shadow-2xl hover:shadow-gold/20 transition-all duration-300 transform hover:scale-105">
+                <Button size="lg" className="bg-burgundy hover:bg-burgundy-700 text-white px-10 py-6 text-lg font-semibold shadow-2xl hover:shadow-burgundy/20 transition-all duration-300 transform hover:scale-105">
                   Start Building
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -343,7 +343,7 @@ export default function Home() {
               Every garment is meticulously crafted to your exact measurements, ensuring a perfect fit that complements your physique
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Button size="lg" className="bg-gold hover:bg-gold/90 text-black px-10 py-6 text-lg font-semibold shadow-2xl hover:shadow-gold/20 transition-all duration-300 transform hover:scale-105">
+              <Button size="lg" className="bg-burgundy hover:bg-burgundy-700 text-white px-10 py-6 text-lg font-semibold shadow-2xl hover:shadow-burgundy/20 transition-all duration-300 transform hover:scale-105">
                 Book Your Consultation
               </Button>
               <Link href="/products">

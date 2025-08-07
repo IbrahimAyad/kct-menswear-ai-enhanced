@@ -116,7 +116,7 @@ export class SettingsService {
     return {
       store: {
         name: data.store_name || 'KCT Menswear',
-        logo: data.store_logo || '/kct-logo.png',
+        logo: data.store_logo || '/KCTLogo.jpg',
         contact_email: data.contact_email || 'info@kctmenswear.com',
         contact_phone: data.contact_phone || '313-555-0100',
         business_hours: data.business_hours || 'Mon-Fri 10AM-7PM, Sat 10AM-6PM, Sun 12PM-5PM',
@@ -157,7 +157,7 @@ export class SettingsService {
     return {
       store: {
         name: 'KCT Menswear',
-        logo: '/kct-logo.png',
+        logo: '/KCTLogo.jpg',
         contact_email: 'info@kctmenswear.com',
         contact_phone: '313-555-0100',
         business_hours: 'Mon-Fri 10AM-7PM, Sat 10AM-6PM, Sun 12PM-5PM',
