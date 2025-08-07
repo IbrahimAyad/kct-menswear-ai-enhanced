@@ -32,7 +32,9 @@ export function ProductImage({
   const [imageError, setImageError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  const handleImageError = () => {
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    // Prevent console error logging for expected external image failures
+    e.preventDefault()
     setImageError(true)
     setIsLoading(false)
     onError?.()
@@ -47,13 +49,28 @@ export function ProductImage({
   const getValidImageUrl = (url: string | undefined): string => {
     if (!url || url.trim() === '') return '/placeholder-product.svg'
     
+    // Check for common invalid patterns
+    if (url === 'image' || url === 'about' || url === 'favorites' || url === 'pattern.svg') {
+      return '/placeholder-product.svg'
+    }
+    
     // Check if URL looks valid
     try {
-      new URL(url)
-      return url
+      const urlObj = new URL(url)
+      // Only allow http/https URLs for external images
+      if (urlObj.protocol === 'http:' || urlObj.protocol === 'https:') {
+        return url
+      }
+      return '/placeholder-product.svg'
     } catch {
-      // If not a valid URL, assume it's a relative path
-      if (url.startsWith('/')) return url
+      // If not a valid URL, check if it's a valid relative path
+      if (url.startsWith('/') && !url.includes('..')) {
+        // Check if it's a known valid local image
+        const validLocalImages = ['/placeholder-product.svg', '/placeholder-suit.jpg', '/placeholder-shirt.jpg', '/placeholder-shoes.jpg', '/placeholder-tie.jpg']
+        if (validLocalImages.includes(url)) {
+          return url
+        }
+      }
       return '/placeholder-product.svg'
     }
   }
