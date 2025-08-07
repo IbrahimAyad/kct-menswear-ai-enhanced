@@ -120,6 +120,13 @@ export async function GET(request: NextRequest) {
           )
         }
 
+        // Apply category filter
+        if (category && category !== 'all') {
+          allEnhancedProducts = allEnhancedProducts.filter(p => 
+            p.category?.toLowerCase() === category.toLowerCase()
+          )
+        }
+
         // Apply vendor filter
         if (vendor && vendor !== 'all') {
           allEnhancedProducts = allEnhancedProducts.filter(p => 

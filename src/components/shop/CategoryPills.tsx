@@ -189,11 +189,11 @@ export function CategoryPills({
 // Preset category configurations for easy use
 export const menswearCategories: CategoryOption[] = [
   { id: 'all', label: 'All Products' },
-  { id: 'Formal Wear', label: 'Formal Wear' },
-  { id: 'Vest & Accessory Sets', label: 'Vest & Accessories' },
-  { id: 'Footwear', label: 'Footwear' },
-  { id: 'Apparel', label: 'Apparel' },
-  { id: 'Other', label: 'Other' },
+  { id: 'formal wear', label: 'Formal Wear' },
+  { id: 'vest & accessory sets', label: 'Vest & Accessories' },
+  { id: 'footwear', label: 'Footwear' },
+  { id: 'apparel', label: 'Apparel' },
+  { id: 'other', label: 'Other' },
 ]
 
 // Quick filter shortcuts

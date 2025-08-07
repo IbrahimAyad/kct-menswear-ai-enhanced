@@ -22,6 +22,7 @@ import { CategoryPills, menswearCategories } from "@/components/shop/CategoryPil
 import { SmartFilters, QuickPriceFilters } from "@/components/shop/SmartFilters";
 import { SupabaseConfigError } from "@/components/ui/SupabaseConfigError";
 import { PullToRefresh } from "@/components/mobile/PullToRefresh";
+import { MobileFilterDrawer } from "@/components/shop/MobileFilterDrawer";
 import { cn } from "@/lib/utils/cn";
 
 interface ProductsResponse {
@@ -52,6 +53,7 @@ function ProductsContent() {
   const [filters, setFilters] = useState<ProductFilters>({})
   const [sort, setSort] = useState<ProductSortOptions>({ field: 'created_at', direction: 'desc' })
   const [showFilters, setShowFilters] = useState(false)
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
@@ -232,7 +234,7 @@ function ProductsContent() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setShowFilters(!showFilters)}
+                onClick={() => setIsMobileFilterOpen(true)}
                 className="lg:hidden"
               >
                 <Filter className="h-4 w-4 mr-2" />
@@ -420,6 +422,17 @@ function ProductsContent() {
           </div>
         </div>
       )}
+
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer
+        isOpen={isMobileFilterOpen}
+        onClose={() => setIsMobileFilterOpen(false)}
+        filters={filters}
+        onFiltersChange={setFilters}
+        metadata={filterMetadata}
+        onClear={clearFilters}
+        activeCount={activeFilterCount}
+      />
     </PullToRefresh>
   )
 }
