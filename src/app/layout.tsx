@@ -3,7 +3,7 @@ import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/components/providers/Providers";
-import { AIStyleAssistant } from "@/components/ai/AIStyleAssistant";
+import { AtelierAIChatButton } from "@/components/chat/AtelierAIChat";
 import { SimpleCartDrawer } from "@/components/cart/SimpleCartDrawer";
 import { GoogleAnalytics, GoogleAnalyticsScript } from "@/components/analytics/GoogleAnalytics";
 import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
@@ -93,7 +93,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-          <AIStyleAssistant />
+          <AtelierAIChatButton />
           <SimpleCartDrawer />
           <MobileBottomNav />
           <ServiceWorkerRegistry />
