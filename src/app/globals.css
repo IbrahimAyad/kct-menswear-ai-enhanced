@@ -5,6 +5,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Chat mobile styles */
+@import '../styles/chat-mobile.css';
+
 :root {
   --background: #ffffff;
   --foreground: #1A1A1A;

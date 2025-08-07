@@ -188,8 +188,15 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
         }
       } catch (error) {
         console.error('Voice recording error:', error)
-        // Fallback to text mode
-        alert('Voice recording failed. Please use text input.')
+        
+        // Add error message to chat
+        const errorMessage: Message = {
+          id: (Date.now() + 2).toString(),
+          content: "I'm having trouble with voice features right now. The CORS settings need to be configured on the server. Please use text input for now, and I'll help you just as well!",
+          sender: 'assistant',
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, errorMessage])
       } finally {
         setIsTyping(false)
       }
@@ -215,9 +222,16 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
         transition={{ duration: 0.2 }}
         className={cn(
-          "fixed bottom-6 right-6 w-[420px] bg-gradient-to-b from-gray-50 to-white rounded-2xl shadow-2xl border border-red-900/20 overflow-hidden z-50",
+          // Desktop styles
+          "fixed bg-gradient-to-b from-gray-50 to-white rounded-2xl shadow-2xl border border-red-900/20 overflow-hidden z-50",
+          // Mobile styles - full screen on small devices
+          "bottom-0 right-0 left-0 md:bottom-6 md:right-6 md:left-auto",
+          "w-full md:w-[420px]",
+          "rounded-none md:rounded-2xl",
           isMinimized && "h-16",
-          !isMinimized && "h-[650px]",
+          !isMinimized && "h-screen md:h-[650px]",
+          // Mobile safe areas
+          "pb-safe-bottom md:pb-0",
           className
         )}
       >
@@ -262,7 +276,7 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
         {!isMinimized && (
           <>
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 h-[420px] bg-gradient-to-b from-transparent to-gray-50/50">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-transparent to-gray-50/50 h-[calc(100vh-280px)] md:h-[420px]">
               {messages.map((message) => (
                 <motion.div
                   key={message.id}
@@ -275,10 +289,10 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                   )}
                 >
                   <div className={cn(
-                    "max-w-[80%] rounded-2xl px-4 py-3",
+                    "max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-3 chat-message",
                     message.sender === 'user' 
-                      ? "bg-gradient-to-r from-red-800 to-red-900 text-white shadow-md" 
-                      : "bg-white text-gray-900 shadow-sm border border-gray-200"
+                      ? "bg-gradient-to-r from-red-800 to-red-900 text-white shadow-md chat-message-user" 
+                      : "bg-white text-gray-900 shadow-sm border border-gray-200 chat-message-ai"
                   )}>
                     {message.sender === 'assistant' && (
                       <div className="flex items-center gap-2 mb-1">
@@ -333,15 +347,16 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
 
             {/* Quick Actions */}
             <div className="px-4 pb-2 border-b border-gray-100">
-              <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+              <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
                 {quickActions.map((action, index) => (
                   <button
                     key={index}
                     onClick={() => handleQuickAction(action.label)}
-                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 border border-red-200 rounded-full text-xs font-medium text-red-900 whitespace-nowrap transition-all transform hover:scale-105"
+                    className="flex items-center gap-2 px-3 py-2 md:px-4 bg-gradient-to-r from-red-50 to-red-100 hover:from-red-100 hover:to-red-200 border border-red-200 rounded-full text-xs font-medium text-red-900 whitespace-nowrap transition-all active:scale-95 md:hover:scale-105"
                   >
-                    <action.icon className="h-3 w-3 text-red-700" />
-                    {action.label}
+                    <action.icon className="h-3 w-3 text-red-700 flex-shrink-0" />
+                    <span className="hidden sm:inline">{action.label}</span>
+                    <span className="sm:hidden">{action.label.split(' ')[0]}</span>
                   </button>
                 ))}
               </div>
@@ -371,25 +386,31 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Ask about style, occasions, or let me help you look your best..."
-                    className="w-full px-4 py-3 pr-12 bg-white border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 text-sm shadow-sm"
+                    className="w-full px-4 py-3 pr-20 md:pr-12 bg-white border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-red-500 text-sm shadow-sm touch-manipulation"
                     rows={1}
-                    style={{ minHeight: '44px', maxHeight: '120px' }}
+                    style={{ minHeight: '48px', maxHeight: '120px', fontSize: '16px' }}
                   />
                   <div className="absolute bottom-3 right-3 flex items-center gap-1">
-                    <button className="p-1.5 hover:bg-red-50 rounded-lg transition-colors">
+                    <button 
+                      className="p-1.5 hover:bg-red-50 active:bg-red-100 rounded-lg transition-colors touch-manipulation"
+                      aria-label="Upload image"
+                    >
                       <ImageIcon className="h-4 w-4 text-red-600" />
                     </button>
                     <button 
                       onClick={handleVoiceRecord}
+                      disabled={isTyping}
                       className={cn(
-                        "p-1.5 rounded-lg transition-all",
-                        isRecording ? "bg-red-600 hover:bg-red-700 animate-pulse" : "hover:bg-red-50"
+                        "p-1.5 rounded-lg transition-all touch-manipulation",
+                        isRecording ? "bg-red-600 hover:bg-red-700 voice-recording-pulse" : "hover:bg-red-50 active:bg-red-100",
+                        isTyping && "opacity-50 cursor-not-allowed"
                       )}
+                      aria-label={isRecording ? "Stop recording" : "Start voice recording"}
                     >
                       {isRecording ? (
-                        <MicOff className="h-4 w-4 text-white" />
+                        <MicOff className="h-5 w-5 text-white" />
                       ) : (
-                        <Mic className="h-4 w-4 text-red-600" />
+                        <Mic className="h-5 w-5 text-red-600" />
                       )}
                     </button>
                   </div>
@@ -397,12 +418,12 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                 <Button
                   onClick={handleSend}
                   disabled={!input.trim() || isTyping}
-                  className="bg-gradient-to-r from-red-800 to-red-900 hover:from-red-900 hover:to-red-950 text-white rounded-xl p-3 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-gradient-to-r from-red-800 to-red-900 hover:from-red-900 hover:to-red-950 active:from-red-950 active:to-black text-white rounded-xl p-3 min-w-[48px] shadow-md disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
                 >
                   {isTyping ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-5 w-5 animate-spin" />
                   ) : (
-                    <Send className="h-4 w-4" />
+                    <Send className="h-5 w-5" />
                   )}
                 </Button>
               </div>
@@ -434,16 +455,21 @@ export function AtelierAIChatButton() {
           setHasUnread(false)
         }}
         className={cn(
-          "fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-full shadow-2xl flex items-center justify-center z-50",
-          "hover:shadow-xl hover:from-red-900 hover:to-red-950 transition-all duration-200 border-2 border-red-700"
+          "fixed z-50 bg-gradient-to-r from-red-800 to-red-900 text-white rounded-full shadow-2xl flex items-center justify-center",
+          "hover:shadow-xl hover:from-red-900 hover:to-red-950 transition-all duration-200 border-2 border-red-700 touch-manipulation",
+          // Mobile positioning - bottom right with safe area
+          "bottom-6 right-6 w-14 h-14 md:w-16 md:h-16",
+          // Ensure it's above mobile navigation
+          "mb-16 md:mb-0"
         )}
+        aria-label="Open Atelier AI Chat"
       >
-        <Crown className="h-7 w-7" />
+        <Crown className="h-6 w-6 md:h-7 md:w-7" />
         {hasUnread && (
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="absolute -top-1 -right-1 w-4 h-4 bg-gold rounded-full animate-pulse border-2 border-white"
+            className="absolute -top-1 -right-1 w-3 h-3 md:w-4 md:h-4 bg-gold rounded-full animate-pulse border-2 border-white"
           />
         )}
       </motion.button>

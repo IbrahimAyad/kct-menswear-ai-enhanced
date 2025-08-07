@@ -5,7 +5,7 @@
 
 export const KNOWLEDGE_API_CONFIG = {
   // Base configuration
-  apiUrl: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_API || 'https://kct-knowledge-api-production.up.railway.app',
+  apiUrl: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_API || 'https://kct-knowledge-api-2-production.up.railway.app',
   apiKey: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_KEY || 'kct-menswear-api-2024-secret',
   
   // Cache configuration (matching enhanced API)
@@ -43,15 +43,15 @@ export const KNOWLEDGE_API_CONFIG = {
   
   // V2 Endpoints mapping
   endpoints: {
-    // Core V1 endpoints
-    colors: '/api/colors',
-    colorRelationships: '/api/colors/:color/relationships',
-    validate: '/api/combinations/validate',
-    recommendations: '/api/recommendations',
-    trending: '/api/trending',
-    venues: '/api/venues/:type/recommendations',
-    styles: '/api/styles/:profile',
-    rules: '/api/rules/check',
+    // Core V2 endpoints (updated from V1)
+    colors: '/api/v2/colors',
+    colorRelationships: '/api/v2/colors/:color/relationships',
+    validate: '/api/v2/combinations/validate',
+    recommendations: '/api/v2/recommendations',
+    trending: '/api/v2/intelligence/trending',
+    venues: '/api/v2/venues/:type/recommendations',
+    styles: '/api/v2/styles/:profile',
+    rules: '/api/v2/rules/check',
     
     // Fashion-CLIP V2 endpoints
     visualAnalyze: '/api/v2/visual/analyze',

@@ -110,14 +110,34 @@ export class VoiceChatService {
         {
           headers: {
             'X-API-Key': this.apiKey,
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, X-API-Key'
+          },
+          timeout: 30000 // 30 second timeout
         }
       );
 
       return response.data;
     } catch (error) {
       console.error('Voice chat error:', error);
+      
+      // Return a fallback response for CORS or API errors
+      if (axios.isAxiosError(error) && (error.code === 'ERR_NETWORK' || error.response?.status === 404)) {
+        // Fallback: transcribe only and use text chat
+        try {
+          const transcript = await this.transcribeAudio(audioBlob);
+          return {
+            transcript,
+            message: "I heard you, but I'm having trouble with voice responses right now. Let me respond with text instead.",
+            intent: 'fallback'
+          };
+        } catch (transcribeError) {
+          throw new Error('Voice services are currently unavailable. Please use text chat.');
+        }
+      }
+      
       throw error;
     }
   }
