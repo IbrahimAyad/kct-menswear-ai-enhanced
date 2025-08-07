@@ -9,6 +9,7 @@ import { CartDrawer } from "./CartDrawer";
 import { useCart } from "@/lib/hooks/useCart";
 import { SmartSearchBar } from "@/components/search/SmartSearchBar";
 import UserMenu from "./UserMenu";
+import { useStoreInfo } from "@/contexts/SettingsContext";
 
 const navItems = [
   { href: "/products", label: "Shop" },
@@ -28,6 +29,7 @@ export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { cartSummary } = useCart();
+  const storeInfo = useStoreInfo();
 
   return (
     <>
@@ -43,12 +45,24 @@ export function Navigation() {
           <Link 
             href="/" 
             className="flex items-center group"
-            aria-label="KCT Menswear - Home"
+            aria-label={`${storeInfo.name} - Home`}
           >
-            <h1 className="text-2xl font-serif font-bold text-black transition-all duration-300">
-              <span className="inline-block transition-transform group-hover:scale-105">KCT</span>
-              <span className="text-gold ml-1">Menswear</span>
-            </h1>
+            {storeInfo.logo && storeInfo.logo !== '/kct-logo.png' ? (
+              <img 
+                src={storeInfo.logo} 
+                alt={storeInfo.name}
+                className="h-8 w-auto transition-transform group-hover:scale-105"
+              />
+            ) : (
+              <h1 className="text-2xl font-serif font-bold text-black transition-all duration-300">
+                <span className="inline-block transition-transform group-hover:scale-105">
+                  {storeInfo.name.split(' ')[0] || 'KCT'}
+                </span>
+                <span className="text-gold ml-1">
+                  {storeInfo.name.split(' ')[1] || 'Menswear'}
+                </span>
+              </h1>
+            )}
           </Link>
 
           {/* Desktop Navigation */}

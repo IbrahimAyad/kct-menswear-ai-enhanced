@@ -6,11 +6,14 @@ import { X, ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
 import { CheckoutButton } from './CheckoutButton';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useCurrency, useShippingCalculator } from '@/contexts/SettingsContext';
 
 export function SimpleCartDrawer() {
   const { items, cartSummary, removeFromCart, clearCart, updateQuantity } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const [dragProgress, setDragProgress] = useState(0);
+  const { format } = useCurrency();
+  const { calculate: calculateShipping, freeThreshold } = useShippingCalculator();
 
   // Haptic feedback
   const triggerHaptic = (pattern: number | number[] = 10) => {
@@ -160,7 +163,7 @@ export function SimpleCartDrawer() {
                               {item.name || `Product ${item.productId}`}
                             </h3>
                             <p className="text-sm text-gray-600">Size: {item.size}</p>
-                            <p className="text-sm font-semibold text-gray-900">${item.price || 0}</p>
+                            <p className="text-sm font-semibold text-gray-900">{format((item.price || 0) / 100)}</p>
                             
                             {/* Quantity Controls */}
                             <div className="flex items-center gap-2 mt-2">
@@ -221,7 +224,7 @@ export function SimpleCartDrawer() {
               {/* Footer */}
               <div className="border-t bg-gray-50 p-4 space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">Total: ${cartSummary.totalPrice.toFixed(2)}</span>
+                  <span className="text-lg font-semibold">Total: {format(cartSummary.totalPrice)}</span>
                   <button
                     onClick={() => {
                       clearCart();
