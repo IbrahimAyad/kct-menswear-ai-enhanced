@@ -95,19 +95,25 @@ export interface EnhancedVariant {
 
 // Product filters and search
 export interface ProductFilters {
+  category?: string
   categories?: string[]
   collections?: string[]
   priceRange?: { min: number; max: number }
+  minPrice?: number
+  maxPrice?: number
+  color?: string
   colors?: string[]
+  vendor?: string
   vendors?: string[]
   tags?: string[]
+  inStock?: boolean
   available?: boolean
   featured?: boolean
   search?: string
 }
 
 export interface ProductSortOptions {
-  field: 'name' | 'base_price' | 'created_at' | 'view_count'
+  field: 'name' | 'title' | 'price' | 'base_price' | 'created_at' | 'view_count'
   direction: 'asc' | 'desc'
 }
 

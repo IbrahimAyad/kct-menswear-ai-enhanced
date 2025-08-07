@@ -19,6 +19,7 @@ import { EnhancedProduct, ProductFilters, ProductSortOptions } from "@/lib/supab
 import { SupabaseProductCard } from "@/components/shop/SupabaseProductCard";
 import { ProductFiltersPanel } from "@/components/shop/ProductFiltersPanel";
 import { CategoryPills, menswearCategories } from "@/components/shop/CategoryPills";
+import { SmartFilters, QuickPriceFilters } from "@/components/shop/SmartFilters";
 import { SupabaseConfigError } from "@/components/ui/SupabaseConfigError";
 import { PullToRefresh } from "@/components/mobile/PullToRefresh";
 import { cn } from "@/lib/utils/cn";
@@ -293,6 +294,22 @@ function ProductsContent() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Smart Filters */}
+        <SmartFilters
+          products={products}
+          currentFilters={filters}
+          onFiltersChange={setFilters}
+          className="mb-6"
+        />
+
+        {/* Quick Price Filters */}
+        <QuickPriceFilters
+          products={products}
+          currentFilters={filters}
+          onFiltersChange={setFilters}
+          className="mb-6"
+        />
+
         <div className="flex gap-8">
           {/* Filters Sidebar - Desktop */}
           <div className="hidden lg:block w-64 flex-shrink-0">

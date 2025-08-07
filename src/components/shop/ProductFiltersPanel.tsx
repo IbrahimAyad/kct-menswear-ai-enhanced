@@ -31,6 +31,8 @@ interface ProductFiltersPanelProps {
   filters: ProductFilters
   onFiltersChange: (filters: ProductFilters) => void
   metadata: FilterMetadata
+  onClear: () => void
+  activeCount: number
   className?: string
 }
 
@@ -154,6 +156,8 @@ export function ProductFiltersPanel({
   filters, 
   onFiltersChange, 
   metadata,
+  onClear,
+  activeCount,
   className 
 }: ProductFiltersPanelProps) {
   const [openSections, setOpenSections] = useState({
@@ -177,41 +181,36 @@ export function ProductFiltersPanel({
   }
 
   const handleCategoryChange = (category: string, checked: boolean) => {
-    const currentCategories = filters.categories || []
-    const newCategories = checked
-      ? [...currentCategories, category]
-      : currentCategories.filter(c => c !== category)
-    
-    updateFilters({ 
-      categories: newCategories.length > 0 ? newCategories : undefined 
-    })
+    if (checked) {
+      updateFilters({ category })
+    } else {
+      const { category: _, ...rest } = filters
+      onFiltersChange(rest)
+    }
   }
 
   const handleVendorChange = (vendor: string, checked: boolean) => {
-    const currentVendors = filters.vendors || []
-    const newVendors = checked
-      ? [...currentVendors, vendor]
-      : currentVendors.filter(v => v !== vendor)
-    
-    updateFilters({ 
-      vendors: newVendors.length > 0 ? newVendors : undefined 
-    })
+    if (checked) {
+      updateFilters({ vendor })
+    } else {
+      const { vendor: _, ...rest } = filters
+      onFiltersChange(rest)
+    }
   }
 
   const handleColorChange = (color: string, checked: boolean) => {
-    const currentColors = filters.colors || []
-    const newColors = checked
-      ? [...currentColors, color]
-      : currentColors.filter(c => c !== color)
-    
-    updateFilters({ 
-      colors: newColors.length > 0 ? newColors : undefined 
-    })
+    if (checked) {
+      updateFilters({ color })
+    } else {
+      const { color: _, ...rest } = filters
+      onFiltersChange(rest)
+    }
   }
 
   const handlePriceRangeChange = (range: [number, number]) => {
     updateFilters({
-      priceRange: { min: range[0], max: range[1] }
+      minPrice: range[0],
+      maxPrice: range[1]
     })
   }
 
@@ -219,19 +218,17 @@ export function ProductFiltersPanel({
     onFiltersChange({})
   }
 
-  const getActiveFilterCount = () => {
-    let count = 0
-    if (filters.categories?.length) count++
-    if (filters.vendors?.length) count++
-    if (filters.colors?.length) count++
-    if (filters.priceRange) count++
-    if (filters.occasions?.length) count++
-    if (filters.inStock !== undefined) count++
-    if (filters.featured !== undefined) count++
-    return count
-  }
-
-  const activeFilterCount = getActiveFilterCount()
+  // Use the activeCount prop passed from parent
+  // const getActiveFilterCount = () => {
+  //   let count = 0
+  //   if (filters.category) count++
+  //   if (filters.vendor) count++
+  //   if (filters.color) count++
+  //   if (filters.minPrice !== undefined || filters.maxPrice !== undefined) count++
+  //   if (filters.inStock !== undefined) count++
+  //   if (filters.featured !== undefined) count++
+  //   return count
+  // }
 
   return (
     <Card className={cn("p-6", className)}>
@@ -240,15 +237,15 @@ export function ProductFiltersPanel({
         <div className="flex items-center gap-2">
           <Filter className="h-5 w-5 text-gray-600" />
           <h3 className="font-semibold text-lg">Filters</h3>
-          {activeFilterCount > 0 && (
-            <Badge className="bg-gold text-black">{activeFilterCount}</Badge>
+          {activeCount > 0 && (
+            <Badge className="bg-gold text-black">{activeCount}</Badge>
           )}
         </div>
-        {activeFilterCount > 0 && (
+        {activeCount > 0 && (
           <Button
             variant="ghost"
             size="sm"
-            onClick={clearAllFilters}
+            onClick={onClear}
             className="text-red-600 hover:text-red-700 hover:bg-red-50"
           >
             <X className="h-4 w-4 mr-1" />
@@ -264,14 +261,14 @@ export function ProductFiltersPanel({
           icon={<Tag className="h-4 w-4" />}
           isOpen={openSections.categories}
           onToggle={() => toggleSection('categories')}
-          count={filters.categories?.length}
+          count={filters.category ? 1 : 0}
         >
           <div className="space-y-3">
             {(metadata.categories || []).map(category => (
               <div key={category} className="flex items-center space-x-2">
                 <Checkbox
                   id={`category-${category}`}
-                  checked={filters.categories?.includes(category) || false}
+                  checked={filters.category === category}
                   onCheckedChange={(checked) => handleCategoryChange(category, checked as boolean)}
                 />
                 <label
@@ -296,8 +293,8 @@ export function ProductFiltersPanel({
             min={metadata.priceRange?.min || 0}
             max={metadata.priceRange?.max || 1000}
             value={[
-              filters.priceRange?.min || metadata.priceRange?.min || 0,
-              filters.priceRange?.max || metadata.priceRange?.max || 1000
+              filters.minPrice || metadata.priceRange?.min || 0,
+              filters.maxPrice || metadata.priceRange?.max || 1000
             ]}
             onChange={handlePriceRangeChange}
           />
@@ -310,14 +307,14 @@ export function ProductFiltersPanel({
             icon={<Palette className="h-4 w-4" />}
             isOpen={openSections.colors}
             onToggle={() => toggleSection('colors')}
-            count={filters.colors?.length}
+            count={filters.color ? 1 : 0}
           >
             <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto">
               {(metadata.colors || []).map(color => (
                 <div key={color} className="flex items-center space-x-2">
                   <Checkbox
                     id={`color-${color}`}
-                    checked={filters.colors?.includes(color) || false}
+                    checked={filters.color === color}
                     onCheckedChange={(checked) => handleColorChange(color, checked as boolean)}
                   />
                   <label
@@ -343,14 +340,14 @@ export function ProductFiltersPanel({
             icon={<Star className="h-4 w-4" />}
             isOpen={openSections.vendors}
             onToggle={() => toggleSection('vendors')}
-            count={filters.vendors?.length}
+            count={filters.vendor ? 1 : 0}
           >
             <div className="space-y-3 max-h-48 overflow-y-auto">
               {(metadata.vendors || []).map(vendor => (
                 <div key={vendor} className="flex items-center space-x-2">
                   <Checkbox
                     id={`vendor-${vendor}`}
-                    checked={filters.vendors?.includes(vendor) || false}
+                    checked={filters.vendor === vendor}
                     onCheckedChange={(checked) => handleVendorChange(vendor, checked as boolean)}
                   />
                   <label

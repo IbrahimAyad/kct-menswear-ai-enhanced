@@ -19,21 +19,60 @@ export async function GET(request: NextRequest) {
       
       case 'vendors':
       case 'brands':
-        // Return static brands for now
+        // Return actual vendors from products
+        const vendorResult = await fetchProductsWithImages({ limit: 1000 })
+        const vendors = [...new Set(vendorResult.data.map(p => p.vendor).filter(Boolean))]
         return NextResponse.json({ 
-          vendors: ['KCT', 'Premium Collection', 'Classic Line'] 
+          vendors: vendors.length > 0 ? vendors : ['KCT', 'Premium Collection', 'Classic Line'] 
         })
       
       case 'colors':
-        // Return common colors
+        // Extract colors from product names and tags
+        const colorResult = await fetchProductsWithImages({ limit: 1000 })
+        const colorSet = new Set<string>()
+        const commonColors = ['Black', 'Navy', 'Gray', 'Grey', 'Blue', 'White', 'Burgundy', 'Brown', 'Green', 'Red', 'Silver', 'Gold', 'Purple', 'Pink']
+        
+        colorResult.data.forEach(product => {
+          // Check product name for colors
+          commonColors.forEach(color => {
+            if (product.name.toLowerCase().includes(color.toLowerCase())) {
+              colorSet.add(color)
+            }
+          })
+          
+          // Check tags for colors
+          if (product.tags) {
+            product.tags.forEach(tag => {
+              commonColors.forEach(color => {
+                if (tag.toLowerCase().includes(color.toLowerCase())) {
+                  colorSet.add(color)
+                }
+              })
+            })
+          }
+        })
+        
         return NextResponse.json({ 
-          colors: ['Black', 'Navy', 'Gray', 'Blue', 'White', 'Burgundy'] 
+          colors: Array.from(colorSet).slice(0, 10) // Limit to top 10 colors
         })
       
       case 'priceRange':
       case 'price-range':
+        // Get actual price range from products
+        const priceResult = await fetchProductsWithImages({ limit: 1000 })
+        const prices = priceResult.data
+          .map(p => p.base_price)
+          .filter(p => p && p > 0)
+          .map(p => p / 100) // Convert from cents to dollars
+        
+        const minPrice = prices.length > 0 ? Math.min(...prices) : 0
+        const maxPrice = prices.length > 0 ? Math.max(...prices) : 1000
+        
         return NextResponse.json({ 
-          priceRange: { min: 0, max: 1000 } 
+          priceRange: { 
+            min: Math.floor(minPrice), 
+            max: Math.ceil(maxPrice) 
+          } 
         })
       
       default:
@@ -41,6 +80,10 @@ export async function GET(request: NextRequest) {
         const limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 24
         const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
         const category = searchParams.get('category')
+        const vendor = searchParams.get('vendor')
+        const color = searchParams.get('color')
+        const minPrice = searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined
+        const maxPrice = searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined
         const search = searchParams.get('search')
         const sortBy = searchParams.get('sortBy') || 'created_at'
         const sortOrder = searchParams.get('sortOrder') || 'desc'
@@ -75,6 +118,33 @@ export async function GET(request: NextRequest) {
             p.category?.toLowerCase().includes(searchLower) ||
             p.tags?.some(tag => tag.toLowerCase().includes(searchLower))
           )
+        }
+
+        // Apply vendor filter
+        if (vendor && vendor !== 'all') {
+          allEnhancedProducts = allEnhancedProducts.filter(p => 
+            p.vendor?.toLowerCase() === vendor.toLowerCase()
+          )
+        }
+
+        // Apply color filter
+        if (color && color !== 'all') {
+          const colorLower = color.toLowerCase()
+          allEnhancedProducts = allEnhancedProducts.filter(p => 
+            p.name.toLowerCase().includes(colorLower) ||
+            p.tags?.some(tag => tag.toLowerCase().includes(colorLower)) ||
+            p.description?.toLowerCase().includes(colorLower)
+          )
+        }
+
+        // Apply price range filter
+        if (minPrice !== undefined || maxPrice !== undefined) {
+          allEnhancedProducts = allEnhancedProducts.filter(p => {
+            const price = p.price / 100 // Convert from cents to dollars
+            const withinMin = minPrice === undefined || price >= minPrice
+            const withinMax = maxPrice === undefined || price <= maxPrice
+            return withinMin && withinMax
+          })
         }
         
         // Sort all products
