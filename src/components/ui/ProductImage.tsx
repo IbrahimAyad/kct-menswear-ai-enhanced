@@ -109,7 +109,7 @@ export function ProductImage({
         <Image
           {...imageProps}
           fill
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: className?.includes('object-contain') ? 'contain' : 'cover' }}
         />
       ) : (
         <Image

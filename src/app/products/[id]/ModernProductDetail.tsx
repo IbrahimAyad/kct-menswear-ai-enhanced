@@ -158,13 +158,13 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
       <div className="min-h-screen bg-white">
         <div className="flex flex-col lg:flex-row">
           {/* Full-height Gallery Section */}
-          <div className="lg:w-2/3 xl:w-3/4 relative bg-gray-50">
+          <div className="lg:w-2/3 xl:w-3/4 relative bg-white">
             <div 
               ref={galleryRef}
               className="sticky top-0 h-screen overflow-hidden"
             >
               {/* Main Image/Video Display */}
-              <div className="relative h-full">
+              <div className="relative h-full flex items-center justify-center bg-gray-50">
                 <AnimatePresence mode="wait">
                   {hasVideo && selectedImage === 0 ? (
                     <motion.div
@@ -209,7 +209,7 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.98 }}
                       transition={{ duration: 0.3 }}
-                      className="relative h-full cursor-zoom-in"
+                      className="relative w-full h-full max-w-4xl cursor-zoom-in"
                       onClick={() => setShowFullscreen(true)}
                     >
                       <ProductImage
@@ -217,7 +217,7 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
                         alt={product.name}
                         fill
                         priority
-                        className="object-contain"
+                        className="object-contain p-8"
                         sizes="(max-width: 1024px) 100vw, 75vw"
                       />
                       
@@ -230,18 +230,22 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
                 </AnimatePresence>
 
                 {/* Navigation Arrows */}
-                <button
-                  onClick={() => setSelectedImage(prev => prev > 0 ? prev - 1 : product.images.length - 1)}
-                  className="absolute left-6 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all"
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => setSelectedImage(prev => prev < product.images.length - 1 ? prev + 1 : 0)}
-                  className="absolute right-6 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
+                {product.images.length > 1 && (
+                  <>
+                    <button
+                      onClick={() => setSelectedImage(prev => prev > 0 ? prev - 1 : product.images.length - 1)}
+                      className="absolute left-6 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all z-10"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={() => setSelectedImage(prev => prev < product.images.length - 1 ? prev + 1 : 0)}
+                      className="absolute right-6 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all z-10"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                  </>
+                )}
 
                 {/* Instagram-style dots */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
@@ -512,7 +516,7 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
               <X className="h-6 w-6" />
             </button>
             
-            <div className="relative w-full h-full flex items-center justify-center p-6">
+            <div className="relative w-full h-full flex items-center justify-center p-12">
               <ProductImage
                 src={product.images[selectedImage]}
                 alt={product.name}
