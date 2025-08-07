@@ -177,6 +177,7 @@ export function ProductFiltersPanel({
   }
 
   const updateFilters = (updates: Partial<ProductFilters>) => {
+    console.log('Updating filters:', { ...filters, ...updates })
     onFiltersChange({ ...filters, ...updates })
   }
 
