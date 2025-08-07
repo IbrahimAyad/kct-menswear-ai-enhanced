@@ -90,16 +90,16 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Link href="/style-quiz" className="group">
-              <div className="relative bg-white border border-gray-200 p-10 h-full transition-all duration-300 hover:border-gold hover:shadow-2xl hover:-translate-y-1">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                <Sparkles className="h-14 w-14 text-gold mb-6 transform group-hover:rotate-12 transition-transform duration-300" />
-                <h3 className="text-2xl font-serif mb-4 group-hover:text-gold transition-colors">Style Finder</h3>
+            <Link href="/atelier-ai" className="group">
+              <div className="relative bg-white border border-gray-200 p-10 h-full transition-all duration-300 hover:border-burgundy hover:shadow-2xl hover:-translate-y-1">
+                <div className="absolute top-0 left-0 w-full h-1 bg-burgundy transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                <Sparkles className="h-14 w-14 text-burgundy mb-6 transform group-hover:rotate-12 transition-transform duration-300" />
+                <h3 className="text-2xl font-serif mb-4 group-hover:text-burgundy transition-colors">Atelier AI</h3>
                 <p className="text-gray-600 mb-6 leading-relaxed">
-                  Discover your perfect look with our AI-powered style recommendations tailored to your preferences
+                  Experience AI-powered outfit recommendations, size predictions, and personalized styling advice
                 </p>
-                <span className="inline-flex items-center text-black font-semibold group-hover:text-gold transition-colors">
-                  Start Now 
+                <span className="inline-flex items-center text-black font-semibold group-hover:text-burgundy transition-colors">
+                  Explore AI Features 
                   <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-2 transition-transform" />
                 </span>
               </div>
