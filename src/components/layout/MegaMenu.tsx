@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Sparkles, Calendar, Users, Video, BookOpen, Palette } from 'lucide-react'
@@ -114,6 +114,7 @@ const menuStructure = {
 export function MegaMenu({ className }: MegaMenuProps) {
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
   const [isHovering, setIsHovering] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   const handleMouseEnter = (menu: string) => {
     setActiveMenu(menu)
@@ -128,8 +129,37 @@ export function MegaMenu({ className }: MegaMenuProps) {
     }, 100)
   }
 
+  const closeMenu = () => {
+    setActiveMenu(null)
+    setIsHovering(false)
+  }
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        closeMenu()
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Close menu when pressing Escape
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeMenu()
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [])
+
   return (
-    <nav className={cn("relative", className)}>
+    <nav className={cn("relative", className)} ref={menuRef}>
       <div className="flex items-center space-x-8">
         {Object.entries(menuStructure).map(([key, menu]) => (
           <div
@@ -174,6 +204,7 @@ export function MegaMenu({ className }: MegaMenuProps) {
                             <Link
                               href={section.featured.href}
                               className="block group"
+                              onClick={closeMenu}
                             >
                               <div className="relative h-48 mb-3 overflow-hidden rounded-lg">
                                 <Image
@@ -201,6 +232,7 @@ export function MegaMenu({ className }: MegaMenuProps) {
                                     <Link
                                       href={item.href}
                                       className="flex items-center justify-between text-sm text-gray-600 hover:text-burgundy transition-colors py-1"
+                                      onClick={closeMenu}
                                     >
                                       <span className="flex items-center gap-1">
                                         {item.icon}
@@ -237,6 +269,7 @@ export function MegaMenu({ className }: MegaMenuProps) {
                           <Link
                             href="/style-quiz"
                             className="text-sm font-medium text-burgundy hover:text-burgundy-700 transition-colors"
+                            onClick={closeMenu}
                           >
                             Take the Quiz →
                           </Link>

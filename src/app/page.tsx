@@ -8,6 +8,7 @@ import { VIDEO_IDS } from "@/lib/utils/constants";
 import { StyleSwiperPreview } from "@/components/style/StyleSwiperPreview";
 import { VisualSearch } from "@/components/search/VisualSearch";
 import { TrendingBundles } from "@/components/home/TrendingBundles";
+import { NewArrivals } from "@/components/home/NewArrivals";
 import { useState, useEffect } from "react";
 import { trackPromoView, trackViewItemList } from "@/lib/analytics/google-analytics";
 import { useScrollTracking } from "@/hooks/useScrollTracking";
@@ -218,6 +219,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* New Arrivals Section */}
+      <NewArrivals />
+      
       {/* Trending Bundles Section */}
       <TrendingBundles />
 
