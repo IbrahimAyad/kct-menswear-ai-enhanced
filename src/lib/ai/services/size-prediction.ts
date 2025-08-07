@@ -416,4 +416,118 @@ export class SizePredictionService {
       console.error('Failed to store size recommendation:', error)
     }
   }
+
+  // Enhanced size prediction for size bot
+  async predictSizeFromBasics(input: {
+    height: number // cm or inches based on unit
+    weight: number // kg or lbs based on unit
+    fitPreference: 'slim' | 'regular' | 'relaxed'
+    unit: 'metric' | 'imperial'
+    productType?: 'suit' | 'shirt' | 'tuxedo'
+  }): Promise<{
+    primarySize: string
+    primarySizeFull: string
+    alternativeSize?: string
+    alternativeSizeFull?: string
+    confidence: number
+    bodyType: string
+    fitScore: number
+    alterations?: string[]
+    rationale?: string
+  }> {
+    // Convert to metric if needed
+    const heightCm = input.unit === 'imperial' ? input.height * 2.54 : input.height
+    const weightKg = input.unit === 'imperial' ? input.weight * 0.453592 : input.weight
+    
+    // Calculate BMI
+    const heightM = heightCm / 100
+    const bmi = weightKg / (heightM * heightM)
+    
+    // Determine body type
+    let bodyType: string
+    if (bmi < 18.5) bodyType = 'Slim'
+    else if (bmi < 25) bodyType = 'Regular'
+    else if (bmi < 30) bodyType = 'Athletic'
+    else bodyType = 'Broad'
+    
+    // Base size calculation with enhanced logic
+    let sizeIndex: number
+    if (bmi < 18.5) sizeIndex = 0
+    else if (bmi < 21) sizeIndex = 1
+    else if (bmi < 23.5) sizeIndex = 2
+    else if (bmi < 26) sizeIndex = 3
+    else if (bmi < 29) sizeIndex = 4
+    else sizeIndex = 5
+    
+    // Height adjustment
+    if (heightCm < 165) sizeIndex -= 0.5
+    else if (heightCm > 190) sizeIndex += 0.5
+    
+    // Fit preference adjustment
+    const fitAdjustment = {
+      'slim': -0.5,
+      'regular': 0,
+      'relaxed': 0.5
+    }
+    sizeIndex += fitAdjustment[input.fitPreference]
+    
+    // Product type adjustment
+    if (input.productType === 'shirt') {
+      sizeIndex -= 0.25 // Shirts typically run slightly larger
+    } else if (input.productType === 'tuxedo') {
+      sizeIndex += 0.25 // Tuxedos need precise fit
+    }
+    
+    // Ensure within bounds
+    sizeIndex = Math.max(0, Math.min(5, sizeIndex))
+    
+    const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+    const sizeNames = ['Extra Small', 'Small', 'Medium', 'Large', 'Extra Large', 'Double XL']
+    
+    const primaryIndex = Math.round(sizeIndex)
+    const alternativeIndex = sizeIndex < primaryIndex ? 
+      Math.max(0, primaryIndex - 1) : 
+      Math.min(5, primaryIndex + 1)
+    
+    // Calculate confidence based on how close to size boundary
+    const distanceFromBoundary = Math.abs(sizeIndex - primaryIndex)
+    const baseConfidence = 0.85
+    const confidence = baseConfidence - (distanceFromBoundary * 0.2)
+    
+    // Calculate fit score
+    const fitScore = 8.5 - (distanceFromBoundary * 2)
+    
+    // Determine alterations needed
+    const alterations: string[] = []
+    if (input.fitPreference === 'slim' && bmi > 25) {
+      alterations.push('Taper waist for slimmer silhouette')
+    }
+    if (heightCm < 165) {
+      alterations.push('Hem sleeves and trouser length')
+    } else if (heightCm > 190) {
+      alterations.push('Extend sleeve length')
+    }
+    
+    // Generate rationale
+    const rationale = `Based on your ${bodyType.toLowerCase()} build and ${input.fitPreference} fit preference, ` +
+      `size ${sizes[primaryIndex]} will provide the best balance of comfort and style. ` +
+      (alternativeIndex !== primaryIndex ? 
+        `Size ${sizes[alternativeIndex]} is a close alternative if you prefer a ${alternativeIndex > primaryIndex ? 'roomier' : 'snugger'} fit.` : 
+        'This size should fit perfectly with minimal alterations needed.')
+    
+    return {
+      primarySize: sizes[primaryIndex],
+      primarySizeFull: sizeNames[primaryIndex],
+      alternativeSize: alternativeIndex !== primaryIndex ? sizes[alternativeIndex] : undefined,
+      alternativeSizeFull: alternativeIndex !== primaryIndex ? sizeNames[alternativeIndex] : undefined,
+      confidence,
+      bodyType,
+      fitScore,
+      alterations: alterations.length > 0 ? alterations : undefined,
+      rationale
+    }
+  }
 }
+
+// Export singleton instance
+export const sizePredictionService = new SizePredictionService()
