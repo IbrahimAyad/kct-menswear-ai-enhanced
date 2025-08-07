@@ -87,7 +87,7 @@ export function MobileProductRecommendations({
           <p className="text-sm text-gray-600">{subtitle}</p>
         </div>
         <Badge variant="secondary" className="bg-gold/10 text-gold border-gold/20">
-          AI Powered
+          Atelier AI
         </Badge>
       </div>
 

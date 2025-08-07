@@ -194,7 +194,7 @@ function SmartFilterContent({
       <div className="flex items-center gap-2 mb-3">
         <Sparkles className="h-4 w-4 text-gold" />
         <h3 className="font-medium">Smart Suggestions</h3>
-        <Badge variant="secondary" className="text-xs">AI Powered</Badge>
+        <Badge variant="secondary" className="text-xs">Atelier AI</Badge>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">

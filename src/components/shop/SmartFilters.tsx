@@ -110,7 +110,7 @@ export function SmartFilters({
           <Sparkles className="h-5 w-5 text-gold" />
           <h3 className="font-semibold text-lg">Smart Suggestions</h3>
           <Badge variant="outline" className="text-xs">
-            AI Powered
+            Atelier AI
           </Badge>
         </div>
         

@@ -138,7 +138,7 @@ export function MobileFilterDrawer({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-gold" />
-                  <span className="text-sm font-medium">AI-Powered Suggestions</span>
+                  <span className="text-sm font-medium">Atelier AI Suggestions</span>
                 </div>
                 <Switch
                   checked={aiEnabled}
