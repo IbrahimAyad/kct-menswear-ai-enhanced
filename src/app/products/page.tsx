@@ -50,11 +50,6 @@ function ProductsContent() {
   const [totalPages, setTotalPages] = useState(1)
 
   const [filters, setFilters] = useState<ProductFilters>({})
-  
-  // Debug filter changes
-  useEffect(() => {
-    console.log('Filters state changed:', filters)
-  }, [filters])
   const [sort, setSort] = useState<ProductSortOptions>({ field: 'created_at', direction: 'desc' })
   const [showFilters, setShowFilters] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
@@ -100,15 +95,12 @@ function ProductsContent() {
   }, [])
 
   // Load products function (extracted for reuse)
-  const loadProducts = useCallback(async (isRefresh = false) => {
+  const loadProducts = async (isRefresh = false) => {
     if (!isRefresh) setIsLoading(true)
     setError(null)
 
     try {
       const params = new URLSearchParams()
-      
-      // Debug log
-      console.log('Loading products with filters:', filters)
       
       // Add filters
       if (filters.category && filters.category !== 'all') {
@@ -128,7 +120,6 @@ function ProductsContent() {
       params.append('sortBy', sort.field)
       params.append('sortOrder', sort.direction)
 
-      console.log('API URL:', `/api/supabase/products?${params.toString()}`)
       const response = await fetch(`/api/supabase/products?${params.toString()}`)
       
       if (!response.ok) {
@@ -136,7 +127,6 @@ function ProductsContent() {
       }
 
       const data: ProductsResponse = await response.json()
-      console.log('API Response:', data)
       
       setProducts(data.products)
       setTotalCount(data.totalCount)
@@ -148,13 +138,13 @@ function ProductsContent() {
     } finally {
       if (!isRefresh) setIsLoading(false)
     }
-  }, [filters, sort, currentPage, searchQuery])
+  }
 
   // Load products when dependencies change
   useEffect(() => {
-    console.log('Dependencies changed, loading products. Filters:', filters)
     loadProducts()
-  }, [loadProducts])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters, sort, currentPage, searchQuery])
 
   // Reset page when filters, search, or sort changes  
   useEffect(() => {
