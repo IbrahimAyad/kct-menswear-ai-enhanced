@@ -24,6 +24,7 @@ import { SupabaseConfigError } from "@/components/ui/SupabaseConfigError";
 import { PullToRefresh } from "@/components/mobile/PullToRefresh";
 import { MobileFilterDrawer } from "@/components/shop/MobileFilterDrawer";
 import { MobileFilterTabs, ActiveFilterPills } from "@/components/shop/MobileFilterTabs";
+import { InlineFilterSection } from "@/components/shop/InlineFilterSection";
 import { cn } from "@/lib/utils/cn";
 
 interface ProductsResponse {
@@ -286,13 +287,23 @@ function ProductsContent() {
         </div>
       </div>
 
-      {/* Mobile Filter Tabs - Replaces Category Pills on Mobile */}
-      <MobileFilterTabs
-        onOpenFilterDrawer={() => setIsMobileFilterOpen(true)}
-        activeFilters={filters}
-        activeFilterCount={activeFilterCount}
-        className="lg:hidden"
-      />
+      {/* Mobile Inline Filter Section - Visible on Mobile Only */}
+      <div className="lg:hidden bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <InlineFilterSection
+            filters={filters}
+            onFiltersChange={(newFilters) => {
+              setFilters(newFilters)
+              // Sync category selection
+              if (newFilters.category !== filters.category) {
+                setSelectedCategory(newFilters.category || 'all')
+              }
+            }}
+            metadata={filterMetadata}
+            onOpenAllFilters={() => setIsMobileFilterOpen(true)}
+          />
+        </div>
+      </div>
 
       {/* Desktop Category Pills */}
       <div className="hidden lg:block bg-white border-b">
@@ -305,41 +316,18 @@ function ProductsContent() {
         </div>
       </div>
 
-      {/* Active Filter Pills - Mobile Only */}
-      <div className="lg:hidden bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ActiveFilterPills
-            filters={filters}
-            onRemoveFilter={(key) => {
-              if (key === 'minPrice' || key === 'maxPrice') {
-                setFilters(prev => {
-                  const { minPrice, maxPrice, ...rest } = prev
-                  return rest
-                })
-              } else {
-                setFilters(prev => {
-                  const { [key]: _, ...rest } = prev
-                  return rest
-                })
-              }
-              // Reset category if removing category filter
-              if (key === 'category') {
-                setSelectedCategory('all')
-              }
-            }}
-          />
-        </div>
-      </div>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Smart Filters */}
-        <SmartFilters
-          products={products}
-          currentFilters={filters}
-          onFiltersChange={setFilters}
-          className="mb-6"
-        />
+        {/* Desktop Smart Filters Only */}
+        <div className="hidden lg:block">
+          <SmartFilters
+            products={products}
+            currentFilters={filters}
+            onFiltersChange={setFilters}
+            className="mb-6"
+          />
+        </div>
 
         {/* Quick Price Filters */}
         <QuickPriceFilters
