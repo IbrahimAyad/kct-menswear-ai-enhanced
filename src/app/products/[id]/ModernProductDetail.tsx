@@ -76,9 +76,9 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
     ? Math.round(((compareAtPrice - displayPrice) / compareAtPrice) * 100)
     : 0
 
-  // Mock video URL - in real app, this would come from product data
-  const hasVideo = selectedImage === 0 // Show video as first item
-  const videoUrl = '/videos/product-showcase.mp4' // Replace with actual video
+  // Check if product has video (for now, no products have videos)
+  const hasVideo = false // Will be: product.videoUrl ? true : false
+  const videoUrl = '' // Will be: product.videoUrl || ''
 
   // Set default size on mount
   useEffect(() => {
@@ -213,7 +213,7 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
                       onClick={() => setShowFullscreen(true)}
                     >
                       <ProductImage
-                        src={product.images[hasVideo ? selectedImage - 1 : selectedImage]}
+                        src={product.images[selectedImage]}
                         alt={product.name}
                         fill
                         priority
@@ -231,13 +231,13 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
 
                 {/* Navigation Arrows */}
                 <button
-                  onClick={() => setSelectedImage(prev => prev > 0 ? prev - 1 : product.images.length)}
+                  onClick={() => setSelectedImage(prev => prev > 0 ? prev - 1 : product.images.length - 1)}
                   className="absolute left-6 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all"
                 >
                   <ChevronLeft className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => setSelectedImage(prev => prev < product.images.length ? prev + 1 : 0)}
+                  onClick={() => setSelectedImage(prev => prev < product.images.length - 1 ? prev + 1 : 0)}
                   className="absolute right-6 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all"
                 >
                   <ChevronRight className="h-5 w-5" />
@@ -245,7 +245,7 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
 
                 {/* Instagram-style dots */}
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
-                  {[...(hasVideo ? ['video'] : []), ...product.images].map((_, index) => (
+                  {product.images.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
@@ -263,7 +263,7 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
               {/* Thumbnail Strip - Mobile */}
               <div className="lg:hidden absolute bottom-20 left-0 right-0 px-6">
                 <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-                  {[...(hasVideo ? ['video'] : []), ...product.images].map((image, index) => (
+                  {product.images.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
@@ -272,19 +272,13 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
                         selectedImage === index && "ring-2 ring-gold"
                       )}
                     >
-                      {index === 0 && hasVideo ? (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                          <Play className="h-6 w-6 text-gray-600" />
-                        </div>
-                      ) : (
-                        <ProductImage
-                          src={hasVideo ? product.images[index - 1] : product.images[index]}
-                          alt={`${product.name} ${index + 1}`}
-                          fill
-                          className="object-cover"
-                          sizes="80px"
-                        />
-                      )}
+                      <ProductImage
+                        src={image}
+                        alt={`${product.name} ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
                     </button>
                   ))}
                 </div>
@@ -520,7 +514,7 @@ export function ModernProductDetail({ product }: ModernProductDetailProps) {
             
             <div className="relative w-full h-full flex items-center justify-center p-6">
               <ProductImage
-                src={product.images[hasVideo ? selectedImage - 1 : selectedImage]}
+                src={product.images[selectedImage]}
                 alt={product.name}
                 fill
                 className="object-contain"
