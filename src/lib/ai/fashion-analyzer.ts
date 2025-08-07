@@ -1,4 +1,4 @@
-import { enhancedKnowledgeAdapter } from '@/lib/services/enhancedKnowledgeAdapter';
+import { enhancedKnowledgeAPI } from '@/lib/services/enhancedKnowledgeAdapter';
 
 export interface FashionAnalysis {
   category: string;
@@ -33,7 +33,7 @@ export class FashionAnalyzer {
   static async analyzeImage(imageUrl: string): Promise<FashionAnalysis> {
     try {
       // Use the enhanced Knowledge API for visual analysis
-      const visualAnalysis = await enhancedKnowledgeAdapter.analyzeImage(imageUrl);
+      const visualAnalysis = await enhancedKnowledgeAPI.analyzeImage(imageUrl);
       
       // Extract fashion-specific attributes
       const fashionData = this.extractFashionAttributes(visualAnalysis);
@@ -194,7 +194,7 @@ export class FashionAnalyzer {
   ): Promise<FashionAnalysis['recommendations']> {
     try {
       // Use Knowledge API to get smart recommendations
-      const smartBundle = await enhancedKnowledgeAdapter.generateSmartBundle({
+      const smartBundle = await enhancedKnowledgeAPI.generateSmartBundle({
         baseItem: {
           category: fashionData.category,
           color: fashionData.colors.primary,

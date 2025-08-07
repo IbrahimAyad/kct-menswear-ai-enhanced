@@ -14,7 +14,7 @@ export default function LoginPage() {
           </h2>
         </div>
         
-        <LoginForm />
+        <EnhancedLoginForm />
       </div>
     </div>
   )
