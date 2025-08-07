@@ -82,8 +82,8 @@ export async function GET(request: NextRequest) {
         const category = searchParams.get('category')
         const vendor = searchParams.get('vendor')
         const color = searchParams.get('color')
-        const minPrice = searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined
-        const maxPrice = searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined
+        const minPriceFilter = searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined
+        const maxPriceFilter = searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined
         const search = searchParams.get('search')
         const sortBy = searchParams.get('sortBy') || 'created_at'
         const sortOrder = searchParams.get('sortOrder') || 'desc'
@@ -138,11 +138,11 @@ export async function GET(request: NextRequest) {
         }
 
         // Apply price range filter
-        if (minPrice !== undefined || maxPrice !== undefined) {
+        if (minPriceFilter !== undefined || maxPriceFilter !== undefined) {
           allEnhancedProducts = allEnhancedProducts.filter(p => {
             const price = p.price / 100 // Convert from cents to dollars
-            const withinMin = minPrice === undefined || price >= minPrice
-            const withinMax = maxPrice === undefined || price <= maxPrice
+            const withinMin = minPriceFilter === undefined || price >= minPriceFilter
+            const withinMax = maxPriceFilter === undefined || price <= maxPriceFilter
             return withinMin && withinMax
           })
         }
