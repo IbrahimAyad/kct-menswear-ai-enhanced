@@ -83,6 +83,15 @@ export class AtelierAICore {
     }
   }
 
+  async findSimilarProducts(analysis: StyleAnalysis): Promise<any> {
+    try {
+      return await this.styleAnalyzer.findSimilarProducts(analysis)
+    } catch (error) {
+      console.error('Error finding similar products:', error)
+      throw new Error('Failed to find similar products')
+    }
+  }
+
   // Conversational AI
   async processConversation(
     message: string, 

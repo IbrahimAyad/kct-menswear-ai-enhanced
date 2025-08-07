@@ -15,6 +15,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { OutfitRecommendations } from '@/components/ai/OutfitRecommendations'
+import { StyleMatcher } from '@/components/ai/StyleMatcher'
+import { SizeAssistant } from '@/components/ai/SizeAssistant'
 import Link from 'next/link'
 
 type AIFeature = 'outfit' | 'size' | 'style' | 'chat' | null
@@ -37,8 +39,7 @@ export default function AtelierAIPage() {
       description: 'Find your perfect fit with AI-powered size predictions',
       icon: Ruler,
       color: 'bg-blue-600',
-      available: false,
-      comingSoon: true
+      available: true
     },
     {
       id: 'style' as AIFeature,
@@ -46,8 +47,7 @@ export default function AtelierAIPage() {
       description: 'Upload a photo and find similar items in our collection',
       icon: Camera,
       color: 'bg-purple-600',
-      available: false,
-      comingSoon: true
+      available: true
     },
     {
       id: 'chat' as AIFeature,
@@ -55,8 +55,7 @@ export default function AtelierAIPage() {
       description: 'Chat with our AI stylist for personalized advice',
       icon: MessageSquare,
       color: 'bg-green-600',
-      available: false,
-      comingSoon: true
+      available: true
     }
   ]
 
@@ -188,7 +187,17 @@ export default function AtelierAIPage() {
 
             {/* Active Feature Component */}
             {activeFeature === 'outfit' && <OutfitRecommendations />}
-            {/* Other features will be added here as we implement them */}
+            {activeFeature === 'style' && <StyleMatcher />}
+            {activeFeature === 'size' && (
+              <div className="max-w-2xl mx-auto">
+                <SizeAssistant 
+                  productId="demo-product" 
+                  productName="Premium Navy Suit"
+                  productBrand="Hugo Boss"
+                />
+              </div>
+            )}
+            {/* Chat feature will be added later */}
           </div>
         </section>
       )}
