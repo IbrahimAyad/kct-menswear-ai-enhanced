@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, ShoppingBag, User, Search } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { Button } from "@/components/ui/button";
 import { CartDrawer } from "./CartDrawer";
 import { useCart } from "@/lib/hooks/useCart";
 import { SmartSearchBar } from "@/components/search/SmartSearchBar";
+import { SearchOverlay } from "@/components/search/SearchOverlay";
+import { MegaMenu } from "./MegaMenu";
 import UserMenu from "./UserMenu";
 import { useStoreInfo } from "@/contexts/SettingsContext";
 
@@ -17,9 +19,6 @@ const navItems = [
   { href: "/collections/dress-shirts", label: "Dress Shirts", highlight: true },
   { href: "/collections/ties", label: "Ties & Bowties", highlight: true },
   { href: "/style-quiz", label: "Style Finder" },
-  { href: "/weddings", label: "Weddings" },
-  { href: "/wedding-guide", label: "Wedding Guide", highlight: true },
-  { href: "/prom-collection", label: "Prom", highlight: true },
   { href: "/occasions", label: "Occasions" },
   { href: "/custom-suits", label: "Custom" },
   { href: "/cart", label: "Cart", mobileOnly: true },
@@ -28,8 +27,22 @@ const navItems = [
 export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { cartSummary } = useCart();
   const storeInfo = useStoreInfo();
+
+  // Keyboard shortcut for search (Cmd/Ctrl + K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <>
@@ -71,7 +84,7 @@ export function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative text-black hover:text-gold transition-colors font-medium group ${
+                className={`relative text-black hover:text-black transition-colors font-medium group ${
                   item.highlight ? 'flex items-center gap-1' : ''
                 }`}
                 aria-label={`Navigate to ${item.label}${item.highlight ? ' - New' : ''}`}
@@ -82,41 +95,55 @@ export function Navigation() {
                     NEW
                   </span>
                 )}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full" aria-hidden="true"></span>
+                <span 
+                  className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-burgundy to-gold transition-all duration-300 group-hover:w-full" 
+                  aria-hidden="true"
+                  style={{
+                    background: 'linear-gradient(90deg, var(--burgundy) 0%, var(--gold) 100%)'
+                  }}
+                ></span>
               </Link>
             ))}
+            
+            {/* MegaMenu Components */}
+            <MegaMenu menuKey="weddings" />
+            <MegaMenu menuKey="prom" />
           </div>
 
           {/* Right Side Actions */}
           <div className="hidden md:flex items-center space-x-4">
             <button
-              className="p-2 hover:bg-gray-100 rounded-sm transition-colors group"
-              onClick={() => {
-                // Open search modal or focus search input
-                const searchElement = document.querySelector('[data-search-trigger]') as HTMLElement;
-                searchElement?.click();
-              }}
-              aria-label="Search products"
+              className="p-2 hover:bg-gray-100 rounded-sm transition-colors group relative"
+              onClick={() => setIsSearchOpen(true)}
+              aria-label="Search products (⌘K)"
             >
-              <Search className="h-5 w-5 group-hover:text-gold transition-colors" />
+              <Search className="h-5 w-5 group-hover:text-burgundy transition-colors" />
+              <div className="absolute -bottom-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="px-1 py-0.5 text-xs text-gray-500 bg-gray-100 rounded border text-xs">
+                  ⌘K
+                </div>
+              </div>
             </button>
             <UserMenu />
             <Button 
               variant="ghost" 
               size="icon"
-              className="relative hover:text-gold transition-colors"
+              className="relative hover:text-burgundy transition-colors"
               onClick={() => setIsCartOpen(true)}
               aria-label={`Shopping cart with ${cartSummary.itemCount} items`}
             >
               <ShoppingBag className="h-5 w-5" />
               {cartSummary.itemCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 bg-gold text-black text-xs font-bold rounded-full flex items-center justify-center animate-scale-in shadow-sm">
+                <span 
+                  className="absolute -top-1 -right-1 h-5 w-5 text-white text-xs font-bold rounded-full flex items-center justify-center animate-scale-in shadow-sm"
+                  style={{ backgroundColor: 'var(--burgundy)' }}
+                >
                   {cartSummary.itemCount}
                 </span>
               )}
             </Button>
             <Button 
-              className="bg-black hover:bg-gray-900 text-white px-6 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
+              className="btn-burgundy px-6 shadow-md hover:scale-105"
               aria-label="Book an appointment for custom fitting"
             >
               Book Appointment
@@ -156,7 +183,7 @@ export function Navigation() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center justify-between px-4 py-3 text-base font-medium text-gray-900 hover:bg-amber-50 hover:text-amber-700 rounded-lg transition-all duration-200",
+                  "flex items-center justify-between px-4 py-3 text-base font-medium text-gray-900 hover:bg-gradient-to-r hover:from-burgundy/5 hover:to-gold/5 hover:text-burgundy rounded-lg transition-all duration-200",
                   item.highlight && "relative"
                 )}
                 onClick={() => setIsMenuOpen(false)}
@@ -164,12 +191,37 @@ export function Navigation() {
               >
                 <span>{item.label}</span>
                 {item.highlight && (
-                  <span className="text-xs bg-amber-600 text-white px-2 py-0.5 rounded-full font-semibold ml-2">
+                  <span 
+                    className="text-xs text-white px-2 py-0.5 rounded-full font-semibold ml-2"
+                    style={{ backgroundColor: 'var(--gold)', color: 'var(--black)' }}
+                  >
                     NEW
                   </span>
                 )}
               </Link>
             ))}
+            
+            {/* Wedding and Prom Navigation Items for Mobile */}
+            <Link
+              href="/weddings"
+              className="flex items-center justify-between px-4 py-3 text-base font-medium text-gray-900 hover:bg-gradient-to-r hover:from-burgundy/5 hover:to-gold/5 hover:text-burgundy rounded-lg transition-all duration-200"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span>Weddings</span>
+            </Link>
+            <Link
+              href="/prom-collection"
+              className="flex items-center justify-between px-4 py-3 text-base font-medium text-gray-900 hover:bg-gradient-to-r hover:from-burgundy/5 hover:to-gold/5 hover:text-burgundy rounded-lg transition-all duration-200"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <span>Prom</span>
+              <span 
+                className="text-xs text-white px-2 py-0.5 rounded-full font-semibold ml-2"
+                style={{ backgroundColor: 'var(--burgundy)' }}
+              >
+                HOT
+              </span>
+            </Link>
           </div>
           
           {/* Divider */}
@@ -188,7 +240,7 @@ export function Navigation() {
             </Link>
             
             <Button 
-              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold shadow-md h-12 text-base"
+              className="btn-burgundy w-full font-semibold shadow-md h-12 text-base"
               aria-label="Book an appointment for custom fitting"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -198,6 +250,9 @@ export function Navigation() {
         </div>
       </div>
     </nav>
+    
+    {/* Search Overlay */}
+    <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     
     {/* Cart Drawer - Disabled in favor of SimpleCartDrawer */}
     {/* <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} /> */}

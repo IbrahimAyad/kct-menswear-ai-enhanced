@@ -28,14 +28,17 @@ export default function Home() {
 
   return (
     <>
-      {/* Hero Section with Video Background */}
+      {/* Hero Section with Static Image Background */}
       <section className="relative h-screen w-full overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <VideoPlayer 
-            videoId={VIDEO_IDS.homepage}
-            className="w-full h-full object-cover scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/60" />
+          <div className="w-full h-full relative">
+            <img 
+              src="/KCT-Home-Banner-Update.jpg"
+              alt="KCT Menswear Premium Collection"
+              className="w-full h-full object-cover scale-105 transition-transform duration-700 hover:scale-100"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/60" />
+          </div>
         </div>
 
         <div className="relative z-10 flex items-center justify-center h-full">
