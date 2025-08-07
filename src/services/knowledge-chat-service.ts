@@ -207,10 +207,22 @@ export class KnowledgeChatService {
 
   // API Calls
   private async fetchColors() {
-    const response = await axios.get(`${this.apiUrl}/api/colors`, {
-      headers: { 'X-API-Key': this.apiKey }
-    });
-    return response.data.data;
+    try {
+      const response = await axios.get(`${this.apiUrl}/api/v2/colors`, {
+        headers: { 
+          'X-API-Key': this.apiKey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        timeout: 15000,
+        withCredentials: false
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error('Failed to fetch colors:', error);
+      // Return fallback color data
+      return this.getFallbackColorData();
+    }
   }
 
   private async fetchColorRecommendations(colors: string[]) {
@@ -220,28 +232,56 @@ export class KnowledgeChatService {
   }
 
   private async fetchStyleProfile(profile: string) {
-    const response = await axios.get(`${this.apiUrl}/api/styles/${profile}`, {
-      headers: { 'X-API-Key': this.apiKey }
-    });
-    return response.data.data;
+    try {
+      const response = await axios.get(`${this.apiUrl}/api/v2/styles/${profile}`, {
+        headers: { 
+          'X-API-Key': this.apiKey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        timeout: 15000,
+        withCredentials: false
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error('Failed to fetch style profile:', error);
+      return {
+        characteristics: ['classic', 'versatile', 'timeless'],
+        wardrobe_essentials: ['navy suit', 'white dress shirt', 'silk tie']
+      };
+    }
   }
 
   private async fetchVenueRecommendations(venueType: string) {
-    const response = await axios.get(`${this.apiUrl}/api/venues/${venueType}/recommendations`, {
-      headers: { 'X-API-Key': this.apiKey }
-    });
-    return response.data.data;
+    try {
+      const response = await axios.get(`${this.apiUrl}/api/v2/venues/${venueType}/recommendations`, {
+        headers: { 
+          'X-API-Key': this.apiKey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        timeout: 15000,
+        withCredentials: false
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error('Failed to fetch venue recommendations:', error);
+      return {
+        dress_code: 'business professional',
+        essential_items: ['tailored suit', 'dress shirt', 'leather shoes']
+      };
+    }
   }
 
   private async fetchTrending() {
-    const response = await axios.get(`${this.apiUrl}/api/trending`, {
+    const response = await axios.get(`${this.apiUrl}/api/v2/intelligence/trending`, {
       headers: { 'X-API-Key': this.apiKey }
     });
     return response.data.data;
   }
 
   private async fetchWeddingRecommendations() {
-    const response = await axios.post(`${this.apiUrl}/api/recommendations`, {
+    const response = await axios.post(`${this.apiUrl}/api/v2/recommendations`, {
       occasion: 'wedding',
       style_preference: 'elegant',
       formality_level: 'formal'
@@ -252,7 +292,7 @@ export class KnowledgeChatService {
   }
 
   private async fetchGeneralRecommendations() {
-    const response = await axios.post(`${this.apiUrl}/api/recommendations`, {
+    const response = await axios.post(`${this.apiUrl}/api/v2/recommendations`, {
       customer_info: this.userProfile,
       preferences: {
         style: 'versatile',
@@ -266,7 +306,7 @@ export class KnowledgeChatService {
 
   private async validateCombination(outfit: any) {
     try {
-      const response = await axios.post(`${this.apiUrl}/api/combinations/validate`, outfit, {
+      const response = await axios.post(`${this.apiUrl}/api/v2/combinations/validate`, outfit, {
         headers: { 'X-API-Key': this.apiKey }
       });
       return response.data.data;
@@ -377,6 +417,23 @@ export class KnowledgeChatService {
       message: "I'm here to help you discover your signature style. At KCT, we believe in the transformative power of well-tailored menswear. Let me guide you through our collections to find pieces that resonate with your personal narrative.",
       suggestions: ["Help me find my style", "Occasion recommendations", "Color matching guide", "Trending now"],
       layerLevel: 1
+    };
+  }
+
+  private getFallbackColorData() {
+    return {
+      color_families: {
+        neutrals: {
+          colors: ['navy', 'charcoal', 'black', 'grey'],
+          complement_with: 'white, light blue, burgundy',
+          tie_suggestions: ['burgundy', 'gold', 'forest green']
+        },
+        earth_tones: {
+          colors: ['brown', 'tan', 'olive'], 
+          complement_with: 'cream, gold, deep red',
+          tie_suggestions: ['burnt orange', 'deep green', 'gold']
+        }
+      }
     };
   }
 }

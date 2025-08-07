@@ -11,8 +11,20 @@
 }
 
 /* iOS safe area support */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
 .pb-safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Mobile viewport fixes */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific fixes */
+  .mobile-chat-container {
+    height: -webkit-fill-available;
+  }
 }
 
 /* Touch target improvements */
@@ -82,5 +94,27 @@
   
   .chat-message-ai {
     margin-right: auto;
+  }
+  
+  /* Mobile chat layout fixes */
+  .mobile-chat-input {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+  }
+  
+  /* Ensure chat takes full viewport */
+  .mobile-full-height {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height */
+    min-height: -webkit-fill-available;
+  }
+  
+  /* Fix for iOS keyboard overlap */
+  .mobile-messages-container {
+    height: calc(100vh - 200px);
+    height: calc(100dvh - 200px);
+    padding-bottom: env(safe-area-inset-bottom, 0);
   }
 }

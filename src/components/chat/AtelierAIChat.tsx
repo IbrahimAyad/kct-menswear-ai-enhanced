@@ -229,9 +229,9 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
           "w-full md:w-[420px]",
           "rounded-none md:rounded-2xl",
           isMinimized && "h-16",
-          !isMinimized && "h-screen md:h-[650px]",
+          !isMinimized && "mobile-full-height md:h-[650px]",
           // Mobile safe areas
-          "pb-safe-bottom md:pb-0",
+          "pb-0 md:pb-0",
           className
         )}
       >
@@ -276,7 +276,7 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
         {!isMinimized && (
           <>
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-transparent to-gray-50/50 h-[calc(100vh-280px)] md:h-[420px]">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-transparent to-gray-50/50 mobile-messages-container md:h-[420px]">
               {messages.map((message) => (
                 <motion.div
                   key={message.id}
@@ -363,7 +363,7 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
             </div>
 
             {/* Input */}
-            <div className="bg-gradient-to-b from-white to-gray-50 p-4">
+            <div className="bg-gradient-to-b from-white to-gray-50 p-4 mobile-chat-input">
               {isRecording && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}

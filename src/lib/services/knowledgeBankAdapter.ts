@@ -70,8 +70,8 @@ class KnowledgeBankAdapter {
   private cacheTimeout = 5 * 60 * 1000; // 5 minutes
 
   constructor() {
-    // Configure with Railway API endpoint
-    this.apiUrl = process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_API || 'https://kct-knowledge-api-production.up.railway.app';
+    // Configure with Railway API endpoint V2
+    this.apiUrl = process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_API || 'https://kct-knowledge-api-2-production.up.railway.app';
     this.apiKey = process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_KEY || 'kct-menswear-api-2024-secret';
   }
 
@@ -105,8 +105,8 @@ class KnowledgeBankAdapter {
     }
 
     try {
-      // Get rules from the API
-      const rulesResponse = await fetch(`${this.apiUrl}/api/rules`, {
+      // Get rules from the API V2
+      const rulesResponse = await fetch(`${this.apiUrl}/api/v2/rules`, {
         headers: {
           'x-api-key': this.apiKey,
           'Content-Type': 'application/json'
@@ -152,8 +152,8 @@ class KnowledgeBankAdapter {
     suggestions?: string[];
   }> {
     try {
-      // Fetch rules to validate against
-      const rulesResponse = await fetch(`${this.apiUrl}/api/rules`, {
+      // Fetch rules to validate against V2
+      const rulesResponse = await fetch(`${this.apiUrl}/api/v2/rules`, {
         headers: {
           'x-api-key': this.apiKey,
           'Content-Type': 'application/json'
@@ -221,7 +221,7 @@ class KnowledgeBankAdapter {
     excludeColors?: string[];
   }): Promise<CombinationRule[]> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/recommendations`, {
+      const response = await fetch(`${this.apiUrl}/api/v2/recommendations`, {
         method: 'POST',
         headers: {
           'x-api-key': this.apiKey,
@@ -254,7 +254,7 @@ class KnowledgeBankAdapter {
     }
 
     try {
-      const response = await fetch(`${this.apiUrl}/api/analytics/conversions/${combinationId}`, {
+      const response = await fetch(`${this.apiUrl}/api/v2/analytics/conversions/${combinationId}`, {
         headers: {
           'x-api-key': this.apiKey,
           'Content-Type': 'application/json'
@@ -286,7 +286,7 @@ class KnowledgeBankAdapter {
     growth: number;
   }>> {
     try {
-      const response = await fetch(`${this.apiUrl}/api/trending`, {
+      const response = await fetch(`${this.apiUrl}/api/v2/intelligence/trending`, {
         headers: {
           'x-api-key': this.apiKey,
           'Content-Type': 'application/json'
@@ -331,7 +331,7 @@ class KnowledgeBankAdapter {
     }
 
     try {
-      const response = await fetch(`${this.apiUrl}/api/profiles/${profileType}`, {
+      const response = await fetch(`${this.apiUrl}/api/v2/profiles/${profileType}`, {
         headers: {
           'x-api-key': this.apiKey,
           'Content-Type': 'application/json'

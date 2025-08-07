@@ -20,7 +20,7 @@ export async function GET() {
     };
   } = {
     timestamp: new Date().toISOString(),
-    apiUrl: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_API || 'https://kct-knowledge-api-production.up.railway.app',
+    apiUrl: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_API || 'https://kct-knowledge-api-2-production.up.railway.app',
     apiKeyConfigured: !!process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_KEY,
     tests: {}
   };
