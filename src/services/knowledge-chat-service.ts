@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { fashionClipService } from '@/lib/services/fashionClipService';
 
 interface ChatMessage {
   message: string;
@@ -24,8 +25,13 @@ export class KnowledgeChatService {
     this.apiKey = process.env.NEXT_PUBLIC_KCT_API_KEY || 'kct-menswear-api-2024-secret';
   }
 
-  async processMessage(message: string): Promise<ChatMessage> {
+  async processMessage(message: string, imageFile?: File): Promise<ChatMessage> {
     const intent = this.analyzeIntent(message);
+    
+    // If an image is provided, analyze it with Fashion CLIP first
+    if (imageFile) {
+      return await this.handleImageBasedQuery(message, imageFile, intent);
+    }
     
     try {
       switch (intent.type) {
@@ -54,6 +60,52 @@ export class KnowledgeChatService {
       console.error('Knowledge API error:', error);
       return this.generateFallbackResponse(message);
     }
+  }
+
+  private async handleImageBasedQuery(message: string, imageFile: File, intent: any): Promise<ChatMessage> {
+    try {
+      // Analyze image with Fashion CLIP
+      const fashionClipAnalysis = await fashionClipService.analyzeImage(imageFile);
+      
+      if (!fashionClipAnalysis) {
+        return {
+          message: "I'm having trouble analyzing the image. Let me help you based on your description instead. What style or outfit are you looking for?",
+          suggestions: ["Describe the style", "Tell me the occasion", "Color preferences", "Budget range"],
+          layerLevel: 1
+        };
+      }
+      
+      // Get product recommendations based on the image
+      const recommendations = await fashionClipService.getImageBasedRecommendations(imageFile);
+      
+      // Analyze colors from Fashion CLIP
+      const colorAnalysis = await fashionClipService.analyzeColors(imageFile);
+      
+      return {
+        message: `Based on my Fashion CLIP analysis, I can see you're looking for ${fashionClipAnalysis.classification || 'sophisticated menswear'}. ${this.generateImageBasedAdvice(fashionClipAnalysis, colorAnalysis)} I've found ${recommendations.length} similar items in our collection that match this aesthetic.`,
+        suggestions: [
+          "Show matching products",
+          "Complete the outfit",
+          "Alternative styles",
+          "Color variations"
+        ],
+        products: recommendations,
+        colors: colorAnalysis,
+        layerLevel: 2,
+        shouldSpeak: true,
+        voicePersona: 'enthusiastic'
+      };
+    } catch (error) {
+      console.error('Fashion CLIP analysis error:', error);
+      return this.generateFallbackResponse(message);
+    }
+  }
+  
+  private generateImageBasedAdvice(analysis: any, colorData: any): string {
+    const dominantColors = colorData?.dominantColors?.join(', ') || 'classic colors';
+    const seasonalPalette = colorData?.seasonalPalette || 'versatile';
+    
+    return `The style features ${dominantColors} which creates a ${seasonalPalette} palette. This look embodies the Sterling Crown philosophy - timeless elegance with modern sophistication.`;
   }
 
   private analyzeIntent(message: string): any {
@@ -109,6 +161,9 @@ export class KnowledgeChatService {
     const profile = intent.style || 'classic';
     const styleData = await this.fetchStyleProfile(profile);
     
+    // Use Fashion CLIP to search for products matching this style description
+    const fashionClipProducts = await fashionClipService.searchByDescription(`${profile} menswear formal elegant`);
+    
     return {
       message: `Let me curate a wardrobe that reflects your ${profile} style personality. At KCT, we believe your attire should amplify your personal narrative. ${this.generateStyleAdvice(styleData)}`,
       suggestions: [
@@ -118,7 +173,10 @@ export class KnowledgeChatService {
         "Investment pieces"
       ],
       styles: styleData,
-      layerLevel: 2
+      products: fashionClipProducts,
+      layerLevel: 2,
+      shouldSpeak: true,
+      voicePersona: 'professional'
     };
   }
 

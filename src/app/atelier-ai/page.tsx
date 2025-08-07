@@ -17,6 +17,7 @@ import { Card } from '@/components/ui/card'
 import { OutfitRecommendations } from '@/components/ai/OutfitRecommendations'
 import { StyleMatcher } from '@/components/ai/StyleMatcher'
 import { SizeAssistant } from '@/components/ai/SizeAssistant'
+import { ChatAssistant } from '@/components/ai/ChatAssistant'
 import Link from 'next/link'
 
 type AIFeature = 'outfit' | 'size' | 'style' | 'chat' | null
@@ -197,7 +198,15 @@ export default function AtelierAIPage() {
                 />
               </div>
             )}
-            {/* Chat feature will be added later */}
+            {activeFeature === 'chat' && (
+              <div className="max-w-4xl mx-auto">
+                <ChatAssistant 
+                  userId={undefined}
+                  initialMessage="Welcome to your personal shopping assistant! I can help you find the perfect outfit, answer questions about sizing, or provide style recommendations. What are you looking for today?"
+                  className="relative bottom-0 right-0 w-full h-[600px]"
+                />
+              </div>
+            )}
           </div>
         </section>
       )}

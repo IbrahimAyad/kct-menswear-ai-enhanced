@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { fashionClipService } from '@/lib/services/fashionClipService'
 import type { 
   StyleAnalysis, 
   DetectedItem, 
@@ -25,21 +26,28 @@ export class StyleAnalysisService {
       // Convert image to base64
       const base64Image = await this.fileToBase64(imageFile)
       
-      // Analyze with OpenAI Vision
+      // Analyze with Fashion CLIP first for fashion-specific insights
+      const fashionClipAnalysis = await fashionClipService.analyzeImage(imageFile)
+      
+      // Analyze with OpenAI Vision for detailed understanding
       const analysis = await this.analyzeWithOpenAI(base64Image)
+      
+      // Merge Fashion CLIP results with OpenAI analysis
+      const mergedAnalysis = this.mergeFashionClipWithOpenAI(fashionClipAnalysis, analysis)
       
       // Extract color palette
       const colorPalette = await this.extractColorPalette(base64Image)
       
       // Store analysis result
       const analysisId = await this.storeAnalysis({
-        ...analysis,
-        colorPalette
+        ...mergedAnalysis,
+        colorPalette,
+        fashionClipData: fashionClipAnalysis
       })
       
       return {
         imageId: analysisId,
-        ...analysis,
+        ...mergedAnalysis,
         colorPalette
       }
     } catch (error) {
@@ -188,10 +196,63 @@ export class StyleAnalysisService {
     }
   }
 
+  private mergeFashionClipWithOpenAI(
+    fashionClipData: any, 
+    openAIAnalysis: Partial<StyleAnalysis>
+  ): Partial<StyleAnalysis> {
+    // If Fashion CLIP found similar items, enhance the analysis
+    if (fashionClipData?.similar_items) {
+      // Fashion CLIP provides better fashion-specific categorization
+      if (fashionClipData.classification) {
+        openAIAnalysis.styleCategory = fashionClipData.classification
+      }
+      
+      // Enhance confidence with Fashion CLIP's fashion expertise
+      if (fashionClipData.confidence && openAIAnalysis.detectedItems) {
+        openAIAnalysis.detectedItems = openAIAnalysis.detectedItems.map(item => ({
+          ...item,
+          confidence: (item.confidence + fashionClipData.confidence) / 2
+        }))
+      }
+    }
+    
+    return openAIAnalysis
+  }
+
   private async searchProductsByStyle(analysis: StyleAnalysis): Promise<any[]> {
     const matchingProducts = []
     
-    // Search for each detected item
+    // If we have Fashion CLIP embeddings, use them for similarity search
+    const fashionClipData = (analysis as any).fashionClipData
+    if (fashionClipData?.embeddings) {
+      // Search using Fashion CLIP embeddings for better fashion similarity
+      const { data: similarProducts } = await supabase
+        .from('products')
+        .select('*')
+        .eq('in_stock', true)
+        .limit(20)
+      
+      // In production, you'd use vector similarity search here
+      // For now, we'll use the similar_items from Fashion CLIP
+      if (fashionClipData.similar_items && similarProducts) {
+        const clipMatches = similarProducts.filter(product => 
+          fashionClipData.similar_items.includes(product.id) ||
+          fashionClipData.similar_items.some((item: string) => 
+            product.name?.toLowerCase().includes(item.toLowerCase())
+          )
+        )
+        
+        matchingProducts.push(...clipMatches.map(product => ({
+          productId: product.id,
+          similarityScore: 0.9, // High score for Fashion CLIP matches
+          matchedAttributes: ['fashion-clip-match', 'style', 'aesthetic'],
+          category: product.category,
+          price: product.price
+        })))
+      }
+    }
+    
+    // Also search for each detected item
     for (const item of analysis.detectedItems) {
       const { data: products } = await supabase
         .from('products')
@@ -212,8 +273,12 @@ export class StyleAnalysisService {
       }
     }
     
-    // Sort by similarity score
-    return matchingProducts.sort((a, b) => b.similarityScore - a.similarityScore)
+    // Remove duplicates and sort by similarity score
+    const uniqueProducts = Array.from(
+      new Map(matchingProducts.map(item => [item.productId, item])).values()
+    )
+    
+    return uniqueProducts.sort((a, b) => b.similarityScore - a.similarityScore)
   }
 
   private calculateItemSimilarity(detectedItem: DetectedItem, product: any): number {

@@ -4,6 +4,7 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/components/providers/Providers";
 import { AtelierAIChatButton } from "@/components/chat/AtelierAIChat";
+import { ChatWidget } from "@/components/ai/ChatWidget";
 import { SimpleCartDrawer } from "@/components/cart/SimpleCartDrawer";
 import { GoogleAnalytics, GoogleAnalyticsScript } from "@/components/analytics/GoogleAnalytics";
 import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
