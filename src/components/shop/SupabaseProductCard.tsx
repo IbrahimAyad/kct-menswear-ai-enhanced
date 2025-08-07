@@ -152,7 +152,7 @@ export function SupabaseProductCard({
   return (
     <div 
       className={cn(
-        "group relative bg-white rounded-lg border border-gray-200 hover:border-gold/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden",
+        "group relative bg-white rounded-lg border border-gray-200 hover:border-gold/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden",
         variant === 'compact' && "max-w-xs",
         variant === 'featured' && "ring-2 ring-gold/20",
         className
@@ -186,13 +186,13 @@ export function SupabaseProductCard({
       <Link href={`/products/${product.id}`}>
         <div className={cn(
           "relative bg-gray-100 overflow-hidden",
-          variant === 'compact' ? "aspect-[3/4]" : "aspect-[3/4]"
+          variant === 'compact' ? "aspect-[3/4]" : "aspect-[2/3]"
         )}>
           <ProductImage
             src={isHovered && hoverImage !== primaryImage ? hoverImage : primaryImage}
             alt={product.name}
             className="object-cover transition-all duration-500 group-hover:scale-105"
-            sizes={variant === 'compact' ? '200px' : '300px'}
+            sizes={variant === 'compact' ? '300px' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
           />
           
           {/* Overlay on hover */}
@@ -218,7 +218,7 @@ export function SupabaseProductCard({
       </Link>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-5">
         {product.brand && (
           <p className="text-sm text-gray-600 mb-1">{product.brand}</p>
         )}
@@ -226,7 +226,7 @@ export function SupabaseProductCard({
         <Link href={`/products/${product.id}`}>
           <h3 className={cn(
             "font-medium text-gray-900 group-hover:text-gold transition-colors line-clamp-2",
-            variant === 'compact' ? "text-sm" : "text-base"
+            variant === 'compact' ? "text-sm" : "text-lg"
           )}>
             {product.name}
           </h3>
@@ -245,7 +245,7 @@ export function SupabaseProductCard({
           <div className="flex items-center gap-2">
             <span className={cn(
               "font-bold text-gray-900",
-              variant === 'compact' ? "text-sm" : "text-lg"
+              variant === 'compact' ? "text-base" : "text-xl"
             )}>
               {formatPrice(product.price)}
             </span>

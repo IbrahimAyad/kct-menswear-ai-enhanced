@@ -308,10 +308,10 @@ function ProductsContent() {
           {/* Products Grid */}
           <div className="flex-1">
             {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                 {[...Array(12)].map((_, i) => (
                   <Card key={i} className="animate-pulse">
-                    <div className="aspect-[3/4] bg-gray-200" />
+                    <div className="aspect-[2/3] bg-gray-200" />
                     <div className="p-4 space-y-3">
                       <div className="h-4 bg-gray-200 rounded w-3/4" />
                       <div className="h-4 bg-gray-200 rounded w-1/2" />
@@ -335,7 +335,7 @@ function ProductsContent() {
               <>
                 <div className={cn(
                   viewMode === 'grid'
-                    ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                    ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
                     : "space-y-4"
                 )}>
                   {products.map((product) => (
