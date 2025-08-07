@@ -17,7 +17,7 @@ import {
 import { cn } from '@/lib/utils/cn'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { atelierAIService } from '@/services/atelier-ai-service'
+import { knowledgeChatService } from '@/services/knowledge-chat-service'
 
 interface Message {
   id: string
@@ -64,40 +64,15 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
   }, [isOpen, isInitialized])
 
   const initializeChat = async () => {
-    try {
-      const response = await atelierAIService.startConversation()
-      setMessages([{
-        id: '1',
-        content: response.message,
-        sender: 'assistant',
-        timestamp: new Date(),
-        layerLevel: 1
-      }])
-      setIsInitialized(true)
-
-      // Set up WebSocket for real-time communication
-      wsRef.current = atelierAIService.connectWebSocket((data) => {
-        if (data.type === 'message') {
-          setMessages(prev => [...prev, {
-            id: data.id || Date.now().toString(),
-            content: data.content,
-            sender: 'assistant',
-            timestamp: new Date(),
-            layerLevel: data.layerLevel
-          }])
-        }
-      })
-    } catch (error) {
-      console.error('Failed to initialize chat:', error)
-      // Fallback message
-      setMessages([{
-        id: '1',
-        content: "Welcome to Atelier AI, your personal luxury menswear consultant. I embody the Sterling Crown philosophy - where luxury is a mindset, not just a price tag. How may I elevate your style today?",
-        sender: 'assistant',
-        timestamp: new Date()
-      }])
-      setIsInitialized(true)
-    }
+    // Welcome message
+    setMessages([{
+      id: '1',
+      content: "Welcome to Atelier AI, your personal luxury menswear consultant. I embody the Sterling Crown philosophy - where luxury is a mindset, not just a price tag. How may I elevate your style today?",
+      sender: 'assistant',
+      timestamp: new Date(),
+      layerLevel: 1
+    }])
+    setIsInitialized(true)
   }
 
   const quickActions = [
@@ -122,7 +97,7 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
     setIsTyping(true)
 
     try {
-      const response = await atelierAIService.sendMessage(input)
+      const response = await knowledgeChatService.processMessage(input)
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -134,20 +109,15 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
       
       setMessages(prev => [...prev, assistantMessage])
       
-      // Add suggestions as quick actions if available
-      if (response.suggestions && response.suggestions.length > 0) {
-        // Update the UI to show suggestions
-      }
-      
-      // Handle product recommendations
-      if (response.products && response.products.length > 0) {
-        // Could emit an event or callback to show products
+      // Store suggestions for later use if needed
+      if (response.suggestions) {
+        // Could store in state or show as quick actions
       }
     } catch (error) {
       console.error('Failed to send message:', error)
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: "I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
+        content: "I apologize for the inconvenience. Let me help you with style guidance based on our extensive fashion knowledge. What specific aspect of menswear can I assist you with today?",
         sender: 'assistant',
         timestamp: new Date()
       }

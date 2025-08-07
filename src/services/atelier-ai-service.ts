@@ -40,11 +40,13 @@ export class AtelierAIService {
   private apiKey: string;
   private sessionId: string | null = null;
   private ws: WebSocket | null = null;
+  private chatEnabled: boolean;
 
   constructor() {
-    // These will be replaced with actual Railway deployment URLs
-    this.apiUrl = process.env.NEXT_PUBLIC_KCT_API_URL || 'http://localhost:3000';
+    // Updated Railway deployment URLs
+    this.apiUrl = process.env.NEXT_PUBLIC_KCT_API_URL || 'https://kct-knowledge-api-2-production.up.railway.app';
     this.apiKey = process.env.NEXT_PUBLIC_KCT_API_KEY || 'kct-menswear-api-2024-secret';
+    this.chatEnabled = process.env.NEXT_PUBLIC_KCT_CHAT_ENABLED === 'true';
   }
 
   async startConversation(customerId?: string): Promise<ConversationStartResponse> {
