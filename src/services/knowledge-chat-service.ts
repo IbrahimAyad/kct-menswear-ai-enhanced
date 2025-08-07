@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { fashionClipService } from '@/lib/services/fashionClipService';
+import { getConversationalResponse, STYLE_DISCOVERY_QUESTIONS } from '@/lib/ai/knowledge-base';
 
 interface ChatMessage {
   message: string;
@@ -25,7 +26,21 @@ export class KnowledgeChatService {
     this.apiKey = process.env.NEXT_PUBLIC_KCT_API_KEY || 'kct-menswear-api-2024-secret';
   }
 
-  async processMessage(message: string, imageFile?: File): Promise<ChatMessage> {
+  async processMessage(message: string, imageFile?: File, context?: any): Promise<ChatMessage> {
+    // First check if we have a trained conversational pattern
+    const conversationalResponse = getConversationalResponse(message, context);
+    
+    // If we found a pattern, use the enhanced conversational approach
+    if (conversationalResponse.response !== "I'm here to help you find the perfect style solution.") {
+      return {
+        message: `${conversationalResponse.response} ${conversationalResponse.followUp}`,
+        suggestions: conversationalResponse.suggestions,
+        layerLevel: 1,
+        shouldSpeak: true,
+        voicePersona: 'professional'
+      };
+    }
+    
     const intent = this.analyzeIntent(message);
     
     // If an image is provided, analyze it with Fashion CLIP first

@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { getConversationalResponse, STYLE_DISCOVERY_QUESTIONS } from '@/lib/ai/knowledge-base'
 import type { 
   ConversationContext, 
   AIResponse, 
@@ -32,6 +33,29 @@ export class ConversationalAI {
 
   async processMessage(message: string, context: ConversationContext): Promise<AIResponse> {
     try {
+      // First check if we have a trained conversational pattern
+      const conversationalResponse = getConversationalResponse(message, context.extractedPreferences)
+      
+      // If we found a specific pattern, use the enhanced conversational approach
+      if (conversationalResponse.response !== "I'm here to help you find the perfect style solution.") {
+        const aiResponse: AIResponse = {
+          message: `${conversationalResponse.response} ${conversationalResponse.followUp}`,
+          intent: 'style-consultation',
+          confidence: 0.9,
+          suggestedActions: conversationalResponse.suggestions.map(suggestion => ({
+            type: 'quick-reply',
+            label: suggestion,
+            data: { reply: suggestion }
+          })),
+          productRecommendations: []
+        }
+        
+        // Still update conversation state
+        this.updateConversationStateFromPattern(context.sessionId, message, conversationalResponse)
+        
+        return aiResponse
+      }
+      
       // Get or create conversation state
       const state = this.getConversationState(context.sessionId)
       
@@ -419,6 +443,41 @@ export class ConversationalAI {
     }
 
     this.conversationStates.set(sessionId, state)
+  }
+
+  private updateConversationStateFromPattern(
+    sessionId: string, 
+    message: string, 
+    conversationalResponse: any
+  ): void {
+    const state = this.getConversationState(sessionId)
+    
+    // Update stage to discovery since we're learning about style
+    state.stage = 'discovery'
+    state.mood = 'positive'
+    
+    // Add topic to history
+    const topic = this.extractTopicFromMessage(message)
+    if (topic && !state.topicHistory.includes(topic)) {
+      state.topicHistory.push(topic)
+    }
+    
+    this.conversationStates.set(sessionId, state)
+  }
+  
+  private extractTopicFromMessage(message: string): string {
+    const lowerMessage = message.toLowerCase()
+    
+    if (lowerMessage.includes('suit')) return 'suits'
+    if (lowerMessage.includes('wedding')) return 'wedding'
+    if (lowerMessage.includes('business')) return 'business'
+    if (lowerMessage.includes('color')) return 'colors'
+    if (lowerMessage.includes('fit')) return 'fit'
+    if (lowerMessage.includes('size')) return 'sizing'
+    if (lowerMessage.includes('price')) return 'pricing'
+    if (lowerMessage.includes('accessory') || lowerMessage.includes('tie') || lowerMessage.includes('pocket square')) return 'accessories'
+    
+    return 'general'
   }
 
   private getFallbackResponse(): AIResponse {
