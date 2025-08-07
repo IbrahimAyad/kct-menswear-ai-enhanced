@@ -9,6 +9,8 @@ interface ChatMessage {
   colors?: any;
   venues?: any;
   styles?: any;
+  shouldSpeak?: boolean;
+  voicePersona?: 'professional' | 'enthusiastic' | 'empathetic';
 }
 
 export class KnowledgeChatService {
@@ -97,7 +99,9 @@ export class KnowledgeChatService {
         "Seasonal color guide"
       ],
       colors: colorData,
-      layerLevel: 1
+      layerLevel: 1,
+      shouldSpeak: true,
+      voicePersona: 'professional'
     };
   }
 

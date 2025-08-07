@@ -12,12 +12,15 @@ import {
   Loader2,
   Image as ImageIcon,
   Mic,
-  Hash
+  Hash,
+  MicOff,
+  Volume2
 } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { knowledgeChatService } from '@/services/knowledge-chat-service'
+import { voiceChatService } from '@/services/voice-chat-service'
 
 interface Message {
   id: string
@@ -39,6 +42,8 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
   const [isTyping, setIsTyping] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
   const [isInitialized, setIsInitialized] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const wsRef = useRef<WebSocket | null>(null)
@@ -60,6 +65,8 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
       if (wsRef.current) {
         wsRef.current.close()
       }
+      // Cleanup voice service
+      voiceChatService.cleanup()
     }
   }, [isOpen, isInitialized])
 
@@ -137,6 +144,65 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
   const handleQuickAction = (action: string) => {
     setInput(action)
     inputRef.current?.focus()
+  }
+
+  const handleVoiceRecord = async () => {
+    if (isRecording) {
+      // Stop recording
+      setIsRecording(false)
+      try {
+        const audioBlob = await voiceChatService.stopRecording()
+        setIsTyping(true)
+        
+        // Transcribe and send voice message
+        const voiceResponse = await voiceChatService.sendVoiceMessage(audioBlob)
+        
+        // Add user message (transcript)
+        if (voiceResponse.transcript) {
+          const userMessage: Message = {
+            id: Date.now().toString(),
+            content: voiceResponse.transcript,
+            sender: 'user',
+            timestamp: new Date()
+          }
+          setMessages(prev => [...prev, userMessage])
+        }
+        
+        // Add AI response
+        if (voiceResponse.message) {
+          const aiMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            content: voiceResponse.message,
+            sender: 'assistant',
+            timestamp: new Date(),
+            layerLevel: 1
+          }
+          setMessages(prev => [...prev, aiMessage])
+          
+          // Play voice response if available
+          if (voiceResponse.audioUrl || voiceResponse.audioBase64) {
+            setIsPlaying(true)
+            await voiceChatService.playAudio(voiceResponse.audioUrl || voiceResponse.audioBase64!)
+            setIsPlaying(false)
+          }
+        }
+      } catch (error) {
+        console.error('Voice recording error:', error)
+        // Fallback to text mode
+        alert('Voice recording failed. Please use text input.')
+      } finally {
+        setIsTyping(false)
+      }
+    } else {
+      // Start recording
+      try {
+        await voiceChatService.startRecording()
+        setIsRecording(true)
+      } catch (error) {
+        console.error('Failed to start recording:', error)
+        alert('Microphone access denied. Please enable microphone permissions.')
+      }
+    }
   }
 
   if (!isOpen) return null
@@ -223,6 +289,12 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                             Layer {message.layerLevel}
                           </Badge>
                         )}
+                        {isPlaying && messages[messages.length - 1]?.id === message.id && (
+                          <div className="flex items-center gap-1">
+                            <Volume2 className="h-3 w-3 text-red-700 animate-pulse" />
+                            <span className="text-xs text-red-700">Speaking</span>
+                          </div>
+                        )}
                       </div>
                     )}
                     <p className="text-sm leading-relaxed">{message.content}</p>
@@ -277,6 +349,20 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
 
             {/* Input */}
             <div className="bg-gradient-to-b from-white to-gray-50 p-4">
+              {isRecording && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-3 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center justify-center gap-2"
+                >
+                  <div className="flex gap-1">
+                    <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse" />
+                    <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
+                    <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }} />
+                  </div>
+                  <span className="text-sm font-medium text-red-700">Recording... Click mic to stop</span>
+                </motion.div>
+              )}
               <div className="flex items-end gap-2">
                 <div className="flex-1 relative">
                   <textarea
@@ -293,8 +379,18 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                     <button className="p-1.5 hover:bg-red-50 rounded-lg transition-colors">
                       <ImageIcon className="h-4 w-4 text-red-600" />
                     </button>
-                    <button className="p-1.5 hover:bg-red-50 rounded-lg transition-colors">
-                      <Mic className="h-4 w-4 text-red-600" />
+                    <button 
+                      onClick={handleVoiceRecord}
+                      className={cn(
+                        "p-1.5 rounded-lg transition-all",
+                        isRecording ? "bg-red-600 hover:bg-red-700 animate-pulse" : "hover:bg-red-50"
+                      )}
+                    >
+                      {isRecording ? (
+                        <MicOff className="h-4 w-4 text-white" />
+                      ) : (
+                        <Mic className="h-4 w-4 text-red-600" />
+                      )}
                     </button>
                   </div>
                 </div>
