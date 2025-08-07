@@ -70,6 +70,9 @@ export function SupabaseProductCard({
                 alt={product.name}
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
                 sizes="128px"
+                fill={false}
+                width={128}
+                height={160}
               />
               {!product.inStock && (
                 <div className="absolute inset-0 bg-black/50 flex items-center justify-center">

@@ -4,6 +4,13 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { getCloudflareOptimizedUrl, imagePresets } from '@/lib/cloudflare/imageTransform';
 import type { ImageTransformOptions } from '@/lib/cloudflare/imageTransform';
+import { cn } from '@/lib/utils';
+
+interface ImageVariant {
+  url: string;
+  width: number;
+  variant: string;
+}
 
 interface OptimizedImageProps {
   src: string;
@@ -20,6 +27,14 @@ interface OptimizedImageProps {
   fill?: boolean;
   width?: number;
   height?: number;
+  // New props for R2 variants
+  variants?: ImageVariant[];
+  placeholder?: string;
+  aspectRatio?: number;
+  colors?: {
+    dominant: string;
+    palette: string[];
+  };
 }
 
 export default function OptimizedImage({
@@ -37,22 +52,53 @@ export default function OptimizedImage({
   fill = false,
   width,
   height,
+  variants,
+  placeholder,
+  aspectRatio,
+  colors,
 }: OptimizedImageProps) {
   const [imageSrc, setImageSrc] = useState(src);
   const [isLoading, setIsLoading] = useState(true);
   const [isInView, setIsInView] = useState(!lazy);
+  const [currentSrc, setCurrentSrc] = useState(src);
   const imageRef = useRef<HTMLDivElement>(null);
 
+  // Select best variant based on viewport
+  useEffect(() => {
+    if (variants && variants.length > 0 && typeof window !== 'undefined') {
+      const selectVariant = () => {
+        const containerWidth = window.innerWidth;
+        const pixelRatio = window.devicePixelRatio || 1;
+        const targetWidth = containerWidth * pixelRatio;
+
+        // Find the best matching variant
+        const bestVariant = variants.reduce((best, variant) => {
+          const bestDiff = Math.abs(best.width - targetWidth);
+          const variantDiff = Math.abs(variant.width - targetWidth);
+          return variantDiff < bestDiff ? variant : best;
+        });
+
+        setCurrentSrc(bestVariant.url);
+      };
+
+      selectVariant();
+      window.addEventListener('resize', selectVariant);
+      return () => window.removeEventListener('resize', selectVariant);
+    }
+  }, [variants]);
+
   // Get optimized URL
-  const optimizedSrc = getCloudflareOptimizedUrl(
-    imageSrc,
-    transformOptions || preset
-  );
+  const optimizedSrc = variants && variants.length > 0 
+    ? currentSrc 
+    : getCloudflareOptimizedUrl(
+        imageSrc,
+        transformOptions || preset
+      );
 
   // Get placeholder for lazy loading
-  const placeholderSrc = lazy 
+  const placeholderSrc = placeholder || (lazy 
     ? getCloudflareOptimizedUrl(imageSrc, { width: 40, quality: 20, blur: 10 })
-    : undefined;
+    : undefined);
 
   // Intersection Observer for lazy loading
   useEffect(() => {
@@ -93,11 +139,35 @@ export default function OptimizedImage({
     ? imagePresets[preset]
     : { width, height };
 
+  // Generate srcSet from variants
+  const srcSet = variants && variants.length > 0
+    ? variants.map(v => `${v.url} ${v.width}w`).join(', ')
+    : undefined;
+
   return (
-    <div ref={imageRef} className={`relative ${className}`}>
-      {/* Loading skeleton */}
+    <div 
+      ref={imageRef} 
+      className={cn('relative overflow-hidden', className)}
+      style={aspectRatio ? { aspectRatio } : undefined}
+    >
+      {/* Loading skeleton with dominant color */}
       {isLoading && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg" />
+        <div 
+          className="absolute inset-0 animate-pulse rounded-lg" 
+          style={{ backgroundColor: colors?.dominant || '#e5e7eb' }}
+        />
+      )}
+
+      {/* Blur placeholder background */}
+      {placeholder && isLoading && (
+        <div
+          className="absolute inset-0 transform scale-110 filter blur-xl"
+          style={{
+            backgroundImage: `url(${placeholder})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        />
       )}
 
       {/* Main image */}
@@ -112,11 +182,15 @@ export default function OptimizedImage({
           priority={priority}
           placeholder={placeholderSrc ? 'blur' : undefined}
           blurDataURL={placeholderSrc}
-          className={`${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+          className={cn(
+            'transition-opacity duration-300',
+            isLoading ? 'opacity-0' : 'opacity-100'
+          )}
           onLoad={handleLoad}
           onError={handleError}
           quality={100} // Let Cloudflare handle quality
           unoptimized={false} // Let Next.js optimize too
+          {...(srcSet && { srcSet })}
         />
       )}
 

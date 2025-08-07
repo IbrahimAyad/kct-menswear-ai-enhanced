@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { Upload, Trash2, Eye, Loader2, FolderOpen } from 'lucide-react';
+import { Upload, Trash2, Eye, Loader2, FolderOpen, Sparkles } from 'lucide-react';
 import { StyleSwiperImage } from '@/lib/types';
+import { FashionAnalysisCard } from '@/components/ai/FashionAnalysisCard';
+import type { FashionAnalysis } from '@/lib/ai/fashion-analyzer';
 
 const CATEGORIES = [
   { value: 'suits', label: 'Suits & Tuxedos' },
@@ -19,6 +21,12 @@ export default function StyleSwiperAdminPage() {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [selectedAnalysis, setSelectedAnalysis] = useState<FashionAnalysis | null>(null);
+  const [uploadResults, setUploadResults] = useState<Array<{
+    filename: string;
+    analysis?: FashionAnalysis;
+    error?: string;
+  }>>([]);
 
   // Fetch images on component mount and category change
   const fetchImages = useCallback(async () => {
@@ -43,13 +51,29 @@ export default function StyleSwiperAdminPage() {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('category', selectedCategory === 'all' ? 'general' : selectedCategory);
+      formData.append('variantType', 'style-swiper');
 
       try {
         const response = await fetch('/api/style-swiper/upload', {
           method: 'POST',
           body: formData,
         });
-        return await response.json();
+        const result = await response.json();
+        
+        if (result.success) {
+          console.log('Upload successful with variants:', result.variants);
+          console.log('Image metadata:', result.metadata);
+          
+          // Store analysis results
+          if (result.analysis) {
+            setUploadResults(prev => [...prev, {
+              filename: file.name,
+              analysis: result.analysis
+            }]);
+          }
+        }
+        
+        return result;
       } catch (error) {
         console.error('Upload error:', error);
         return null;
@@ -61,6 +85,10 @@ export default function StyleSwiperAdminPage() {
     
     if (successful.length > 0) {
       await fetchImages();
+      
+      // Show success message with variant info
+      const totalVariants = successful.reduce((sum, r) => sum + (r.variants?.length || 0), 0);
+      console.log(`Uploaded ${successful.length} images with ${totalVariants} total variants`);
     }
     
     setUploading(false);
@@ -124,8 +152,49 @@ export default function StyleSwiperAdminPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Style Swiper Image Manager</h1>
-          <p className="text-gray-600">Upload and manage images for the Style Swiper feature</p>
+          <p className="text-gray-600">Upload and manage images for the Style Swiper feature with AI fashion analysis</p>
         </div>
+
+        {/* Upload Results with Fashion Analysis */}
+        {uploadResults.length > 0 && (
+          <div className="mb-8 bg-amber-50 border border-amber-200 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-amber-900 flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                Recent Fashion Analysis Results
+              </h3>
+              <button
+                onClick={() => setUploadResults([])}
+                className="text-amber-700 hover:text-amber-900 text-sm"
+              >
+                Clear Results
+              </button>
+            </div>
+            <div className="space-y-2">
+              {uploadResults.map((result, idx) => (
+                <div key={idx} className="flex items-center justify-between bg-white rounded p-3">
+                  <div>
+                    <p className="font-medium text-sm">{result.filename}</p>
+                    {result.analysis && (
+                      <p className="text-xs text-gray-600">
+                        {result.analysis.category} • {result.analysis.style.join(', ')} • 
+                        Score: {(result.analysis.styleScore * 100).toFixed(0)}%
+                      </p>
+                    )}
+                  </div>
+                  {result.analysis && (
+                    <button
+                      onClick={() => setSelectedAnalysis(result.analysis)}
+                      className="text-amber-600 hover:text-amber-700 text-sm font-medium"
+                    >
+                      View Details
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Category Filter */}
         <div className="mb-8 bg-white rounded-lg shadow p-6">
@@ -255,6 +324,18 @@ export default function StyleSwiperAdminPage() {
           )}
         </div>
       </div>
+
+      {/* Fashion Analysis Modal */}
+      {selectedAnalysis && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <FashionAnalysisCard
+              analysis={selectedAnalysis}
+              onClose={() => setSelectedAnalysis(null)}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

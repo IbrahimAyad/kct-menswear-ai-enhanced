@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import { getProduct } from '@/lib/supabase/products'
-import { ProductDetailClient } from './ProductDetailClient'
+import { ModernProductDetail } from './ModernProductDetail'
 import { RelatedProducts } from '@/components/products/RelatedProducts'
 import { formatPrice } from '@/lib/utils/format'
 
@@ -105,7 +105,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <ProductDetailClient product={product} />
+      <ModernProductDetail product={product} />
       <RelatedProducts 
         currentProductId={product.id} 
         category={product.category} 
