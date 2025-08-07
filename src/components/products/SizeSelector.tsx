@@ -1,6 +1,7 @@
 'use client'
 
-import { Info, Ruler } from 'lucide-react'
+import { useEffect } from 'react'
+import { Info, Ruler, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import { 
   isPopularSize,
@@ -8,6 +9,7 @@ import {
   getSizeRecommendation,
   type UserMeasurements
 } from '@/lib/products/sizing'
+import { useSizeMemory } from '@/hooks/useSizeMemory'
 
 interface SizeSelectorProps {
   category: string
@@ -28,9 +30,27 @@ export function SizeSelector({
   userMeasurements,
   className
 }: SizeSelectorProps) {
+  const { rememberSize, getRememberedSize } = useSizeMemory()
+  
   const recommendation = userMeasurements 
     ? getSizeRecommendation(category, userMeasurements)
     : null
+
+  // Get remembered size
+  const rememberedSize = getRememberedSize(category, availableSizes)
+
+  // Auto-select remembered size on mount if no size is selected
+  useEffect(() => {
+    if (!selectedSize && rememberedSize) {
+      onSizeSelect(rememberedSize)
+    }
+  }, [rememberedSize, selectedSize, onSizeSelect])
+
+  // Remember size when selected
+  const handleSizeSelect = (size: string) => {
+    onSizeSelect(size)
+    rememberSize(category, size)
+  }
 
   // Sort sizes with popular ones first
   const sortedSizes = sortSizesWithPopular(category, availableSizes)
@@ -57,15 +77,19 @@ export function SizeSelector({
           return (
             <button
               key={size}
-              onClick={() => onSizeSelect(size)}
+              onClick={() => handleSizeSelect(size)}
               className={cn(
-                "py-2 px-4 border rounded-md text-sm font-medium transition-all",
+                "py-2 px-4 border rounded-md text-sm font-medium transition-all relative",
                 selectedSize === size
                   ? "border-gold bg-gold/10 text-gray-900"
                   : "border-gray-300 text-gray-700 hover:border-gray-400"
               )}
             >
               {size}
+              {/* Show sparkle for remembered size */}
+              {size === rememberedSize && !selectedSize && (
+                <Sparkles className="absolute -top-1 -right-1 h-3 w-3 text-gold" />
+              )}
             </button>
           )
         })}
@@ -77,6 +101,16 @@ export function SizeSelector({
           <Info className="h-4 w-4 text-green-600 shrink-0 mt-0.5" />
           <p className="text-sm text-green-800">
             Based on your measurements, we recommend size <strong>{recommendation}</strong>
+          </p>
+        </div>
+      )}
+      
+      {/* Smart size memory info */}
+      {rememberedSize && !selectedSize && (
+        <div className="flex items-start gap-2 p-3 bg-blue-50 rounded-md">
+          <Sparkles className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+          <p className="text-sm text-blue-800">
+            We've highlighted size <strong>{rememberedSize}</strong> based on your previous selections
           </p>
         </div>
       )}

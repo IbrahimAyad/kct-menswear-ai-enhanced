@@ -7,7 +7,8 @@ import { WishlistButton } from '@/components/products/WishlistButton'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ProductImage } from '@/components/ui/ProductImage'
-import { ShoppingBag, Eye, Star } from 'lucide-react'
+import { QuickViewModal } from '@/components/products/QuickViewModal'
+import { ShoppingBag, Eye, Star, Zap } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
 import { cn } from '@/lib/utils/cn'
 import { useCart } from '@/lib/hooks/useCart'
@@ -28,6 +29,7 @@ export function SupabaseProductCard({
 }: SupabaseProductCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  const [showQuickView, setShowQuickView] = useState(false)
   const { addToCart } = useCart()
 
   const handleQuickAdd = () => {
@@ -55,12 +57,18 @@ export function SupabaseProductCard({
     ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
     : 0
 
+  // Check inventory levels for urgency indicators
+  const totalInventory = product.totalInventory || 0
+  const lowStock = totalInventory > 0 && totalInventory < 10
+  const veryLowStock = totalInventory > 0 && totalInventory < 5
+
   if (viewMode === 'list') {
     return (
-      <div className={cn(
-        "group bg-white rounded-lg border border-gray-200 hover:border-gold/30 transition-all duration-300 hover:shadow-lg",
-        className
-      )}>
+      <>
+        <div className={cn(
+          "group bg-white rounded-lg border border-gray-200 hover:border-gold/30 transition-all duration-300 hover:shadow-lg",
+          className
+        )}>
         <div className="flex gap-4 p-4">
           {/* Image */}
           <Link href={`/products/${product.id}`} className="flex-shrink-0">
@@ -144,7 +152,15 @@ export function SupabaseProductCard({
             </div>
           </div>
         </div>
-      </div>
+        </div>
+        
+        {/* Quick View Modal for List Mode */}
+        <QuickViewModal
+          product={product}
+          isOpen={showQuickView}
+          onClose={() => setShowQuickView(false)}
+        />
+      </>
     )
   }
 
@@ -170,6 +186,12 @@ export function SupabaseProductCard({
         )}
         {hasDiscount && (
           <Badge className="bg-red-500 text-white">{discountPercent}% OFF</Badge>
+        )}
+        {veryLowStock && (
+          <Badge className="bg-orange-500 text-white">
+            <Zap className="h-3 w-3 mr-1" />
+            Only {totalInventory} left!
+          </Badge>
         )}
       </div>
 
@@ -203,6 +225,10 @@ export function SupabaseProductCard({
             <Button
               variant="secondary"
               className="bg-white/90 backdrop-blur-sm text-gray-900 hover:bg-white"
+              onClick={(e) => {
+                e.preventDefault()
+                setShowQuickView(true)
+              }}
             >
               <Eye className="h-4 w-4 mr-2" />
               Quick View
@@ -280,7 +306,22 @@ export function SupabaseProductCard({
             Quick Add
           </Button>
         )}
+
+        {/* Low stock indicator */}
+        {lowStock && !veryLowStock && (
+          <p className="text-xs text-orange-600 mt-2 flex items-center gap-1">
+            <Zap className="h-3 w-3" />
+            Low stock - only {totalInventory} left
+          </p>
+        )}
       </div>
+
+      {/* Quick View Modal */}
+      <QuickViewModal
+        product={product}
+        isOpen={showQuickView}
+        onClose={() => setShowQuickView(false)}
+      />
     </div>
   )
 }
