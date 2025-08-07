@@ -1,101 +1,228 @@
-'use client'
+import { useEffect } from 'react'
+import { useCustomerStore } from '@/store/customerStore'
+import { createClient } from '@supabase/supabase-js'
+import type { CustomerProfile, LoyaltyTier } from '@/lib/customer/types'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import type { User, Session } from '@supabase/supabase-js'
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
-  const supabase = createClient()
+  const { login, logout, profile, isAuthenticated } = useCustomerStore()
 
   useEffect(() => {
-    // Handle case where Supabase client is null (during build)
-    if (!supabase) {
-      setLoading(false)
-      return
-    }
-
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+    // Check for existing session
+    checkSession()
 
     // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          await handleSignIn(session.user.id, session.user.email!)
+        } else if (event === 'SIGNED_OUT') {
+          logout()
+        }
+      }
+    )
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  const checkSession = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session) {
+      await handleSignIn(session.user.id, session.user.email!)
+    }
+  }
+
+  const handleSignIn = async (userId: string, email: string) => {
+    try {
+      // Fetch user profile from database
+      const { data: profileData } = await supabase
+        .from('customer_profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+
+      if (profileData) {
+        // Load existing profile
+        const profile: CustomerProfile = {
+          ...profileData,
+          createdAt: new Date(profileData.created_at),
+          updatedAt: new Date(profileData.updated_at),
+          dateOfBirth: profileData.date_of_birth ? new Date(profileData.date_of_birth) : undefined,
+          tier: getLoyaltyTier(profileData.loyalty_points || 0)
+        }
+        
+        login(profile)
+      } else {
+        // Create new profile
+        const newProfile = await createNewProfile(userId, email)
+        login(newProfile)
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error)
+    }
+  }
+
+  const createNewProfile = async (userId: string, email: string): Promise<CustomerProfile> => {
+    const profile: CustomerProfile = {
+      id: userId,
+      email,
+      preferences: {
+        favoriteColors: [],
+        preferredFit: 'regular',
+        stylePersonality: 'classic',
+        occasionFrequency: {
+          business: 0,
+          formal: 0,
+          casual: 0,
+          special: 0
+        },
+        brands: []
+      },
+      measurements: [],
+      addresses: [],
+      paymentMethods: [],
+      orderHistory: [],
+      wishlist: [],
+      loyaltyPoints: 0,
+      tier: getLoyaltyTier(0),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+
+    // Save to database
+    await supabase.from('customer_profiles').insert({
+      user_id: userId,
+      email,
+      preferences: profile.preferences,
+      loyalty_points: 0,
+      created_at: profile.createdAt.toISOString(),
+      updated_at: profile.updatedAt.toISOString()
     })
 
-    return () => subscription.unsubscribe()
-  }, [supabase])
+    return profile
+  }
 
   const signIn = async (email: string, password: string) => {
-    if (!supabase) {
-      return { data: null, error: new Error('Supabase client not available') }
-    }
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      password,
+      password
     })
-    return { data, error }
+
+    if (error) throw error
+    return data
   }
 
   const signUp = async (email: string, password: string, metadata?: any) => {
-    if (!supabase) {
-      return { data: null, error: new Error('Supabase client not available') }
-    }
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: metadata,
-      },
+        data: metadata
+      }
     })
-    return { data, error }
+
+    if (error) throw error
+    return data
   }
 
   const signOut = async () => {
-    if (!supabase) {
-      return { error: new Error('Supabase client not available') }
-    }
-    const { error } = await supabase.auth.signOut()
-    if (!error) {
-      router.push('/')
-    }
-    return { error }
+    await supabase.auth.signOut()
+    logout()
   }
 
-  const resetPassword = async (email: string) => {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
-    })
-    return { data, error }
-  }
+  const updateProfile = async (updates: Partial<CustomerProfile>) => {
+    if (!profile) return
 
-  const updatePassword = async (newPassword: string) => {
-    const { data, error } = await supabase.auth.updateUser({
-      password: newPassword,
-    })
-    return { data, error }
+    const { error } = await supabase
+      .from('customer_profiles')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString()
+      })
+      .eq('user_id', profile.id)
+
+    if (error) throw error
   }
 
   return {
-    user,
-    session,
-    loading,
+    profile,
+    isAuthenticated,
     signIn,
     signUp,
     signOut,
-    resetPassword,
-    updatePassword,
+    updateProfile
+  }
+}
+
+function getLoyaltyTier(points: number): LoyaltyTier {
+  if (points >= 10000) {
+    return {
+      name: 'Crown',
+      benefits: [
+        'Free shipping on all orders',
+        'Priority customer support',
+        'Exclusive access to new collections',
+        '25% discount on all purchases',
+        'Personal stylist consultations',
+        'VIP event invitations'
+      ],
+      pointsRequired: 10000,
+      discountPercentage: 25,
+      freeShipping: true,
+      prioritySupport: true,
+      exclusiveAccess: true
+    }
+  } else if (points >= 5000) {
+    return {
+      name: 'Platinum',
+      benefits: [
+        'Free shipping on orders over $100',
+        'Priority customer support',
+        'Early access to sales',
+        '15% discount on all purchases',
+        'Quarterly style guides'
+      ],
+      pointsRequired: 5000,
+      discountPercentage: 15,
+      freeShipping: true,
+      prioritySupport: true,
+      exclusiveAccess: true
+    }
+  } else if (points >= 1000) {
+    return {
+      name: 'Gold',
+      benefits: [
+        'Free shipping on orders over $200',
+        'Extended return window',
+        '10% discount on all purchases',
+        'Birthday rewards'
+      ],
+      pointsRequired: 1000,
+      discountPercentage: 10,
+      freeShipping: false,
+      prioritySupport: false,
+      exclusiveAccess: false
+    }
+  } else {
+    return {
+      name: 'Sterling',
+      benefits: [
+        'Earn points on every purchase',
+        'Exclusive member offers',
+        '5% welcome discount',
+        'Style tips and guides'
+      ],
+      pointsRequired: 0,
+      discountPercentage: 5,
+      freeShipping: false,
+      prioritySupport: false,
+      exclusiveAccess: false
+    }
   }
 }
