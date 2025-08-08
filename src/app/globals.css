@@ -8,6 +8,44 @@
 /* Chat mobile styles */
 @import '../styles/chat-mobile.css';
 
+/* Modern Size Bot Styles */
+@layer components {
+  /* Custom slider styling */
+  .slider::-webkit-slider-thumb {
+    @apply appearance-none w-6 h-6 bg-white rounded-full cursor-pointer shadow-lg border-2 border-burgundy;
+    transition: all 0.15s ease-in-out;
+  }
+  
+  .slider::-webkit-slider-thumb:hover {
+    @apply scale-110;
+    box-shadow: 0 0 0 8px rgba(139, 38, 53, 0.1);
+  }
+  
+  .slider::-moz-range-thumb {
+    @apply w-6 h-6 bg-white rounded-full cursor-pointer shadow-lg border-2 border-burgundy;
+    transition: all 0.15s ease-in-out;
+  }
+  
+  .slider::-moz-range-thumb:hover {
+    @apply scale-110;
+    box-shadow: 0 0 0 8px rgba(139, 38, 53, 0.1);
+  }
+  
+  /* Shimmer animation for confidence bar */
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #1A1A1A;

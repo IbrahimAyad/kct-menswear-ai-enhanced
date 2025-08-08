@@ -436,96 +436,165 @@ export class SizePredictionService {
     rationale?: string
   }> {
     // Convert to metric if needed
-    const heightCm = input.unit === 'imperial' ? input.height * 2.54 : input.height
-    const weightKg = input.unit === 'imperial' ? input.weight * 0.453592 : input.weight
+    const heightInches = input.unit === 'metric' ? input.height / 2.54 : input.height
+    const weightLbs = input.unit === 'metric' ? input.weight * 2.20462 : input.weight
     
     // Calculate BMI
-    const heightM = heightCm / 100
-    const bmi = weightKg / (heightM * heightM)
+    const bmi = (weightLbs / (heightInches * heightInches)) * 703
     
-    // Determine body type
+    // Determine body type based on BMI and build
     let bodyType: string
     if (bmi < 18.5) bodyType = 'Slim'
     else if (bmi < 25) bodyType = 'Regular'
     else if (bmi < 30) bodyType = 'Athletic'
     else bodyType = 'Broad'
     
-    // Base size calculation with enhanced logic
-    let sizeIndex: number
-    if (bmi < 18.5) sizeIndex = 0
-    else if (bmi < 21) sizeIndex = 1
-    else if (bmi < 23.5) sizeIndex = 2
-    else if (bmi < 26) sizeIndex = 3
-    else if (bmi < 29) sizeIndex = 4
-    else sizeIndex = 5
-    
-    // Height adjustment
-    if (heightCm < 165) sizeIndex -= 0.5
-    else if (heightCm > 190) sizeIndex += 0.5
-    
-    // Fit preference adjustment
-    const fitAdjustment = {
-      'slim': -0.5,
-      'regular': 0,
-      'relaxed': 0.5
-    }
-    sizeIndex += fitAdjustment[input.fitPreference]
-    
-    // Product type adjustment
+    // For shirts, use simple sizing
     if (input.productType === 'shirt') {
-      sizeIndex -= 0.25 // Shirts typically run slightly larger
-    } else if (input.productType === 'tuxedo') {
-      sizeIndex += 0.25 // Tuxedos need precise fit
+      let sizeIndex: number
+      if (bmi < 18.5) sizeIndex = 0
+      else if (bmi < 21) sizeIndex = 1
+      else if (bmi < 23.5) sizeIndex = 2
+      else if (bmi < 26) sizeIndex = 3
+      else if (bmi < 29) sizeIndex = 4
+      else sizeIndex = 5
+      
+      const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+      const sizeNames = ['Extra Small', 'Small', 'Medium', 'Large', 'Extra Large', 'Double XL']
+      
+      const primaryIndex = Math.round(sizeIndex)
+      return {
+        primarySize: sizes[primaryIndex],
+        primarySizeFull: sizeNames[primaryIndex],
+        confidence: 0.85,
+        bodyType,
+        fitScore: 8.5,
+        rationale: `Based on your measurements, ${sizes[primaryIndex]} shirt will fit best.`
+      }
     }
     
-    // Ensure within bounds
-    sizeIndex = Math.max(0, Math.min(5, sizeIndex))
+    // SUIT SIZING - Using actual suit size data
+    // Determine chest size based on height/weight
+    let chestSize: number
     
-    const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
-    const sizeNames = ['Extra Small', 'Small', 'Medium', 'Large', 'Extra Large', 'Double XL']
+    // Enhanced chest size calculation based on the CSV data patterns
+    if (weightLbs < 130) chestSize = 34
+    else if (weightLbs < 145) chestSize = 36
+    else if (weightLbs < 165) chestSize = 38
+    else if (weightLbs < 180) chestSize = 40
+    else if (weightLbs < 200) chestSize = 42
+    else if (weightLbs < 220) chestSize = 44
+    else if (weightLbs < 240) chestSize = 46
+    else if (weightLbs < 260) chestSize = 48
+    else if (weightLbs < 275) chestSize = 50
+    else if (weightLbs < 290) chestSize = 52
+    else chestSize = 54
     
-    const primaryIndex = Math.round(sizeIndex)
-    const alternativeIndex = sizeIndex < primaryIndex ? 
-      Math.max(0, primaryIndex - 1) : 
-      Math.min(5, primaryIndex + 1)
+    // Determine length (S/R/L) based on height
+    let length: string
+    if (heightInches < 68) length = 'S' // Under 5'8"
+    else if (heightInches <= 72) length = 'R' // 5'8" to 6'0"
+    else length = 'L' // Over 6'0"
     
-    // Calculate confidence based on how close to size boundary
-    const distanceFromBoundary = Math.abs(sizeIndex - primaryIndex)
-    const baseConfidence = 0.85
-    const confidence = baseConfidence - (distanceFromBoundary * 0.2)
+    // Adjust for body type and fit preference
+    if (bodyType === 'Athletic' && input.fitPreference === 'slim') {
+      // Athletic builds with slim preference might need to size up
+      if (chestSize < 54) chestSize += 2
+    } else if (bodyType === 'Slim' && input.fitPreference === 'relaxed') {
+      // Slim builds wanting relaxed fit should size up
+      if (chestSize < 54) chestSize += 2
+    } else if (bodyType === 'Broad' && input.fitPreference === 'slim') {
+      // Broad builds wanting slim fit might struggle, recommend regular
+      input.fitPreference = 'regular'
+    }
     
-    // Calculate fit score
-    const fitScore = 8.5 - (distanceFromBoundary * 2)
+    // Primary recommendation
+    const primarySize = `${chestSize}${length}`
+    
+    // Alternative size logic
+    let alternativeSize: string | undefined
+    let alternativeSizeFull: string | undefined
+    
+    // If between sizes, suggest alternative
+    if (weightLbs % 20 < 10 && chestSize > 34) {
+      // Close to lower boundary, suggest size down as alternative
+      alternativeSize = `${chestSize - 2}${length}`
+      alternativeSizeFull = this.getFullSuitSizeName(alternativeSize)
+    } else if (weightLbs % 20 > 15 && chestSize < 54) {
+      // Close to upper boundary, suggest size up as alternative
+      alternativeSize = `${chestSize + 2}${length}`
+      alternativeSizeFull = this.getFullSuitSizeName(alternativeSize)
+    }
+    
+    // Calculate confidence based on edge cases
+    let confidence = 0.90
+    
+    // Reduce confidence for edge cases
+    if (heightInches < 63 || heightInches > 77) confidence -= 0.15 // Height extremes
+    if (weightLbs < 110 || weightLbs > 290) confidence -= 0.10 // Weight extremes
+    if (bmi < 16 || bmi > 35) confidence -= 0.10 // BMI extremes
+    
+    // Calculate chest-to-waist drop for alterations
+    const estimatedWaist = chestSize - 6 // Standard 6" drop
     
     // Determine alterations needed
     const alterations: string[] = []
-    if (input.fitPreference === 'slim' && bmi > 25) {
-      alterations.push('Taper waist for slimmer silhouette')
-    }
-    if (heightCm < 165) {
-      alterations.push('Hem sleeves and trouser length')
-    } else if (heightCm > 190) {
-      alterations.push('Extend sleeve length')
+    
+    if (bodyType === 'Athletic') {
+      alterations.push('Taper waist for athletic V-shape')
+      if (chestSize >= 44) alterations.push('Let out chest slightly')
     }
     
-    // Generate rationale
-    const rationale = `Based on your ${bodyType.toLowerCase()} build and ${input.fitPreference} fit preference, ` +
-      `size ${sizes[primaryIndex]} will provide the best balance of comfort and style. ` +
-      (alternativeIndex !== primaryIndex ? 
-        `Size ${sizes[alternativeIndex]} is a close alternative if you prefer a ${alternativeIndex > primaryIndex ? 'roomier' : 'snugger'} fit.` : 
-        'This size should fit perfectly with minimal alterations needed.')
+    if (bodyType === 'Slim' && input.fitPreference === 'slim') {
+      alterations.push('Take in waist for slimmer silhouette')
+      alterations.push('Narrow sleeves for proportional fit')
+    }
+    
+    if (length === 'S' && heightInches < 66) {
+      alterations.push('Shorten jacket length by 1-2 inches')
+      alterations.push('Hem trouser length')
+    } else if (length === 'L' && heightInches > 74) {
+      alterations.push('Extend sleeve length by 1 inch')
+    }
+    
+    if (bodyType === 'Broad') {
+      alterations.push('Let out waist for comfort')
+      alterations.push('Widen sleeves if needed')
+    }
+    
+    // Generate detailed rationale
+    const rationale = `Based on your ${heightInches}" height and ${weightLbs} lbs weight, ` +
+      `with a ${bodyType.toLowerCase()} build, size ${primarySize} suit will provide the best fit. ` +
+      `The "${length}" length is ideal for your height range. ` +
+      (alternativeSize ? 
+        `Size ${alternativeSize} could also work if you prefer a ${alternativeSize > primarySize ? 'roomier' : 'more fitted'} feel. ` : 
+        '') +
+      (alterations.length > 0 ? 
+        'Minor tailoring will perfect the fit.' : 
+        'This should fit well with minimal alterations.')
     
     return {
-      primarySize: sizes[primaryIndex],
-      primarySizeFull: sizeNames[primaryIndex],
-      alternativeSize: alternativeIndex !== primaryIndex ? sizes[alternativeIndex] : undefined,
-      alternativeSizeFull: alternativeIndex !== primaryIndex ? sizeNames[alternativeIndex] : undefined,
-      confidence,
+      primarySize,
+      primarySizeFull: this.getFullSuitSizeName(primarySize),
+      alternativeSize,
+      alternativeSizeFull,
+      confidence: Math.max(0.5, confidence),
       bodyType,
-      fitScore,
+      fitScore: 8.5 - ((1 - confidence) * 3),
       alterations: alterations.length > 0 ? alterations : undefined,
       rationale
     }
+  }
+  
+  private getFullSuitSizeName(size: string): string {
+    const chest = size.slice(0, -1)
+    const length = size.slice(-1)
+    const lengthNames: Record<string, string> = {
+      'S': 'Short',
+      'R': 'Regular',
+      'L': 'Long'
+    }
+    return `${chest} ${lengthNames[length] || 'Regular'}`
   }
 }
 

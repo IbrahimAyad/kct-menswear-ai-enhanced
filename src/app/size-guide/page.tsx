@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedSizeBot } from '@/components/sizing/EnhancedSizeBot';
+import { ModernSizeBot } from '@/components/sizing/ModernSizeBot';
 import { Ruler, TrendingUp, Shield, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -280,14 +281,16 @@ export default function SizeGuidePage() {
         </div>
       </section>
 
-      {/* Enhanced Size Bot Modal */}
+      {/* Modern Size Bot Modal */}
       {showSizeBot && (
-        <EnhancedSizeBot
+        <ModernSizeBot
           onClose={() => setShowSizeBot(false)}
           onSizeSelected={(recommendation) => {
             console.log('Size recommendation:', recommendation);
-            // Handle size selection
+            // You can add a toast notification here
           }}
+          productType="suit"
+          isModal={true}
         />
       )}
     </div>
