@@ -24,7 +24,8 @@ export async function middleware(request: NextRequest) {
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net https://js.stripe.com; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "font-src 'self' https://fonts.gstatic.com; " +
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://facebook.com https://api.stripe.com https://*.railway.app;"
+    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com; " +
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://facebook.com https://www.facebook.com https://api.stripe.com https://*.railway.app;"
   )
 
   // Skip middleware if Supabase env vars are not available (during build)

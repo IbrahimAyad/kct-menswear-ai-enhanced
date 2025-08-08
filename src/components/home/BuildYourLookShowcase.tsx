@@ -7,28 +7,28 @@ import { R2Image } from '@/components/ui/R2Image';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Product data with actual R2 CDN images
+// Product data using temp-images from public folder
 const productRotations = {
   suits: [
-    { color: 'Navy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg', fallbackColor: '#1e3a8a' },
-    { color: 'Charcoal', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg', fallbackColor: '#374151' },
-    { color: 'Black', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png', fallbackColor: '#000000' },
-    { color: 'Light Grey', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg', fallbackColor: '#d1d5db' },
-    { color: 'Burgundy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/two-peice-main-bur.jpg', fallbackColor: '#8b0000' },
+    { color: 'Navy', image: '/placeholder-suit.jpg', fallbackColor: '#1e3a8a' },
+    { color: 'Black', image: '/temp-images/black-suit.png', fallbackColor: '#000000' },
+    { color: 'Light Grey', image: '/temp-images/light-grey-main.jpeg', fallbackColor: '#d1d5db' },
+    { color: 'Sand', image: '/temp-images/sand-suit.jpg', fallbackColor: '#d4b896' },
+    { color: 'Emerald', image: '/temp-images/emerlad-suit.jpg', fallbackColor: '#50c878' },
   ],
   shirts: [
-    { color: 'White', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg', fallbackColor: '#ffffff' },
-    { color: 'Light Blue', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Sky-Blue-Dress-Shirt.jpg', fallbackColor: '#93c5fd' },
-    { color: 'Pink', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Pink-Dress-Shirt.jpg', fallbackColor: '#ffc0cb' },
-    { color: 'Black', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Black-Dress-Shirt.jpg', fallbackColor: '#000000' },
-    { color: 'Lavender', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Lavender-Dress-Shirt.jpg', fallbackColor: '#ddd6fe' },
+    { color: 'White', image: '/temp-images/shirt1.jpg', fallbackColor: '#ffffff' },
+    { color: 'Light Blue', image: '/temp-images/french-blue-main.webp', fallbackColor: '#93c5fd' },
+    { color: 'Lavender', image: '/temp-images/Lavender-main.jpg', fallbackColor: '#ddd6fe' },
+    { color: 'Rust', image: '/temp-images/rust-main.jpg', fallbackColor: '#b7410e' },
+    { color: 'Classic', image: '/temp-images/shirt2.jpg', fallbackColor: '#f0f0f0' },
   ],
   ties: [
-    { color: 'Burgundy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg', fallbackColor: '#8b0000' },
-    { color: 'Navy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Navy.webp', fallbackColor: '#1e3a8a' },
-    { color: 'Silver', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/silver.jpg', fallbackColor: '#e5e7eb' },
-    { color: 'Gold', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Gold.webp', fallbackColor: '#daa520' },
-    { color: 'Black', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg', fallbackColor: '#000000' },
+    { color: 'True Red', image: '/temp-images/True-Red-main.webp', fallbackColor: '#c00000' },
+    { color: 'Turquoise', image: '/temp-images/Turquoise-mian.webp', fallbackColor: '#40e0d0' },
+    { color: 'Classic', image: '/placeholder-tie.jpg', fallbackColor: '#4b5563' },
+    { color: 'Pattern', image: '/temp-images/shirt4.jpg', fallbackColor: '#6b7280' },
+    { color: 'Elegant', image: '/temp-images/shirt5.jpg', fallbackColor: '#1f2937' },
   ],
 };
 
@@ -229,19 +229,7 @@ export function BuildYourLookShowcase() {
                               : 'border-gray-300'
                           }`}
                           style={{
-                            backgroundColor: 
-                              product.color.toLowerCase() === 'white' ? '#ffffff' :
-                              product.color.toLowerCase() === 'black' ? '#000000' :
-                              product.color.toLowerCase() === 'navy' ? '#1e3a8a' :
-                              product.color.toLowerCase() === 'charcoal' ? '#374151' :
-                              product.color.toLowerCase() === 'light grey' ? '#d1d5db' :
-                              product.color.toLowerCase() === 'burgundy' ? '#8b0000' :
-                              product.color.toLowerCase() === 'light blue' ? '#93c5fd' :
-                              product.color.toLowerCase() === 'pink' ? '#fbbf24' :
-                              product.color.toLowerCase() === 'lavender' ? '#ddd6fe' :
-                              product.color.toLowerCase() === 'silver' ? '#e5e7eb' :
-                              product.color.toLowerCase() === 'gold' ? '#daa520' :
-                              '#9ca3af'
+                            backgroundColor: product.fallbackColor || '#9ca3af'
                           }}
                         />
                       ))}
