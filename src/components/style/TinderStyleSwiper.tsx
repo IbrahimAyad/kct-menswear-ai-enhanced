@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { motion, AnimatePresence, PanInfo, useMotionValue, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { Heart, X, RefreshCw } from 'lucide-react';
 import { Product } from '@/lib/types';
-// import Image from 'next/image';
 
 interface TinderStyleSwiperProps {
   products: Product[];
@@ -18,11 +17,6 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
   const [exitDirection, setExitDirection] = useState<'left' | 'right' | null>(null);
   
   const constraintsRef = useRef(null);
-  const x = useMotionValue(0);
-  const rotate = useTransform(x, [-200, 200], [-30, 30]);
-  const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0.5, 1, 1, 1, 0.5]);
-  const likeOpacity = useTransform(x, [10, 100], [0, 1]);
-  const nopeOpacity = useTransform(x, [-100, -10], [1, 0]);
 
   const currentProduct = products[currentIndex];
   const nextProduct = products[currentIndex + 1];
@@ -116,20 +110,17 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
             <motion.div
               key={currentProduct.id}
               className="absolute w-full h-full cursor-grab active:cursor-grabbing"
-              style={{ x, rotate, opacity }}
               drag="x"
               dragConstraints={constraintsRef}
               dragElastic={0.2}
               onDragEnd={handleDragEnd}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{
-                x: exitDirection === 'right' ? 500 : -500,
-                rotate: exitDirection === 'right' ? 30 : -30,
+                x: exitDirection === 'right' ? 300 : -300,
                 opacity: 0,
-                transition: { duration: 0.3 }
+                transition: { duration: 0.2 }
               }}
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             >
               <div className="relative h-full bg-white rounded-2xl shadow-2xl overflow-hidden">
                 {/* Product Image */}
@@ -147,25 +138,6 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
                   
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  
-                  {/* Like/Nope indicators */}
-                  <motion.div
-                    className="absolute top-8 left-8 bg-green-500 text-white px-6 py-3 rounded-full font-bold text-2xl rotate-[-20deg] opacity-0"
-                    style={{
-                      opacity: likeOpacity
-                    }}
-                  >
-                    LIKE
-                  </motion.div>
-                  
-                  <motion.div
-                    className="absolute top-8 right-8 bg-red-500 text-white px-6 py-3 rounded-full font-bold text-2xl rotate-[20deg] opacity-0"
-                    style={{
-                      opacity: nopeOpacity
-                    }}
-                  >
-                    NOPE
-                  </motion.div>
                   
                   {/* Progress indicator */}
                   <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/20 backdrop-blur-sm rounded-full px-4 py-2">
