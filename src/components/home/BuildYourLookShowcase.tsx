@@ -75,6 +75,7 @@ export function BuildYourLookShowcase() {
       products: productRotations.suits,
       currentIndex: currentIndices.suits,
       priceRange: '$179 - $799',
+      order: 1,
     },
     {
       key: 'shirts',
@@ -83,6 +84,7 @@ export function BuildYourLookShowcase() {
       products: productRotations.shirts,
       currentIndex: currentIndices.shirts,
       priceRange: '$39 - $129',
+      order: 2,
     },
     {
       key: 'ties',
@@ -91,8 +93,9 @@ export function BuildYourLookShowcase() {
       products: productRotations.ties,
       currentIndex: currentIndices.ties,
       priceRange: '$24 - $89',
+      order: 3,
     },
-  ];
+  ].sort((a, b) => a.order - b.order);
 
   return (
     <section className="py-24 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
@@ -136,8 +139,8 @@ export function BuildYourLookShowcase() {
           </motion.p>
         </div>
 
-        {/* Product Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
+        {/* Product Grid - Mobile: 3 columns for side-by-side display */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-8 mb-12">
           {productCategories.map((category, categoryIndex) => (
             <motion.div
               key={category.key}
@@ -147,9 +150,9 @@ export function BuildYourLookShowcase() {
               className="group"
             >
               <Link href="/custom-suits">
-                <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+                <div className="relative bg-white rounded-lg md:rounded-2xl shadow-md md:shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
                   {/* Image Container */}
-                  <div className="relative h-[400px] overflow-hidden bg-gray-100">
+                  <div className="relative h-[200px] sm:h-[300px] md:h-[400px] overflow-hidden bg-gray-100">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={`${category.key}-${category.currentIndex}`}
@@ -197,34 +200,34 @@ export function BuildYourLookShowcase() {
                     </div>
                   </div>
 
-                  {/* Product Info */}
-                  <div className="p-6">
-                    <h3 className="text-2xl font-serif mb-2 group-hover:text-burgundy transition-colors">
+                  {/* Product Info - Responsive sizing */}
+                  <div className="p-2 sm:p-4 md:p-6">
+                    <h3 className="text-sm sm:text-lg md:text-2xl font-serif mb-1 md:mb-2 group-hover:text-burgundy transition-colors">
                       {category.title}
                     </h3>
-                    <p className="text-gray-600 mb-3">{category.subtitle}</p>
+                    <p className="text-xs sm:text-sm md:text-base text-gray-600 mb-1 md:mb-3 hidden sm:block">{category.subtitle}</p>
                     
-                    {/* Current color display */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-500">Current:</span>
-                        <span className="font-medium text-gray-900">
+                    {/* Current color display - Mobile optimized */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 md:mb-4">
+                      <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-0">
+                        <span className="text-[10px] sm:text-xs md:text-sm text-gray-500 hidden sm:inline">Current:</span>
+                        <span className="text-xs sm:text-sm md:text-base font-medium text-gray-900">
                           {category.products[category.currentIndex].color}
                         </span>
                       </div>
-                      <span className="text-sm font-semibold text-burgundy">
+                      <span className="text-[10px] sm:text-xs md:text-sm font-semibold text-burgundy">
                         {category.priceRange}
                       </span>
                     </div>
 
-                    {/* Available colors preview */}
-                    <div className="flex gap-2">
+                    {/* Available colors preview - Mobile responsive */}
+                    <div className="flex gap-1 sm:gap-2">
                       {category.products.map((product, index) => (
                         <div
                           key={index}
-                          className={`w-8 h-8 rounded-full border-2 transition-all duration-300 ${
+                          className={`w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-full border transition-all duration-300 ${
                             index === category.currentIndex
-                              ? 'border-burgundy scale-110'
+                              ? 'border-burgundy scale-110 border-2'
                               : 'border-gray-300'
                           }`}
                           style={{

@@ -265,14 +265,14 @@ export default function StyleQuizPage() {
         <section className="py-16 min-h-screen">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 text-gold mb-6">
-                <div className="h-px w-12 bg-gold"></div>
+              <div className="inline-flex items-center gap-2 text-burgundy mb-6">
+                <div className="h-px w-12 bg-burgundy"></div>
                 <span className="text-sm font-semibold tracking-widest uppercase">AI-Powered Styling</span>
-                <div className="h-px w-12 bg-gold"></div>
+                <div className="h-px w-12 bg-burgundy"></div>
               </div>
               <h1 className="text-5xl md:text-7xl font-serif mb-6 leading-tight">
                 Stylin' 
-                <span className="text-gold block mt-2">Profilin'</span>
+                <span className="text-burgundy block mt-2">Profilin'</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 Swipe through complete outfit bundles - suits, shirts, ties, and accessories perfectly coordinated. 

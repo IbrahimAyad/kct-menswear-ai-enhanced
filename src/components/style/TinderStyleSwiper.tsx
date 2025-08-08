@@ -43,7 +43,7 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
       } else {
         setCurrentIndex(prev => prev + 1);
       }
-    }, 350);
+    }, 250);
   };
 
   const handleDragEnd = (event: any, info: PanInfo) => {
@@ -118,12 +118,13 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
               dragConstraints={constraintsRef}
               dragElastic={0.2}
               onDragEnd={handleDragEnd}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               exit={{
                 x: exitDirection === 'right' ? 500 : -500,
                 opacity: 0,
-                transition: { duration: 0.3 }
+                transition: { duration: 0.2, ease: "easeOut" }
               }}
             >
               <div className="relative h-full bg-white rounded-2xl shadow-2xl overflow-hidden">
@@ -143,8 +144,8 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                   
-                  {/* Progress indicator */}
-                  <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/20 backdrop-blur-sm rounded-full px-4 py-2">
+                  {/* Progress indicator with burgundy accent */}
+                  <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-burgundy/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
                     <span className="text-white text-sm font-medium">
                       {currentIndex + 1} / {products.length}
                     </span>
@@ -155,7 +156,7 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
                 <div className="absolute bottom-0 left-0 right-0 bg-white p-6">
                   <h3 className="text-2xl font-serif mb-2">{currentProduct.name}</h3>
                   <div className="flex items-center justify-between">
-                    <span className="bg-gold/10 text-gold px-3 py-1 rounded-full text-sm font-medium">
+                    <span className="bg-burgundy/10 text-burgundy px-3 py-1 rounded-full text-sm font-medium">
                       Complete Outfit Bundle
                     </span>
                     <p className="text-gray-600 text-sm">Swipe to rate this look</p>
