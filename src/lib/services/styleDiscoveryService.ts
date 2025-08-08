@@ -164,6 +164,153 @@ export const styleBundles: StyleBundle[] = [
     style: 'traditional',
     primaryColor: 'brown',
     occasion: ['business-casual', 'daytime-event', 'brunch']
+  },
+  
+  // Additional bundles for more variety
+  {
+    id: 'black-red-power',
+    name: 'Power Red Accent',
+    image: '/Swiper-v1/Season-1-bundles/black-suit-3p-red.webp',
+    category: 'formal',
+    colorPalette: ['black', 'red'],
+    formality: 4,
+    style: 'modern',
+    primaryColor: 'black',
+    secondaryColor: 'red',
+    occasion: ['business', 'evening', 'power-meeting']
+  },
+  {
+    id: 'black-emerald-luxury',
+    name: 'Emerald Luxury',
+    image: '/Swiper-v1/Season-1-bundles/black-suit-3p-emerald-green.webp',
+    category: 'formal',
+    colorPalette: ['black', 'emerald'],
+    formality: 5,
+    style: 'modern',
+    primaryColor: 'black',
+    secondaryColor: 'emerald',
+    occasion: ['gala', 'luxury-event', 'vip']
+  },
+  {
+    id: 'spring-sage',
+    name: 'Spring Sage',
+    image: '/Swiper-v1/Spring Wedding Bundles/midnight-blue-3p-white-sage.webp',
+    category: 'wedding',
+    season: 'spring',
+    colorPalette: ['midnight-blue', 'white', 'sage'],
+    formality: 4,
+    style: 'modern',
+    primaryColor: 'midnight-blue',
+    secondaryColor: 'sage',
+    occasion: ['spring-wedding', 'garden-party', 'outdoor-event']
+  },
+  {
+    id: 'royal-statement',
+    name: 'Royal Blue Statement',
+    image: '/Swiper-v1/Season-1-bundles/black-suit-3p-royal-blue-.webp',
+    category: 'formal',
+    colorPalette: ['black', 'royal-blue'],
+    formality: 4,
+    style: 'trendy',
+    primaryColor: 'black',
+    secondaryColor: 'royal-blue',
+    occasion: ['special-event', 'celebration', 'formal-party']
+  },
+  {
+    id: 'burnt-orange-bold',
+    name: 'Burnt Orange Bold',
+    image: '/Swiper-v1/Season-1-bundles/black-suit-2p-burnt-orange.webp',
+    category: 'formal',
+    colorPalette: ['black', 'burnt-orange'],
+    formality: 3,
+    style: 'trendy',
+    primaryColor: 'black',
+    secondaryColor: 'burnt-orange',
+    occasion: ['cocktail', 'art-gallery', 'creative-event']
+  },
+  {
+    id: 'hunter-green-classic',
+    name: 'Hunter Green Classic',
+    image: '/Swiper-v1/Season-1-bundles/black-suit-3p-hunter-green.webp',
+    category: 'formal',
+    colorPalette: ['black', 'hunter-green'],
+    formality: 4,
+    style: 'classic',
+    primaryColor: 'black',
+    secondaryColor: 'hunter-green',
+    occasion: ['business', 'dinner', 'traditional-event']
+  },
+  {
+    id: 'fuschia-party',
+    name: 'Fuschia Party',
+    image: '/Swiper-v1/Season-1-bundles/black-suit-black-shirt-fuschia.webp',
+    category: 'casual',
+    colorPalette: ['black', 'fuschia'],
+    formality: 3,
+    style: 'trendy',
+    primaryColor: 'black',
+    secondaryColor: 'fuschia',
+    occasion: ['party', 'club', 'celebration']
+  },
+  {
+    id: 'burgundy-mustard',
+    name: 'Autumn Burgundy',
+    image: '/Swiper-v1/Season-1-bundles/burgundy-black-mustrard.webp',
+    category: 'formal',
+    colorPalette: ['burgundy', 'black', 'mustard'],
+    formality: 4,
+    style: 'traditional',
+    primaryColor: 'burgundy',
+    secondaryColor: 'mustard',
+    occasion: ['fall-event', 'harvest-wedding', 'thanksgiving']
+  },
+  {
+    id: 'dark-grey-silver',
+    name: 'Silver Sophistication',
+    image: '/Swiper-v1/Season-1-bundles/dark-grey-white-silver.webp',
+    category: 'formal',
+    colorPalette: ['dark-grey', 'white', 'silver'],
+    formality: 5,
+    style: 'classic',
+    primaryColor: 'dark-grey',
+    secondaryColor: 'silver',
+    occasion: ['black-tie', 'award-ceremony', 'formal-gala']
+  },
+  {
+    id: 'indigo-dusty-pink',
+    name: 'Soft Indigo Romance',
+    image: '/Swiper-v1/Season-1-bundles/indigo-2p-white-dusty-pink.webp',
+    category: 'wedding',
+    colorPalette: ['indigo', 'white', 'dusty-pink'],
+    formality: 4,
+    style: 'modern',
+    primaryColor: 'indigo',
+    secondaryColor: 'dusty-pink',
+    occasion: ['wedding', 'romantic-dinner', 'anniversary']
+  },
+  {
+    id: 'brown-pink-navy',
+    name: 'Preppy Mix',
+    image: '/Swiper-v1/Season-1-bundles/brown-pink-navy.webp',
+    category: 'casual',
+    colorPalette: ['brown', 'pink', 'navy'],
+    formality: 2,
+    style: 'classic',
+    primaryColor: 'brown',
+    secondaryColor: 'pink',
+    occasion: ['country-club', 'yacht-party', 'polo-match']
+  },
+  {
+    id: 'indigo-red-power',
+    name: 'Red Power Tie',
+    image: '/Swiper-v1/Season-1-bundles/indigo-2p-white-red.webp',
+    category: 'formal',
+    colorPalette: ['indigo', 'white', 'red'],
+    formality: 5,
+    style: 'traditional',
+    primaryColor: 'indigo',
+    secondaryColor: 'red',
+    occasion: ['executive', 'board-meeting', 'power-lunch']
   }
 ];
 

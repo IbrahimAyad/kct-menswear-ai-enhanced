@@ -37,7 +37,7 @@ export default function Home() {
             <img 
               src="/KCT-Home-Banner-Update.jpg"
               alt="KCT Menswear Premium Collection"
-              className="w-full h-full object-cover scale-105 transition-transform duration-700 hover:scale-100"
+              className="w-full h-full object-cover object-left md:object-center scale-105 transition-transform duration-700 hover:scale-100"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/60" />
           </div>

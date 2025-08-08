@@ -144,12 +144,6 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
                   {/* Gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                   
-                  {/* Progress indicator with burgundy accent */}
-                  <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-burgundy/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
-                    <span className="text-white text-sm font-medium">
-                      {currentIndex + 1} / {products.length}
-                    </span>
-                  </div>
                 </div>
                 
                 {/* Product Info */}
