@@ -11,95 +11,18 @@ import Link from "next/link";
 import { Product, StylePreferences } from '@/lib/types';
 import { facebookTracking } from '@/lib/analytics/FacebookTrackingService';
 import { useFacebookPageTracking } from '@/hooks/useFacebookTracking';
+import { getSmartStyleOrder, styleBundleToProduct, analyzeStylePreferences, styleBundles } from '@/lib/services/styleDiscoveryService';
 
-// Mock products for the quiz using temp images
-const quizProducts: Product[] = [
-  {
-    id: '1',
-    sku: 'SQ-001',
-    name: 'Classic Black Tuxedo',
-    price: 89900,
-    images: ['/temp-images/black-suit.png'],
-    category: 'suits',
-    stock: { '40R': 10 },
-    variants: [],
-  },
-  {
-    id: '2',
-    sku: 'SQ-002',
-    name: 'Modern Navy Suit',
-    price: 79900,
-    images: ['/placeholder-suit.jpg'],
-    category: 'suits',
-    stock: { '40R': 8 },
-    variants: [],
-  },
-  {
-    id: '3',
-    sku: 'SQ-003',
-    name: 'Emerald Velvet Blazer',
-    price: 59900,
-    images: ['/temp-images/emerlad-suit.jpg'],
-    category: 'suits',
-    stock: { '40R': 5 },
-    variants: [],
-  },
-  {
-    id: '4',
-    sku: 'SQ-004',
-    name: 'Light Grey Three-Piece',
-    price: 99900,
-    images: ['/temp-images/light-grey-main.jpeg'],
-    category: 'suits',
-    stock: { '40R': 6 },
-    variants: [],
-  },
-  {
-    id: '5',
-    sku: 'SQ-005',
-    name: 'Sand Dinner Jacket',
-    price: 69900,
-    images: ['/temp-images/sand-suit.jpg'],
-    category: 'suits',
-    stock: { '40R': 4 },
-    variants: [],
-  },
-  {
-    id: '6',
-    sku: 'SQ-006',
-    name: 'Classic White Dress Shirt',
-    price: 7900,
-    images: ['/temp-images/shirt1.jpg'],
-    category: 'shirts',
-    stock: { 'M': 15 },
-    variants: [],
-  },
-  {
-    id: '7',
-    sku: 'SQ-007',
-    name: 'French Blue Dress Shirt',
-    price: 8900,
-    images: ['/temp-images/french-blue-main.webp'],
-    category: 'shirts',
-    stock: { 'M': 12 },
-    variants: [],
-  },
-  {
-    id: '8',
-    sku: 'SQ-008',
-    name: 'Lavender Dress Shirt',
-    price: 8900,
-    images: ['/temp-images/Lavender-main.jpg'],
-    category: 'shirts',
-    stock: { 'M': 10 },
-    variants: [],
-  },
-];
+// Get smart ordered style bundles and convert to products
+const styleProducts: Product[] = getSmartStyleOrder().map((bundle, index) => 
+  styleBundleToProduct(bundle, index)
+);
 
 export default function StyleQuizPage() {
   const router = useRouter();
   const [showResults, setShowResults] = useState(false);
   const [likedProducts, setLikedProducts] = useState<Product[]>([]);
+  const [likedBundles, setLikedBundles] = useState<string[]>([]);
   const [stylePreferences, setStylePreferences] = useState<StylePreferences>({
     colors: [],
     fit: 'modern',
@@ -119,20 +42,28 @@ export default function StyleQuizPage() {
   }, [quizStarted]);
 
   const handleSwipe = (product: Product, direction: 'left' | 'right') => {
-
+    if (direction === 'right' && product.id) {
+      setLikedBundles(prev => [...prev, product.id]);
+    }
   };
 
   const handleComplete = (liked: Product[]) => {
     setLikedProducts(liked);
 
-    // Generate style preferences based on liked products
+    // Get the actual style bundles that were liked
+    const likedStyleBundles = styleBundles.filter(bundle => 
+      liked.some(product => product.id === bundle.id)
+    );
+
+    // Analyze preferences using the service
+    const analysis = analyzeStylePreferences(likedStyleBundles);
+
+    // Generate style preferences based on analysis
     const preferences: StylePreferences = {
-      colors: liked.map(p => p.name.toLowerCase().includes('navy') ? 'navy' : 
-                           p.name.toLowerCase().includes('black') ? 'black' :
-                           p.name.toLowerCase().includes('burgundy') ? 'burgundy' : 'gray'),
-      fit: liked.some(p => p.name.toLowerCase().includes('slim')) ? 'slim' : 'modern',
-      occasions: liked.some(p => p.name.toLowerCase().includes('tuxedo')) ? ['formal', 'wedding'] : ['business', 'casual'],
-      stylePersona: 'Modern Professional',
+      colors: analysis.topColors,
+      fit: analysis.averageFormality > 3.5 ? 'classic' : 'modern',
+      occasions: analysis.topOccasions,
+      stylePersona: `${analysis.dominantStyle.charAt(0).toUpperCase() + analysis.dominantStyle.slice(1)} ${analysis.formalityPreference.charAt(0).toUpperCase() + analysis.formalityPreference.slice(1)}`,
     };
 
     setStylePreferences(preferences);
@@ -202,7 +133,7 @@ export default function StyleQuizPage() {
             </div>
 
             <TinderStyleSwiper 
-              products={quizProducts}
+              products={styleProducts}
               onSwipe={handleSwipe}
               onComplete={handleComplete}
             />
@@ -225,7 +156,7 @@ export default function StyleQuizPage() {
           {/* Outfit Builder Section */}
           <section className="py-12">
             <PersonalizedOutfitBuilder 
-              products={quizProducts}
+              products={styleProducts}
               onAddOutfitToCart={handleAddOutfitToCart}
             />
           </section>

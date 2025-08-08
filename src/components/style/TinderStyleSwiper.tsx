@@ -21,6 +21,8 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-30, 30]);
   const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0.5, 1, 1, 1, 0.5]);
+  const likeOpacity = useTransform(x, [10, 100], [0, 1]);
+  const nopeOpacity = useTransform(x, [-100, -10], [1, 0]);
 
   const currentProduct = products[currentIndex];
   const nextProduct = products[currentIndex + 1];
@@ -149,7 +151,7 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
                   <motion.div
                     className="absolute top-8 left-8 bg-green-500 text-white px-6 py-3 rounded-full font-bold text-2xl rotate-[-20deg] opacity-0"
                     style={{
-                      opacity: useTransform(x, [10, 100], [0, 1])
+                      opacity: likeOpacity
                     }}
                   >
                     LIKE
@@ -158,7 +160,7 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
                   <motion.div
                     className="absolute top-8 right-8 bg-red-500 text-white px-6 py-3 rounded-full font-bold text-2xl rotate-[20deg] opacity-0"
                     style={{
-                      opacity: useTransform(x, [-100, -10], [1, 0])
+                      opacity: nopeOpacity
                     }}
                   >
                     NOPE
