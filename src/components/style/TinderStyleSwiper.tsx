@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence, PanInfo, useMotionValue, useTransform } from 'framer-motion';
 import { Heart, X, RefreshCw } from 'lucide-react';
 import { Product } from '@/lib/types';
-import Image from 'next/image';
+// import Image from 'next/image';
 
 interface TinderStyleSwiperProps {
   products: Product[];
@@ -94,18 +94,17 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
   }
 
   return (
-    <div className="relative w-full max-w-lg mx-auto" ref={constraintsRef}>
+    <div className="relative w-full max-w-lg mx-auto pb-16" ref={constraintsRef}>
       {/* Card Stack Container */}
       <div className="relative h-[700px] flex items-center justify-center">
         {/* Background card preview */}
         {nextProduct && (
           <div className="absolute inset-0 scale-95 opacity-40">
             <div className="h-full bg-white rounded-2xl shadow-lg overflow-hidden">
-              <Image
+              <img
                 src={nextProduct.images[0] || '/placeholder-suit.jpg'}
                 alt={nextProduct.name}
-                fill
-                className="object-cover"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
@@ -135,13 +134,15 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
               <div className="relative h-full bg-white rounded-2xl shadow-2xl overflow-hidden">
                 {/* Product Image */}
                 <div className="relative h-3/4">
-                  <Image
+                  <img
                     src={currentProduct.images[0] || '/placeholder-suit.jpg'}
                     alt={currentProduct.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 500px"
-                    priority
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      console.error('Image failed to load:', currentProduct.images[0]);
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder-suit.jpg';
+                    }}
                   />
                   
                   {/* Gradient overlay */}
@@ -178,8 +179,10 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
                 <div className="absolute bottom-0 left-0 right-0 bg-white p-6">
                   <h3 className="text-2xl font-serif mb-2">{currentProduct.name}</h3>
                   <div className="flex items-center justify-between">
-                    <p className="text-xl font-semibold">${(currentProduct.price / 100).toFixed(2)}</p>
-                    <p className="text-gray-600 capitalize">{currentProduct.category}</p>
+                    <span className="bg-gold/10 text-gold px-3 py-1 rounded-full text-sm font-medium">
+                      Complete Outfit Bundle
+                    </span>
+                    <p className="text-gray-600 text-sm">Swipe to rate this look</p>
                   </div>
                 </div>
               </div>
@@ -189,7 +192,7 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
       </div>
 
       {/* Action Buttons */}
-      <div className="absolute -bottom-20 left-0 right-0 flex justify-center items-center gap-6">
+      <div className="mt-8 flex justify-center items-center gap-6">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -220,8 +223,9 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
       </div>
 
       {/* Instructions */}
-      <div className="absolute -bottom-32 left-0 right-0 text-center text-gray-500 text-sm">
+      <div className="mt-4 text-center text-gray-500 text-sm mb-16">
         <p>Swipe right to like, left to pass</p>
+        <p className="text-xs mt-1">Viewing complete outfit bundles</p>
       </div>
     </div>
   );

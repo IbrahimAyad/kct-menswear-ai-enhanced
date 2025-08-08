@@ -112,13 +112,13 @@ const outfitBuilderProducts: Product[] = [
     stock: { 'M': 7 },
     variants: [],
   },
-  // Accessories (ties)
+  // Accessories (ties) - using shirt images as placeholders
   {
     id: 'ob-tie-1',
     sku: 'OB-007',
     name: 'Burgundy Silk Tie',
     price: 4900,
-    images: ['/placeholder-tie.jpg'],
+    images: ['/temp-images/shirt2.jpg'],
     category: 'accessories',
     stock: { 'OS': 20 },
     variants: [],
@@ -128,7 +128,7 @@ const outfitBuilderProducts: Product[] = [
     sku: 'OB-008',
     name: 'Navy Patterned Tie',
     price: 5900,
-    images: ['/placeholder-tie.jpg'],
+    images: ['/temp-images/shirt4.jpg'],
     category: 'accessories',
     stock: { 'OS': 18 },
     variants: [],
@@ -138,7 +138,7 @@ const outfitBuilderProducts: Product[] = [
     sku: 'OB-009',
     name: 'Silver Silk Tie',
     price: 5900,
-    images: ['/placeholder-tie.jpg'],
+    images: ['/temp-images/shirt5.jpg'],
     category: 'accessories',
     stock: { 'OS': 15 },
     variants: [],
@@ -262,7 +262,7 @@ export default function StyleQuizPage() {
 
       {/* Style Swiper Section */}
       {!showResults && (
-        <section className="py-16">
+        <section className="py-16 min-h-screen">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 text-gold mb-6">
@@ -275,8 +275,8 @@ export default function StyleQuizPage() {
                 <span className="text-gold block mt-2">Profilin'</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Swipe right on styles you love, left on ones you don't. 
-                Our AI will learn your preferences and create personalized recommendations.
+                Swipe through complete outfit bundles - suits, shirts, ties, and accessories perfectly coordinated. 
+                Our AI will learn your style preferences from these complete looks.
               </p>
             </div>
 
