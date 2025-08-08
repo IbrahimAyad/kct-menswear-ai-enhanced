@@ -2,13 +2,16 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Check, Truck, Shield, RefreshCw, Ruler, MessageCircle, Star, Clock, Info } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useCart } from '@/lib/hooks/useCart';
 import { availableSizes } from '@/lib/services/stripeProductService';
 import { getSuitImages } from '@/lib/data/suitImages';
 import SizeGuideModal from './SizeGuideModal';
 import { CheckoutButton } from '../cart/CheckoutButton';
 import MobileSuitSelector from './MobileSuitSelector';
+import { EnhancedSizeBot } from '@/components/sizing/EnhancedSizeBot';
 
 interface SimpleSuitProductDetailProps {
   color: string;
@@ -27,6 +30,7 @@ export default function SimpleSuitProductDetail({ color, suitData }: SimpleSuitP
   const [showSizeError, setShowSizeError] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showAISizeBot, setShowAISizeBot] = useState(false);
   
   // Product details
   const productName = `${color.charAt(0).toUpperCase() + color.slice(1).replace(/([A-Z])/g, ' $1')} Suit`;
@@ -295,12 +299,22 @@ export default function SimpleSuitProductDetail({ color, suitData }: SimpleSuitP
               
               {/* AI Size Recommendation */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-                <div className="flex items-start">
-                  <Info className="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
-                  <div className="text-sm">
-                    <p className="font-medium text-blue-900">Size Recommendation</p>
-                    <p className="text-blue-700">Based on your previous orders, we recommend size 40R</p>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start">
+                    <Info className="h-5 w-5 text-blue-600 mt-0.5 mr-2 flex-shrink-0" />
+                    <div className="text-sm">
+                      <p className="font-medium text-blue-900">Size Recommendation</p>
+                      <p className="text-blue-700">Based on your previous orders, we recommend size 40R</p>
+                    </div>
                   </div>
+                  <Button
+                    onClick={() => setShowAISizeBot(true)}
+                    size="sm"
+                    className="bg-burgundy hover:bg-burgundy-700 text-white"
+                  >
+                    <MessageCircle className="h-4 w-4 mr-1" />
+                    AI Size Assistant
+                  </Button>
                 </div>
               </div>
               
@@ -505,6 +519,34 @@ export default function SimpleSuitProductDetail({ color, suitData }: SimpleSuitP
       {showSizeGuide && (
         <SizeGuideModal onClose={() => setShowSizeGuide(false)} />
       )}
+      
+      {/* Enhanced AI Size Bot Modal */}
+      {showAISizeBot && (
+        <EnhancedSizeBot
+          productType="suit"
+          onClose={() => setShowAISizeBot(false)}
+          onSizeSelected={(recommendation) => {
+            if (recommendation.primarySize) {
+              setSelectedSize(recommendation.primarySize);
+              setShowAISizeBot(false);
+            }
+          }}
+        />
+      )}
+      
+      {/* Floating AI Size Assistant Button */}
+      <motion.button
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 1, type: "spring" }}
+        onClick={() => setShowAISizeBot(true)}
+        className="fixed bottom-6 right-6 bg-burgundy hover:bg-burgundy-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-300 z-40 group"
+      >
+        <MessageCircle className="h-6 w-6" />
+        <span className="absolute bottom-full right-0 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          AI Size Assistant
+        </span>
+      </motion.button>
     </div>
   );
 }
