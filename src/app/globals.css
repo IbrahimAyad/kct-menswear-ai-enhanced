@@ -79,6 +79,34 @@
   .animate-draw-line {
     animation: drawLine 1s ease-out forwards;
   }
+  
+  /* Animated dash pattern for measurement lines */
+  @keyframes dashMove {
+    0% {
+      stroke-dashoffset: 0;
+    }
+    100% {
+      stroke-dashoffset: -20;
+    }
+  }
+  
+  .animate-dash-move {
+    animation: dashMove 1s linear infinite;
+  }
+  
+  /* Glow effect for active measurements */
+  @keyframes measureGlow {
+    0%, 100% {
+      filter: drop-shadow(0 0 3px rgba(218, 165, 32, 0.5));
+    }
+    50% {
+      filter: drop-shadow(0 0 8px rgba(218, 165, 32, 0.8));
+    }
+  }
+  
+  .animate-measure-glow {
+    animation: measureGlow 2s ease-in-out infinite;
+  }
 }
 
 :root {

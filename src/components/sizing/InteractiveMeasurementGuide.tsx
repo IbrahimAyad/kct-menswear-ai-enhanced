@@ -19,6 +19,7 @@ interface MeasurementData {
     measurementLine: { x1: number; y1: number; x2: number; y2: number };
     label: string;
     dots: { x: number; y: number }[];
+    path?: string; // Optional curved path for complex measurements
   };
 }
 
@@ -68,7 +69,8 @@ const measurementData: Record<MeasurementType, MeasurementData> = {
     diagram: {
       measurementLine: { x1: 110, y1: 180, x2: 290, y2: 180 },
       label: '32"',
-      dots: [{ x: 110, y: 180 }, { x: 290, y: 180 }]
+      dots: [{ x: 110, y: 180 }, { x: 200, y: 180 }, { x: 290, y: 180 }],
+      path: 'M 110 180 Q 200 175 290 180' // Slight curve for waist
     }
   },
   sleeve: {
@@ -90,9 +92,10 @@ const measurementData: Record<MeasurementType, MeasurementData> = {
       'Add 1/2 inch if you prefer longer sleeves'
     ],
     diagram: {
-      measurementLine: { x1: 200, y1: 80, x2: 350, y2: 200 },
+      measurementLine: { x1: 200, y1: 65, x2: 280, y2: 180 },
       label: '33"',
-      dots: [{ x: 200, y: 80 }, { x: 275, y: 120 }, { x: 350, y: 200 }]
+      dots: [{ x: 200, y: 65 }, { x: 250, y: 80 }, { x: 280, y: 180 }],
+      path: 'M 200 65 Q 230 70 250 80 Q 270 100 280 180' // Curved path for sleeve
     }
   },
   inseam: {
@@ -212,19 +215,24 @@ export function InteractiveMeasurementGuide() {
                 className="w-full h-full max-w-[300px]"
                 style={{ maxHeight: '350px' }}
               >
-                {/* Body outline */}
-                <g className="stroke-gray-400 fill-none stroke-2">
+                {/* Body outline with subtle animation */}
+                <motion.g 
+                  className="stroke-gray-400 fill-none stroke-2"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
                   {/* Head */}
                   <circle cx="200" cy="40" r="25" />
                   
                   {/* Body */}
                   <line x1="200" y1="65" x2="200" y2="120" />
                   
-                  {/* Arms */}
-                  <line x1="200" y1="80" x2="150" y2="120" />
-                  <line x1="150" y1="120" x2="120" y2="180" />
-                  <line x1="200" y1="80" x2="250" y2="120" />
-                  <line x1="250" y1="120" x2="280" y2="180" />
+                  {/* Arms - slightly curved for more natural look */}
+                  <path d="M 200 80 Q 175 100 150 120" />
+                  <path d="M 150 120 Q 135 150 120 180" />
+                  <path d="M 200 80 Q 225 100 250 120" />
+                  <path d="M 250 120 Q 265 150 280 180" />
                   
                   {/* Torso */}
                   <rect x="170" y="120" width="60" height="60" rx="5" />
@@ -234,7 +242,7 @@ export function InteractiveMeasurementGuide() {
                   <line x1="185" y1="300" x2="175" y2="380" />
                   <line x1="215" y1="180" x2="215" y2="300" />
                   <line x1="215" y1="300" x2="225" y2="380" />
-                </g>
+                </motion.g>
 
                 {/* Measurement Line */}
                 <motion.g
@@ -242,39 +250,110 @@ export function InteractiveMeasurementGuide() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2 }}
                 >
-                  {/* Measurement line */}
-                  <line
-                    x1={measurement.diagram.measurementLine.x1}
-                    y1={measurement.diagram.measurementLine.y1}
-                    x2={measurement.diagram.measurementLine.x2}
-                    y2={measurement.diagram.measurementLine.y2}
-                    stroke="#DAA520"
-                    strokeWidth="3"
-                    strokeDasharray="5,5"
-                    className="animate-draw-line"
-                  />
+                  {/* Measurement line - use path for sleeve, line for others */}
+                  {measurement.diagram.path ? (
+                    <motion.path
+                      d={measurement.diagram.path}
+                      stroke="#DAA520"
+                      strokeWidth="3"
+                      strokeDasharray="5,5"
+                      fill="none"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      transition={{ duration: 1.2, ease: "easeInOut" }}
+                    />
+                  ) : (
+                    <motion.line
+                      x1={measurement.diagram.measurementLine.x1}
+                      y1={measurement.diagram.measurementLine.y1}
+                      x2={measurement.diagram.measurementLine.x2}
+                      y2={measurement.diagram.measurementLine.y2}
+                      stroke="#DAA520"
+                      strokeWidth="3"
+                      strokeDasharray="5,5"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      transition={{ duration: 1, ease: "easeInOut" }}
+                    />
+                  )}
                   
                   {/* Measurement dots */}
                   {measurement.diagram.dots.map((dot, index) => (
-                    <circle
+                    <motion.circle
                       key={index}
                       cx={dot.x}
                       cy={dot.y}
                       r="8"
                       fill="#8B0000"
-                      className="animate-measure-pulse"
-                    />
+                      initial={{ r: 0, opacity: 0 }}
+                      animate={{ r: 8, opacity: 1 }}
+                      transition={{ 
+                        delay: 0.3 + (index * 0.2),
+                        duration: 0.5,
+                        ease: "backOut"
+                      }}
+                    >
+                      <animate
+                        attributeName="r"
+                        values="8;12;8"
+                        dur="2s"
+                        repeatCount="indefinite"
+                        begin={`${0.5 + (index * 0.2)}s`}
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0.6;1;0.6"
+                        dur="2s"
+                        repeatCount="indefinite"
+                        begin={`${0.5 + (index * 0.2)}s`}
+                      />
+                    </motion.circle>
                   ))}
                   
-                  {/* Measurement label */}
-                  <text
+                  {/* Measurement label with animation */}
+                  <motion.text
                     x={(measurement.diagram.measurementLine.x1 + measurement.diagram.measurementLine.x2) / 2}
                     y={(measurement.diagram.measurementLine.y1 + measurement.diagram.measurementLine.y2) / 2 - 10}
                     textAnchor="middle"
                     className="fill-burgundy font-bold text-lg"
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1, duration: 0.5, ease: "backOut" }}
                   >
                     {measurement.diagram.label}
-                  </text>
+                  </motion.text>
+
+                  {/* Animated arrows at measurement points */}
+                  {measurement.diagram.dots.length >= 2 && (
+                    <>
+                      <motion.g
+                        initial={{ opacity: 0, x: 10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.8, duration: 0.6, repeat: Infinity, repeatType: "reverse", repeatDelay: 1 }}
+                      >
+                        <path
+                          d={`M ${measurement.diagram.dots[0].x - 20} ${measurement.diagram.dots[0].y} 
+                              L ${measurement.diagram.dots[0].x - 10} ${measurement.diagram.dots[0].y - 5} 
+                              L ${measurement.diagram.dots[0].x - 10} ${measurement.diagram.dots[0].y + 5} Z`}
+                          fill="#DAA520"
+                          opacity="0.7"
+                        />
+                      </motion.g>
+                      <motion.g
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.8, duration: 0.6, repeat: Infinity, repeatType: "reverse", repeatDelay: 1 }}
+                      >
+                        <path
+                          d={`M ${measurement.diagram.dots[measurement.diagram.dots.length - 1].x + 20} ${measurement.diagram.dots[measurement.diagram.dots.length - 1].y} 
+                              L ${measurement.diagram.dots[measurement.diagram.dots.length - 1].x + 10} ${measurement.diagram.dots[measurement.diagram.dots.length - 1].y - 5} 
+                              L ${measurement.diagram.dots[measurement.diagram.dots.length - 1].x + 10} ${measurement.diagram.dots[measurement.diagram.dots.length - 1].y + 5} Z`}
+                          fill="#DAA520"
+                          opacity="0.7"
+                        />
+                      </motion.g>
+                    </>
+                  )}
                 </motion.g>
               </svg>
             </motion.div>
