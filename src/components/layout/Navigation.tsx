@@ -18,7 +18,7 @@ const navItems = [
   { href: "/products/suits", label: "Suits" },
   { href: "/collections/dress-shirts", label: "Dress Shirts", highlight: true },
   { href: "/collections/ties", label: "Ties & Bowties", highlight: true },
-  { href: "/style-quiz", label: "Style Finder" },
+  { href: "/style-quiz", label: "Stylin' Profilin'" },
   { href: "/occasions", label: "Occasions" },
   { href: "/custom-suits", label: "Custom" },
   { href: "/cart", label: "Cart", mobileOnly: true },

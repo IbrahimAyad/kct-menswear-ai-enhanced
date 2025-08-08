@@ -91,7 +91,7 @@ const menuStructure = {
         icon: <Palette className="h-5 w-5 text-burgundy" />,
         items: [
           { href: '/atelier-ai', label: 'Atelier AI Hub', badge: 'NEW' },
-          { href: '/style-quiz', label: 'Style Finder Quiz', badge: 'AI' },
+          { href: '/style-quiz', label: "Stylin' Profilin'", badge: 'AI' },
           { href: '/builder', label: '3D Suit Builder', badge: 'NEW' },
           { href: '/voice-search', label: 'Voice Search', badge: null },
           { href: '/color-matcher', label: 'Color Matcher', badge: null }

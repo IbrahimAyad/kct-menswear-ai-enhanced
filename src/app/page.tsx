@@ -189,7 +189,7 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link href="/style-quiz">
                     <Button size="lg" className="bg-burgundy hover:bg-burgundy-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                      Start Style Quiz
+                      Start Stylin' Profilin'
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </Link>

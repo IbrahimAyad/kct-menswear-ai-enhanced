@@ -18,6 +18,154 @@ const styleProducts: Product[] = getSmartStyleOrder().map((bundle, index) =>
   styleBundleToProduct(bundle, index)
 );
 
+// Temp products for outfit builder
+const outfitBuilderProducts: Product[] = [
+  // Suits
+  {
+    id: 'ob-suit-1',
+    sku: 'OB-001',
+    name: 'Emerald Green Suit',
+    price: 79900,
+    images: ['/temp-images/emerlad-suit.jpg'],
+    category: 'suits',
+    stock: { '40R': 10 },
+    variants: [],
+  },
+  {
+    id: 'ob-suit-2',
+    sku: 'OB-002',
+    name: 'Light Grey Suit',
+    price: 89900,
+    images: ['/temp-images/light-grey-main.jpeg'],
+    category: 'suits',
+    stock: { '40R': 8 },
+    variants: [],
+  },
+  {
+    id: 'ob-suit-3',
+    sku: 'OB-003',
+    name: 'Black Tuxedo',
+    price: 99900,
+    images: ['/temp-images/black-suit.png'],
+    category: 'suits',
+    stock: { '40R': 5 },
+    variants: [],
+  },
+  {
+    id: 'ob-suit-4',
+    sku: 'OB-012',
+    name: 'Sand Dinner Jacket',
+    price: 69900,
+    images: ['/temp-images/sand-suit.jpg'],
+    category: 'suits',
+    stock: { '40R': 6 },
+    variants: [],
+  },
+  // Shirts
+  {
+    id: 'ob-shirt-1',
+    sku: 'OB-004',
+    name: 'White Dress Shirt',
+    price: 7900,
+    images: ['/temp-images/shirt1.jpg'],
+    category: 'shirts',
+    stock: { 'M': 15 },
+    variants: [],
+  },
+  {
+    id: 'ob-shirt-2',
+    sku: 'OB-005',
+    name: 'French Blue Shirt',
+    price: 8900,
+    images: ['/temp-images/french-blue-main.webp'],
+    category: 'shirts',
+    stock: { 'M': 12 },
+    variants: [],
+  },
+  {
+    id: 'ob-shirt-3',
+    sku: 'OB-006',
+    name: 'Lavender Dress Shirt',
+    price: 8900,
+    images: ['/temp-images/Lavender-main.jpg'],
+    category: 'shirts',
+    stock: { 'M': 10 },
+    variants: [],
+  },
+  {
+    id: 'ob-shirt-4',
+    sku: 'OB-013',
+    name: 'True Red Dress Shirt',
+    price: 9900,
+    images: ['/temp-images/True-Red-main.webp'],
+    category: 'shirts',
+    stock: { 'M': 8 },
+    variants: [],
+  },
+  {
+    id: 'ob-shirt-5',
+    sku: 'OB-014',
+    name: 'Turquoise Dress Shirt',
+    price: 9900,
+    images: ['/temp-images/Turquoise-mian.webp'],
+    category: 'shirts',
+    stock: { 'M': 7 },
+    variants: [],
+  },
+  // Accessories (ties)
+  {
+    id: 'ob-tie-1',
+    sku: 'OB-007',
+    name: 'Burgundy Silk Tie',
+    price: 4900,
+    images: ['/placeholder-tie.jpg'],
+    category: 'accessories',
+    stock: { 'OS': 20 },
+    variants: [],
+  },
+  {
+    id: 'ob-tie-2',
+    sku: 'OB-008',
+    name: 'Navy Patterned Tie',
+    price: 5900,
+    images: ['/placeholder-tie.jpg'],
+    category: 'accessories',
+    stock: { 'OS': 18 },
+    variants: [],
+  },
+  {
+    id: 'ob-tie-3',
+    sku: 'OB-009',
+    name: 'Silver Silk Tie',
+    price: 5900,
+    images: ['/placeholder-tie.jpg'],
+    category: 'accessories',
+    stock: { 'OS': 15 },
+    variants: [],
+  },
+  // Shoes
+  {
+    id: 'ob-shoe-1',
+    sku: 'OB-010',
+    name: 'Black Oxford Shoes',
+    price: 29900,
+    images: ['/placeholder-shoes.jpg'],
+    category: 'shoes',
+    stock: { '10': 5 },
+    variants: [],
+  },
+  {
+    id: 'ob-shoe-2',
+    sku: 'OB-011',
+    name: 'Brown Leather Loafers',
+    price: 24900,
+    images: ['/placeholder-shoes.jpg'],
+    category: 'shoes',
+    stock: { '10': 6 },
+    variants: [],
+  }
+];
+
 export default function StyleQuizPage() {
   const router = useRouter();
   const [showResults, setShowResults] = useState(false);
@@ -123,8 +271,8 @@ export default function StyleQuizPage() {
                 <div className="h-px w-12 bg-gold"></div>
               </div>
               <h1 className="text-5xl md:text-7xl font-serif mb-6 leading-tight">
-                Find Your 
-                <span className="text-gold block mt-2">Perfect Style</span>
+                Stylin' 
+                <span className="text-gold block mt-2">Profilin'</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 Swipe right on styles you love, left on ones you don't. 
@@ -156,7 +304,7 @@ export default function StyleQuizPage() {
           {/* Outfit Builder Section */}
           <section className="py-12">
             <PersonalizedOutfitBuilder 
-              products={styleProducts}
+              products={outfitBuilderProducts}
               onAddOutfitToCart={handleAddOutfitToCart}
             />
           </section>

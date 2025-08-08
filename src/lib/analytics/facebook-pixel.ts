@@ -220,7 +220,7 @@ export const getConversionAPIPayload = (event: {
 export const trackStyleQuizStart = () => {
   if (!isFBPixelEnabled()) return;
   window.fbq('track', 'Lead', {
-    content_name: 'Style Quiz Started',
+    content_name: "Stylin' Profilin' Started",
     content_category: 'Lead Generation',
     value: 25.00,
     currency: 'USD'
@@ -230,7 +230,7 @@ export const trackStyleQuizStart = () => {
 export const trackStyleQuizComplete = (styleType: string, budget: string) => {
   if (!isFBPixelEnabled()) return;
   window.fbq('track', 'CompleteRegistration', {
-    content_name: 'Style Quiz Completed',
+    content_name: "Stylin' Profilin' Completed",
     content_category: 'Lead Generation',
     style_type: styleType,
     budget_range: budget,

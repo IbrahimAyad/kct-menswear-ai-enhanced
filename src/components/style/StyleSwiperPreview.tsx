@@ -66,7 +66,7 @@ export function StyleSwiperPreview() {
       <div className="text-center">
         <Link href="/style-quiz">
           <Button size="lg" className="group">
-            Start Style Quiz
+            Start Stylin' Profilin'
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </Link>
