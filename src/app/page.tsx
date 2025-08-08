@@ -9,6 +9,7 @@ import { StyleSwiperPreview } from "@/components/style/StyleSwiperPreview";
 import { VisualSearch } from "@/components/search/VisualSearch";
 import { TrendingBundles } from "@/components/home/TrendingBundles";
 import { NewArrivals } from "@/components/home/NewArrivals";
+import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
 import { useState, useEffect } from "react";
 import { trackPromoView, trackViewItemList } from "@/lib/analytics/google-analytics";
 import { useScrollTracking } from "@/hooks/useScrollTracking";
@@ -79,6 +80,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Build Your Look Showcase - NEW SECTION */}
+      <BuildYourLookShowcase />
 
       {/* Feature Cards */}
       <section className="py-24 bg-white">
