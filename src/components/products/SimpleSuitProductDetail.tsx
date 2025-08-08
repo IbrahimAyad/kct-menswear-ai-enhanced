@@ -11,7 +11,7 @@ import { getSuitImages } from '@/lib/data/suitImages';
 import SizeGuideModal from './SizeGuideModal';
 import { CheckoutButton } from '../cart/CheckoutButton';
 import MobileSuitSelector from './MobileSuitSelector';
-import { EnhancedSizeBot } from '@/components/sizing/EnhancedSizeBot';
+import { ModernSizeBot } from '@/components/sizing/ModernSizeBot';
 
 interface SimpleSuitProductDetailProps {
   color: string;
@@ -520,9 +520,9 @@ export default function SimpleSuitProductDetail({ color, suitData }: SimpleSuitP
         <SizeGuideModal onClose={() => setShowSizeGuide(false)} />
       )}
       
-      {/* Enhanced AI Size Bot Modal */}
+      {/* Modern AI Size Bot Modal */}
       {showAISizeBot && (
-        <EnhancedSizeBot
+        <ModernSizeBot
           productType="suit"
           onClose={() => setShowAISizeBot(false)}
           onSizeSelected={(recommendation) => {
@@ -531,6 +531,7 @@ export default function SimpleSuitProductDetail({ color, suitData }: SimpleSuitP
               setShowAISizeBot(false);
             }
           }}
+          isModal={true}
         />
       )}
       
