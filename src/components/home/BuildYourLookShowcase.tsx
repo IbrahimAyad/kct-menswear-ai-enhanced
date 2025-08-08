@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { R2Image } from '@/components/ui/R2Image';
+// import { R2Image } from '@/components/ui/R2Image';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -159,15 +159,14 @@ export function BuildYourLookShowcase() {
                         transition={{ duration: 0.6 }}
                         className="absolute inset-0"
                       >
-                        <R2Image
+                        <img
                           src={category.products[category.currentIndex].image}
                           alt={`${category.products[category.currentIndex].color} ${category.title}`}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-700"
-                          sizes="(max-width: 768px) 100vw, 33vw"
-                          fallbackColor={category.products[category.currentIndex].fallbackColor}
-                          priority={categoryIndex === 0}
-                          quality={90}
+                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.backgroundColor = category.products[category.currentIndex].fallbackColor;
+                          }}
                         />
                       </motion.div>
                     </AnimatePresence>

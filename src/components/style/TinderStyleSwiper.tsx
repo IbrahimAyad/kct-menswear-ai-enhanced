@@ -23,23 +23,27 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
   const hasMoreProducts = currentIndex < products.length;
 
   const handleSwipe = (direction: 'left' | 'right') => {
-    if (!currentProduct) return;
+    if (!currentProduct || currentIndex >= products.length) return;
 
     setExitDirection(direction);
     onSwipe(currentProduct, direction);
 
+    const updatedLikedProducts = direction === 'right' 
+      ? [...likedProducts, currentProduct] 
+      : likedProducts;
+
     if (direction === 'right') {
-      setLikedProducts([...likedProducts, currentProduct]);
+      setLikedProducts(updatedLikedProducts);
     }
 
     setTimeout(() => {
+      setExitDirection(null);
       if (currentIndex === products.length - 1) {
-        onComplete?.(direction === 'right' ? [...likedProducts, currentProduct] : likedProducts);
+        onComplete?.(updatedLikedProducts);
       } else {
-        setCurrentIndex(currentIndex + 1);
-        setExitDirection(null);
+        setCurrentIndex(prev => prev + 1);
       }
-    }, 300);
+    }, 350);
   };
 
   const handleDragEnd = (event: any, info: PanInfo) => {
@@ -88,9 +92,9 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
   }
 
   return (
-    <div className="relative w-full max-w-lg mx-auto pb-16" ref={constraintsRef}>
+    <div className="relative w-full max-w-md md:max-w-xl mx-auto pb-16" ref={constraintsRef}>
       {/* Card Stack Container */}
-      <div className="relative h-[700px] flex items-center justify-center">
+      <div className="relative h-[600px] md:h-[750px] flex items-center justify-center">
         {/* Background card preview */}
         {nextProduct && (
           <div className="absolute inset-0 scale-95 opacity-40">
@@ -106,7 +110,7 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
 
         {/* Main swipeable card */}
         <AnimatePresence mode="wait">
-          {currentProduct && !exitDirection && (
+          {currentProduct && currentIndex < products.length && (
             <motion.div
               key={currentProduct.id}
               className="absolute w-full h-full cursor-grab active:cursor-grabbing"
@@ -117,9 +121,9 @@ export function TinderStyleSwiper({ products, onSwipe, onComplete }: TinderStyle
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{
-                x: exitDirection === 'right' ? 300 : -300,
+                x: exitDirection === 'right' ? 500 : -500,
                 opacity: 0,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.3 }
               }}
             >
               <div className="relative h-full bg-white rounded-2xl shadow-2xl overflow-hidden">
