@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { StyleSwiper } from "@/components/style/StyleSwiper";
+import { TinderStyleSwiper } from "@/components/style/TinderStyleSwiper";
 import { StyleRecommendations } from "@/components/style/StyleRecommendations";
 import { PersonalizedOutfitBuilder } from "@/components/style/PersonalizedOutfitBuilder";
 import { Button } from "@/components/ui/button";
@@ -12,14 +12,14 @@ import { Product, StylePreferences } from '@/lib/types';
 import { facebookTracking } from '@/lib/analytics/FacebookTrackingService';
 import { useFacebookPageTracking } from '@/hooks/useFacebookTracking';
 
-// Mock products for the quiz
+// Mock products for the quiz using temp images
 const quizProducts: Product[] = [
   {
     id: '1',
     sku: 'SQ-001',
     name: 'Classic Black Tuxedo',
     price: 89900,
-    images: ['/api/placeholder/600/800'],
+    images: ['/temp-images/black-suit.png'],
     category: 'suits',
     stock: { '40R': 10 },
     variants: [],
@@ -29,7 +29,7 @@ const quizProducts: Product[] = [
     sku: 'SQ-002',
     name: 'Modern Navy Suit',
     price: 79900,
-    images: ['/api/placeholder/600/800'],
+    images: ['/placeholder-suit.jpg'],
     category: 'suits',
     stock: { '40R': 8 },
     variants: [],
@@ -37,9 +37,9 @@ const quizProducts: Product[] = [
   {
     id: '3',
     sku: 'SQ-003',
-    name: 'Burgundy Velvet Blazer',
+    name: 'Emerald Velvet Blazer',
     price: 59900,
-    images: ['/api/placeholder/600/800'],
+    images: ['/temp-images/emerlad-suit.jpg'],
     category: 'suits',
     stock: { '40R': 5 },
     variants: [],
@@ -47,9 +47,9 @@ const quizProducts: Product[] = [
   {
     id: '4',
     sku: 'SQ-004',
-    name: 'Charcoal Three-Piece',
+    name: 'Light Grey Three-Piece',
     price: 99900,
-    images: ['/api/placeholder/600/800'],
+    images: ['/temp-images/light-grey-main.jpeg'],
     category: 'suits',
     stock: { '40R': 6 },
     variants: [],
@@ -57,11 +57,41 @@ const quizProducts: Product[] = [
   {
     id: '5',
     sku: 'SQ-005',
-    name: 'Slim Fit White Dinner Jacket',
+    name: 'Sand Dinner Jacket',
     price: 69900,
-    images: ['/api/placeholder/600/800'],
+    images: ['/temp-images/sand-suit.jpg'],
     category: 'suits',
     stock: { '40R': 4 },
+    variants: [],
+  },
+  {
+    id: '6',
+    sku: 'SQ-006',
+    name: 'Classic White Dress Shirt',
+    price: 7900,
+    images: ['/temp-images/shirt1.jpg'],
+    category: 'shirts',
+    stock: { 'M': 15 },
+    variants: [],
+  },
+  {
+    id: '7',
+    sku: 'SQ-007',
+    name: 'French Blue Dress Shirt',
+    price: 8900,
+    images: ['/temp-images/french-blue-main.webp'],
+    category: 'shirts',
+    stock: { 'M': 12 },
+    variants: [],
+  },
+  {
+    id: '8',
+    sku: 'SQ-008',
+    name: 'Lavender Dress Shirt',
+    price: 8900,
+    images: ['/temp-images/Lavender-main.jpg'],
+    category: 'shirts',
+    stock: { 'M': 10 },
     variants: [],
   },
 ];
@@ -171,7 +201,7 @@ export default function StyleQuizPage() {
               </p>
             </div>
 
-            <StyleSwiper 
+            <TinderStyleSwiper 
               products={quizProducts}
               onSwipe={handleSwipe}
               onComplete={handleComplete}
