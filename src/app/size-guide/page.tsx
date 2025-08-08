@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { EnhancedSizeBot } from '@/components/sizing/EnhancedSizeBot';
 import { ModernSizeBot } from '@/components/sizing/ModernSizeBot';
+import { InteractiveMeasurementGuide } from '@/components/sizing/InteractiveMeasurementGuide';
 import { Ruler, TrendingUp, Shield, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -218,47 +219,9 @@ export default function SizeGuidePage() {
             </div>
           </div>
 
-          {/* Measurement Guide */}
-          <div className="bg-white rounded-lg shadow-sm p-8">
-            <h3 className="text-2xl font-semibold mb-6">How to Measure</h3>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Ruler className="h-5 w-5 text-burgundy" />
-                  Chest
-                </h4>
-                <p className="text-gray-600 mb-4">
-                  Measure around the fullest part of your chest, keeping the tape horizontal and snug but not tight.
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Ruler className="h-5 w-5 text-burgundy" />
-                  Waist
-                </h4>
-                <p className="text-gray-600 mb-4">
-                  Measure around your natural waistline, keeping the tape comfortably loose.
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Ruler className="h-5 w-5 text-burgundy" />
-                  Sleeve Length
-                </h4>
-                <p className="text-gray-600 mb-4">
-                  Measure from the center back of your neck, across the shoulder, and down to your wrist.
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Ruler className="h-5 w-5 text-burgundy" />
-                  Inseam
-                </h4>
-                <p className="text-gray-600 mb-4">
-                  Measure from the top of your inner thigh down to the bottom of your ankle.
-                </p>
-              </div>
-            </div>
+          {/* Interactive Measurement Guide */}
+          <div className="mt-12">
+            <InteractiveMeasurementGuide />
           </div>
         </div>
       </section>

@@ -44,6 +44,41 @@
   .animate-shimmer {
     animation: shimmer 2s infinite;
   }
+  
+  /* Measurement guide animations */
+  @keyframes measurePulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.2);
+    }
+  }
+  
+  .animate-measure-pulse {
+    animation: measurePulse 2s ease-in-out infinite;
+  }
+  
+  /* Measurement line animation */
+  @keyframes drawLine {
+    0% {
+      stroke-dashoffset: 100;
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+  }
+  
+  .animate-draw-line {
+    animation: drawLine 1s ease-out forwards;
+  }
 }
 
 :root {
