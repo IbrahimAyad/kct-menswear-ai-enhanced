@@ -16,10 +16,15 @@ export async function middleware(request: NextRequest) {
     },
   })
   
-  // Add CSP headers to allow R2 images
+  // Add CSP headers to allow R2 images and necessary external resources
   response.headers.set(
     'Content-Security-Policy',
-    "default-src 'self'; img-src 'self' data: blob: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev https://imagedelivery.net https://*.supabase.co https://*.railway.app; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';"
+    "default-src 'self'; " +
+    "img-src 'self' data: blob: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev https://imagedelivery.net https://*.supabase.co https://*.railway.app https://images.unsplash.com; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net https://js.stripe.com; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "font-src 'self' https://fonts.gstatic.com; " +
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://facebook.com https://api.stripe.com https://*.railway.app;"
   )
 
   // Skip middleware if Supabase env vars are not available (during build)
