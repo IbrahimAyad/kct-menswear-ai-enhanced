@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEnhancedAuth } from '@/hooks/useEnhancedAuth';
 import { TwoFactorSetup } from '@/components/auth/TwoFactorSetup';
 import { Navigation } from '@/components/layout/Navigation';
-import { Shield, Settings, Users, BarChart3, Package } from 'lucide-react';
+import { Shield, Settings, Users, BarChart3, Package, LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AdminLayout({
@@ -142,7 +142,7 @@ export default function AdminLayout({
 
 interface AdminNavLinkProps {
   href: string;
-  icon: any;
+  icon: LucideIcon;
   children: React.ReactNode;
 }
 

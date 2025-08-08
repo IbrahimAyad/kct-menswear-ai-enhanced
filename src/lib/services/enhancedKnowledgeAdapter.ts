@@ -91,8 +91,8 @@ export interface CustomerInsight {
 }
 
 class EnhancedKnowledgeAdapter {
-  private cache: Map<string, { data: any; timestamp: number }> = new Map();
-  private requestQueue: Map<string, Promise<any>> = new Map();
+  private cache: Map<string, { data: unknown; timestamp: number }> = new Map();
+  private requestQueue: Map<string, Promise<unknown>> = new Map();
   
   constructor() {
     // Initialize with config
@@ -176,7 +176,7 @@ class EnhancedKnowledgeAdapter {
     throw lastError || new Error('Request failed after retries');
   }
 
-  private getFromCache(key: string): any | null {
+  private getFromCache(key: string): unknown | null {
     const cached = this.cache.get(key);
     if (cached && Date.now() - cached.timestamp < 0) {
       return cached.data;

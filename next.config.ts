@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Skip TypeScript errors during build
+  // TypeScript errors temporarily ignored - minor admin issues remain
   typescript: {
     ignoreBuildErrors: true,
   },

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
+import { LucideIcon } from 'lucide-react';
 
 interface AdminStats {
   totalOrders: number;
@@ -103,7 +104,7 @@ export default function AdminDashboard() {
           icon={AlertTriangle}
           trend="-2"
           trendUp={false}
-          alert={stats?.securityAlerts && stats.securityAlerts > 0}
+          alert={Boolean(stats?.securityAlerts && stats.securityAlerts > 0)}
         />
       </div>
 
@@ -195,7 +196,7 @@ export default function AdminDashboard() {
 interface MetricCardProps {
   title: string;
   value: string;
-  icon: any;
+  icon: LucideIcon;
   trend?: string;
   trendUp?: boolean;
   alert?: boolean;
@@ -226,7 +227,7 @@ interface QuickActionCardProps {
   href: string;
   title: string;
   description: string;
-  icon: any;
+  icon: LucideIcon;
 }
 
 function QuickActionCard({ href, title, description, icon: Icon }: QuickActionCardProps) {
@@ -246,7 +247,7 @@ function QuickActionCard({ href, title, description, icon: Icon }: QuickActionCa
 }
 
 interface ActivityItemProps {
-  icon: any;
+  icon: LucideIcon;
   title: string;
   time: string;
   type: 'success' | 'warning' | 'info';

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { useNotificationStore } from "@/lib/store/notificationStore";
+import { InventoryAdjustment, InventoryReservation, SSEClient, AdminNotification, APIResponse } from '@/lib/types/api';
 
 const ADMIN_WEBHOOK_SECRET = process.env.ADMIN_WEBHOOK_SECRET || "";
 
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function handleInventoryAdjusted(data: any) {
+async function handleInventoryAdjusted(data: InventoryAdjustment) {
   const { sku, changes } = data;
 
   for (const change of changes) {
@@ -79,19 +80,19 @@ async function handleInventoryAdjusted(data: any) {
   }
 }
 
-async function handleInventoryReserved(data: any) {
+async function handleInventoryReserved(data: InventoryReservation) {
 
   // Update available stock in real-time
   // Prevent overselling
 }
 
-async function handleInventoryReleased(data: any) {
+async function handleInventoryReleased(data: InventoryReservation) {
 
   // Return stock from cancelled/abandoned orders
   // Notify customers if item is back in stock
 }
 
-async function handleInventorySync(data: any) {
+async function handleInventorySync(data: Record<string, unknown>) {
 
   // Complete inventory reconciliation
   // Update all stock levels
@@ -128,7 +129,7 @@ async function notifyBackInStock(sku: string, size: string) {
   await notifyBackInStockSubscribers(sku, size);
 }
 
-async function broadcastInventoryUpdate(data: any) {
+async function broadcastInventoryUpdate(data: Record<string, unknown>) {
   // Broadcast to all connected SSE clients
   const message = JSON.stringify({
     type: "inventory_update",
@@ -139,12 +140,12 @@ async function broadcastInventoryUpdate(data: any) {
 
   // In production, use a message queue or pub/sub system
   // For now, we'll use a simple approach
-  (global as any).sseClients?.forEach((client: any) => {
+  (global as Record<string, unknown>).sseClients?.forEach((client: SSEClient) => {
     client.write(`data: ${message}\n\n`);
   });
 }
 
-async function sendAdminNotification(notification: any) {
+async function sendAdminNotification(notification: AdminNotification) {
   // Send email to admin
   // Send push notification
   // Log to monitoring system

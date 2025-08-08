@@ -9,26 +9,31 @@ import { useCart } from '@/lib/hooks/useCart';
 export default function CheckoutSuccess({ 
   searchParams 
 }: { 
-  searchParams: { session_id?: string } 
+  searchParams: Promise<{ session_id?: string }> 
 }) {
   const { clearCart } = useCart();
 
   useEffect(() => {
-    // Track purchase completion
-    if (searchParams.session_id) {
-      // In a real implementation, you would fetch order details from your API
-      // For now, we'll use the session ID as transaction ID
-      trackPurchase({
-        transaction_id: searchParams.session_id,
+    const processSuccess = async () => {
+      const params = await searchParams;
+      // Track purchase completion
+      if (params.session_id) {
+        // In a real implementation, you would fetch order details from your API
+        // For now, we'll use the session ID as transaction ID
+        trackPurchase({
+          transaction_id: params.session_id,
         value: 0, // This would come from the actual order
         currency: 'USD',
         items: [], // This would come from the actual order items
       });
 
-      // Clear the cart after successful purchase
-      clearCart();
-    }
-  }, [searchParams.session_id, clearCart]);
+        // Clear the cart after successful purchase
+        clearCart();
+      }
+    };
+    
+    processSuccess();
+  }, [searchParams, clearCart]);
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">

@@ -7,13 +7,14 @@ import { RelatedProducts } from '@/components/products/RelatedProducts'
 import { formatPrice } from '@/lib/utils/format'
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const product = await getProduct(params.id)
+  const { id } = await params
+  const product = await getProduct(id)
   
   if (!product) {
     return {
@@ -59,7 +60,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProduct(params.id)
+  const { id } = await params
+  const product = await getProduct(id)
 
   if (!product) {
     notFound()
@@ -78,7 +80,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     },
     offers: {
       '@type': 'Offer',
-      url: `https://kct-menswear.vercel.app/products/${product.id}`,
+      url: `https://kct-menswear.vercel.app/products/${id}`,
       priceCurrency: 'USD',
       price: (product.price / 100).toFixed(2),
       availability: product.inStock 

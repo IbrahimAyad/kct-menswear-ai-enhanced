@@ -161,8 +161,172 @@ export default function EnhancedSuitProductDetail({ color, suitData }: EnhancedS
                 preset="gallery"
                 fill
                 priority
-                className="w-full h-full"
-                onError={() => 
+                className="object-cover w-full h-full"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/placeholder-suit.jpg';
+                }}
+              />
+              
+              {/* Navigation Arrows */}
+              {displayImages.length > 1 && (
+                <>
+                  <button
+                    onClick={() => navigateImage('prev')}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    onClick={() => navigateImage('next')}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </>
+              )}
+              
+              {/* Image counter */}
+              {displayImages.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                  {currentImageIndex + 1} / {displayImages.length}
+                </div>
+              )}
+              
+              {/* Zoom button */}
+              <button
+                onClick={() => setShowZoom(true)}
+                className="absolute top-4 right-4 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+                aria-label="Zoom image"
+              >
+                <ZoomIn size={16} />
+              </button>
+            </div>
+            
+            {/* Thumbnail Gallery */}
+            <div className="grid grid-cols-4 gap-2">
+              {displayImages.slice(0, 8).map((image, index) => (
+                <button
+                  key={`${selectedOption}-${index}`}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`aspect-[3/4] bg-gray-100 rounded-md overflow-hidden border-2 transition-all ${
+                    currentImageIndex === index ? 'border-black' : 'border-transparent hover:border-gray-300'
+                  }`}
+                >
+                  <OptimizedImage
+                    src={image || '/placeholder-suit.jpg'}
+                    alt={`${productName} - Thumbnail ${index + 1}`}
+                    width={100}
+                    height={133}
+                    preset="thumbnail"
+                    className="object-cover w-full h-full"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {/* Product Details */}
+          <div className="space-y-6">
+            {/* Title and Price */}
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">{productName}</h1>
+              <div className="flex items-baseline space-x-2">
+                <span className="text-3xl font-semibold">${price}</span>
+                <span className="text-sm text-gray-500">USD</span>
+              </div>
+              
+              {/* Rating */}
+              <div className="flex items-center mt-2">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <span className="ml-2 text-sm text-gray-600">(127 reviews)</span>
+              </div>
+            </div>
+            
+            {/* Trust Badges */}
+            <div className="grid grid-cols-2 gap-3">
+              {trustBadges.map((badge, index) => (
+                <div key={index} className="flex items-center space-x-2 text-sm">
+                  <badge.icon className="h-4 w-4 text-gray-400" />
+                  <span className="text-gray-600">{badge.text}</span>
+                </div>
+              ))}
+            </div>
+            
+            {/* Style Options */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-900 mb-3">Style</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setSelectedOption('twoPiece')}
+                  className={`relative border-2 rounded-lg p-4 text-left transition-all ${
+                    selectedOption === 'twoPiece' 
+                      ? 'border-black bg-gray-50' 
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="font-medium">2-Piece Suit</div>
+                  <div className="text-sm text-gray-500">Jacket & Pants</div>
+                  <div className="font-semibold mt-1">$179.99</div>
+                  {selectedOption === 'twoPiece' && (
+                    <div className="absolute top-2 right-2">
+                      <Check className="h-5 w-5" />
+                    </div>
+                  )}
+                </button>
+                
+                <button
+                  onClick={() => setSelectedOption('threePiece')}
+                  className={`relative border-2 rounded-lg p-4 text-left transition-all ${
+                    selectedOption === 'threePiece' 
+                      ? 'border-black bg-gray-50' 
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="font-medium">3-Piece Suit</div>
+                  <div className="text-sm text-gray-500">Jacket, Vest & Pants</div>
+                  <div className="font-semibold mt-1">$199.99</div>
+                  {selectedOption === 'threePiece' && (
+                    <div className="absolute top-2 right-2">
+                      <Check className="h-5 w-5" />
+                    </div>
+                  )}
+                </button>
+              </div>
+            </div>
+            
+            {/* Size Selection - Desktop */}
+            <div className="hidden md:block">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-medium text-gray-900">Size</h3>
+                <button
+                  onClick={() => setShowSizeGuide(true)}
+                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center"
+                >
+                  <Ruler className="h-4 w-4 mr-1" />
+                  Size Guide
+                </button>
+              </div>
+              
+              {/* Size Grid */}
+              <div className="space-y-3">
+                {Object.entries(sizesByType).map(([type, sizes]) => (
+                  <div key={type}>
+                    <div className="text-xs font-medium text-gray-500 uppercase mb-2">
+                      {type} ({type === 'short' ? '5\'4" - 5\'7"' : type === 'regular' ? '5\'8" - 6\'1"' : '6\'2" +'})
+                    </div>
+                    <div className="grid grid-cols-6 gap-2">
+                      {sizes.map((size) => (
+                        <button
+                          key={size}
+                          onClick={() => {
+                            setSelectedSize(size);
                             setShowSizeError(false);
                           }}
                           className={`py-2 px-3 text-sm font-medium rounded-md transition-all ${

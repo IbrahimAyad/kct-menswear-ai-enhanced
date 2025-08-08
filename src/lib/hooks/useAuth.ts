@@ -52,8 +52,10 @@ export function useAuth() {
 
   return {
     customer,
+    user: customer, // Alias for backward compatibility
     isAuthenticated,
     isLoading,
+    loading: isLoading, // Alias for backward compatibility
     login: handleLogin,
     logout: handleLogout,
     updateProfile: handleUpdateProfile,

@@ -332,7 +332,7 @@ export interface AIResponse {
 export interface Action {
   type: 'navigate' | 'filter' | 'add-to-cart' | 'size-guide' | 'contact-support'
   label: string
-  data: any
+  data: ActionData
 }
 
 export interface ProductSuggestion {
@@ -344,7 +344,7 @@ export interface ProductSuggestion {
 
 export interface VisualAid {
   type: 'size-chart' | 'style-guide' | 'color-swatch' | 'outfit-visualization'
-  data: any
+  data: VisualAidData
 }
 
 export interface CartItem {
@@ -381,4 +381,72 @@ export interface SavedOutfit {
   occasion: OccasionType
   season: Season
   notes: string
+}
+
+// Supporting interface definitions for Action and VisualAid data
+export interface ActionData {
+  // Navigation data
+  url?: string
+  route?: string
+  params?: Record<string, string>
+  
+  // Filter data
+  filterType?: string
+  filterValue?: string | string[] | number[]
+  category?: string
+  
+  // Product data
+  productId?: string
+  size?: string
+  quantity?: number
+  
+  // Generic data
+  [key: string]: string | string[] | number | number[] | boolean | Record<string, unknown> | undefined
+}
+
+export interface VisualAidData {
+  // Size chart data
+  sizeChart?: {
+    measurements: Array<{
+      size: string
+      chest: number
+      waist: number
+      length: number
+    }>
+    fitGuide?: string
+  }
+  
+  // Style guide data
+  styleGuide?: {
+    images: string[]
+    tips: string[]
+    dosDonts?: {
+      dos: string[]
+      donts: string[]
+    }
+  }
+  
+  // Color swatch data
+  colorSwatch?: {
+    colors: Array<{
+      name: string
+      hex: string
+      available: boolean
+    }>
+    recommendations?: string[]
+  }
+  
+  // Outfit visualization data
+  outfitVisualization?: {
+    image?: string
+    items: Array<{
+      productId: string
+      position: { x: number; y: number }
+      highlight: boolean
+    }>
+    alternatives?: string[]
+  }
+  
+  // Generic data
+  [key: string]: unknown
 }

@@ -1,17 +1,21 @@
-import { loadStripe, Stripe } from "@stripe/stripe-js";
+import { loadStripe, Stripe, StripeElements } from "@stripe/stripe-js";
+import { PaymentIntentRequest, PaymentIntentResponse } from "@/lib/types";
 
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "";
 
 let stripePromise: Promise<Stripe | null>;
 
-export const getStripe = () => {
+export const getStripe = (): Promise<Stripe | null> => {
   if (!stripePromise) {
     stripePromise = loadStripe(stripePublishableKey);
   }
   return stripePromise;
 };
 
-export async function createPaymentIntent(amount: number, metadata?: any) {
+export async function createPaymentIntent(
+  amount: number, 
+  metadata?: Record<string, any>
+): Promise<string> {
   try {
     const response = await fetch("/api/checkout/payment-intent", {
       method: "POST",
@@ -36,12 +40,15 @@ export async function createPaymentIntent(amount: number, metadata?: any) {
   }
 }
 
-export async function confirmPayment(clientSecret: string, paymentElement: any) {
+export async function confirmPayment(
+  clientSecret: string, 
+  elements: StripeElements
+): Promise<void> {
   const stripe = await getStripe();
   if (!stripe) throw new Error("Stripe not initialized");
 
   const { error } = await stripe.confirmPayment({
-    elements: paymentElement,
+    elements,
     confirmParams: {
       return_url: `${window.location.origin}/checkout/confirmation`,
     },

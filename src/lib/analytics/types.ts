@@ -1,6 +1,6 @@
 export interface AnalyticsEvent {
   name: string;
-  properties?: Record<string, any>;
+  properties?: AnalyticsProperties;
   timestamp?: number;
   userId?: string;
   sessionId?: string;
@@ -69,7 +69,7 @@ export interface SearchEvent {
   query: string;
   resultsCount: number;
   clickedPosition?: number;
-  filters?: Record<string, any>;
+  filters?: SearchFilters;
 }
 
 export interface FilterEvent {
@@ -100,4 +100,58 @@ export interface UserProfile {
     preferredCategories?: string[];
     preferredSizes?: string[];
   };
+}
+
+// Supporting interface definitions
+export interface AnalyticsProperties {
+  // Page view properties
+  url?: string;
+  title?: string;
+  referrer?: string;
+  duration?: number;
+  
+  // Product properties
+  productId?: string;
+  productName?: string;
+  category?: string;
+  price?: number;
+  quantity?: number;
+  size?: string;
+  
+  // E-commerce properties
+  currency?: string;
+  value?: number;
+  orderId?: string;
+  
+  // Search properties
+  query?: string;
+  resultsCount?: number;
+  clickedPosition?: number;
+  
+  // User properties
+  userId?: string;
+  sessionId?: string;
+  
+  // Context properties
+  source?: string;
+  medium?: string;
+  campaign?: string;
+  
+  // Custom properties
+  [key: string]: string | number | boolean | string[] | number[] | undefined;
+}
+
+export interface SearchFilters {
+  category?: string[];
+  size?: string[];
+  color?: string[];
+  price?: {
+    min: number;
+    max: number;
+  };
+  occasion?: string[];
+  brand?: string[];
+  inStock?: boolean;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
 }

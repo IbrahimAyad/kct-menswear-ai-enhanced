@@ -193,7 +193,7 @@ export async function getProductRecommendations(productId: string, limit = 4) {
         )
       `)
       .eq('status', 'active')
-      .eq('product_type', currentProduct.product_type)
+      .eq('product_type', currentProduct.productType)
       .neq('id', productId)
       .order('created_at', { ascending: false })
       .limit(limit)
@@ -241,7 +241,7 @@ export async function getProductCategories() {
     }
 
     // Extract unique categories
-    const categories = [...new Set(data?.map(p => p.product_type) || [])]
+    const categories = [...new Set(data?.map((p: any) => p.product_type) || [])]
     return categories.filter(Boolean)
   } catch (error) {
     console.error('Error in getProductCategories:', error)
@@ -277,7 +277,7 @@ export async function getProductVendors() {
     }
 
     // Extract unique vendors
-    const vendors = [...new Set(data?.map(p => p.vendor) || [])]
+    const vendors = [...new Set(data?.map((p: any) => p.vendor) || [])]
     return vendors.filter(Boolean)
   } catch (error) {
     console.error('Error in getProductVendors:', error)
@@ -305,7 +305,7 @@ export async function getProductColors() {
     }
 
     // Extract unique colors
-    const colors = [...new Set(data?.map(v => v.color) || [])]
+    const colors = [...new Set(data?.map((v: any) => v.color) || [])]
     return colors.filter(Boolean)
   } catch (error) {
     console.error('Error in getProductColors:', error)
@@ -333,7 +333,7 @@ export async function getProductPriceRange() {
       throw error
     }
 
-    const prices = data?.map(p => p.price) || []
+    const prices = data?.map((p: any) => p.price) || []
     if (prices.length === 0) {
       return { min: 0, max: 100000 } // Default range in cents
     }

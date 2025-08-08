@@ -139,7 +139,7 @@ export const useCartStore = create<CartStore>()(
       name: "kct-cart-storage",
       storage: createJSONStorage(() => localStorage),
       version: 2, // Increment to clear old cart data
-      migrate: (persistedState: any, version: number) => {
+      migrate: (persistedState: unknown, version: number) => {
         // Clear old cart data that doesn't have metadata
         if (version < 2) {
           return { items: [], isLoading: false };

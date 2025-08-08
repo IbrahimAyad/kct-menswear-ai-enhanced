@@ -57,15 +57,15 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (user) {
-      // Extract name from user metadata
-      const userMeta = user.user_metadata || {}
+      // Extract name from user metadata if available, otherwise use profile data
+      const userMeta = (user as any).user_metadata || {}
       setProfile(prev => ({
         ...prev,
-        first_name: userMeta.first_name || '',
-        last_name: userMeta.last_name || '',
-        phone: userMeta.phone || '',
-        date_of_birth: userMeta.date_of_birth || '',
-        preferences: userMeta.preferences || prev.preferences,
+        first_name: userMeta.first_name || (user as any).firstName || '',
+        last_name: userMeta.last_name || (user as any).lastName || '',
+        phone: userMeta.phone || (user as any).phone || '',
+        date_of_birth: userMeta.date_of_birth || (user as any).dateOfBirth || '',
+        preferences: userMeta.preferences || (user as any).preferences || prev.preferences,
       }))
       setEditedProfile(prev => ({
         ...prev,

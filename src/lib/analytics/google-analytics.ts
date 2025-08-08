@@ -1,6 +1,16 @@
 // Google Analytics 4 Configuration
 export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || '';
 
+// GA Item interface
+export interface GAItem {
+  item_id: string;
+  item_name: string;
+  item_category: string;
+  price: number;
+  quantity: number;
+  item_variant?: string;
+}
+
 // Check if GA is available
 export const isGAEnabled = () => {
   return typeof window !== 'undefined' && GA_MEASUREMENT_ID;
@@ -18,7 +28,7 @@ export const initGA = () => {
 
   // Initialize gtag
   window.dataLayer = window.dataLayer || [];
-  function gtag(...args: any[]) {
+  function gtag(...args: unknown[]) {
     window.dataLayer.push(args);
   }
   window.gtag = gtag;
@@ -146,7 +156,7 @@ export const trackRemoveFromCart = (item: {
   });
 };
 
-export const trackBeginCheckout = (items: any[], total: number) => {
+export const trackBeginCheckout = (items: GAItem[], total: number) => {
   if (!isGAEnabled() || !window.gtag) return;
 
   window.gtag('event', 'begin_checkout', {
@@ -169,7 +179,7 @@ export const trackPurchase = (orderData: {
   tax?: number;
   shipping?: number;
   currency?: string;
-  items: any[];
+  items: GAItem[];
 }) => {
   if (!isGAEnabled() || !window.gtag) return;
 

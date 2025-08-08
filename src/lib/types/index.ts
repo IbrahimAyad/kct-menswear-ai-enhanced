@@ -10,7 +10,7 @@ export interface Product {
   variants: ProductVariant[];
   color?: string;
   description?: string;
-  metadata?: any;
+  metadata?: ProductMetadata;
 }
 
 export type ProductCategory = 'suits' | 'shirts' | 'accessories' | 'shoes';
@@ -58,7 +58,7 @@ export interface CartItem {
   name?: string;
   price?: number;
   image?: string;
-  metadata?: any;
+  metadata?: CartItemMetadata;
 }
 
 // Style Types
@@ -128,4 +128,104 @@ export interface SwipeAnalytics {
   swipeVelocities: number[];
   undoCount: number;
   categoryPreferences: Record<string, number>;
+}
+
+// Stripe Integration Types
+export interface StripeProductData {
+  productId: string;
+  twoPiece: string;
+  threePiece: string;
+}
+
+export interface StripeProducts {
+  suits: Record<string, StripeProductData>;
+}
+
+export interface PaymentIntentRequest {
+  amount: number;
+  metadata?: PaymentMetadata;
+  currency?: string;
+}
+
+export interface PaymentIntentResponse {
+  clientSecret: string;
+  paymentIntentId: string;
+}
+
+export interface CheckoutSessionRequest {
+  items: CartItem[];
+  customer?: Customer;
+  successUrl?: string;
+  cancelUrl?: string;
+}
+
+export interface CheckoutSessionResponse {
+  sessionId: string;
+  url: string;
+}
+
+export interface StripeWebhookEvent {
+  id: string;
+  object: 'event';
+  type: string;
+  data: {
+    object: Record<string, unknown>;
+  };
+  created: number;
+}
+
+export interface OrderData {
+  customerId?: string;
+  email: string;
+  items: CartItem[];
+  shippingInfo: ShippingInfo;
+  total: number;
+}
+
+export interface ShippingInfo {
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  phone: string;
+}
+
+// Metadata interface definitions
+export interface ProductMetadata {
+  tags?: string[];
+  fabric?: string;
+  brand?: string;
+  season?: string;
+  occasions?: string[];
+  colors?: string[];
+  patterns?: string[];
+  careInstructions?: string;
+  countryOfOrigin?: string;
+  seoKeywords?: string[];
+  featured?: boolean;
+  trending?: boolean;
+  newArrival?: boolean;
+}
+
+export interface CartItemMetadata {
+  addedFrom?: 'product_page' | 'quick_add' | 'recommendations' | 'search';
+  bundleId?: string;
+  personalizedFit?: boolean;
+  alterationsRequired?: boolean;
+  giftMessage?: string;
+  occasionTag?: string;
+  rushOrder?: boolean;
+}
+
+export interface PaymentMetadata {
+  order_id?: string;
+  customer_id?: string;
+  items?: string;
+  shipping_info?: string;
+  gift_message?: string;
+  referral_code?: string;
+  campaign_id?: string;
+  session_id?: string;
 }

@@ -14,7 +14,8 @@ import {
   Settings,
   Monitor,
   Lock,
-  Unlock
+  Unlock,
+  LucideIcon
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -239,7 +240,7 @@ export default function SecuritySettingsPage() {
                   {trustedDevices.length === 0 ? (
                     <p className="text-gray-500 text-center py-8">No trusted devices found.</p>
                   ) : (
-                    trustedDevices.map((device: any) => (
+                    trustedDevices.map((device: TrustedDevice) => (
                       <DeviceItem
                         key={device.id}
                         device={device}
@@ -268,7 +269,7 @@ export default function SecuritySettingsPage() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {sessions.map((session: any) => (
+                  {sessions.map((session: UserSession) => (
                     <SessionItem
                       key={session.id}
                       session={session}
@@ -288,7 +289,7 @@ export default function SecuritySettingsPage() {
 interface TabButtonProps {
   active: boolean;
   onClick: () => void;
-  icon: any;
+  icon: LucideIcon;
   children: React.ReactNode;
 }
 
@@ -308,7 +309,15 @@ function TabButton({ active, onClick, icon: Icon, children }: TabButtonProps) {
   );
 }
 
-function DeviceItem({ device, onRevoke }: { device: any; onRevoke: (id: string) => void }) {
+interface TrustedDevice {
+  id: string;
+  name: string;
+  type: string;
+  lastUsed: string;
+  trusted: boolean;
+}
+
+function DeviceItem({ device, onRevoke }: { device: TrustedDevice; onRevoke: (id: string) => void }) {
   return (
     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
       <div className="flex items-center gap-3">
@@ -341,7 +350,17 @@ function DeviceItem({ device, onRevoke }: { device: any; onRevoke: (id: string) 
   );
 }
 
-function SessionItem({ session, onRevoke }: { session: any; onRevoke: (id: string) => void }) {
+interface UserSession {
+  id: string;
+  browser: string;
+  os: string;
+  ip: string;
+  location: string;
+  lastActive: string;
+  current: boolean;
+}
+
+function SessionItem({ session, onRevoke }: { session: UserSession; onRevoke: (id: string) => void }) {
   return (
     <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
       <div className="flex items-center gap-3">

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { APIResponse, StripeWebhookPayload } from '@/lib/types/api';
 
 // Disable body parsing, we need the raw body for webhook signature verification
 export const runtime = 'nodejs';
@@ -9,18 +10,22 @@ export async function POST(req: NextRequest) {
   // Initialize Stripe inside the function to ensure env vars are available
   if (!process.env.STRIPE_SECRET_KEY) {
 
-    return NextResponse.json(
-      { error: 'Webhook configuration error' },
-      { status: 500 }
-    );
+    const errorResponse: APIResponse = {
+      success: false,
+      error: 'Webhook configuration error',
+      timestamp: new Date().toISOString()
+    };
+    return NextResponse.json(errorResponse, { status: 500 });
   }
 
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
 
-    return NextResponse.json(
-      { error: 'Webhook secret not configured' },
-      { status: 500 }
-    );
+    const errorResponse: APIResponse = {
+      success: false,
+      error: 'Webhook secret not configured',
+      timestamp: new Date().toISOString()
+    };
+    return NextResponse.json(errorResponse, { status: 500 });
   }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -31,10 +36,12 @@ export async function POST(req: NextRequest) {
   const signature = req.headers.get('stripe-signature');
 
   if (!signature) {
-    return NextResponse.json(
-      { error: 'Missing stripe-signature header' },
-      { status: 400 }
-    );
+    const errorResponse: APIResponse = {
+      success: false,
+      error: 'Missing stripe-signature header',
+      timestamp: new Date().toISOString()
+    };
+    return NextResponse.json(errorResponse, { status: 400 });
   }
 
   let event: Stripe.Event;
@@ -47,10 +54,12 @@ export async function POST(req: NextRequest) {
     );
   } catch (err) {
 
-    return NextResponse.json(
-      { error: 'Invalid signature' },
-      { status: 400 }
-    );
+    const errorResponse: APIResponse = {
+      success: false,
+      error: 'Invalid signature',
+      timestamp: new Date().toISOString()
+    };
+    return NextResponse.json(errorResponse, { status: 400 });
   }
 
   // Handle the event
@@ -136,5 +145,11 @@ export async function POST(req: NextRequest) {
 
   }
 
-  return NextResponse.json({ received: true });
+  const response: APIResponse<{ received: boolean }> = {
+    success: true,
+    data: { received: true },
+    timestamp: new Date().toISOString()
+  };
+  
+  return NextResponse.json(response);
 }

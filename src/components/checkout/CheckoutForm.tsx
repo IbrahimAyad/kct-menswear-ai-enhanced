@@ -107,17 +107,24 @@ function CheckoutFormInner({ amount, onComplete, isProcessing, setIsProcessing }
               placeholder="First Name"
               aria-label="First name"
               aria-required="true"
-            required
-            className="px-4 py-2 border border-gray-300 rounded-md focus:ring-gold focus:border-gold"
-          />
-          <input
-            type="text"
-            value={shippingInfo.lastName}
-            onChange={(e) => setShippingInfo({ ...shippingInfo, lastName: e.target.value })}
-            placeholder="Last Name"
-            required
-            className="px-4 py-2 border border-gray-300 rounded-md focus:ring-gold focus:border-gold"
-          />
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-gold focus:border-gold"
+            />
+          </div>
+          <div>
+            <label htmlFor="lastName" className="sr-only">Last name</label>
+            <input
+              id="lastName"
+              type="text"
+              value={shippingInfo.lastName}
+              onChange={(e) => setShippingInfo({ ...shippingInfo, lastName: e.target.value })}
+              placeholder="Last Name"
+              aria-label="Last name"
+              aria-required="true"
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-gold focus:border-gold"
+            />
+          </div>
         </div>
         <input
           type="text"

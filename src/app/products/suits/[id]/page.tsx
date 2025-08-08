@@ -4,9 +4,10 @@ import SimpleSuitProductDetail from '@/components/products/SimpleSuitProductDeta
 import { stripeProducts } from '@/lib/services/stripeProductService';
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params
   const suitData = Object.entries(stripeProducts.suits).find(([key, suit]) => 
-    suit.productId === params.id
+    suit.productId === id
   );
   
   if (!suitData) {
@@ -36,10 +37,11 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function SuitProductPage({ params }: { params: { id: string } }) {
+export default async function SuitProductPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   // Find the suit data
   const suitEntry = Object.entries(stripeProducts.suits).find(([key, suit]) => 
-    suit.productId === params.id
+    suit.productId === id
   );
   
   if (!suitEntry) {

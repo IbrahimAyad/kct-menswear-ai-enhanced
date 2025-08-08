@@ -215,6 +215,7 @@ export function getDisplayPrice(product: Product): number {
  */
 export async function testSupabaseConnection() {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     console.log('Testing Supabase connection with URL:', supabaseUrl);
     console.log('Creating query...');
     

@@ -152,7 +152,9 @@ export function useAuth() {
 
   return {
     profile,
+    user: profile, // Alias for backward compatibility
     isAuthenticated,
+    loading: false, // This hook doesn't track loading state currently
     signIn,
     signUp,
     signOut,

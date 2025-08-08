@@ -4,9 +4,10 @@ import { ProductSearchParams } from '@/lib/supabase/types'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { category: string } }
+  { params }: { params: Promise<{ category: string }> }
 ) {
   try {
+    const { category } = await params
     const { searchParams } = new URL(request.url)
 
     // Parse search parameters
@@ -65,7 +66,7 @@ export async function GET(
       searchParamsObj.filters.featured = searchParams.get('featured') === 'true'
     }
 
-    const result = await getProductsByCategory(decodeURIComponent(params.category), searchParamsObj)
+    const result = await getProductsByCategory(decodeURIComponent(category), searchParamsObj)
 
     return NextResponse.json(result)
   } catch (error) {

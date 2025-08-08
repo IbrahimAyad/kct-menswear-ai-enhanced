@@ -1,4 +1,5 @@
 import { useCartStore } from '@/lib/store/cartStore';
+import { Product, ProductCategory } from '@/lib/types';
 
 interface CartItemData {
   id: string;
@@ -20,23 +21,25 @@ export function useCart() {
 
   const addItem = (item: CartItemData) => {
     // Convert to Product format expected by cart store
-    const product = {
+    const product: Product = {
       id: item.id,
+      sku: item.id, // Use id as sku fallback
       name: item.name,
       price: item.price,
       images: [item.image],
-      stripePriceId: item.stripePriceId,
-      stripeProductId: item.stripeProductId,
-      category: item.category || 'ties',
+      category: (item.category as ProductCategory) || 'accessories',
+      stock: {}, // Empty stock object, will be handled by inventory system
+      variants: [], // Empty variants array, size handled separately
       color: item.selectedColor,
-      bundleId: item.bundleId,
+      description: undefined,
       metadata: {
         ...item.metadata,
         stripePriceId: item.stripePriceId,
         stripeProductId: item.stripeProductId,
         category: item.category,
+        bundleId: item.bundleId,
       }
-    } as any;
+    };
 
     store.addItem(product, item.selectedSize || '', item.quantity);
   };

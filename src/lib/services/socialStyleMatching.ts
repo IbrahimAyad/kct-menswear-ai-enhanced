@@ -80,7 +80,7 @@ class SocialStyleMatchingService {
         const analysis = await fashionClipService.analyzeImage(image);
         if (analysis) {
           // Extract style information from predictions
-          const extractedStyles = analysis.predictions?.map((p: any) => p.label) || [];
+          const extractedStyles = analysis.predictions?.map((p: { label: string }) => p.label) || [];
           profile.preferredStyles = this.mergePreferences(
             profile.preferredStyles, 
             extractedStyles

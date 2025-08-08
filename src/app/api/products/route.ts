@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { APIResponse, ProductsResponse } from '@/lib/types/api';
+import { Product } from '@/lib/types';
 
 const ADMIN_API_KEY = process.env.ADMIN_BACKEND_API_KEY || '0aadbad87424e6f468ce0fdb18d1462fd03b133c1b48fd805fab14d4bac3bd75';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest): Promise<NextResponse<APIResponse<ProductsResponse>>> {
   const { searchParams } = new URL(request.url);
   const category = searchParams.get('category');
   
-  return NextResponse.json([
+  const products: Product[] = [
     {
       id: "NVY-SUIT-001",
       sku: "NVY-SUIT-001",
@@ -93,7 +95,24 @@ export async function GET(request: NextRequest) {
         { size: "46R", stock: 5 }
       ]
     }
-  ].filter(product => !category || category === 'all' || product.category === category));
+  ].filter(product => !category || category === 'all' || product.category === category);
+  
+  const response: APIResponse<ProductsResponse> = {
+    success: true,
+    data: {
+      products,
+      total: products.length,
+      hasMore: false,
+      filters: {
+        availableColors: ['navy', 'charcoal', 'light-grey', 'black'],
+        availableSizes: ['36R', '38R', '40R', '42R', '44R', '46R'],
+        priceRange: { min: 549.99, max: 899.99 }
+      }
+    },
+    timestamp: new Date().toISOString()
+  };
+  
+  return NextResponse.json(response);
 }
 
 export async function OPTIONS() {
