@@ -39,10 +39,18 @@ export async function GET(request: NextRequest) {
         const supabase = await createClient();
         
         if (supabase) {
-          // Build Supabase query based on filters
+          // Build Supabase query based on filters - include product images
           let query = supabase
             .from('products')
-            .select('*')
+            .select(`
+              *,
+              product_images (
+                image_url,
+                alt_text,
+                position,
+                image_type
+              )
+            `)
             .limit(100); // Limit to prevent timeout
           
           // Apply basic filters to reduce data transfer
@@ -81,28 +89,40 @@ export async function GET(request: NextRequest) {
               console.error('Supabase query error:', error);
             } else {
               // Map raw Supabase products to expected format
-              individualProducts = (data || []).map((product: any) => ({
-                id: product.id,
-                title: product.name, // Map name to title
-                description: product.description,
-                price: (product.base_price / 100).toString(), // Convert cents to dollars as string
-                compare_at_price: null, // Not available in current schema
-                category: product.category,
-                product_type: product.product_type,
-                sku: product.sku,
-                handle: product.handle,
-                tags: product.tags || [],
-                meta_description: product.meta_description,
-                available: product.in_stock,
-                inventory_quantity: product.total_inventory,
-                featured_image: product.primary_image ? { src: product.primary_image } : null,
-                images: product.image_gallery?.map((img: string) => ({ src: img })) || [],
-                vendor: product.vendor,
-                sizes: product.additional_info?.sizes_available?.split(', ') || [],
-                material: product.additional_info?.material,
-                fit: product.additional_info?.fit_type,
-                ai_score: 80 + Math.floor(Math.random() * 20) // Generate AI score
-              }));
+              individualProducts = (data || []).map((product: any) => {
+                // Get primary image from product_images relation
+                const primaryImage = product.product_images?.find((img: any) => 
+                  img.image_type === 'primary' || img.position === 1
+                ) || product.product_images?.[0];
+                
+                // Get all images sorted by position
+                const allImages = product.product_images?.sort((a: any, b: any) => 
+                  (a.position || 999) - (b.position || 999)
+                ).map((img: any) => ({ src: img.image_url })) || [];
+                
+                return {
+                  id: product.id,
+                  title: product.name, // Map name to title
+                  description: product.description,
+                  price: (product.base_price / 100).toString(), // Convert cents to dollars as string
+                  compare_at_price: null, // Not available in current schema
+                  category: product.category,
+                  product_type: product.product_type,
+                  sku: product.sku,
+                  handle: product.handle,
+                  tags: product.tags || [],
+                  meta_description: product.meta_description,
+                  available: product.in_stock,
+                  inventory_quantity: product.total_inventory,
+                  featured_image: primaryImage ? { src: primaryImage.image_url } : null,
+                  images: allImages,
+                  vendor: product.vendor,
+                  sizes: product.additional_info?.sizes_available?.split(', ') || [],
+                  material: product.additional_info?.material,
+                  fit: product.additional_info?.fit_type,
+                  ai_score: 80 + Math.floor(Math.random() * 20) // Generate AI score
+                };
+              });
               console.log(`Fetched and mapped ${individualProducts.length} products from Supabase`);
             }
           } catch (timeoutError) {
