@@ -3,11 +3,11 @@ import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImage
 import { UnifiedProduct } from '@/types/unified-shop';
 
 /**
- * Get a unified product by ID - checks both bundles and Supabase products
+ * Get a unified product by ID or slug - checks both bundles and Supabase products
  */
-export async function getUnifiedProduct(id: string): Promise<UnifiedProduct | null> {
-  // First, check if it's a bundle
-  const bundle = bundleProductsWithImages.bundles.find(b => b.id === id);
+export async function getUnifiedProduct(idOrSlug: string): Promise<UnifiedProduct | null> {
+  // First, check if it's a bundle (bundles use ID)
+  const bundle = bundleProductsWithImages.bundles.find(b => b.id === idOrSlug);
   
   if (bundle) {
     // Convert bundle to UnifiedProduct format
@@ -42,8 +42,37 @@ export async function getUnifiedProduct(id: string): Promise<UnifiedProduct | nu
     };
   }
 
-  // If not a bundle, check Supabase
-  const product = await getProduct(id);
+  // If not a bundle, check Supabase by ID first, then by handle/slug
+  let product = await getProduct(idOrSlug);
+  
+  // If not found by ID, try to find by handle (slug)
+  if (!product) {
+    // Import Supabase client to search by handle
+    const { createClient } = await import('@/lib/supabase/server');
+    const supabase = await createClient();
+    
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          product_images (
+            image_url,
+            alt_text,
+            position,
+            image_type
+          )
+        `)
+        .eq('handle', idOrSlug)
+        .single();
+      
+      if (data && !error) {
+        // Convert to the format expected by getProduct
+        const { getProductById } = await import('@/lib/supabase/products');
+        product = await getProductById(data.id);
+      }
+    }
+  }
   
   if (product) {
     // Convert Supabase product to UnifiedProduct format
