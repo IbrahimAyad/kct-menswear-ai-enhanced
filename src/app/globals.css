@@ -8,8 +8,6 @@
 /* Chat mobile styles */
 @import '../styles/chat-mobile.css';
 
-/* Enhanced Mobile Navigation styles */
-@import '../styles/mobile-navigation.css';
 
 /* Modern Size Bot Styles */
 @layer components {

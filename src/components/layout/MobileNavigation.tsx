@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
+import '@/styles/mobile-navigation.css';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import {
   X,
