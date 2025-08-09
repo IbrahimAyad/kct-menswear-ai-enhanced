@@ -1,37 +1,32 @@
 'use client'
 
-import { useState } from 'react'
-
+/**
+ * Accessibility Skip Links Component
+ * 
+ * Provides keyboard navigation shortcuts that are:
+ * - Hidden by default (sr-only)
+ * - Visible only when focused via keyboard
+ * - Properly positioned and styled for luxury brand aesthetic
+ * - WCAG 2.1 AA compliant
+ */
 export function SkipLinks() {
-  const [isVisible, setIsVisible] = useState(false)
-
   return (
-    <div
-      className={`fixed top-0 left-0 z-[100] transition-transform ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}
-    >
+    <div className="sr-only">
       <a
         href="#main-content"
-        className="bg-gold text-black px-4 py-2 font-medium focus:translate-y-0"
-        onFocus={() => setIsVisible(true)}
-        onBlur={() => setIsVisible(false)}
+        className="skip-link"
       >
         Skip to main content
       </a>
       <a
         href="#navigation"
-        className="bg-gold text-black px-4 py-2 font-medium ml-2 focus:translate-y-0"
-        onFocus={() => setIsVisible(true)}
-        onBlur={() => setIsVisible(false)}
+        className="skip-link"
       >
         Skip to navigation
       </a>
       <a
         href="#footer"
-        className="bg-gold text-black px-4 py-2 font-medium ml-2 focus:translate-y-0"
-        onFocus={() => setIsVisible(true)}
-        onBlur={() => setIsVisible(false)}
+        className="skip-link"
       >
         Skip to footer
       </a>

@@ -210,6 +210,140 @@
 }
 
 @layer components {
+  /* Accessibility Skip Links - Luxury Brand Styling */
+  .skip-link {
+    @apply fixed top-4 left-4 z-[200] px-4 py-2 font-medium text-sm rounded-sm shadow-lg transition-all duration-300 transform;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    color: var(--black);
+    border: 2px solid var(--black);
+    /* Initially positioned off-screen */
+    transform: translateY(-100vh);
+  }
+  
+  .skip-link:focus {
+    /* Slide into view when focused */
+    transform: translateY(0);
+    outline: 3px solid var(--burgundy);
+    outline-offset: 2px;
+    box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3), 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .skip-link:hover:focus {
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+    transform: translateY(0) scale(1.05);
+  }
+
+  /* Luxury Brand Logo Styling */
+  .logo-brand {
+    @apply font-serif font-bold transition-all duration-300 ease-in-out;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  
+  .logo-primary {
+    @apply inline-block text-black relative;
+    font-weight: 800;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .logo-secondary {
+    @apply inline-block ml-2 relative;
+    color: var(--gold);
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Logo hover effects */
+  .group:hover .logo-primary {
+    transform: translateY(-1px);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .group:hover .logo-secondary {
+    color: var(--gold-light);
+    transform: translateY(-1px);
+    text-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+  }
+  
+  /* Luxury underline effect */
+  .logo-brand::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--burgundy), var(--gold));
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .group:hover .logo-brand::after {
+    width: 100%;
+  }
+  
+  /* Responsive logo scaling */
+  @media (max-width: 768px) {
+    .logo-brand {
+      font-size: clamp(1.25rem, 5vw, 1.75rem);
+    }
+    
+    .logo-secondary {
+      @apply ml-1.5;
+    }
+  }
+
+  /* Luxury Header Structure */
+  .luxury-header {
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.03), 0 1px 4px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .header-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .header-content {
+    @apply flex items-center justify-between;
+    height: 4.5rem; /* Increased from 4rem for better proportions */
+    position: relative;
+  }
+  
+  /* Enhanced header interactions */
+  .luxury-header:hover {
+    background: rgba(255, 255, 255, 0.98);
+    border-bottom-color: rgba(212, 175, 55, 0.12);
+    box-shadow: 0 4px 28px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+  
+  /* Scrolled header state */
+  .luxury-header.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    border-bottom-color: rgba(212, 175, 55, 0.15);
+    box-shadow: 0 6px 32px rgba(0, 0, 0, 0.06), 0 2px 12px rgba(0, 0, 0, 0.04);
+  }
+  
+  .luxury-header.scrolled .header-content {
+    height: 4rem; /* Slightly compressed when scrolled */
+  }
+  
+  /* Mobile header optimization */
+  @media (max-width: 768px) {
+    .header-content {
+      height: 4rem;
+    }
+    
+    .luxury-header.scrolled .header-content {
+      height: 3.5rem;
+    }
+  }
+
   .btn-primary {
     @apply bg-gold hover:bg-gold/90 text-black px-6 py-3 rounded-sm font-semibold transition-colors;
   }

@@ -48,12 +48,12 @@ export function Navigation() {
     <>
     <nav 
       id="navigation"
-      className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gold/10 shadow-sm"
+      className="luxury-header fixed top-0 w-full z-50"
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="header-container">
+        <div className="header-content">
           {/* Logo */}
           <Link 
             href="/" 
@@ -67,11 +67,11 @@ export function Navigation() {
                 className="h-8 w-auto transition-transform group-hover:scale-105"
               />
             ) : (
-              <h1 className="text-2xl font-serif font-bold text-black transition-all duration-300">
-                <span className="inline-block transition-transform group-hover:scale-105">
+              <h1 className="logo-brand">
+                <span className="logo-primary">
                   {storeInfo.name.split(' ')[0] || 'KCT'}
                 </span>
-                <span className="text-gold ml-1">
+                <span className="logo-secondary">
                   {storeInfo.name.split(' ')[1] || 'Menswear'}
                 </span>
               </h1>
