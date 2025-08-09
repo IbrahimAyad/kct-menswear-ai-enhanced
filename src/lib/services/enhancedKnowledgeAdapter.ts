@@ -96,7 +96,7 @@ class EnhancedKnowledgeAdapter {
   
   constructor() {
     // Initialize with config
-    console.log('Enhanced Knowledge API initialized with features:', 
+    // console.log('Enhanced Knowledge API initialized with features:', 
       Object.entries(KNOWLEDGE_API_CONFIG.features)
         .filter(([_, enabled]) => enabled)
         .map(([feature]) => feature)

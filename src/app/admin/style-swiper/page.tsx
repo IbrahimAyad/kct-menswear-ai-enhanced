@@ -61,8 +61,8 @@ export default function StyleSwiperAdminPage() {
         const result = await response.json();
         
         if (result.success) {
-          console.log('Upload successful with variants:', result.variants);
-          console.log('Image metadata:', result.metadata);
+          // console.log('Upload successful with variants:', result.variants);
+          // console.log('Image metadata:', result.metadata);
           
           // Store analysis results
           if (result.analysis) {
@@ -88,7 +88,7 @@ export default function StyleSwiperAdminPage() {
       
       // Show success message with variant info
       const totalVariants = successful.reduce((sum, r) => sum + (r.variants?.length || 0), 0);
-      console.log(`Uploaded ${successful.length} images with ${totalVariants} total variants`);
+      // console.log(`Uploaded ${successful.length} images with ${totalVariants} total variants`);
     }
     
     setUploading(false);

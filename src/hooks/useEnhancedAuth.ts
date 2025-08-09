@@ -162,7 +162,7 @@ export function useEnhancedAuth() {
 
   const handleUntrustedDevice = async (deviceId: string) => {
     // This would typically trigger additional verification
-    console.log('Untrusted device detected:', deviceId);
+    // console.log('Untrusted device detected:', deviceId);
   };
 
   const showSessionTimeoutWarning = () => {

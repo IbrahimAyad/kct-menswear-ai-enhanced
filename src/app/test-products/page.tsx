@@ -13,12 +13,12 @@ export default function TestProductsPage() {
   useEffect(() => {
     async function loadProducts() {
       try {
-        console.log('Starting to load products...');
+        // console.log('Starting to load products...');
         
         // First test connection
-        console.log('Testing Supabase connection...');
+        // console.log('Testing Supabase connection...');
         const connectionTest = await testSupabaseConnection();
-        console.log('Connection test result:', connectionTest);
+        // console.log('Connection test result:', connectionTest);
         
         setConnectionStatus(connectionTest.success ? '✅ Connected to Supabase' : `❌ ${connectionTest.error}`);
 
@@ -29,12 +29,12 @@ export default function TestProductsPage() {
         }
 
         // Then fetch products
-        console.log('Fetching products...');
+        // console.log('Fetching products...');
         const result = await fetchProductsWithImages({ limit: 10 });
-        console.log('Fetch result:', result);
+        // console.log('Fetch result:', result);
         
         if (result.success) {
-          console.log(`Successfully fetched ${result.data.length} products`);
+          // console.log(`Successfully fetched ${result.data.length} products`);
           setProducts(result.data);
           setError(null);
         } else {
@@ -94,8 +94,8 @@ export default function TestProductsPage() {
                       alt={product.name}
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        console.error(`Image failed to load for ${product.name}:`, e);
-                        e.currentTarget.src = '/placeholder-product.jpg';
+                        // console.error(`Image failed to load for ${product.name}:`, e);
+                        e.currentTarget.src = '/placeholder-product.svg';
                       }}
                     />
                     {product.images && product.images.length > 0 && (

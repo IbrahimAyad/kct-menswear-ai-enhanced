@@ -13,7 +13,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 })
 
 async function updateProductTotalInventory() {
-  console.log('Starting product total inventory update...')
+  // console.log('Starting product total inventory update...')
   
   let updatedCount = 0
   let errorCount = 0
@@ -29,7 +29,7 @@ async function updateProductTotalInventory() {
       return
     }
 
-    console.log(`Found ${products?.length || 0} products to update`)
+    // console.log(`Found ${products?.length || 0} products to update`)
 
     for (const product of products || []) {
       try {
@@ -62,7 +62,7 @@ async function updateProductTotalInventory() {
           errorCount++
         } else {
           updatedCount++
-          console.log(`✓ Updated ${product.name} - Total inventory: ${totalInventory}`)
+          // console.log(`✓ Updated ${product.name} - Total inventory: ${totalInventory}`)
         }
       } catch (error) {
         console.error(`Error processing ${product.name}:`, error)
@@ -70,10 +70,10 @@ async function updateProductTotalInventory() {
       }
     }
 
-    console.log('\n--- Update Summary ---')
-    console.log(`✓ Successfully updated: ${updatedCount} products`)
-    console.log(`✗ Errors encountered: ${errorCount}`)
-    console.log('----------------------')
+    // console.log('\n--- Update Summary ---')
+    // console.log(`✓ Successfully updated: ${updatedCount} products`)
+    // console.log(`✗ Errors encountered: ${errorCount}`)
+    // console.log('----------------------')
   } catch (error) {
     console.error('Unexpected error:', error)
   }
@@ -81,5 +81,5 @@ async function updateProductTotalInventory() {
 
 // Run the update
 updateProductTotalInventory()
-  .then(() => console.log('Update complete'))
+  .then(() => {}) // console.log('Update complete')
   .catch(console.error)

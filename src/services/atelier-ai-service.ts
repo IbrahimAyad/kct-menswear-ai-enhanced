@@ -137,7 +137,7 @@ export class AtelierAIService {
       this.ws = new WebSocket(`${wsUrl}/ws`);
       
       this.ws.onopen = () => {
-        console.log('WebSocket connected');
+        // console.log('WebSocket connected');
         this.ws?.send(JSON.stringify({ 
           type: 'auth', 
           apiKey: this.apiKey,
@@ -159,7 +159,7 @@ export class AtelierAIService {
       };
 
       this.ws.onclose = () => {
-        console.log('WebSocket disconnected');
+        // console.log('WebSocket disconnected');
         // Attempt reconnect after 5 seconds
         setTimeout(() => this.connectWebSocket(onMessage), 5000);
       };

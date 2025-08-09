@@ -22,7 +22,7 @@ export default function StyleSwiperR2Page() {
   const [completedProfiles, setCompletedProfiles] = useState<any[]>([]);
 
   const handleSwipe = (image: StyleSwiperImage, direction: 'left' | 'right', velocity?: number) => {
-    console.log(`Swiped ${direction} on image ${image.id}`, velocity && `at ${velocity.toFixed(0)}px/s`);
+    // console.log(`Swiped ${direction} on image ${image.id}`, velocity && `at ${velocity.toFixed(0)}px/s`);
     setSwipeData(prev => [...prev, { 
       imageId: image.id, 
       category: image.category,
@@ -33,8 +33,8 @@ export default function StyleSwiperR2Page() {
   };
 
   const handleComplete = (likedImages: StyleSwiperImage[], analytics: SwipeAnalytics) => {
-    console.log('Completed with liked images:', likedImages);
-    console.log('Analytics:', analytics);
+    // console.log('Completed with liked images:', likedImages);
+    // console.log('Analytics:', analytics);
     setCompletedProfiles(prev => [...prev, { 
       likedImages, 
       analytics, 
@@ -44,7 +44,7 @@ export default function StyleSwiperR2Page() {
   };
 
   const handleProductClick = (productId: string) => {
-    console.log('Product clicked:', productId);
+    // console.log('Product clicked:', productId);
     // In a real app, navigate to product page or open quick view
     // window.location.href = `/products/${productId}`;
   };

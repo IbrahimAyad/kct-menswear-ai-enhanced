@@ -12,7 +12,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 })
 
 async function checkProductImages() {
-  console.log('Checking product images in Supabase...\n')
+  // console.log('Checking product images in Supabase...\n')
 
   try {
     // Get a sample of products with their images
@@ -35,22 +35,22 @@ async function checkProductImages() {
       return
     }
 
-    console.log('Sample products and their images:')
-    console.log('================================\n')
+    // console.log('Sample products and their images:')
+    // console.log('================================\n')
 
     for (const product of products || []) {
-      console.log(`Product: ${product.name}`)
-      console.log(`ID: ${product.id}`)
+      // console.log(`Product: ${product.name}`)
+      // console.log(`ID: ${product.id}`)
       
       if (product.product_images && product.product_images.length > 0) {
-        console.log('Images:')
+        // console.log('Images:')
         product.product_images.forEach((img: any) => {
-          console.log(`  - Type: ${img.image_type}, URL: ${img.image_url}`)
+          // console.log(`  - Type: ${img.image_type}, URL: ${img.image_url}`)
         })
       } else {
-        console.log('  No images found')
+        // console.log('  No images found')
       }
-      console.log('---')
+      // console.log('---')
     }
 
     // Check if there are any products with actual URLs
@@ -61,10 +61,10 @@ async function checkProductImages() {
       .limit(5)
 
     if (urlCheck && urlCheck.length > 0) {
-      console.log('\nFound products with actual URLs:')
-      urlCheck.forEach(img => console.log(`  - ${img.image_url}`))
+      // console.log('\nFound products with actual URLs:')
+      urlCheck.forEach(img => {}) // console.log(`  - ${img.image_url}`)
     } else {
-      console.log('\nNo products found with actual URLs (all are UUIDs)')
+      // console.log('\nNo products found with actual URLs (all are UUIDs)')
     }
 
   } catch (error) {
@@ -73,5 +73,5 @@ async function checkProductImages() {
 }
 
 checkProductImages()
-  .then(() => console.log('\nCheck complete'))
+  .then(() => {}) // console.log('\nCheck complete')
   .catch(console.error)

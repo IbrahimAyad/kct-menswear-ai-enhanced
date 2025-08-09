@@ -159,7 +159,7 @@ const productImageMappings: Record<string, { model: string; product: string }> =
 }
 
 async function updateProductsWithInventoryAndImages() {
-  console.log('Starting product update...')
+  // console.log('Starting product update...')
   
   let updatedCount = 0
   let errorCount = 0
@@ -176,7 +176,7 @@ async function updateProductsWithInventoryAndImages() {
       return
     }
 
-    console.log(`Found ${products?.length || 0} products to update`)
+    // console.log(`Found ${products?.length || 0} products to update`)
 
     for (const product of products || []) {
       try {
@@ -184,7 +184,7 @@ async function updateProductsWithInventoryAndImages() {
         
         if (images) {
           // Update product images
-          console.log(`Updating images for: ${product.name}`)
+          // console.log(`Updating images for: ${product.name}`)
           
           // Delete existing images
           await supabase
@@ -248,18 +248,18 @@ async function updateProductsWithInventoryAndImages() {
         }
 
         updatedCount++
-        console.log(`✓ Updated ${product.name}`)
+        // console.log(`✓ Updated ${product.name}`)
       } catch (error) {
         console.error(`Error processing ${product.name}:`, error)
         errorCount++
       }
     }
 
-    console.log('\n--- Update Summary ---')
-    console.log(`✓ Successfully updated: ${updatedCount} products`)
-    console.log(`✓ Updated variants: ${variantCount}`)
-    console.log(`✗ Errors encountered: ${errorCount}`)
-    console.log('----------------------')
+    // console.log('\n--- Update Summary ---')
+    // console.log(`✓ Successfully updated: ${updatedCount} products`)
+    // console.log(`✓ Updated variants: ${variantCount}`)
+    // console.log(`✗ Errors encountered: ${errorCount}`)
+    // console.log('----------------------')
   } catch (error) {
     console.error('Unexpected error:', error)
   }
@@ -267,5 +267,5 @@ async function updateProductsWithInventoryAndImages() {
 
 // Run the update
 updateProductsWithInventoryAndImages()
-  .then(() => console.log('Update complete'))
+  .then(() => {}) // console.log('Update complete')
   .catch(console.error)

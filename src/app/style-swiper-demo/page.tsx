@@ -76,14 +76,14 @@ export default function StyleSwiperDemoPage() {
   const [completedProfiles, setCompletedProfiles] = useState<any[]>([]);
 
   const handleSwipe = (product: Product, direction: 'left' | 'right', velocity?: number) => {
-    console.log(`Swiped ${direction} on ${product.name}`, velocity && `at ${velocity.toFixed(0)}px/s`);
+    // console.log(`Swiped ${direction} on ${product.name}`, velocity && `at ${velocity.toFixed(0)}px/s`);
     setSwipeData(prev => [...prev, { product: product.name, direction, velocity, timestamp: Date.now() }]);
   };
 
   const handleComplete = (likedProducts: Product[], analytics?: any) => {
-    console.log('Completed with liked products:', likedProducts);
+    // console.log('Completed with liked products:', likedProducts);
     if (analytics) {
-      console.log('Analytics:', analytics);
+      // console.log('Analytics:', analytics);
     }
     setCompletedProfiles(prev => [...prev, { likedProducts, analytics, version }]);
   };

@@ -167,7 +167,7 @@ const vestProducts = [
 ]
 
 async function updateVestProducts() {
-  console.log('Starting vest products update...')
+  // console.log('Starting vest products update...')
   
   let updatedCount = 0
   let errorCount = 0
@@ -207,7 +207,7 @@ async function updateVestProducts() {
           console.error(`Error updating ${vest.name}:`, updateError)
           errorCount++
         } else {
-          console.log(`✓ Updated ${vest.name}`)
+          // console.log(`✓ Updated ${vest.name}`)
           
           // Update or insert product images
           // Delete existing images
@@ -241,7 +241,7 @@ async function updateVestProducts() {
           updatedCount++
         }
       } else {
-        console.log(`⚠️  Product not found: ${vest.name}`)
+        // console.log(`⚠️  Product not found: ${vest.name}`)
       }
     } catch (error) {
       console.error(`Unexpected error processing ${vest.name}:`, error)
@@ -249,13 +249,13 @@ async function updateVestProducts() {
     }
   }
 
-  console.log('\n--- Update Summary ---')
-  console.log(`✓ Successfully updated: ${updatedCount} products`)
-  console.log(`✗ Errors encountered: ${errorCount} products`)
-  console.log('----------------------')
+  // console.log('\n--- Update Summary ---')
+  // console.log(`✓ Successfully updated: ${updatedCount} products`)
+  // console.log(`✗ Errors encountered: ${errorCount} products`)
+  // console.log('----------------------')
 }
 
 // Run the update
 updateVestProducts()
-  .then(() => console.log('Update complete'))
+  .then(() => {}) // console.log('Update complete')
   .catch(console.error)

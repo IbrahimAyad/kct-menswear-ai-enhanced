@@ -6,9 +6,9 @@ require('dotenv').config({ path: '.env.local' });
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-console.log('Testing Supabase connection...');
-console.log('URL:', supabaseUrl ? '✅ Found' : '❌ Missing');
-console.log('Key:', supabaseKey ? '✅ Found' : '❌ Missing');
+// Testing Supabase connection...
+// URL: supabaseUrl ? '✅ Found' : '❌ Missing'
+// Key: supabaseKey ? '✅ Found' : '❌ Missing'
 
 if (!supabaseUrl || !supabaseKey) {
   console.error('Missing Supabase credentials!');
@@ -20,7 +20,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function testConnection() {
   try {
     // Test 1: Basic connection
-    console.log('\n📡 Testing connection...');
+    // 📡 Testing connection...
     const { data: tables, error: tablesError } = await supabase
       .from('products')
       .select('count')
@@ -30,10 +30,10 @@ async function testConnection() {
       console.error('❌ Connection failed:', tablesError.message);
       return;
     }
-    console.log('✅ Connected to Supabase!');
+    // ✅ Connected to Supabase!
 
     // Test 2: Fetch products
-    console.log('\n📦 Fetching products...');
+    // 📦 Fetching products...
     const { data: products, error: productsError } = await supabase
       .from('products')
       .select('*')
@@ -44,15 +44,15 @@ async function testConnection() {
       return;
     }
 
-    console.log(`✅ Found ${products?.length || 0} products`);
+    // ✅ Found ${products?.length || 0} products
     
-    if (products && products.length > 0) {
-      console.log('\nFirst product:');
-      console.log(JSON.stringify(products[0], null, 2));
-    }
+    // if (products && products.length > 0) {
+    //   First product:
+    //   JSON.stringify(products[0], null, 2)
+    // }
 
     // Test 3: Check product_images table
-    console.log('\n🖼️  Checking images...');
+    // 🖼️  Checking images...
     const { data: images, error: imagesError } = await supabase
       .from('product_images')
       .select('*')
@@ -61,7 +61,7 @@ async function testConnection() {
     if (imagesError) {
       console.error('❌ Error fetching images:', imagesError.message);
     } else {
-      console.log(`✅ Found ${images?.length || 0} images`);
+      // ✅ Found ${images?.length || 0} images
     }
 
   } catch (error) {

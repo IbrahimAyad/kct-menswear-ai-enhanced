@@ -216,15 +216,15 @@ export function getDisplayPrice(product: Product): number {
 export async function testSupabaseConnection() {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    console.log('Testing Supabase connection with URL:', supabaseUrl);
-    console.log('Creating query...');
+    // console.log('Testing Supabase connection with URL:', supabaseUrl);
+    // console.log('Creating query...');
     
     const { data, error } = await supabase
       .from('products')
       .select('count')
       .limit(1);
 
-    console.log('Query response - data:', data, 'error:', error);
+    // console.log('Query response - data:', data, 'error:', error);
 
     if (error) throw error;
 

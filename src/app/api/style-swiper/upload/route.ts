@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     if (originalResult.url) {
       try {
         fashionAnalysis = await FashionAnalyzer.analyzeImage(originalResult.url);
-        console.log('Fashion analysis completed:', {
+        // console.log('Fashion analysis completed:', {
           category: fashionAnalysis.category,
           style: fashionAnalysis.style,
           formality: fashionAnalysis.formality,

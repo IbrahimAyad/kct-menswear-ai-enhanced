@@ -144,7 +144,7 @@ export class AtelierAICore {
     }
   ): Promise<void> {
     // Record feedback for continuous improvement
-    console.log('Recording feedback:', { recommendationId, feedback })
+    // console.log('Recording feedback:', { recommendationId, feedback })
     // Implementation would store in database
   }
 

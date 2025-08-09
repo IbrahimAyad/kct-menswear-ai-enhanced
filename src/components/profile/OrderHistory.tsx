@@ -93,7 +93,7 @@ export function OrderHistory({ limit, showPagination = true }: OrderHistoryProps
       setReorderingId(null)
       
       // Show success message or redirect to cart
-      console.log(`Added ${itemsToReorder.length} items to cart`)
+      // console.log(`Added ${itemsToReorder.length} items to cart`)
     } catch (error) {
       console.error('Reorder failed:', error)
     } finally {
@@ -111,7 +111,7 @@ export function OrderHistory({ limit, showPagination = true }: OrderHistoryProps
         customizations: item.customizations
       })
       
-      console.log(`Added ${item.productName} to cart`)
+      // console.log(`Added ${item.productName} to cart`)
     } catch (error) {
       console.error('Failed to add item to cart:', error)
     }
@@ -127,7 +127,7 @@ export function OrderHistory({ limit, showPagination = true }: OrderHistoryProps
 
   const downloadInvoice = (order: OrderSummary) => {
     // In a real app, this would generate and download a PDF invoice
-    console.log('Downloading invoice for order:', order.orderNumber)
+    // console.log('Downloading invoice for order:', order.orderNumber)
   }
 
   return (

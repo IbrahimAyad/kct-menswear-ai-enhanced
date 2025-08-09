@@ -3,11 +3,11 @@ import { enhancedKnowledgeAPI } from '@/lib/services/enhancedKnowledgeAdapter';
 
 export async function GET() {
   try {
-    console.log('Testing Enhanced Knowledge API...');
+    // console.log('Testing Enhanced Knowledge API...');
     
     // Test health check
     const health = await enhancedKnowledgeAPI.checkHealth();
-    console.log('Health check:', health);
+    // console.log('Health check:', health);
     
     // Test core endpoints
     const tests = {

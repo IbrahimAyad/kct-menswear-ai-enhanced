@@ -102,7 +102,7 @@ export function Wishlist() {
       await shareWishlist(Array.from(selectedItems), shareForm.recipientEmail)
       
       // Send email notification (in real app)
-      console.log('Sharing wishlist:', {
+      // console.log('Sharing wishlist:', {
         items: Array.from(selectedItems),
         ...shareForm
       })

@@ -176,7 +176,7 @@ export function AIStyleAssistant({
           className="justify-start gap-2"
           onClick={() => {
             // Trigger camera for outfit matching
-            console.log('Camera feature coming soon')
+            // console.log('Camera feature coming soon')
           }}
         >
           <Camera className="h-4 w-4" />

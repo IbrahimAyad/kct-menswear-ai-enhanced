@@ -257,7 +257,7 @@ export const useCustomerStore = create<CustomerStore>()(
         if (!state.profile) return
         
         // In a real app, this would make an API call
-        console.log('Sharing wishlist items:', itemIds, 'with:', recipientEmail)
+        // console.log('Sharing wishlist items:', itemIds, 'with:', recipientEmail)
         
         // Update shared status
         const wishlist = state.profile.wishlist.map(w => {
