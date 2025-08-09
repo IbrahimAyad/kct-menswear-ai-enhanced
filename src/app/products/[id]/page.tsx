@@ -1,9 +1,9 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
-import { getProduct } from '@/lib/supabase/products'
-import { ModernProductDetail } from './ModernProductDetail'
-import { RelatedProducts } from '@/components/products/RelatedProducts'
+import { getUnifiedProduct, getRelatedUnifiedProducts } from '@/lib/services/unifiedProductDetail'
+import { UnifiedProductDetail } from './UnifiedProductDetail'
+import UnifiedProductGrid from '@/components/products/UnifiedProductGrid'
 import { formatPrice } from '@/lib/utils/format'
 
 interface ProductPageProps {
@@ -14,7 +14,7 @@ interface ProductPageProps {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { id } = await params
-  const product = await getProduct(id)
+  const product = await getUnifiedProduct(id)
   
   if (!product) {
     return {
@@ -22,11 +22,11 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     }
   }
 
-  const ogImage = product.images[0] || '/placeholder-product.svg'
+  const ogImage = product.imageUrl || product.images?.[0] || '/placeholder-product.svg'
 
   return {
     title: `${product.name} | KCT Menswear`,
-    description: product.metaDescription || product.description || `Shop ${product.name} from our premium collection`,
+    description: product.description || `Shop ${product.name} from our premium collection`,
     keywords: product.tags?.join(', ') || `${product.category}, menswear, suits, formal wear`,
     openGraph: {
       title: product.name,
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params
-  const product = await getProduct(id)
+  const product = await getUnifiedProduct(id)
 
   if (!product) {
     notFound()
@@ -73,16 +73,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
     '@type': 'Product',
     name: product.name,
     description: product.description,
-    image: product.images,
+    image: product.images || [product.imageUrl],
     brand: {
       '@type': 'Brand',
-      name: product.brand || 'KCT Menswear',
+      name: 'KCT Menswear',
     },
     offers: {
       '@type': 'Offer',
       url: `https://kct-menswear.vercel.app/products/${id}`,
       priceCurrency: 'USD',
-      price: (product.price / 100).toFixed(2),
+      price: product.price.toFixed(2),
       availability: product.inStock 
         ? 'https://schema.org/InStock' 
         : 'https://schema.org/OutOfStock',
@@ -96,8 +96,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
       bestRating: '5',
       worstRating: '1',
     },
-    ...(product.sku && { sku: product.sku }),
-    ...(product.weight && { weight: `${product.weight} oz` }),
   }
 
   return (
@@ -107,11 +105,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <ModernProductDetail product={product} />
-      <RelatedProducts 
-        currentProductId={product.id} 
-        category={product.category} 
-      />
+      <UnifiedProductDetail product={product} />
+      
+      {/* Related Products Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 className="text-2xl font-bold mb-6">You May Also Like</h2>
+        <UnifiedProductGrid 
+          products={await getRelatedUnifiedProducts(product.id, product.category, 4)} 
+          gridLayout="standard"
+        />
+      </div>
     </>
   )
 }
