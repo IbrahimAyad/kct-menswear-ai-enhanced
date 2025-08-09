@@ -5,11 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Eye, Heart, ShoppingBag, TrendingUp, Tag, Sparkles } from 'lucide-react';
-import { Bundle } from '@/lib/products/bundleProducts';
 import { useCart } from '@/hooks/useCart';
 
 interface BundleCardProps {
-  bundle: Bundle;
+  bundle: any; // Changed to any to support multiple bundle types
   onQuickView: () => void;
   featured?: boolean;
 }
@@ -32,6 +31,7 @@ export default function BundleCard({ bundle, onQuickView, featured = false }: Bu
         suit: bundle.suit,
         shirt: bundle.shirt,
         tie: bundle.tie,
+        pocketSquare: bundle.pocketSquare,
         originalPrice: bundle.originalPrice,
         savings: bundle.savings
       }
@@ -133,7 +133,7 @@ export default function BundleCard({ bundle, onQuickView, featured = false }: Bu
         {/* Combination */}
         <div className="text-base text-gray-600 mb-3">
           <p className="line-clamp-1">
-            {bundle.suit.color} • {bundle.shirt.color} • {bundle.tie.color}
+            {bundle.suit.color} • {bundle.shirt.color} • {bundle.tie ? bundle.tie.color : bundle.pocketSquare ? bundle.pocketSquare.color + ' PS' : ''}
           </p>
         </div>
 

@@ -5,11 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, Heart, ShoppingBag, Sparkles, Tag, Clock, Package } from 'lucide-react';
-import { Bundle } from '@/lib/products/bundleProducts';
 import { useCart } from '@/hooks/useCart';
 
 interface BundleQuickViewProps {
-  bundle: Bundle;
+  bundle: any; // Changed to any to support multiple bundle types
   onClose: () => void;
 }
 
@@ -39,6 +38,7 @@ export default function BundleQuickView({ bundle, onClose }: BundleQuickViewProp
         suit: bundle.suit,
         shirt: bundle.shirt,
         tie: bundle.tie,
+        pocketSquare: bundle.pocketSquare,
         originalPrice: bundle.originalPrice,
         savings: bundle.savings
       }
@@ -121,7 +121,7 @@ export default function BundleQuickView({ bundle, onClose }: BundleQuickViewProp
                   {bundle.shirt.color} Shirt
                 </div>
                 <div className="aspect-square rounded-lg bg-gray-100 flex items-center justify-center text-sm text-gray-600">
-                  {bundle.tie.color} Tie
+                  {bundle.tie ? `${bundle.tie.color} Tie` : bundle.pocketSquare ? `${bundle.pocketSquare.color} Pocket Square` : ''}
                 </div>
               </div>
             </div>
@@ -197,25 +197,38 @@ export default function BundleQuickView({ bundle, onClose }: BundleQuickViewProp
                     <Check className="w-5 h-5 text-green-500 mt-0.5" />
                   </div>
                   
-                  {/* Tie */}
-                  <div className="flex items-start gap-3">
-                    {bundle.tie.image && (
-                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border">
-                        <Image
-                          src={bundle.tie.image}
-                          alt={`${bundle.tie.color} Tie`}
-                          width={64}
-                          height={64}
-                          className="object-cover w-full h-full"
-                        />
+                  {/* Tie or Pocket Square */}
+                  {bundle.tie ? (
+                    <div className="flex items-start gap-3">
+                      {bundle.tie.image && (
+                        <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border">
+                          <Image
+                            src={bundle.tie.image}
+                            alt={`${bundle.tie.color} Tie`}
+                            width={64}
+                            height={64}
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <span className="font-medium">{bundle.tie.color} {bundle.tie.style}</span>
+                        <p className="text-sm text-gray-600">Silk blend, handcrafted</p>
                       </div>
-                    )}
-                    <div className="flex-1">
-                      <span className="font-medium">{bundle.tie.color} {bundle.tie.style}</span>
-                      <p className="text-sm text-gray-600">Silk blend, handcrafted</p>
+                      <Check className="w-5 h-5 text-green-500 mt-0.5" />
                     </div>
-                    <Check className="w-5 h-5 text-green-500 mt-0.5" />
-                  </div>
+                  ) : bundle.pocketSquare ? (
+                    <div className="flex items-start gap-3">
+                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-white border flex items-center justify-center">
+                        <div className="w-12 h-12 bg-gradient-to-br from-gray-200 to-gray-300 rounded" />
+                      </div>
+                      <div className="flex-1">
+                        <span className="font-medium">{bundle.pocketSquare.color} {bundle.pocketSquare.pattern} Pocket Square</span>
+                        <p className="text-sm text-gray-600">Premium silk, elegant finish</p>
+                      </div>
+                      <Check className="w-5 h-5 text-green-500 mt-0.5" />
+                    </div>
+                  ) : null}
                 </div>
               </div>
 

@@ -6,7 +6,7 @@ import { EnhancedProduct } from '@/lib/supabase/types';
 /**
  * Convert a bundle to UnifiedProduct format
  */
-export function bundleToUnifiedProduct(bundle: Bundle): UnifiedProduct {
+export function bundleToUnifiedProduct(bundle: any): UnifiedProduct {
   // Determine bundle tier based on price
   let bundleTier: 'starter' | 'professional' | 'executive' | 'premium' = 'professional';
   
@@ -14,6 +14,41 @@ export function bundleToUnifiedProduct(bundle: Bundle): UnifiedProduct {
   else if (bundle.bundlePrice <= 229) bundleTier = 'professional';
   else if (bundle.bundlePrice <= 249) bundleTier = 'executive';
   else bundleTier = 'premium';
+  
+  // Build bundle components - handle both tie and pocket square bundles
+  const bundleComponents: any = {
+    suit: {
+      name: `${bundle.suit.color} ${bundle.suit.type} Suit`,
+      color: bundle.suit.color.toLowerCase(),
+      type: bundle.suit.type,
+      image: bundle.suit?.image || ''
+    },
+    shirt: {
+      name: `${bundle.shirt.color} ${bundle.shirt.fit} Shirt`,
+      color: bundle.shirt.color.toLowerCase(),
+      fit: bundle.shirt.fit,
+      image: bundle.shirt?.image || ''
+    }
+  };
+  
+  // Add tie if present
+  if (bundle.tie) {
+    bundleComponents.tie = {
+      name: `${bundle.tie.color} ${bundle.tie.style} Tie`,
+      color: bundle.tie.color.toLowerCase(),
+      style: bundle.tie.style,
+      image: bundle.tie?.image || ''
+    };
+  }
+  
+  // Add pocket square if present (casual bundles)
+  if (bundle.pocketSquare) {
+    bundleComponents.pocketSquare = {
+      name: `${bundle.pocketSquare.color} ${bundle.pocketSquare.pattern} Pocket Square`,
+      color: bundle.pocketSquare.color.toLowerCase(),
+      pattern: bundle.pocketSquare.pattern
+    };
+  }
   
   return {
     id: bundle.id,
@@ -29,30 +64,11 @@ export function bundleToUnifiedProduct(bundle: Bundle): UnifiedProduct {
     stripePriceId: bundle.stripePriceId,
     isBundle: true,
     bundleTier,
-    bundleComponents: {
-      suit: {
-        name: `${bundle.suit.color} ${bundle.suit.type} Suit`,
-        color: bundle.suit.color.toLowerCase(),
-        type: bundle.suit.type,
-        image: bundle.suit.image
-      },
-      shirt: {
-        name: `${bundle.shirt.color} ${bundle.shirt.fit} Shirt`,
-        color: bundle.shirt.color.toLowerCase(),
-        fit: bundle.shirt.fit,
-        image: bundle.shirt.image
-      },
-      tie: {
-        name: `${bundle.tie.color} ${bundle.tie.style} Tie`,
-        color: bundle.tie.color.toLowerCase(),
-        style: bundle.tie.style,
-        image: bundle.tie.image
-      }
-    },
+    bundleComponents,
     occasions: bundle.occasions,
     tags: [bundle.category, ...(bundle.trending ? ['trending'] : [])],
     trending: bundle.trending,
-    seasonal: bundle.seasonal,
+    seasonal: bundle.seasonal || bundle.season,
     aiScore: bundle.aiScore,
     inStock: true, // Bundles are always in stock
     category: bundle.category
@@ -228,6 +244,7 @@ function applyFilters(products: UnifiedProduct[], filters: UnifiedProductFilters
         ${product.bundleComponents?.suit?.color || ''}
         ${product.bundleComponents?.shirt?.color || ''}
         ${product.bundleComponents?.tie?.color || ''}
+        ${product.bundleComponents?.pocketSquare?.color || ''}
         ${product.occasions.join(' ')}
         ${product.tags.join(' ')}
       `.toLowerCase();
@@ -256,7 +273,8 @@ function applyFilters(products: UnifiedProduct[], filters: UnifiedProductFilters
         product.color,
         product.bundleComponents?.suit?.color,
         product.bundleComponents?.shirt?.color,
-        product.bundleComponents?.tie?.color
+        product.bundleComponents?.tie?.color,
+        product.bundleComponents?.pocketSquare?.color
       ].filter(Boolean).map(c => c?.toLowerCase());
       
       if (!filters.color.some(c => productColors.includes(c.toLowerCase()))) return false;
@@ -374,7 +392,8 @@ function generateFacets(products: UnifiedProduct[]): UnifiedSearchResult['facets
       product.color,
       product.bundleComponents?.suit?.color,
       product.bundleComponents?.shirt?.color,
-      product.bundleComponents?.tie?.color
+      product.bundleComponents?.tie?.color,
+      product.bundleComponents?.pocketSquare?.color
     ].filter(Boolean);
     
     productColors.forEach(color => {

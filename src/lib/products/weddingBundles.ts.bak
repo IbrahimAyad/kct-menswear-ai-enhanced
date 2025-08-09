@@ -30,7 +30,6 @@ export const weddingBundles = {
   bundles: [
     // FALL WEDDING BUNDLES
     {
-      category: 'wedding' as const,
       id: 'wedding-fall-001',
       name: 'Autumn Elegance',
       season: 'fall' as const,
@@ -48,7 +47,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZtCHc12x7sCzny7VmEWD'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-fall-002',
       name: 'Harvest Romance',
       season: 'fall' as const,
@@ -66,7 +64,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZtCHc12x7sCzny7VmEWD'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-fall-003',
       name: 'Forest Ceremony',
       season: 'fall' as const,
@@ -84,7 +81,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZtCHc12x7sCzny7VmEWD'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-fall-004',
       name: 'Burgundy Harvest',
       season: 'fall' as const,
@@ -102,7 +98,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZtCHc12x7sCzny7VmEWD'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-fall-005',
       name: 'Chocolate Elegance',
       season: 'fall' as const,
@@ -120,7 +115,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZtCHc12x7sCzny7VmEWD'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-fall-006',
       name: 'Emerald Autumn',
       season: 'fall' as const,
@@ -138,7 +132,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZtCHc12x7sCzny7VmEWD'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-fall-007',
       name: 'Forest Formal',
       season: 'fall' as const,
@@ -156,7 +149,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvaBCHc12x7sCzRV6Hy0Im'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-fall-008',
       name: 'Caramel Sunset',
       season: 'fall' as const,
@@ -176,7 +168,6 @@ export const weddingBundles = {
 
     // SPRING WEDDING BUNDLES
     {
-      category: 'wedding' as const,
       id: 'wedding-spring-001',
       name: 'Spring Romance',
       season: 'spring' as const,
@@ -194,7 +185,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZtCHc12x7sCzny7VmEWD'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-spring-002',
       name: 'Sage Garden',
       season: 'spring' as const,
@@ -212,7 +202,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZtCHc12x7sCzny7VmEWD'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-spring-003',
       name: 'Midnight Sage',
       season: 'spring' as const,
@@ -230,7 +219,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvaBCHc12x7sCzRV6Hy0Im'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-spring-004',
       name: 'Spring Meadow',
       season: 'spring' as const,
@@ -250,7 +238,6 @@ export const weddingBundles = {
 
     // SUMMER WEDDING BUNDLES
     {
-      category: 'wedding' as const,
       id: 'wedding-summer-001',
       name: 'Beach Elegance',
       season: 'summer' as const,
@@ -268,7 +255,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZUCHc12x7sCzM4sp9DY5'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-summer-002',
       name: 'Dusty Blue Dream',
       season: 'summer' as const,
@@ -286,7 +272,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZUCHc12x7sCzM4sp9DY5'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-summer-003',
       name: 'Blush Summer',
       season: 'summer' as const,
@@ -304,7 +289,6 @@ export const weddingBundles = {
       stripePriceId: 'price_1RpvZUCHc12x7sCzM4sp9DY5'
     },
     {
-      category: 'wedding' as const,
       id: 'wedding-summer-004',
       name: 'Desert Sage',
       season: 'summer' as const,
