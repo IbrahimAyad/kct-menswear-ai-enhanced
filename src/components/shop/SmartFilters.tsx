@@ -56,11 +56,11 @@ const getTypeIcon = (type: string) => {
 
 const getTypeColor = (type: string) => {
   switch (type) {
-    case 'seasonal': return 'bg-green-100 text-green-800 border-green-200'
-    case 'weather': return 'bg-blue-100 text-blue-800 border-blue-200'
-    case 'occasion': return 'bg-purple-100 text-purple-800 border-purple-200'
-    case 'trending': return 'bg-orange-100 text-orange-800 border-orange-200'
-    case 'ai-recommended': return 'bg-gold/20 text-gold-800 border-gold/30'
+    case 'seasonal': return 'bg-gold-100 text-gold-800 border-gold-300'
+    case 'weather': return 'bg-burgundy-100 text-burgundy-800 border-burgundy-300'
+    case 'occasion': return 'bg-purple-100 text-purple-800 border-purple-300'
+    case 'trending': return 'bg-rose-100 text-rose-800 border-rose-300'
+    case 'ai-recommended': return 'bg-gradient-to-r from-gold-100 to-burgundy-100 text-burgundy-800 border-burgundy-300'
     default: return 'bg-gray-100 text-gray-800 border-gray-200'
   }
 }
@@ -104,12 +104,14 @@ export function SmartFilters({
   if (suggestions.length === 0) return null
 
   return (
-    <Card className={cn("p-4 mb-6", className)}>
+    <Card className={cn("p-5 mb-6 bg-gradient-to-br from-white via-gold-50/20 to-burgundy-50/10 border-2 border-gold-200/50 shadow-lg shadow-gold-100/20", className)}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-gold" />
-          <h3 className="font-semibold text-lg">Smart Suggestions</h3>
-          <Badge variant="outline" className="text-xs">
+          <div className="p-2 bg-gradient-to-br from-burgundy-500 to-burgundy-600 rounded-lg">
+            <Sparkles className="h-4 w-4 text-white" />
+          </div>
+          <h3 className="font-serif text-lg text-burgundy-800">Smart Suggestions</h3>
+          <Badge className="bg-gold-100 text-burgundy-700 border-gold-300 text-xs font-semibold">
             Atelier AI
           </Badge>
         </div>
@@ -119,7 +121,7 @@ export function SmartFilters({
             variant="ghost"
             size="sm"
             onClick={clearSmartFilters}
-            className="text-red-600 hover:text-red-700"
+            className="text-burgundy-600 hover:text-burgundy-700 hover:bg-burgundy-50 font-medium"
           >
             Clear All
           </Button>
@@ -131,10 +133,10 @@ export function SmartFilters({
           <div
             key={`${suggestion.type}-${index}`}
             className={cn(
-              "flex items-center justify-between p-3 rounded-lg border transition-all hover:shadow-sm cursor-pointer",
+              "flex items-center justify-between p-3 rounded-xl border-2 transition-all hover:shadow-md cursor-pointer",
               isFilterActive(suggestion) 
-                ? "border-gold bg-gold/5" 
-                : "border-gray-200 hover:border-gray-300"
+                ? "border-burgundy-300 bg-gradient-to-r from-burgundy-50 to-gold-50 shadow-burgundy-100/20" 
+                : "border-gold-200/50 hover:border-burgundy-200 bg-white/80"
             )}
             onClick={() => applySuggestion(suggestion)}
           >
@@ -166,14 +168,14 @@ export function SmartFilters({
 
             <div className="flex items-center gap-2 ml-2">
               {isFilterActive(suggestion) && (
-                <Badge className="bg-gold text-black text-xs">
+                <Badge className="bg-burgundy-500 text-white text-xs font-semibold">
                   Active
                 </Badge>
               )}
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-xs px-2 py-1 h-auto"
+                className="text-xs px-3 py-1.5 h-auto text-burgundy-700 hover:bg-burgundy-50 font-medium"
               >
                 Apply
               </Button>
@@ -188,7 +190,7 @@ export function SmartFilters({
             variant="ghost"
             size="sm"
             onClick={() => setShowAll(!showAll)}
-            className="text-sm text-gray-600 hover:text-gray-800"
+            className="text-sm text-burgundy-600 hover:text-burgundy-800 hover:bg-gold-50 font-medium"
           >
             {showAll ? 'Show Less' : `Show ${suggestions.length - 3} More`}
           </Button>
@@ -227,9 +229,11 @@ export function QuickPriceFilters({
   }
 
   return (
-    <div className={cn("flex flex-wrap gap-2", className)}>
-      <div className="flex items-center gap-1 text-sm text-gray-600">
-        <DollarSign className="h-4 w-4" />
+    <div className={cn("flex flex-wrap gap-2 p-3 bg-gradient-to-r from-gold-50/50 to-burgundy-50/30 rounded-xl border border-gold-200/40", className)}>
+      <div className="flex items-center gap-2 text-sm font-medium text-burgundy-700">
+        <div className="p-1.5 bg-gold-200 rounded-lg">
+          <DollarSign className="h-3 w-3 text-burgundy-700" />
+        </div>
         <span>Quick Price:</span>
       </div>
       
@@ -240,8 +244,10 @@ export function QuickPriceFilters({
           size="sm"
           onClick={() => applyPriceRange(range.min, range.max)}
           className={cn(
-            "text-xs",
-            isRangeActive(range.min, range.max) && "bg-gold hover:bg-gold/90 text-black"
+            "text-xs font-medium transition-all",
+            isRangeActive(range.min, range.max) 
+              ? "bg-burgundy-600 hover:bg-burgundy-700 text-white border-burgundy-600" 
+              : "border-burgundy-200 hover:border-burgundy-300 hover:bg-burgundy-50 text-burgundy-700"
           )}
         >
           {range.label}

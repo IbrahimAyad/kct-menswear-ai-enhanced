@@ -208,14 +208,14 @@ function ProductsContent() {
   }
 
   return (
-    <PullToRefresh onRefresh={handleRefresh} className="min-h-screen bg-gray-50">
+    <PullToRefresh onRefresh={handleRefresh} className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Header */}
-      <div className="bg-white border-b sticky top-0 z-30">
+      <div className="bg-white border-b border-gold-200/30 sticky top-0 z-30 shadow-sm backdrop-blur-lg bg-white/95">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-serif">Shop All Products</h1>
-              <Badge variant="secondary">{totalCount} items</Badge>
+              <h1 className="text-2xl font-serif bg-gradient-to-r from-burgundy-700 to-burgundy-500 bg-clip-text text-transparent">Shop All Products</h1>
+              <Badge className="bg-gold-100 text-burgundy-700 border-gold-300">{totalCount} items</Badge>
             </div>
             
             {/* Search Bar */}
@@ -227,7 +227,7 @@ function ProductsContent() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:border-burgundy-300 transition-all duration-200 hover:border-burgundy-200"
                 />
               </div>
             </form>
@@ -239,23 +239,28 @@ function ProductsContent() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className="hidden lg:flex"
+                className="hidden lg:flex border-burgundy-200 hover:bg-burgundy-50 hover:border-burgundy-300 transition-colors"
               >
-                <Filter className="h-4 w-4 mr-2" />
-                Filters
+                <Filter className="h-4 w-4 mr-2 text-burgundy-600" />
+                <span className="text-burgundy-700">Filters</span>
                 {activeFilterCount > 0 && (
-                  <Badge variant="secondary" className="ml-2">
+                  <Badge className="ml-2 bg-burgundy-500 text-white">
                     {activeFilterCount}
                   </Badge>
                 )}
               </Button>
               
-              <div className="hidden sm:flex items-center gap-2 border border-gray-200 rounded-lg p-1">
+              <div className="hidden sm:flex items-center gap-1 border-2 border-gold-200 rounded-xl p-1 bg-gold-50/50">
                 <Button
                   variant={viewMode === 'grid' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('grid')}
-                  className="px-2"
+                  className={cn(
+                    "px-3 py-1.5 rounded-lg transition-all",
+                    viewMode === 'grid' 
+                      ? "bg-burgundy-600 hover:bg-burgundy-700 text-white" 
+                      : "hover:bg-gold-100 text-burgundy-700"
+                  )}
                 >
                   <Grid3X3 className="h-4 w-4" />
                 </Button>
@@ -263,7 +268,12 @@ function ProductsContent() {
                   variant={viewMode === 'list' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setViewMode('list')}
-                  className="px-2"
+                  className={cn(
+                    "px-3 py-1.5 rounded-lg transition-all",
+                    viewMode === 'list' 
+                      ? "bg-burgundy-600 hover:bg-burgundy-700 text-white" 
+                      : "hover:bg-gold-100 text-burgundy-700"
+                  )}
                 >
                   <List className="h-4 w-4" />
                 </Button>
@@ -275,7 +285,7 @@ function ProductsContent() {
                   const [field, direction] = e.target.value.split('-') as [ProductSortOptions['field'], ProductSortOptions['direction']]
                   setSort({ field, direction })
                 }}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent"
+                className="px-4 py-2.5 border-2 border-gold-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:border-burgundy-300 bg-white hover:border-gold-300 transition-colors text-burgundy-700 font-medium"
               >
                 <option value="created_at-desc">Newest First</option>
                 <option value="price-asc">Price: Low to High</option>
@@ -289,7 +299,7 @@ function ProductsContent() {
       </div>
 
       {/* Mobile Inline Filter Section - Visible on Mobile Only */}
-      <div className="lg:hidden bg-white border-b">
+      <div className="lg:hidden bg-gradient-to-r from-burgundy-50/50 to-gold-50/50 border-b border-gold-200/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <InlineFilterSection
             filters={filters}
@@ -307,7 +317,7 @@ function ProductsContent() {
       </div>
 
       {/* Desktop Category Pills */}
-      <div className="hidden lg:block bg-white border-b">
+      <div className="hidden lg:block bg-gradient-to-r from-burgundy-50/30 via-white to-gold-50/30 border-b border-gold-200/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <CategoryPills
             categories={menswearCategories}
@@ -355,24 +365,28 @@ function ProductsContent() {
             {isLoading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                 {[...Array(12)].map((_, i) => (
-                  <Card key={i} className="animate-pulse">
-                    <div className="aspect-[2/3] bg-gray-200" />
+                  <Card key={i} className="animate-pulse border-gold-100">
+                    <div className="aspect-[2/3] bg-gradient-to-br from-gold-100 to-burgundy-100/20" />
                     <div className="p-4 space-y-3">
-                      <div className="h-4 bg-gray-200 rounded w-3/4" />
-                      <div className="h-4 bg-gray-200 rounded w-1/2" />
-                      <div className="h-6 bg-gray-200 rounded w-1/3" />
+                      <div className="h-4 bg-gold-100 rounded w-3/4" />
+                      <div className="h-4 bg-burgundy-100/50 rounded w-1/2" />
+                      <div className="h-6 bg-burgundy-100 rounded w-1/3" />
                     </div>
                   </Card>
                 ))}
               </div>
             ) : products.length === 0 ? (
-              <Card className="p-12 text-center">
-                <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No products found</h3>
-                <p className="text-gray-600 mb-4">
+              <Card className="p-12 text-center bg-gradient-to-br from-gold-50 to-burgundy-50/20 border-2 border-gold-200">
+                <Search className="h-12 w-12 text-burgundy-400 mx-auto mb-4" />
+                <h3 className="text-xl font-serif text-burgundy-700 mb-2">No products found</h3>
+                <p className="text-burgundy-600 mb-6">
                   Try adjusting your filters or search terms
                 </p>
-                <Button variant="outline" onClick={clearFilters}>
+                <Button 
+                  variant="outline" 
+                  onClick={clearFilters}
+                  className="border-burgundy-300 hover:bg-burgundy-50 hover:border-burgundy-400 text-burgundy-700 font-semibold"
+                >
                   Clear all filters
                 </Button>
               </Card>
@@ -394,25 +408,30 @@ function ProductsContent() {
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="mt-12 flex justify-center gap-2">
+                  <div className="mt-12 flex justify-center gap-3">
                     <Button
                       variant="outline"
                       onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1 || isLoading}
+                      className="border-burgundy-200 hover:bg-burgundy-50 hover:border-burgundy-300 text-burgundy-700 font-medium transition-all"
                     >
                       Previous
                     </Button>
                     
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-600">
-                        Page {currentPage} of {totalPages} ({totalCount} products)
+                    <div className="flex items-center gap-2 px-4 py-2 bg-gold-50 border-2 border-gold-200 rounded-xl">
+                      <span className="text-sm font-medium text-burgundy-700">
+                        Page {currentPage} of {totalPages}
                       </span>
+                      <Badge className="bg-burgundy-500 text-white text-xs">
+                        {totalCount} products
+                      </Badge>
                     </div>
 
                     <Button
                       variant="outline"
                       onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                       disabled={currentPage === totalPages || isLoading}
+                      className="border-burgundy-200 hover:bg-burgundy-50 hover:border-burgundy-300 text-burgundy-700 font-medium transition-all"
                     >
                       Next
                     </Button>
@@ -468,10 +487,10 @@ function ProductsContent() {
 export default function ProductsPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-burgundy-50/20 to-gold-50/20">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-gold mx-auto mb-4" />
-          <p className="text-gray-600">Loading products...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-burgundy-600 mx-auto mb-4" />
+          <p className="text-burgundy-700 font-medium">Loading products...</p>
         </div>
       </div>
     }>
