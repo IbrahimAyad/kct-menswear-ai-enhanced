@@ -103,9 +103,9 @@ export function Wishlist() {
       
       // Send email notification (in real app)
       // console.log('Sharing wishlist:', {
-        items: Array.from(selectedItems),
-        ...shareForm
-      })
+      //   items: Array.from(selectedItems),
+      //   ...shareForm
+      // })
       
       // Reset form
       setIsSharing(false)

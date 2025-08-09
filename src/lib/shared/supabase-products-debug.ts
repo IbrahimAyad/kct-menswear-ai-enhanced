@@ -35,11 +35,11 @@ export async function testDirectConnection() {
       .single();
 
     // console.log('Response:', {
-      data,
-      error,
-      status,
-      statusText
-    });
+    //   data,
+    //   error,
+    //   status,
+    //   statusText
+    // });
 
     if (error) {
       console.error('Error details:', {

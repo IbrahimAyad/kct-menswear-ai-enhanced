@@ -69,11 +69,11 @@ export async function POST(request: NextRequest) {
       try {
         fashionAnalysis = await FashionAnalyzer.analyzeImage(originalResult.url);
         // console.log('Fashion analysis completed:', {
-          category: fashionAnalysis.category,
-          style: fashionAnalysis.style,
-          formality: fashionAnalysis.formality,
-          styleScore: fashionAnalysis.styleScore
-        });
+        //   category: fashionAnalysis.category,
+        //   style: fashionAnalysis.style,
+        //   formality: fashionAnalysis.formality,
+        //   styleScore: fashionAnalysis.styleScore
+        // });
       } catch (error) {
         console.error('Fashion analysis failed:', error);
       }
