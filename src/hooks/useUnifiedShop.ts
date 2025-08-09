@@ -103,7 +103,8 @@ export function useUnifiedShop(options: UseUnifiedShopOptions = {}): UseUnifiedS
         params.set('preset', activePreset);
       }
       
-      const response = await fetch(`/api/products/unified?${params.toString()}`);
+      // Temporarily use simple endpoint to debug
+      const response = await fetch(`/api/products/unified-simple?${params.toString()}`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch products');

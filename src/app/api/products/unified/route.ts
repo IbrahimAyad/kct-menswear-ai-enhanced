@@ -35,42 +35,50 @@ export async function GET(request: NextRequest) {
     // Fetch individual products from Supabase if needed
     let individualProducts = [];
     if (filters.includeIndividual !== false) {
-      const supabase = await createClient();
-      
-      // Build Supabase query based on filters
-      let query = supabase
-        .from('products')
-        .select('*');
-      
-      // Apply basic filters to reduce data transfer
-      if (filters.category?.length) {
-        query = query.in('product_type', filters.category);
+      try {
+        const supabase = await createClient();
+        
+        if (supabase) {
+          // Build Supabase query based on filters
+          let query = supabase
+            .from('products')
+            .select('*');
+          
+          // Apply basic filters to reduce data transfer
+          if (filters.category?.length) {
+            query = query.in('product_type', filters.category);
+          }
+          
+          if (filters.color?.length) {
+            // Handle color filtering for individual products
+            const colorConditions = filters.color.map(color => 
+              `title.ilike.%${color}%,tags.cs.{${color}}`
+            ).join(',');
+            query = query.or(colorConditions);
+          }
+          
+          // Price filters
+          if (filters.minPrice) {
+            query = query.gte('price', filters.minPrice);
+          }
+          if (filters.maxPrice) {
+            query = query.lte('price', filters.maxPrice);
+          }
+          
+          // Execute query
+          const { data, error } = await query;
+          
+          if (error) {
+            console.error('Supabase query error:', error);
+            // Continue with empty individual products
+          } else {
+            individualProducts = data || [];
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching individual products:', error);
+        // Continue with just bundles
       }
-      
-      if (filters.color?.length) {
-        // Handle color filtering for individual products
-        const colorConditions = filters.color.map(color => 
-          `title.ilike.%${color}%,tags.cs.{${color}}`
-        ).join(',');
-        query = query.or(colorConditions);
-      }
-      
-      // Price filters
-      if (filters.minPrice) {
-        query = query.gte('price', filters.minPrice);
-      }
-      if (filters.maxPrice) {
-        query = query.lte('price', filters.maxPrice);
-      }
-      
-      // Execute query
-      const { data, error } = await query;
-      
-      if (error) {
-        throw new Error(`Supabase query failed: ${error.message}`);
-      }
-      
-      individualProducts = data || [];
     }
     
     // Perform unified search
@@ -78,7 +86,7 @@ export async function GET(request: NextRequest) {
     
     // Add preset metadata to results if applicable
     if (presetData) {
-      results.presetMetadata = {
+      (results as any).presetMetadata = {
         name: presetData.name,
         description: presetData.description,
         icon: presetData.icon,
