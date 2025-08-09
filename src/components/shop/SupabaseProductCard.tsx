@@ -1,277 +1,226 @@
-"use client"
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { EnhancedProduct } from '@/lib/supabase/types'
-import { WishlistButton } from '@/components/products/WishlistButton'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { ProductImage } from '@/components/ui/ProductImage'
-import { QuickViewModal } from '@/components/products/QuickViewModal'
-import { ShoppingBag, Eye, Star, Zap } from 'lucide-react'
-import { formatPrice } from '@/lib/utils/format'
-import { cn } from '@/lib/utils/cn'
-import { useCart } from '@/lib/hooks/useCart'
-import { toast } from 'sonner'
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Heart, ShoppingBag, Eye, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils/cn';
+import { formatPrice } from '@/lib/utils/format';
+import { Button } from '@/components/ui/button';
+import { WishlistButton } from '@/components/products/WishlistButton';
+import { useCart } from '@/lib/hooks/useCart';
+import { EnhancedProduct } from '@/lib/supabase/types';
 
 interface SupabaseProductCardProps {
-  product: EnhancedProduct
-  viewMode?: 'grid' | 'list'
-  variant?: 'default' | 'compact' | 'featured'
-  className?: string
+  product: EnhancedProduct;
+  className?: string;
+  showQuickAdd?: boolean;
+  showWishlist?: boolean;
+  variant?: 'default' | 'compact' | 'featured';
+  onQuickView?: (product: EnhancedProduct) => void;
 }
 
-export function SupabaseProductCard({ 
-  product, 
-  viewMode = 'grid',
+export function SupabaseProductCard({
+  product,
+  className,
+  showQuickAdd = true,
+  showWishlist = true,
   variant = 'default',
-  className 
+  onQuickView,
 }: SupabaseProductCardProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isHovered, setIsHovered] = useState(false)
-  const [showQuickView, setShowQuickView] = useState(false)
-  const { addToCart } = useCart()
+  const [isHovered, setIsHovered] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const { addToCart } = useCart();
 
-  const handleQuickAdd = () => {
-    try {
-      // For Supabase products, we'll add without variant for now
-      // This can be enhanced later with size selection modal
-      addToCart(product, 'default')
-      toast.success('Added to cart', {
-        description: `${product.name} has been added to your cart`,
-        action: {
-          label: 'View Cart',
-          onClick: () => window.location.href = '/cart'
-        }
-      })
-    } catch (error) {
-      toast.error('Failed to add to cart')
+  const handleQuickAdd = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // For quick add, use the first available variant or default size
+    const defaultVariant = product.variants?.[0];
+    if (defaultVariant) {
+      await addToCart(product, defaultVariant.size || 'M', 1);
     }
-  }
+  };
 
-  const primaryImage = product.images[0] || product.primaryImage
-  const hoverImage = product.images[1] || primaryImage
-  
-  const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price
-  const discountPercent = hasDiscount 
-    ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
-    : 0
+  const handleQuickView = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onQuickView?.(product);
+  };
 
-  // Check inventory levels for urgency indicators
-  const totalInventory = product.totalInventory || 0
-  const lowStock = totalInventory > 0 && totalInventory < 10
-  const veryLowStock = totalInventory > 0 && totalInventory < 5
+  const isCompact = variant === 'compact';
+  const isFeatured = variant === 'featured';
+  const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
+  const discountPercentage = hasDiscount 
+    ? Math.round(((product.compareAtPrice! - product.price) / product.compareAtPrice!) * 100)
+    : 0;
 
-  if (viewMode === 'list') {
-    return (
-      <>
-        <div className={cn(
-          "group bg-white rounded-lg border border-gray-200 hover:border-gold/30 transition-all duration-300 hover:shadow-lg",
-          className
-        )}>
-        <div className="flex gap-4 p-4">
-          {/* Image */}
-          <Link href={`/products/${product.id}`} className="flex-shrink-0">
-            <div className="relative w-32 h-40 bg-gray-100 rounded-md overflow-hidden">
-              <ProductImage
-                src={primaryImage}
-                alt={product.name}
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                sizes="128px"
-                fill={false}
-                width={128}
-                height={160}
-              />
-              {!product.inStock && (
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                  <span className="text-white text-xs font-medium">Out of Stock</span>
-                </div>
-              )}
-            </div>
-          </Link>
+  const primaryImage = product.primaryImage || product.images[0];
+  const secondaryImage = product.images[1];
 
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                {product.brand && (
-                  <p className="text-sm text-gray-600 mb-1">{product.brand}</p>
-                )}
-                <Link href={`/products/${product.id}`}>
-                  <h3 className="font-medium text-gray-900 group-hover:text-gold transition-colors line-clamp-2">
-                    {product.name}
-                  </h3>
-                </Link>
-                {product.description && (
-                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">{product.description}</p>
-                )}
-                
-                {/* Tags */}
-                {product.tags && product.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {(product.tags || []).slice(0, 3).map(tag => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center gap-2 ml-4">
-                <WishlistButton productId={product.id} variant="icon" />
-                {product.inStock && (
-                  <Button
-                    size="sm"
-                    onClick={handleQuickAdd}
-                    className="bg-gold hover:bg-gold/90 text-black"
-                  >
-                    <ShoppingBag className="h-4 w-4 mr-1" />
-                    Add
-                  </Button>
-                )}
-              </div>
-            </div>
-
-            {/* Price */}
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-lg font-bold text-gray-900">
-                {formatPrice(product.price)}
-              </span>
-              {hasDiscount && (
-                <>
-                  <span className="text-sm text-gray-500 line-through">
-                    {formatPrice(product.compareAtPrice!)}
-                  </span>
-                  <Badge className="bg-red-100 text-red-800 text-xs">
-                    {discountPercent}% OFF
-                  </Badge>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-        </div>
-        
-        {/* Quick View Modal for List Mode */}
-        <QuickViewModal
-          product={product}
-          isOpen={showQuickView}
-          onClose={() => setShowQuickView(false)}
-        />
-      </>
-    )
-  }
-
-  // Grid view
   return (
-    <div 
+    <div
       className={cn(
-        "group relative bg-white rounded-lg border border-gray-200 hover:border-gold/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden",
-        variant === 'compact' && "max-w-xs",
-        variant === 'featured' && "ring-2 ring-gold/20",
+        "group relative bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100",
+        "hover:shadow-xl hover:border-gold/20 transition-all duration-500 ease-out",
+        "transform hover:scale-[1.02] hover:-translate-y-1",
+        isCompact ? "aspect-[3/4]" : "aspect-[3/5]",
+        isFeatured && "ring-2 ring-gold/30 shadow-lg",
         className
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Badges */}
-      <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
-        {!product.inStock && (
-          <Badge className="bg-gray-800 text-white">Out of Stock</Badge>
-        )}
-        {product.isFeatured && (
-          <Badge className="bg-gold text-black">Featured</Badge>
-        )}
-        {hasDiscount && (
-          <Badge className="bg-red-500 text-white">{discountPercent}% OFF</Badge>
-        )}
-        {veryLowStock && (
-          <Badge className="bg-orange-500 text-white">
-            <Zap className="h-3 w-3 mr-1" />
-            Only {totalInventory} left!
-          </Badge>
-        )}
-      </div>
-
-      {/* Wishlist Button */}
-      <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <WishlistButton 
-          productId={product.id} 
-          variant="icon" 
-          className="bg-white/90 backdrop-blur-sm shadow-md hover:bg-white" 
-        />
-      </div>
-
-      {/* Image */}
-      <Link href={`/products/${product.id}`}>
-        <div className={cn(
-          "relative bg-gray-100 overflow-hidden",
-          variant === 'compact' ? "aspect-[3/4]" : "aspect-[2/3]"
-        )}>
-          <ProductImage
-            src={isHovered && hoverImage !== primaryImage ? hoverImage : primaryImage}
-            alt={product.name}
-            className="object-cover transition-all duration-500 group-hover:scale-105"
-            sizes={variant === 'compact' ? '300px' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
-          />
-          
-          {/* Overlay on hover */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-          
-          {/* Quick view button */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <Button
-              variant="secondary"
-              className="bg-white/90 backdrop-blur-sm text-gray-900 hover:bg-white"
-              onClick={(e) => {
-                e.preventDefault()
-                setShowQuickView(true)
-              }}
-            >
-              <Eye className="h-4 w-4 mr-2" />
-              Quick View
-            </Button>
-          </div>
-          
-          {!product.inStock && (
-            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-              <span className="text-white font-medium">Out of Stock</span>
+      {/* Product Link Wrapper */}
+      <Link
+        href={`/products/${product.id}`}
+        className="block h-full"
+        aria-label={`View ${product.name}`}
+      >
+        {/* Image Container */}
+        <div className="relative overflow-hidden aspect-[3/4] bg-gray-50">
+          {/* Primary Image */}
+          {primaryImage && !imageError ? (
+            <Image
+              src={primaryImage}
+              alt={product.name}
+              fill
+              className={cn(
+                "object-cover transition-all duration-700 ease-out",
+                imageLoaded ? "opacity-100" : "opacity-0",
+                isHovered && secondaryImage ? "opacity-0" : "opacity-100"
+              )}
+              onLoad={() => setImageLoaded(true)}
+              onError={() => setImageError(true)}
+              priority={isFeatured}
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+              <div className="text-gray-400 text-center">
+                <ShoppingBag className="h-8 w-8 mx-auto mb-2" />
+                <p className="text-sm">No Image</p>
+              </div>
             </div>
           )}
-        </div>
-      </Link>
 
-      {/* Content */}
-      <div className="p-5">
-        {product.brand && (
-          <p className="text-sm text-gray-600 mb-1">{product.brand}</p>
-        )}
-        
-        <Link href={`/products/${product.id}`}>
+          {/* Secondary Image (Hover Effect) */}
+          {secondaryImage && !imageError && (
+            <Image
+              src={secondaryImage}
+              alt={`${product.name} - alternate view`}
+              fill
+              className={cn(
+                "object-cover transition-all duration-700 ease-out",
+                isHovered ? "opacity-100" : "opacity-0"
+              )}
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+            />
+          )}
+
+          {/* Badges */}
+          <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
+            {!product.inStock && (
+              <div className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                Out of Stock
+              </div>
+            )}
+            {hasDiscount && (
+              <div className="bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded">
+                -{discountPercentage}%
+              </div>
+            )}
+            {product.isFeatured && (
+              <div className="bg-gold text-black text-xs font-semibold px-2 py-1 rounded flex items-center gap-1">
+                <Sparkles className="h-3 w-3" />
+                Featured
+              </div>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className={cn(
+            "absolute top-3 right-3 flex flex-col gap-2 z-10",
+            "transform transition-all duration-300 ease-out",
+            isHovered ? "translate-x-0 opacity-100" : "translate-x-2 opacity-0"
+          )}>
+            {showWishlist && (
+              <WishlistButton
+                productId={product.id}
+                variant="icon"
+                className="bg-white/90 backdrop-blur-sm hover:bg-white shadow-sm"
+              />
+            )}
+            {onQuickView && (
+              <button
+                onClick={handleQuickView}
+                className="p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white shadow-sm transition-all duration-300 hover:scale-110 group/btn"
+                aria-label="Quick view"
+              >
+                <Eye className="h-4 w-4 text-gray-700 group-hover/btn:text-gold transition-colors" />
+              </button>
+            )}
+          </div>
+
+          {/* Quick Add Overlay */}
+          {showQuickAdd && product.inStock && (
+            <div className={cn(
+              "absolute inset-x-3 bottom-3 z-10",
+              "transform transition-all duration-300 ease-out",
+              isHovered ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
+            )}>
+              <Button
+                onClick={handleQuickAdd}
+                className="w-full bg-black/90 hover:bg-black text-white backdrop-blur-sm shadow-lg"
+                size="sm"
+              >
+                <ShoppingBag className="h-4 w-4 mr-2" />
+                Quick Add
+              </Button>
+            </div>
+          )}
+
+          {/* Loading Shimmer */}
+          {!imageLoaded && !imageError && (
+            <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-[length:200%_100%] animate-shimmer" />
+          )}
+        </div>
+
+        {/* Product Info */}
+        <div className={cn(
+          "p-4 space-y-2",
+          isCompact ? "p-3 space-y-1" : "p-4 space-y-2"
+        )}>
+          {/* Category & Brand */}
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <span className="uppercase tracking-wide">{product.category}</span>
+            {product.brand && (
+              <span className="font-medium">{product.brand}</span>
+            )}
+          </div>
+
+          {/* Product Name */}
           <h3 className={cn(
-            "font-medium text-gray-900 group-hover:text-gold transition-colors line-clamp-2",
-            variant === 'compact' ? "text-sm" : "text-lg"
+            "font-medium text-gray-900 line-clamp-2 transition-colors group-hover:text-gold",
+            isCompact ? "text-sm" : "text-base"
           )}>
             {product.name}
           </h3>
-        </Link>
 
-        {/* Rating placeholder - can be enhanced later */}
-        <div className="flex items-center gap-1 mt-1">
-          {[...Array(5)].map((_, i) => (
-            <Star key={i} className="h-3 w-3 text-gold fill-current" />
-          ))}
-          <span className="text-xs text-gray-500 ml-1">(24)</span>
-        </div>
+          {/* Product Type */}
+          {product.productType && (
+            <p className="text-xs text-gray-500 capitalize">
+              {product.productType}
+            </p>
+          )}
 
-        {/* Price */}
-        <div className="flex items-center justify-between mt-3">
+          {/* Price */}
           <div className="flex items-center gap-2">
             <span className={cn(
-              "font-bold text-gray-900",
-              variant === 'compact' ? "text-base" : "text-xl"
+              "font-semibold text-gray-900",
+              isCompact ? "text-sm" : "text-base"
             )}>
               {formatPrice(product.price)}
             </span>
@@ -281,47 +230,48 @@ export function SupabaseProductCard({
               </span>
             )}
           </div>
-        </div>
 
-        {/* Available sizes preview */}
-        {product.variants && product.variants.length > 0 && (
-          <div className="flex items-center gap-1 mt-2">
-            <span className="text-xs text-gray-600">Sizes:</span>
-            {(product.variants || []).slice(0, 4).map((variant, idx) => (
-              <span key={idx} className="text-xs text-gray-600">
-                {variant.option1}{idx < Math.min(3, (product.variants || []).length - 1) ? ',' : ''}
+          {/* Color Variants Preview */}
+          {product.colorFamily && (
+            <div className="flex items-center gap-1">
+              <div 
+                className="w-4 h-4 rounded-full border-2 border-white shadow-sm ring-1 ring-gray-200"
+                style={{ backgroundColor: product.colorFamily.toLowerCase() }}
+                title={product.colorFamily}
+              />
+              <span className="text-xs text-gray-500">
+                {product.colorFamily}
               </span>
-            ))}
-            {(product.variants || []).length > 4 && <span className="text-xs text-gray-600">+more</span>}
-          </div>
-        )}
+            </div>
+          )}
 
-        {/* Quick add button */}
-        {product.inStock && (
-          <Button
-            onClick={handleQuickAdd}
-            className="w-full mt-3 bg-gold hover:bg-gold/90 text-black font-medium transition-all duration-200 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0"
-          >
-            <ShoppingBag className="h-4 w-4 mr-2" />
-            Quick Add
-          </Button>
-        )}
+          {/* Tags */}
+          {product.occasionTags.length > 0 && !isCompact && (
+            <div className="flex flex-wrap gap-1">
+              {product.occasionTags.slice(0, 2).map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
+                >
+                  {tag}
+                </span>
+              ))}
+              {product.occasionTags.length > 2 && (
+                <span className="text-xs text-gray-400">
+                  +{product.occasionTags.length - 2} more
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </Link>
 
-        {/* Low stock indicator */}
-        {lowStock && !veryLowStock && (
-          <p className="text-xs text-orange-600 mt-2 flex items-center gap-1">
-            <Zap className="h-3 w-3" />
-            Low stock - only {totalInventory} left
-          </p>
-        )}
-      </div>
-
-      {/* Quick View Modal */}
-      <QuickViewModal
-        product={product}
-        isOpen={showQuickView}
-        onClose={() => setShowQuickView(false)}
-      />
+      {/* Gold accent border on hover */}
+      <div className={cn(
+        "absolute inset-0 border-2 border-gold rounded-lg pointer-events-none",
+        "transition-opacity duration-300",
+        isHovered ? "opacity-100" : "opacity-0"
+      )} />
     </div>
-  )
+  );
 }

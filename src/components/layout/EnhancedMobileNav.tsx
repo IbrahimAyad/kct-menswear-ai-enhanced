@@ -48,10 +48,10 @@ const searchSuggestions = {
     'Burgundy accessories'
   ],
   occasions: [
-    { label: 'Wedding Guest', icon: Users, href: '/occasions/wedding' },
-    { label: 'Prom Night', icon: Star, href: '/occasions/prom' },
-    { label: 'Business Meeting', icon: Award, href: '/occasions/business' },
-    { label: 'Black Tie Event', icon: Gift, href: '/occasions/black-tie' }
+    { label: 'Wedding Guest', icon: Users, href: '/products?preset=wedding-guest' },
+    { label: 'Prom Night', icon: Star, href: '/products?preset=prom-special' },
+    { label: 'Business Meeting', icon: Award, href: '/products?preset=business-professional' },
+    { label: 'Black Tie Event', icon: Gift, href: '/products?preset=black-tie' }
   ],
   popular: [
     { name: 'Classic Navy Suit', price: '$495', image: '/api/placeholder/80/80' },
@@ -73,27 +73,27 @@ const primaryNavigation = [
       { 
         id: 'wedding', 
         label: 'Wedding', 
-        href: '/occasions/wedding',
+        href: '/products?preset=wedding-guest',
         badge: { text: 'POPULAR', color: 'bg-emerald-500' },
         description: 'Guest & groomsmen attire'
       },
       { 
         id: 'prom', 
         label: 'Prom 2025', 
-        href: '/occasions/prom',
+        href: '/products?preset=prom-special',
         badge: { text: 'HOT', color: 'bg-pink-500' },
         description: 'Stand out at your prom'
       },
       { 
         id: 'business', 
         label: 'Business', 
-        href: '/occasions/business',
+        href: '/products?preset=business-professional',
         description: 'Professional & polished'
       },
       { 
         id: 'black-tie', 
         label: 'Black Tie', 
-        href: '/occasions/black-tie',
+        href: '/products?preset=black-tie',
         badge: { text: 'LUXURY', color: 'bg-gold-500' },
         description: 'Formal evening wear'
       }
@@ -106,14 +106,20 @@ const primaryNavigation = [
     description: 'Explore our complete collection',
     children: [
       { 
+        id: 'complete-looks', 
+        label: 'Complete Looks', 
+        href: '/products?type=bundle',
+        badge: { text: '$199', color: 'bg-green-500' }
+      },
+      { 
         id: 'suits', 
         label: 'Suits & Tuxedos', 
-        href: '/products/suits',
+        href: '/products?category=suits',
         badge: { text: 'NEW', color: 'bg-blue-500' }
       },
-      { id: 'dress-shirts', label: 'Dress Shirts', href: '/collections/dress-shirts' },
-      { id: 'ties', label: 'Ties & Bowties', href: '/collections/ties' },
-      { id: 'accessories', label: 'Accessories', href: '/collections/accessories' }
+      { id: 'dress-shirts', label: 'Dress Shirts', href: '/products?category=shirts' },
+      { id: 'ties', label: 'Ties & Bowties', href: '/products?category=ties,bowties' },
+      { id: 'accessories', label: 'Accessories', href: '/products?category=accessories' }
     ]
   },
   {

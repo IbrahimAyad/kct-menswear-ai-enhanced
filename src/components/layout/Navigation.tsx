@@ -14,15 +14,18 @@ import UserMenu from "./UserMenu";
 import MobileNavigation from "./MobileNavigation";
 import EnhancedMobileNav from "./EnhancedMobileNav";
 import { useStoreInfo } from "@/contexts/SettingsContext";
+import { navigationConfig } from "@/lib/config/navigation-presets";
 
+// Updated nav items with preset URLs
 const navItems = [
-  { href: "/products", label: "Shop" },
-  { href: "/products/suits", label: "Suits" },
-  { href: "/collections/dress-shirts", label: "Dress Shirts", highlight: true },
-  { href: "/collections/ties", label: "Ties & Bowties", highlight: true },
-  { href: "/style-quiz", label: "Stylin' Profilin'" },
-  { href: "/occasions", label: "Occasions" },
-  { href: "/custom-suits", label: "Custom" },
+  { href: "/products", label: "Shop All" },
+  { href: "/products?type=bundle", label: "Complete Looks", highlight: true },
+  { href: "/products?category=suits", label: "Suits" },
+  { href: "/products?category=shirts", label: "Dress Shirts" },
+  { href: "/products?category=ties,bowties", label: "Ties & Bowties" },
+  { href: "/products?preset=black-tie", label: "Black Tie" },
+  { href: "/products?preset=wedding-guest", label: "Wedding" },
+  { href: "/style-quiz", label: "Style Quiz" },
   { href: "/cart", label: "Cart", mobileOnly: true },
 ];
 
