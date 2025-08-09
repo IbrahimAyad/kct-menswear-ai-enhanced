@@ -10,6 +10,7 @@ import { VisualSearch } from "@/components/search/VisualSearch";
 import { TrendingBundles } from "@/components/home/TrendingBundles";
 import { NewArrivals } from "@/components/home/NewArrivals";
 import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
+import TrendingEnsembles from "@/components/home/TrendingEnsembles";
 import { useState, useEffect } from "react";
 import { trackPromoView, trackViewItemList } from "@/lib/analytics/google-analytics";
 import { useScrollTracking } from "@/hooks/useScrollTracking";
@@ -83,6 +84,9 @@ export default function Home() {
 
       {/* Build Your Look Showcase - NEW SECTION */}
       <BuildYourLookShowcase />
+
+      {/* Atelier AI - Trending Now Section */}
+      <TrendingEnsembles />
 
       {/* Feature Cards */}
       <section className="py-24 bg-white">
