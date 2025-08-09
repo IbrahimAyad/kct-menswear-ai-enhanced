@@ -11,6 +11,7 @@ import { TrendingBundles } from "@/components/home/TrendingBundles";
 import { NewArrivals } from "@/components/home/NewArrivals";
 import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
 import TrendingEnsembles from "@/components/home/TrendingEnsembles";
+import StyleSwipeHero from "@/components/home/StyleSwipeHero";
 import { useState, useEffect } from "react";
 import { trackPromoView, trackViewItemList } from "@/lib/analytics/google-analytics";
 import { useScrollTracking } from "@/hooks/useScrollTracking";
@@ -171,61 +172,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Style Finder CTA Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container-main">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="inline-flex items-center gap-2 text-gold mb-6">
-                  <Sparkles className="h-5 w-5" />
-                  <span className="text-sm font-semibold tracking-widest uppercase">AI-Powered Styling</span>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-serif mb-6 leading-tight">
-                  Discover Your
-                  <span className="text-gold block">Signature Style</span>
-                </h2>
-                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                  Take our interactive style quiz and let our AI-powered system curate the perfect wardrobe 
-                  for your unique taste and lifestyle. Swipe through styles, get personalized recommendations, 
-                  and build complete outfits with confidence.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/style-quiz">
-                    <Button size="lg" className="bg-burgundy hover:bg-burgundy-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                      Start Stylin' Profilin'
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </Link>
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    onClick={() => setShowVisualSearch(true)}
-                    data-search-trigger
-                    className="border-gold text-gold hover:bg-gold hover:text-black px-8 py-4 text-lg font-semibold transition-all duration-300"
-                  >
-                    <Camera className="mr-2 h-5 w-5" />
-                    Visual Search
-                  </Button>
-                </div>
-              </div>
-              <div className="relative">
-                <div className="aspect-[4/5] rounded-lg overflow-hidden shadow-2xl">
-                  <img 
-                    src="https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/9b127676-6911-450b-0bbb-b5eb670de800/public" 
-                    alt="KCT Menswear Formal Suits Collection"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-lg shadow-xl max-w-xs">
-                  <p className="text-2xl font-bold mb-2">95% Match</p>
-                  <p className="text-gray-600">Find your perfect style with AI recommendations</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Style Swipe Hero Section - Interactive Style Finder */}
+      <StyleSwipeHero />
 
       {/* New Arrivals Section */}
       <NewArrivals />
