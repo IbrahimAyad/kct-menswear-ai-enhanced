@@ -4,7 +4,6 @@ import Script from 'next/script'
 import { getUnifiedProduct, getRelatedUnifiedProducts } from '@/lib/services/unifiedProductDetail'
 import { EnhancedUnifiedDetail } from './EnhancedUnifiedDetail'
 import UnifiedProductGrid from '@/components/products/UnifiedProductGrid'
-import { formatPrice } from '@/lib/utils/format'
 
 interface ProductPageProps {
   params: Promise<{

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { WishlistButton } from '@/components/products/WishlistButton'
 import SizeGuideModal from '@/components/products/SizeGuideModal'
-import { useCart } from '@/lib/hooks/useCart'
+import { useCart } from '@/hooks/useCart'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils/cn'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -36,12 +36,15 @@ interface EnhancedUnifiedDetailProps {
   product: UnifiedProduct
 }
 
-// Standard sizes for suits
+// Standard sizes for suits and blazers
 const SUIT_SIZES = {
   SHORT: ['34S', '36S', '38S', '40S', '42S', '44S', '46S', '48S', '50S'],
   REGULAR: ['34R', '36R', '38R', '40R', '42R', '44R', '46R', '48R', '50R', '52R', '54R'],
   LONG: ['38L', '40L', '42L', '44L', '46L', '48L', '50L', '52L', '54L']
 };
+
+// Blazer specific sizes
+const BLAZER_SIZES = ['36R', '38R', '40R', '42R', '44R', '46R', '48R', '50R', '52R', '54R'];
 
 export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
   const [selectedImage, setSelectedImage] = useState(0)
@@ -50,21 +53,26 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
   const [quantity, setQuantity] = useState(1)
   const [showSizeGuide, setShowSizeGuide] = useState(false)
   const [isFavorited, setIsFavorited] = useState(false)
-  const { addToCart } = useCart()
+  const { addItem } = useCart()
 
   // Get all images
   const allImages = product.images?.length > 0 
     ? product.images 
     : [product.imageUrl || '/placeholder.jpg'];
 
-  // Determine if this is a suit/formal wear
+  // Determine product type
   const isSuit = product.category?.toLowerCase().includes('suit') || 
-                 product.isBundle ||
                  product.name?.toLowerCase().includes('suit');
+  
+  const isBlazer = product.category?.toLowerCase().includes('blazer') || 
+                   product.name?.toLowerCase().includes('blazer');
 
   // Get available sizes based on product type
   const getAvailableSizes = () => {
-    if (isSuit) {
+    if (isBlazer && !product.isBundle) {
+      return BLAZER_SIZES;
+    }
+    if (isSuit || product.isBundle) {
       return SUIT_SIZES;
     }
     return product.size || ['S', 'M', 'L', 'XL', 'XXL'];
@@ -81,21 +89,22 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
     try {
       // For bundles, add all components
       if (product.isBundle && product.bundleComponents) {
-        const bundleItems = product.bundleComponents.map(component => ({
-          id: `${product.id}-${component.type}`,
-          productId: product.id,
-          name: `${component.name} (${product.name})`,
-          price: product.price / product.bundleComponents.length,
-          image: component.image || product.imageUrl,
-          size: selectedSize || 'M',
-          quantity: quantity,
-          variantId: `${product.id}-${component.type}-${selectedSize || 'M'}`,
-          bundleId: product.id,
-          bundleName: product.name
-        }));
-
-        for (const item of bundleItems) {
-          await addToCart(item as any);
+        for (const component of product.bundleComponents) {
+          addItem({
+            id: `${product.id}-${component.type}`,
+            name: `${component.name} (${product.name})`,
+            price: product.price / product.bundleComponents.length,
+            image: component.image || product.imageUrl || '/placeholder.jpg',
+            quantity: quantity,
+            selectedSize: selectedSize || 'M',
+            stripePriceId: '',
+            category: product.category,
+            bundleId: product.id,
+            metadata: {
+              bundleName: product.name,
+              componentType: component.type
+            }
+          });
         }
         toast.success(
           <div className="flex items-center gap-2">
@@ -109,17 +118,19 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
           ? product.price + 20 // Add $20 for vest
           : product.price;
 
-        await addToCart({
+        addItem({
           id: product.id,
-          productId: product.id,
           name: product.name,
           price: price,
-          image: product.imageUrl,
-          size: selectedSize,
+          image: product.imageUrl || '/placeholder.jpg',
           quantity: quantity,
-          style: isSuit ? selectedStyle : undefined,
-          variantId: `${product.id}-${selectedSize}-${selectedStyle}`
-        } as any);
+          selectedSize: selectedSize,
+          stripePriceId: '',
+          category: product.category,
+          metadata: {
+            style: isSuit ? selectedStyle : undefined
+          }
+        });
         
         toast.success(`${product.name} added to cart!`)
       }
@@ -399,7 +410,25 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
                 </div>
               </div>
               
-              {isSuit ? (
+              {isBlazer && !product.isBundle ? (
+                // Blazer sizes - single row
+                <div className="grid grid-cols-5 gap-2">
+                  {(availableSizes as string[]).map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={cn(
+                        "py-3 px-4 border-2 rounded-lg transition-all font-medium",
+                        selectedSize === size
+                          ? "border-burgundy-600 bg-burgundy-50 text-burgundy-600"
+                          : "border-gray-200 hover:border-gray-300"
+                      )}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              ) : isSuit || product.isBundle ? (
                 // Suit sizes with categories
                 <div className="space-y-3">
                   {Object.entries(availableSizes).map(([category, sizes]) => (
@@ -427,7 +456,7 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
                   ))}
                 </div>
               ) : (
-                // Regular sizes
+                // Regular sizes (S, M, L, XL, XXL)
                 <div className="grid grid-cols-5 gap-2">
                   {(availableSizes as string[]).map((size) => (
                     <button
@@ -447,7 +476,7 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
               )}
 
               {/* Size Recommendation */}
-              {isSuit && (
+              {(isSuit || isBlazer) && (
                 <div className="mt-3 p-3 bg-blue-50 rounded-lg flex items-start gap-2">
                   <Info className="h-4 w-4 text-blue-600 mt-0.5" />
                   <p className="text-sm text-blue-800">
