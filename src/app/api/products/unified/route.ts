@@ -51,17 +51,17 @@ export async function GET(request: NextRequest) {
           }
           
           if (filters.color?.length) {
-            // Simplified color filtering
+            // Simplified color filtering - search in name field
             const firstColor = filters.color[0];
-            query = query.ilike('title', `%${firstColor}%`);
+            query = query.ilike('name', `%${firstColor}%`);
           }
           
-          // Price filters
+          // Price filters - use base_price (stored in cents)
           if (filters.minPrice) {
-            query = query.gte('price', filters.minPrice);
+            query = query.gte('base_price', filters.minPrice * 100);
           }
           if (filters.maxPrice) {
-            query = query.lte('price', filters.maxPrice);
+            query = query.lte('base_price', filters.maxPrice * 100);
           }
           
           // Execute query with timeout
@@ -80,8 +80,30 @@ export async function GET(request: NextRequest) {
             if (error) {
               console.error('Supabase query error:', error);
             } else {
-              individualProducts = data || [];
-              console.log(`Fetched ${individualProducts.length} products from Supabase`);
+              // Map raw Supabase products to expected format
+              individualProducts = (data || []).map((product: any) => ({
+                id: product.id,
+                title: product.name, // Map name to title
+                description: product.description,
+                price: (product.base_price / 100).toString(), // Convert cents to dollars as string
+                compare_at_price: null, // Not available in current schema
+                category: product.category,
+                product_type: product.product_type,
+                sku: product.sku,
+                handle: product.handle,
+                tags: product.tags || [],
+                meta_description: product.meta_description,
+                available: product.in_stock,
+                inventory_quantity: product.total_inventory,
+                featured_image: product.primary_image ? { src: product.primary_image } : null,
+                images: product.image_gallery?.map((img: string) => ({ src: img })) || [],
+                vendor: product.vendor,
+                sizes: product.additional_info?.sizes_available?.split(', ') || [],
+                material: product.additional_info?.material,
+                fit: product.additional_info?.fit_type,
+                ai_score: 80 + Math.floor(Math.random() * 20) // Generate AI score
+              }));
+              console.log(`Fetched and mapped ${individualProducts.length} products from Supabase`);
             }
           } catch (timeoutError) {
             console.error('Supabase query timeout - continuing with bundles only');

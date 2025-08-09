@@ -78,15 +78,15 @@ export function bundleToUnifiedProduct(bundle: any): UnifiedProduct {
 /**
  * Convert Supabase product to UnifiedProduct format
  */
-export function supabaseProductToUnified(product: EnhancedProduct): UnifiedProduct {
+export function supabaseProductToUnified(product: any): UnifiedProduct {
   return {
     id: product.id,
     sku: product.sku || product.id,
     type: 'individual',
-    name: product.title,
+    name: product.title || product.name,
     description: product.description || '',
     imageUrl: product.featured_image?.src || product.images?.[0]?.src || '',
-    images: product.images?.map(img => img.src),
+    images: product.images?.map((img: any) => typeof img === 'string' ? img : img.src),
     price: parseFloat(product.price || '0'),
     originalPrice: product.compare_at_price ? parseFloat(product.compare_at_price) : undefined,
     isBundle: false,
@@ -110,17 +110,19 @@ export function supabaseProductToUnified(product: EnhancedProduct): UnifiedProdu
 /**
  * Helper to extract color from product
  */
-function extractColorFromProduct(product: EnhancedProduct): string | undefined {
-  // Try to get from color field
+function extractColorFromProduct(product: any): string | undefined {
+  // Try to get from color field or additional_info
   if (product.color) return product.color.toLowerCase();
+  if (product.additional_info?.color) return product.additional_info.color.toLowerCase();
   
-  // Try to extract from title
-  const colorPattern = /(black|navy|grey|gray|blue|brown|tan|burgundy|white|cream|charcoal)/i;
-  const match = product.title.match(colorPattern);
+  // Try to extract from title or name
+  const productName = product.title || product.name || '';
+  const colorPattern = /(black|navy|grey|gray|blue|brown|tan|burgundy|white|cream|charcoal|red|green|pink|coral|sage)/i;
+  const match = productName.match(colorPattern);
   if (match) return match[1].toLowerCase();
   
   // Try tags
-  const colorTag = product.tags?.find(tag => colorPattern.test(tag));
+  const colorTag = product.tags?.find((tag: string) => colorPattern.test(tag));
   if (colorTag) return colorTag.toLowerCase();
   
   return undefined;
@@ -129,12 +131,15 @@ function extractColorFromProduct(product: EnhancedProduct): string | undefined {
 /**
  * Extract sizes from variants
  */
-function extractSizesFromVariants(product: EnhancedProduct): string[] {
+function extractSizesFromVariants(product: any): string[] {
   if (product.sizes) return product.sizes;
+  if (product.additional_info?.sizes_available) {
+    return product.additional_info.sizes_available.split(', ');
+  }
   if (!product.variants) return [];
   
   const sizes = new Set<string>();
-  product.variants.forEach(variant => {
+  product.variants.forEach((variant: any) => {
     if (variant.option1) sizes.add(variant.option1);
     if (variant.option2) sizes.add(variant.option2);
   });
@@ -145,11 +150,11 @@ function extractSizesFromVariants(product: EnhancedProduct): string[] {
 /**
  * Extract occasions from tags
  */
-function extractOccasionsFromTags(product: EnhancedProduct): string[] {
+function extractOccasionsFromTags(product: any): string[] {
   if (!product.tags) return [];
   
-  const occasionKeywords = ['wedding', 'business', 'formal', 'casual', 'prom', 'cocktail', 'black-tie'];
-  return product.tags.filter(tag => 
+  const occasionKeywords = ['wedding', 'business', 'formal', 'casual', 'prom', 'cocktail', 'black-tie', 'gala', 'party'];
+  return product.tags.filter((tag: string) => 
     occasionKeywords.some(keyword => tag.toLowerCase().includes(keyword))
   );
 }
@@ -157,11 +162,11 @@ function extractOccasionsFromTags(product: EnhancedProduct): string[] {
 /**
  * Extract season from tags
  */
-function extractSeasonFromTags(product: EnhancedProduct): 'spring' | 'summer' | 'fall' | 'winter' | 'year-round' | undefined {
+function extractSeasonFromTags(product: any): 'spring' | 'summer' | 'fall' | 'winter' | 'year-round' | undefined {
   if (!product.tags) return 'year-round';
   
   const seasons = ['spring', 'summer', 'fall', 'winter'];
-  const seasonTag = product.tags.find(tag => 
+  const seasonTag = product.tags.find((tag: string) => 
     seasons.some(season => tag.toLowerCase().includes(season))
   );
   

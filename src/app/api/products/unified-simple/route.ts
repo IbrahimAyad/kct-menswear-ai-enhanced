@@ -41,12 +41,17 @@ export async function GET(request: NextRequest) {
             fit: bundle.shirt.fit,
             image: bundle.shirt.image
           },
-          tie: {
+          tie: bundle.tie ? {
             name: `${bundle.tie.color} ${bundle.tie.style} Tie`,
             color: bundle.tie.color.toLowerCase(),
             style: bundle.tie.style,
             image: bundle.tie.image
-          }
+          } : undefined,
+          pocketSquare: bundle.pocketSquare ? {
+            name: `${bundle.pocketSquare.color} ${bundle.pocketSquare.pattern} Pocket Square`,
+            color: bundle.pocketSquare.color.toLowerCase(),
+            pattern: bundle.pocketSquare.pattern
+          } : undefined
         },
         occasions: bundle.occasions,
         tags: [bundle.category],
