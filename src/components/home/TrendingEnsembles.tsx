@@ -194,92 +194,64 @@ export default function TrendingEnsembles() {
                 href={ensemble.link}
                 className="min-w-full sm:min-w-[calc(50%-0.5rem)] md:min-w-[calc(33.333%-0.667rem)] lg:min-w-[calc(25%-0.75rem)] group"
               >
-                <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
-                  {/* Image Container */}
-                  <div className="relative aspect-[3/4] bg-gray-50 overflow-hidden">
-                    <Image
-                      src={ensemble.image}
-                      alt={ensemble.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    
-                    {/* Tags */}
-                    <div className="absolute top-4 left-4 flex flex-col gap-2">
-                      {ensemble.tags.map((tag, index) => (
-                        <span
-                          key={index}
-                          className={`
-                            px-3 py-1 rounded-full text-xs font-medium
-                            ${tag === 'Trending' ? 'bg-red-500 text-white flex items-center gap-1' : ''}
-                            ${tag === 'Fall' || tag === 'Spring' ? 'bg-orange-100 text-orange-800 border border-orange-200' : ''}
-                            ${tag === 'AI Pick' ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' : ''}
-                            ${tag === 'Best Seller' ? 'bg-gold text-black' : ''}
-                            ${tag === 'Classic' || tag === 'Modern' || tag === 'Business' || tag === 'Wedding' ? 'bg-gray-100 text-gray-800 border border-gray-200' : ''}
-                          `}
-                        >
-                          {tag === 'Trending' && <TrendingUp className="w-3 h-3" />}
-                          {tag === 'AI Pick' && <Sparkles className="w-3 h-3" />}
-                          {tag}
-                        </span>
-                      ))}
+                <div className="relative aspect-[3/4] bg-gray-50 overflow-hidden rounded-lg shadow-sm hover:shadow-xl transition-all duration-300">
+                  {/* Full Image */}
+                  <Image
+                    src={ensemble.image}
+                    alt={ensemble.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  
+                  {/* Gradient overlay for better text visibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  {/* AI Score Badge - Always visible */}
+                  {ensemble.aiScore && (
+                    <div className="absolute top-4 right-4 bg-black/80 backdrop-blur text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                      <Sparkles className="w-3 h-3" />
+                      AI Pick {ensemble.aiScore}%
                     </div>
+                  )}
 
-                    {/* AI Score Badge */}
-                    {ensemble.aiScore && (
-                      <div className="absolute top-4 right-4 bg-black text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                        <Sparkles className="w-3 h-3" />
-                        AI Pick {ensemble.aiScore}%
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-4">
-                    {/* Name */}
-                    <h3 className="text-lg font-semibold text-black mb-1">
-                      {ensemble.name}
-                    </h3>
-
-                    {/* Color Palette */}
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="flex gap-1">
-                        {ensemble.colors.map((color, index) => (
-                          <div
-                            key={index}
-                            className="w-4 h-4 rounded-full border border-gray-200"
-                            style={{ backgroundColor: color }}
-                            title={ensemble.colorNames[index]}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-xs text-gray-500">
-                        {ensemble.colorNames.join(' • ')}
-                      </span>
+                  {/* Trending Badge - Always visible if trending */}
+                  {ensemble.tags.includes('Trending') && (
+                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3" />
+                      Trending
                     </div>
+                  )}
 
-                    {/* Description */}
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                      {ensemble.description}
-                    </p>
+                  {/* Best Seller Badge */}
+                  {ensemble.tags.includes('Best Seller') && (
+                    <div className="absolute top-14 left-4 bg-gold text-black px-3 py-1 rounded-full text-xs font-medium">
+                      Best Seller
+                    </div>
+                  )}
 
-                    {/* Price */}
-                    <div className="flex items-baseline justify-between">
-                      <div>
-                        <span className="text-2xl font-bold text-black">
-                          ${ensemble.price}
-                        </span>
-                        {ensemble.originalPrice > ensemble.price && (
-                          <span className="ml-2 text-sm text-gray-400 line-through">
-                            ${ensemble.originalPrice}
+                  {/* Hover Content - Price and Name */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                    <div className="bg-white/95 backdrop-blur rounded-lg p-3">
+                      <h3 className="text-lg font-semibold text-black mb-1">
+                        {ensemble.name}
+                      </h3>
+                      <div className="flex items-baseline justify-between">
+                        <div>
+                          <span className="text-xl font-bold text-black">
+                            ${ensemble.price}
+                          </span>
+                          {ensemble.originalPrice > ensemble.price && (
+                            <span className="ml-2 text-sm text-gray-500 line-through">
+                              ${ensemble.originalPrice}
+                            </span>
+                          )}
+                        </div>
+                        {ensemble.savings > 0 && (
+                          <span className="text-sm font-medium text-green-600">
+                            Save ${ensemble.savings}
                           </span>
                         )}
                       </div>
-                      {ensemble.savings > 0 && (
-                        <span className="text-sm font-medium text-green-600">
-                          Save ${ensemble.savings}
-                        </span>
-                      )}
                     </div>
                   </div>
                 </div>
