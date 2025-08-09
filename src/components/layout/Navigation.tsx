@@ -12,6 +12,7 @@ import { InstantSearch } from "@/components/search/InstantSearch";
 import { MegaMenu } from "./MegaMenu";
 import UserMenu from "./UserMenu";
 import MobileNavigation from "./MobileNavigation";
+import EnhancedMobileNav from "./EnhancedMobileNav";
 import { useStoreInfo } from "@/contexts/SettingsContext";
 
 const navItems = [
@@ -139,11 +140,16 @@ export function Navigation() {
         </div>
       </div>
 
-      {/* Enhanced Mobile Navigation */}
-      <MobileNavigation 
+      {/* Enhanced Mobile Navigation - New Version */}
+      <EnhancedMobileNav 
         isOpen={isMenuOpen} 
         onClose={() => setIsMenuOpen(false)} 
       />
+      {/* Original Mobile Navigation - Commented for A/B testing */}
+      {/* <MobileNavigation 
+        isOpen={isMenuOpen} 
+        onClose={() => setIsMenuOpen(false)} 
+      /> */}
     </nav>
     
     {/* Instant Search */}
