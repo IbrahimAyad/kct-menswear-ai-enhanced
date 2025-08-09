@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
-import { User, ChevronDown, Heart } from 'lucide-react'
+import { User, ChevronDown, Heart, Sparkles } from 'lucide-react'
 
 export default function UserMenu() {
   const { user, signOut, loading } = useAuth()
@@ -85,6 +85,14 @@ export default function UserMenu() {
               className="group flex w-full items-center rounded-md px-3 py-2 text-sm hover:bg-gray-100 transition-colors"
             >
               Profile Settings
+            </Link>
+            <Link
+              href="/profile-enhanced"
+              onClick={() => setIsOpen(false)}
+              className="group flex w-full items-center rounded-md px-3 py-2 text-sm hover:bg-gray-100 transition-colors bg-gradient-to-r from-burgundy/5 to-burgundy/10 text-burgundy font-medium"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Enhanced Profile
             </Link>
           </div>
           <div className="px-1 py-1">
