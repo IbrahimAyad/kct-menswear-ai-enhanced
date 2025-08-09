@@ -42,7 +42,8 @@ export async function GET(request: NextRequest) {
           // Build Supabase query based on filters
           let query = supabase
             .from('products')
-            .select('*');
+            .select('*')
+            .limit(100); // Limit to prevent timeout
           
           // Apply basic filters to reduce data transfer
           if (filters.category?.length) {
@@ -50,11 +51,9 @@ export async function GET(request: NextRequest) {
           }
           
           if (filters.color?.length) {
-            // Handle color filtering for individual products
-            const colorConditions = filters.color.map(color => 
-              `title.ilike.%${color}%,tags.cs.{${color}}`
-            ).join(',');
-            query = query.or(colorConditions);
+            // Simplified color filtering
+            const firstColor = filters.color[0];
+            query = query.ilike('title', `%${firstColor}%`);
           }
           
           // Price filters
@@ -65,14 +64,27 @@ export async function GET(request: NextRequest) {
             query = query.lte('price', filters.maxPrice);
           }
           
-          // Execute query
-          const { data, error } = await query;
+          // Execute query with timeout
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Supabase timeout')), 5000)
+          );
           
-          if (error) {
-            console.error('Supabase query error:', error);
-            // Continue with empty individual products
-          } else {
-            individualProducts = data || [];
+          const queryPromise = query;
+          
+          try {
+            const { data, error } = await Promise.race([
+              queryPromise,
+              timeoutPromise
+            ]) as any;
+            
+            if (error) {
+              console.error('Supabase query error:', error);
+            } else {
+              individualProducts = data || [];
+              console.log(`Fetched ${individualProducts.length} products from Supabase`);
+            }
+          } catch (timeoutError) {
+            console.error('Supabase query timeout - continuing with bundles only');
           }
         }
       } catch (error) {

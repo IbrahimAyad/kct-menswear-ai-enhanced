@@ -163,11 +163,9 @@ export async function unifiedSearch(
   
   // Convert bundles to unified format
   const unifiedBundles = bundleProductsWithImages.bundles.map(bundleToUnifiedProduct);
-  console.log('Unified bundles count:', unifiedBundles.length);
   
   // Convert individual products to unified format
   const unifiedIndividual = individualProducts.map(supabaseProductToUnified);
-  console.log('Individual products count:', unifiedIndividual.length);
   
   // Combine based on filter preferences
   if (filters.includeBundles !== false) {
@@ -182,8 +180,6 @@ export async function unifiedSearch(
   if (filters.includeBundles === undefined && filters.includeIndividual === undefined) {
     results = [...unifiedBundles, ...unifiedIndividual];
   }
-  
-  console.log('Total results before filtering:', results.length);
   
   // Apply filters
   results = applyFilters(results, filters);

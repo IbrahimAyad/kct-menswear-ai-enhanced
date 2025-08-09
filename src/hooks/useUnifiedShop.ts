@@ -103,8 +103,8 @@ export function useUnifiedShop(options: UseUnifiedShopOptions = {}): UseUnifiedS
         params.set('preset', activePreset);
       }
       
-      // Temporarily use simple endpoint to debug
-      const response = await fetch(`/api/products/unified-simple?${params.toString()}`);
+      // Use main unified endpoint that fetches both bundles and Supabase products
+      const response = await fetch(`/api/products/unified?${params.toString()}`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch products');
