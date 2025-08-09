@@ -67,9 +67,15 @@ export default function BundleProductCard({
       )}
       
       {/* Main Image Container */}
-      <div 
-        className="relative h-96 bg-gray-100 cursor-pointer group"
-        onClick={() => setShowComponents(!showComponents)}
+      <Link 
+        href={`/products/${product.id}`}
+        className="block relative h-96 bg-gray-100 cursor-pointer group"
+        onClick={(e) => {
+          // Allow component toggle only if clicking on the image area, not when navigating
+          if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+          e.preventDefault();
+          setShowComponents(!showComponents);
+        }}
       >
         {!showComponents ? (
           // Main bundle image
@@ -161,13 +167,15 @@ export default function BundleProductCard({
             )}
           </div>
         )}
-      </div>
+      </Link>
       
       {/* Product Info */}
       <div className="p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
-          {product.name}
-        </h3>
+        <Link href={`/products/${product.id}`}>
+          <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-burgundy-600 transition-colors">
+            {product.name}
+          </h3>
+        </Link>
         
         <p className="text-sm text-gray-600 mb-3 line-clamp-2">
           {product.description}
@@ -236,13 +244,12 @@ export default function BundleProductCard({
         
         {/* Actions */}
         <div className="flex gap-2">
-          <button
-            onClick={() => onAddToCart?.(product)}
+          <Link 
+            href={`/products/${product.id}`}
             className="flex-1 bg-burgundy-600 text-white px-4 py-2 rounded-lg hover:bg-burgundy-700 transition-colors duration-200 flex items-center justify-center gap-2 font-medium"
           >
-            <FiShoppingCart className="w-4 h-4" />
-            Add Complete Look
-          </button>
+            View Details
+          </Link>
           <button
             onClick={() => onQuickView?.(product)}
             className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"

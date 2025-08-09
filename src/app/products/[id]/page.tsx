@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import { getUnifiedProduct, getRelatedUnifiedProducts } from '@/lib/services/unifiedProductDetail'
-import { UnifiedProductDetail } from './UnifiedProductDetail'
+import { EnhancedUnifiedDetail } from './EnhancedUnifiedDetail'
 import UnifiedProductGrid from '@/components/products/UnifiedProductGrid'
 import { formatPrice } from '@/lib/utils/format'
 
@@ -105,7 +105,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <UnifiedProductDetail product={product} />
+      <EnhancedUnifiedDetail product={product} />
       
       {/* Related Products Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
