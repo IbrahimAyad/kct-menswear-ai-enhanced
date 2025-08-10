@@ -1,19 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useCart } from '@/lib/hooks/useCart';
+import { useSimpleCart } from '@/hooks/useSimpleCart';
 import { X, ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
 import { CheckoutButton } from './CheckoutButton';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { useCurrency, useShippingCalculator } from '@/contexts/SettingsContext';
 
 export function SimpleCartDrawer() {
-  const { items, cartSummary, removeFromCart, clearCart, updateQuantity } = useCart();
+  const { items, cartSummary, removeFromCart, clearCart, updateQuantity } = useSimpleCart();
   const [isOpen, setIsOpen] = useState(false);
   const [dragProgress, setDragProgress] = useState(0);
-  const { format } = useCurrency();
-  const { calculate: calculateShipping, freeThreshold } = useShippingCalculator();
 
   // Haptic feedback
   const triggerHaptic = (pattern: number | number[] = 10) => {
@@ -163,7 +160,7 @@ export function SimpleCartDrawer() {
                               {item.name || `Product ${item.productId}`}
                             </h3>
                             <p className="text-sm text-gray-600">Size: {item.size}</p>
-                            <p className="text-sm font-semibold text-gray-900">{format((item.price || 0) / 100)}</p>
+                            <p className="text-sm font-semibold text-gray-900">{item.displayPrice || `$${((item.price || 0) / 100).toFixed(2)}`}</p>
                             
                             {/* Quantity Controls */}
                             <div className="flex items-center gap-2 mt-2">
@@ -195,7 +192,7 @@ export function SimpleCartDrawer() {
                             
                             {/* Status */}
                             <div className="text-xs mt-1">
-                              {item.metadata?.stripePriceId ? (
+                              {item.stripePriceId ? (
                                 <span className="text-green-600">✓ Ready for checkout</span>
                               ) : (
                                 <span className="text-red-600">✗ Missing checkout data</span>
@@ -224,7 +221,7 @@ export function SimpleCartDrawer() {
               {/* Footer */}
               <div className="border-t bg-gray-50 p-4 space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">Total: {format(cartSummary.totalPrice)}</span>
+                  <span className="text-lg font-semibold">Total: {cartSummary.totalPriceFormatted}</span>
                   <button
                     onClick={() => {
                       clearCart();

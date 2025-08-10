@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Heart, ShoppingBag, Eye, ArrowRight, Check, Layers } from 'lucide-react';
 import { UnifiedProduct } from '@/types/unified-shop';
-import { useCart } from '@/hooks/useCart';
+import { useSimpleCart } from '@/hooks/useSimpleCart';
 import { cn } from '@/lib/utils';
 
 interface UniversalLargeCardProps {
@@ -22,20 +22,25 @@ export default function UniversalLargeCard({
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState(0);
   const [addedToCart, setAddedToCart] = useState(false);
-  const { addItem } = useCart();
+  const { addItem } = useSimpleCart();
 
   const handleQuickAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
+    // Convert price to cents for Stripe
+    const priceInCents = Math.round((product.isBundle ? (product.bundlePrice || product.price) : product.price) * 100);
+    
     addItem({
       id: product.id,
       name: product.name,
-      price: product.isBundle ? (product.bundlePrice || product.price) : product.price,
+      price: priceInCents, // Price in cents for Stripe
       image: product.imageUrl || '/placeholder.jpg',
       quantity: 1,
       category: product.isBundle ? 'bundle' : product.category || 'product',
-      size: selectedSize || '40'
+      size: selectedSize || '40',
+      color: product.color,
+      stripePriceId: product.stripePriceId // Include if available
     });
     
     setAddedToCart(true);

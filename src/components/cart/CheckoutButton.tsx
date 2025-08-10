@@ -2,16 +2,13 @@
 
 import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { useCart } from '@/lib/hooks/useCart';
-import { useCartStore } from '@/lib/store/cartStore';
-import { useProductStore } from '@/lib/store/productStore';
+import { useSimpleCart } from '@/hooks/useSimpleCart';
 import { stripeProducts } from '@/lib/services/stripeProductService';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export function CheckoutButton() {
-  const { items, cartSummary, clearCart } = useCart();
-  const { products } = useProductStore();
+  const { items, cartSummary, clearCart } = useSimpleCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -92,57 +89,21 @@ export function CheckoutButton() {
     try {
       // Prepare cart items for checkout
       const checkoutItems = items.map(item => {
-        // Check if it's a bundle item with bundleId
-        if (item.metadata?.bundleId || item.metadata?.bundleType) {
-          // For bundles, use the metadata directly
-          return {
-            stripePriceId: item.metadata.stripePriceId,
-            quantity: item.quantity,
-            name: item.name,
-            selectedSize: 'Bundle',
-            selectedColor: 'Mixed',
-            id: item.productId,
-            price: item.price,
-            bundleId: item.metadata.bundleId,
-            metadata: item.metadata
-          };
-        }
-
-        // Try to find product in store first
-        let product = products.find(p => p.id === item.productId);
-
-        // If not in store, use the cart item data directly
-        if (!product && item.metadata) {
-          product = {
-            id: item.productId,
-            name: item.name,
-            price: item.price,
-            category: item.metadata.category || 'suits',
-            metadata: item.metadata,
-            color: item.metadata.suitColor || item.metadata.color,
-            stripePriceId: item.metadata.stripePriceId,
-          } as any;
-        }
-
-        if (!product) {
-
-          throw new Error(`Product ${item.productId} not found`);
-        }
-
-        const stripePriceId = item.metadata?.stripePriceId || getStripePriceId(product);
-        if (!stripePriceId) {
-
-          throw new Error(`No Stripe price found for ${product.name}. Please clear your cart and add items again.`);
+        // The stripePriceId should already be set by useSimpleCart
+        if (!item.stripePriceId) {
+          throw new Error(`No Stripe price found for ${item.name}. Please clear your cart and add items again.`);
         }
 
         return {
-          stripePriceId,
+          stripePriceId: item.stripePriceId,
           quantity: item.quantity,
-          name: item.name || product.name,
+          name: item.name || `Product ${item.productId}`,
           selectedSize: item.size,
-          selectedColor: item.metadata?.suitColor || product.color || 'default',
-          id: product.id,
-          price: item.price || product.price,
+          selectedColor: item.metadata?.color || 'default',
+          id: item.productId,
+          price: item.price,
+          category: item.metadata?.category,
+          metadata: item.metadata
         };
       });
 
@@ -203,7 +164,7 @@ export function CheckoutButton() {
             Processing...
           </span>
         ) : (
-          `Checkout - $${cartSummary.totalPrice.toFixed(2)}`
+          `Checkout - ${cartSummary.totalPriceFormatted}`
         )}
       </button>
 
