@@ -18,7 +18,6 @@ export default function UniversalLargeCard({
   onQuickView
 }: UniversalLargeCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
-  const [showComponents, setShowComponents] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState(0);
@@ -84,19 +83,11 @@ export default function UniversalLargeCard({
 
       {/* Large Product Image */}
       <Link href={productLink}>
-        <div 
-          className="relative aspect-[4/5] overflow-hidden bg-gray-50 cursor-pointer"
-          onClick={(e) => {
-            if (showComponents && product.isBundle) {
-              e.preventDefault();
-              setShowComponents(false);
-            }
-          }}
-        >
-          {/* Bundle Component View */}
-          {product.isBundle && showComponents && product.bundleComponents ? (
-            <div className="grid grid-cols-2 grid-rows-2 h-full gap-1 bg-gray-100 p-4">
-              <div className="relative bg-white group/item hover:z-10 hover:scale-105 transition-all">
+        <div className="relative aspect-[4/5] overflow-hidden bg-gray-50 cursor-pointer">
+          {/* Bundle: Show component breakdown on hover */}
+          {product.isBundle && isHovered && product.bundleComponents ? (
+            <div className="grid grid-cols-2 grid-rows-2 h-full gap-0.5 bg-gray-200">
+              <div className="relative bg-white">
                 {product.bundleComponents.suit?.image && (
                   <Image
                     src={product.bundleComponents.suit.image}
@@ -105,14 +96,14 @@ export default function UniversalLargeCard({
                     className="object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity flex flex-col justify-end p-3">
-                  <div className="text-white text-sm font-medium">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex flex-col justify-end p-2">
+                  <div className="text-white text-xs font-medium">
                     {product.bundleComponents.suit?.color} Suit
                   </div>
                 </div>
               </div>
               
-              <div className="relative bg-white group/item hover:z-10 hover:scale-105 transition-all">
+              <div className="relative bg-white">
                 {product.bundleComponents.shirt?.image && (
                   <Image
                     src={product.bundleComponents.shirt.image}
@@ -121,14 +112,14 @@ export default function UniversalLargeCard({
                     className="object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity flex flex-col justify-end p-3">
-                  <div className="text-white text-sm font-medium">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex flex-col justify-end p-2">
+                  <div className="text-white text-xs font-medium">
                     {product.bundleComponents.shirt?.color} Shirt
                   </div>
                 </div>
               </div>
               
-              <div className="relative bg-white group/item hover:z-10 hover:scale-105 transition-all">
+              <div className="relative bg-white">
                 {product.bundleComponents.tie?.image && (
                   <Image
                     src={product.bundleComponents.tie.image}
@@ -137,54 +128,67 @@ export default function UniversalLargeCard({
                     className="object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity flex flex-col justify-end p-3">
-                  <div className="text-white text-sm font-medium">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex flex-col justify-end p-2">
+                  <div className="text-white text-xs font-medium">
                     {product.bundleComponents.tie?.color} Tie
                   </div>
                 </div>
               </div>
               
-              <div className="flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white p-4">
-                <div className="text-3xl font-light mb-2">${product.bundlePrice}</div>
-                <div className="text-sm text-white/60 line-through mb-1">${product.originalPrice}</div>
+              <div className="flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white p-2">
+                <div className="text-2xl font-light mb-1">${product.bundlePrice}</div>
+                <div className="text-xs text-white/60 line-through">${product.originalPrice}</div>
                 <div className="text-xs text-green-400 font-medium">Save ${savingsAmount}</div>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowComponents(false);
-                  }}
-                  className="mt-3 text-xs underline hover:no-underline"
-                >
-                  Back to outfit
-                </button>
               </div>
             </div>
           ) : (
-            // Regular Product Image
+            // Regular Product: Show second image on hover if available
             <>
-              <Image
-                src={colorVariants[selectedColor]?.image || product.imageUrl || '/placeholder.jpg'}
-                alt={product.name}
-                fill
-                className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority
-              />
+              {/* Primary Image - Hidden on hover if second image exists */}
+              <div className={cn(
+                "absolute inset-0 transition-opacity duration-500",
+                isHovered && product.images && product.images.length > 1 ? "opacity-0" : "opacity-100"
+              )}>
+                <Image
+                  src={colorVariants[selectedColor]?.image || product.imageUrl || '/placeholder.jpg'}
+                  alt={product.name}
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+              </div>
+              
+              {/* Second Image - Shown on hover if available */}
+              {product.images && product.images.length > 1 && (
+                <div className={cn(
+                  "absolute inset-0 transition-opacity duration-500",
+                  isHovered ? "opacity-100" : "opacity-0"
+                )}>
+                  <Image
+                    src={product.images[1]}
+                    alt={`${product.name} - View 2`}
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+              )}
               
               {/* Hover Overlay with Actions */}
               {isHovered && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-6">
-                  <div className="flex gap-3">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex flex-col justify-end p-6 pointer-events-none">
+                  <div className="flex gap-3 pointer-events-auto">
                     {product.isBundle ? (
                       <button
                         onClick={(e) => {
                           e.preventDefault();
-                          setShowComponents(true);
+                          // Bundle hover already shows components
                         }}
                         className="flex-1 bg-white text-black py-3 px-4 font-medium hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
                       >
                         <Layers className="w-4 h-4" />
-                        View Pieces
+                        View Bundle
                       </button>
                     ) : (
                       <button
@@ -337,12 +341,6 @@ export default function UniversalLargeCard({
           </Link>
         </div>
 
-        {/* Helper Text */}
-        {product.isBundle && (
-          <p className="text-xs text-gray-500 mt-3 text-center">
-            {showComponents ? 'Click image to view full outfit' : 'Hover to see bundle pieces'}
-          </p>
-        )}
       </div>
     </div>
   );
