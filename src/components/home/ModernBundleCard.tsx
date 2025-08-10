@@ -59,95 +59,100 @@ export function ModernBundleCard({ bundle }: ModernBundleCardProps) {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <div className="aspect-[4/3] relative overflow-hidden bg-gray-50">
+        <div className="aspect-[3/4] relative overflow-hidden bg-gray-50">
           <AnimatePresence mode="wait">
             {!isHovered ? (
-              // 3-Product Grid (Default State)
+              // Single Model/Product View (Default State)
               <motion.div
-                key="grid"
+                key="model"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-3 h-full gap-0.5 bg-gray-200"
-              >
-                {/* Suit */}
-                <div className="relative bg-white">
-                  <Image
-                    src={bundle.suit.image}
-                    alt={bundle.suit.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 33vw, 20vw"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0">
-                    <div className="bg-black/70 text-white text-xs px-2 py-1 text-center">
-                      {bundle.suit.name}
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Shirt */}
-                <div className="relative bg-white">
-                  <Image
-                    src={bundle.shirt.image}
-                    alt={bundle.shirt.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 33vw, 20vw"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0">
-                    <div className="bg-black/70 text-white text-xs px-2 py-1 text-center">
-                      {bundle.shirt.name}
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Tie */}
-                <div className="relative bg-white">
-                  <Image
-                    src={bundle.tie.image}
-                    alt={bundle.tie.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 33vw, 20vw"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0">
-                    <div className="bg-black/70 text-white text-xs px-2 py-1 text-center">
-                      {bundle.tie.name}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ) : (
-              // Single Model View (Hover State)
-              <motion.div
-                key="model"
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
                 className="relative h-full"
               >
                 <Image
                   src={bundle.modelImage}
-                  alt={`Model wearing ${bundle.name}`}
+                  alt={bundle.name}
                   fill
                   className="object-cover object-top"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              </motion.div>
+            ) : (
+              // 3-Product Grid (Hover State)
+              <motion.div
+                key="grid"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+                className="h-full relative"
+              >
+                {/* Main grid layout */}
+                <div className="grid grid-cols-2 h-full">
+                  {/* Left side - Suit takes up full height */}
+                  <div className="relative bg-white">
+                    <Image
+                      src={bundle.suit.image}
+                      alt={bundle.suit.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                    <div className="absolute bottom-2 left-2 right-2">
+                      <div className="bg-white/90 backdrop-blur text-black text-xs px-2 py-1 text-center font-medium">
+                        {bundle.suit.name}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Right side - Shirt and Tie stacked */}
+                  <div className="grid grid-rows-2">
+                    {/* Shirt */}
+                    <div className="relative bg-white">
+                      <Image
+                        src={bundle.shirt.image}
+                        alt={bundle.shirt.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 25vw, 12.5vw"
+                      />
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <div className="bg-white/90 backdrop-blur text-black text-xs px-2 py-1 text-center font-medium">
+                          {bundle.shirt.name}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Tie */}
+                    <div className="relative bg-white">
+                      <Image
+                        src={bundle.tie.image}
+                        alt={bundle.tie.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 25vw, 12.5vw"
+                      />
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <div className="bg-white/90 backdrop-blur text-black text-xs px-2 py-1 text-center font-medium">
+                          {bundle.tie.name}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 
-                {/* Quick Shop Button - appears on hover */}
+                {/* Quick Shop Button Overlay */}
                 <div className="absolute bottom-4 left-4 right-4">
                   <Button 
                     onClick={handleQuickShop}
-                    className="w-full bg-white text-black hover:bg-gray-100 font-semibold"
+                    className="w-full bg-black text-white hover:bg-gray-800 font-semibold shadow-lg"
                     size="sm"
                   >
                     <ShoppingBag className="w-4 h-4 mr-2" />
-                    Quick Add to Cart
+                    Quick Add Bundle
                   </Button>
                 </div>
               </motion.div>
