@@ -117,17 +117,9 @@ const categories = [
 
 export function ShopByStyleGrid() {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-8 bg-gray-50">
       <div className="container-main">
-        <div className="mb-8">
-          <h2 className="text-3xl md:text-4xl font-serif mb-2">Shop by Style</h2>
-          <p className="text-gray-600">Click images to filter products by category or occasion</p>
-          <button className="text-sm text-gray-500 hover:text-gray-700 mt-2">
-            Hide Visual Filters
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-4">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-2 md:gap-4">
           {categories.map((category) => (
             <Link 
               key={category.name} 
@@ -141,7 +133,7 @@ export function ShopByStyleGrid() {
                     alt={category.name}
                     fill
                     className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 12.5vw"
+                    sizes="(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 12.5vw"
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -153,9 +145,9 @@ export function ShopByStyleGrid() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 
                 {/* Content */}
-                <div className={`absolute bottom-0 left-0 right-0 p-3 ${category.textColor || 'text-white'}`}>
-                  <h3 className="font-semibold text-sm mb-1">{category.name}</h3>
-                  <p className="text-xs opacity-90">{category.items}</p>
+                <div className={`absolute bottom-0 left-0 right-0 p-2 md:p-3 ${category.textColor || 'text-white'}`}>
+                  <h3 className="font-semibold text-xs md:text-sm mb-0.5 md:mb-1">{category.name}</h3>
+                  <p className="text-[10px] md:text-xs opacity-90">{category.items}</p>
                 </div>
               </div>
             </Link>
