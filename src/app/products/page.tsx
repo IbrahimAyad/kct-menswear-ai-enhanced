@@ -7,6 +7,8 @@ import LargeProductGrid from '@/components/products/LargeProductGrid';
 import EnhancedFilterPanel from '@/components/filters/EnhancedFilterPanel';
 import MobileFilterDrawer from '@/components/filters/MobileFilterDrawer';
 import ActiveFilterPills from '@/components/filters/ActiveFilterPills';
+import VisualCategoryFilter from '@/components/filters/VisualCategoryFilter';
+import VisualOccasionFilter from '@/components/filters/VisualOccasionFilter';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -33,6 +35,9 @@ function UnifiedProductsContent() {
   const [showFilters, setShowFilters] = useState(false);
   const [showPresets, setShowPresets] = useState(false);
   const [layoutMode, setLayoutMode] = useState<'2x2' | '3x3'>('2x2');
+  const [showVisualFilters, setShowVisualFilters] = useState(true);
+  const [selectedVisualCategories, setSelectedVisualCategories] = useState<string[]>([]);
+  const [selectedVisualOccasions, setSelectedVisualOccasions] = useState<string[]>([]);
   
   const {
     products,
@@ -68,6 +73,38 @@ function UnifiedProductsContent() {
     key !== 'limit' && 
     key !== 'sortBy'
   ).length;
+
+  // Handle visual category toggle
+  const handleVisualCategoryToggle = (categoryId: string) => {
+    const newCategories = selectedVisualCategories.includes(categoryId)
+      ? selectedVisualCategories.filter(id => id !== categoryId)
+      : [...selectedVisualCategories, categoryId];
+    
+    setSelectedVisualCategories(newCategories);
+    
+    // Update actual filters
+    if (newCategories.length > 0) {
+      updateFilters({ category: newCategories });
+    } else {
+      updateFilters({ category: undefined });
+    }
+  };
+
+  // Handle visual occasion toggle
+  const handleVisualOccasionToggle = (occasionId: string) => {
+    const newOccasions = selectedVisualOccasions.includes(occasionId)
+      ? selectedVisualOccasions.filter(id => id !== occasionId)
+      : [...selectedVisualOccasions, occasionId];
+    
+    setSelectedVisualOccasions(newOccasions);
+    
+    // Update actual filters
+    if (newOccasions.length > 0) {
+      updateFilters({ occasions: newOccasions });
+    } else {
+      updateFilters({ occasions: undefined });
+    }
+  };
   
   // Get preset collections for quick access
   const presetCollections = [
@@ -280,6 +317,72 @@ function UnifiedProductsContent() {
         updateFilters={updateFilters}
         resetFilters={resetFilters}
       />
+      
+      {/* Visual Filters Section */}
+      {showVisualFilters && (
+        <div className="bg-white border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {/* Section Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-serif text-gray-900">Shop by Category</h2>
+                <p className="text-sm text-gray-600 mt-1">Click images to filter products</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowVisualFilters(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                Hide Visual Filters
+              </Button>
+            </div>
+            
+            {/* Category Visual Filters */}
+            <VisualCategoryFilter
+              selectedCategories={selectedVisualCategories}
+              onCategoryToggle={handleVisualCategoryToggle}
+              onClearAll={() => {
+                setSelectedVisualCategories([]);
+                updateFilters({ category: undefined });
+              }}
+              variant="grid"
+              showCounts={true}
+            />
+            
+            {/* Occasions Visual Filters */}
+            <div className="mt-10">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Shop by Occasion</h3>
+              <VisualOccasionFilter
+                selectedOccasions={selectedVisualOccasions}
+                onOccasionToggle={handleVisualOccasionToggle}
+                onClearAll={() => {
+                  setSelectedVisualOccasions([]);
+                  updateFilters({ occasions: undefined });
+                }}
+                variant="cards"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Show Visual Filters Button (when hidden) */}
+      {!showVisualFilters && (
+        <div className="bg-gray-50 py-3">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowVisualFilters(true)}
+              className="border-gray-300 hover:border-burgundy-300"
+            >
+              <Grid3x3 className="w-4 h-4 mr-2" />
+              Show Visual Filters
+            </Button>
+          </div>
+        </div>
+      )}
       
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
