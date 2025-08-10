@@ -206,7 +206,7 @@ export default function ModernHomePage() {
       <ShopByStyleGrid />
 
       {/* Build Your Perfect Ensemble - Moved up after Shop by Style */}
-      <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-8 bg-gradient-to-br from-gray-50 to-white">
         <BuildYourLookShowcase />
       </section>
 

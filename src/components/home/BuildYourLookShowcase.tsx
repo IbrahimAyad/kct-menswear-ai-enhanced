@@ -98,7 +98,7 @@ export function BuildYourLookShowcase() {
   ].sort((a, b) => a.order - b.order);
 
   return (
-    <section className="py-24 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
+    <section className="py-12 bg-gradient-to-br from-gray-50 via-white to-gray-50 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-20 w-96 h-96 bg-burgundy/5 rounded-full blur-3xl"></div>
@@ -107,7 +107,7 @@ export function BuildYourLookShowcase() {
 
       <div className="container-main relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -127,15 +127,6 @@ export function BuildYourLookShowcase() {
             Mix and Match
             <span className="text-burgundy block">Your Style</span>
           </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
-          >
-            Free shipping on orders over $200 • Expert styling advice included
-          </motion.p>
         </div>
 
         {/* Product Grid - Mobile: 3 columns for side-by-side display */}
