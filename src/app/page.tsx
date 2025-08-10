@@ -1,13 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, ShoppingBag, Sparkles, TrendingUp, Package } from "lucide-react";
+import { ArrowRight, Calendar, ShoppingBag, Sparkles, TrendingUp, Package, Zap } from "lucide-react";
 import Link from "next/link";
 import { ModernBundleCard } from "@/components/home/ModernBundleCard";
 import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
 import { ShopByStyleGrid } from "@/components/home/ShopByStyleGrid";
 import { BundleCarouselTheater } from "@/components/home/BundleCarouselTheater";
 import { VelocityGrid } from "@/components/home/VelocityGrid";
+import { InteractiveStyleEnvironments } from "@/components/home/InteractiveStyleEnvironments";
+import { ServiceJourneyVisualization } from "@/components/home/ServiceJourneyVisualization";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -126,31 +128,43 @@ const trendingProducts = [
   { id: 12, name: 'Black Bow Tie', category: 'Ties', price: 25, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg', trending: 'up' as const, hotness: 78, recentlyViewed: 24 }
 ];
 
-// Style categories with background images
+// Style categories with enhanced interactive properties
 const styleCategories = [
   {
     name: 'Business Professional',
     slug: 'business',
     description: 'Sharp suits for the modern executive',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png'
+    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png',
+    particleType: 'fabric' as const,
+    borderColor: '#1e3a8a',
+    styleDNA: ['Power', 'Confidence', 'Success']
   },
   {
     name: 'Wedding Collection',
     slug: 'wedding',
     description: 'Elegant attire for your special day',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png'
+    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png',
+    particleType: 'sparkle' as const,
+    borderColor: '#D4AF37',
+    styleDNA: ['Elegant', 'Timeless', 'Romantic']
   },
   {
     name: 'Black Tie Events',
     slug: 'formal',
     description: 'Tuxedos and formal wear for galas',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png'
+    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png',
+    particleType: 'sparkle' as const,
+    borderColor: '#000000',
+    styleDNA: ['Luxury', 'Sophisticated', 'Elite']
   },
   {
     name: 'Prom Night',
     slug: 'prom',
     description: 'Stand out styles for your big night',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-pink-pink.png'
+    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-pink-pink.png',
+    particleType: 'sparkle' as const,
+    borderColor: '#ec4899',
+    styleDNA: ['Bold', 'Trendy', 'Memorable']
   }
 ];
 
@@ -286,93 +300,55 @@ export default function ModernHomePage() {
         </div>
       </section>
 
-      {/* Style Categories - Visual Grid */}
-      <section className="py-16 bg-gray-50">
-        <div className="container-main">
-          <h2 className="text-3xl md:text-4xl font-serif text-center mb-12">
-            Shop by Style
-          </h2>
-
-          {/* 2x2 grid on desktop */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-            {styleCategories.map((category) => (
-              <Link key={category.slug} href={`/collections/${category.slug}`}>
-                <div className="group relative overflow-hidden aspect-[16/10] cursor-pointer">
-                  <Image
-                    src={category.backgroundImage}
-                    alt={category.name}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-2xl md:text-3xl font-serif mb-2">{category.name}</h3>
-                    <p className="text-gray-200 mb-4">{category.description}</p>
-                    <div className="inline-flex items-center text-sm font-semibold">
-                      Shop Collection <ArrowRight className="ml-2 h-4 w-4" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Grid - Compressed */}
-      <section className="py-16 bg-white">
+      {/* Style Categories - Interactive Style Environments */}
+      <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
         <div className="container-main">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif mb-3">Tailored to Perfection</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover our comprehensive services designed to elevate your wardrobe
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 text-burgundy mb-4"
+            >
+              <Sparkles className="h-5 w-5" />
+              <span className="text-sm font-semibold tracking-widest uppercase">Style Experiences</span>
+              <Sparkles className="h-5 w-5" />
+            </motion.div>
+            
+            <h2 className="text-3xl md:text-4xl font-serif mb-3">
+              Find Your Perfect Occasion
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Interactive style environments that adapt to your needs • Hover to explore
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Link href="/atelier-ai" className="group">
-              <div className="relative bg-white border border-gray-200 p-8 h-full transition-all duration-300 hover:border-burgundy hover:shadow-xl hover:-translate-y-1">
-                <div className="absolute top-0 left-0 w-full h-1 bg-burgundy transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                <Sparkles className="h-12 w-12 text-burgundy mb-4" />
-                <h3 className="text-xl font-serif mb-3">Atelier AI</h3>
-                <p className="text-gray-600 mb-4 text-sm">
-                  Experience AI-powered outfit recommendations and personalized styling
-                </p>
-                <span className="inline-flex items-center text-sm font-semibold text-burgundy">
-                  Explore AI Features <ArrowRight className="ml-2 h-3 w-3" />
-                </span>
-              </div>
-            </Link>
+          {/* Interactive Style Environments Component */}
+          <InteractiveStyleEnvironments categories={styleCategories} />
+        </div>
+      </section>
 
-            <Link href="/bundles" className="group">
-              <div className="relative bg-white border border-gray-200 p-8 h-full transition-all duration-300 hover:border-gold hover:shadow-xl hover:-translate-y-1">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                <Package className="h-12 w-12 text-gold mb-4" />
-                <h3 className="text-xl font-serif mb-3">Occasion Bundles</h3>
-                <p className="text-gray-600 mb-4 text-sm">
-                  Pre-styled outfits for every occasion with exclusive bundle pricing
-                </p>
-                <span className="inline-flex items-center text-sm font-semibold text-gold">
-                  Browse Bundles <ArrowRight className="ml-2 h-3 w-3" />
-                </span>
-              </div>
-            </Link>
-
-            <Link href="/wedding" className="group">
-              <div className="relative bg-white border border-gray-200 p-8 h-full transition-all duration-300 hover:border-gold hover:shadow-xl hover:-translate-y-1">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gold transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
-                <Calendar className="h-12 w-12 text-gold mb-4" />
-                <h3 className="text-xl font-serif mb-3">Wedding Hub</h3>
-                <p className="text-gray-600 mb-4 text-sm">
-                  Complete wedding party management with group discounts
-                </p>
-                <span className="inline-flex items-center text-sm font-semibold text-gold">
-                  Plan Your Wedding <ArrowRight className="ml-2 h-3 w-3" />
-                </span>
-              </div>
-            </Link>
+      {/* Services Grid - Service Journey Visualization */}
+      <section className="py-16 bg-white">
+        <div className="container-main">
+          <div className="text-center mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 text-burgundy mb-4"
+            >
+              <Zap className="h-5 w-5" />
+              <span className="text-sm font-semibold tracking-widest uppercase">Your Style Journey</span>
+              <Zap className="h-5 w-5" />
+            </motion.div>
+            
+            <h2 className="text-3xl md:text-4xl font-serif mb-3">Tailored to Perfection</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Discover our comprehensive services designed to elevate your wardrobe • Click to explore each journey
+            </p>
           </div>
+
+          {/* Service Journey Visualization */}
+          <ServiceJourneyVisualization />
         </div>
       </section>
 
