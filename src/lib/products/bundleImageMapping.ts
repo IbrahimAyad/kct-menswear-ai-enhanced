@@ -20,6 +20,11 @@ export const bundleColorMapping = {
     'Indigo': 'indigo',
     'Emerald Green': 'emerald',
     'Ocean Teal': 'teal',
+    'French Blue': 'indigo',
+    'Light Brown': 'brown',
+    'Dark Brown': 'darkBrown',
+    'Royal Blue': 'indigo',
+    'Sand': 'sand',
   },
   shirts: {
     'White': 'white',
@@ -38,6 +43,9 @@ export const bundleColorMapping = {
     'Onyx Black': 'black',
     'Midnight Black': 'black',
     'Sky Blue': 'light-blue',
+    'Lilac': 'lilac',
+    'Hunter Green': 'sage',
+    'Emerald Green': 'sage',
   },
   ties: {
     'Black': 'black',
@@ -67,6 +75,9 @@ export const bundleColorMapping = {
     'Pearl Grey': 'silver',
     'Soft Lavender': 'lavender',
     'Blush Pink': 'blush-pink',
+    'Dusty Blue': 'powder-blue',
+    'Mustard': 'banana-yellow',
+    'Sage': 'dusty-sage',
   }
 };
 

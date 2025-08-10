@@ -132,6 +132,27 @@ export const suitImages = {
     ],
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/indigo/indigo-main.jpg`,
   },
+  teal: {
+    main: `${R2_BASE_URL}/kct-prodcuts/suits/teal/teal-main.jpg`,
+    gallery: [
+      `${R2_BASE_URL}/kct-prodcuts/suits/teal/teal-main.jpg`,
+    ],
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/teal/teal-main.jpg`,
+  },
+  royalBlue: {
+    main: `${R2_BASE_URL}/kct-prodcuts/suits/royal-blue/royal-blue-main.jpg`,
+    gallery: [
+      `${R2_BASE_URL}/kct-prodcuts/suits/royal-blue/royal-blue-main.jpg`,
+    ],
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/royal-blue/royal-blue-main.jpg`,
+  },
+  frenchBlue: {
+    main: `${R2_BASE_URL}/kct-prodcuts/suits/french-blue/french-blue-main.jpg`,
+    gallery: [
+      `${R2_BASE_URL}/kct-prodcuts/suits/french-blue/french-blue-main.jpg`,
+    ],
+    thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/french-blue/french-blue-main.jpg`,
+  },
   
   // Statement Tuxedos
   blackTuxedo: {

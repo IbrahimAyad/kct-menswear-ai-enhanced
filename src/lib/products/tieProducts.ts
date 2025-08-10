@@ -579,6 +579,20 @@ export const tieProducts = {
       hex: '#483C32',
       imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Taupe-main.webp'
     },
+    {
+      id: 'mustard',
+      name: 'Mustard',
+      displayName: 'Mustard',
+      hex: '#FFDB58',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Mustard-main.webp'
+    },
+    {
+      id: 'sage',
+      name: 'Sage',
+      displayName: 'Sage',
+      hex: '#9CAF88',
+      imageUrl: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Sage-main.webp'
+    },
   ]
 };
 

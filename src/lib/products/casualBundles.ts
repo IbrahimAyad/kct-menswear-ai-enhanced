@@ -1,6 +1,8 @@
 // Casual Bundles - Relaxed style outfits with pocket squares
 // All bundles are priced at $199.99
 
+import { getSuitImage, getShirtImage } from './bundleImageMapping';
+
 const R2_BASE_URL = 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev';
 
 export interface CasualBundle {
@@ -10,10 +12,12 @@ export interface CasualBundle {
   suit: {
     color: string;
     type: '2-piece';
+    image?: string;
   };
   shirt: {
     color: string;
     fit: 'Classic' | 'Slim';
+    image?: string;
   };
   pocketSquare: {
     color: string;
@@ -28,12 +32,39 @@ export interface CasualBundle {
   trending?: boolean;
   aiScore?: number;
   stripePriceId: string;
+  sizes?: string[];
 }
 
 // Using the $199.99 price ID
 const CASUAL_BUNDLE_STRIPE_PRICE_ID = 'price_1RpvZUCHc12x7sCzM4sp9DY5';
 
-export const casualBundles = {
+// Complete suit sizing for all casual bundles
+const CASUAL_BUNDLE_SIZES = [
+  // SHORT sizes
+  '34S', '36S', '38S', '40S', '42S', '44S', '46S', '48S', '50S',
+  // REGULAR sizes  
+  '34R', '36R', '38R', '40R', '42R', '44R', '46R', '48R', '50R', '52R', '54R',
+  // LONG sizes
+  '38L', '40L', '42L', '44L', '46L', '48L', '50L', '52L', '54L'
+];
+
+// Helper function to add component images and sizes to a casual bundle
+function enhanceCasualBundle(bundle: any): CasualBundle {
+  return {
+    ...bundle,
+    suit: {
+      ...bundle.suit,
+      image: getSuitImage(bundle.suit.color)
+    },
+    shirt: {
+      ...bundle.shirt,
+      image: getShirtImage(bundle.shirt.color)
+    },
+    sizes: CASUAL_BUNDLE_SIZES
+  };
+}
+
+const rawCasualBundles = {
   bundles: [
     // NAVY BUNDLES
     {
@@ -302,6 +333,11 @@ export const casualBundles = {
 
     // NOTE: One duplicate was removed (indigo--white-shirt-white-pocket-sqaure.png appears to be a duplicate of indigo-white)
   ]
+};
+
+// Export enhanced bundles with component images and sizes
+export const casualBundles = {
+  bundles: rawCasualBundles.bundles.map(enhanceCasualBundle)
 };
 
 // Helper function to get casual bundle by ID

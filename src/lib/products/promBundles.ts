@@ -1,3 +1,5 @@
+import { getSuitImage, getShirtImage, getTieImage } from './bundleImageMapping';
+
 export interface PromBundle {
   id: string;
   name: string;
@@ -5,14 +7,17 @@ export interface PromBundle {
   suit: {
     color: string;
     type: '2-piece' | '3-piece' | 'tuxedo';
+    image?: string;
   };
   shirt: {
     color: string;
     fit: 'Classic' | 'Slim';
+    image?: string;
   };
   tie: {
     color: string;
     style: 'Classic' | 'Skinny' | 'Slim' | 'Bowtie';
+    image?: string;
   };
   imageUrl: string;
   originalPrice: number;
@@ -23,9 +28,40 @@ export interface PromBundle {
   trending?: boolean;
   aiScore?: number;
   stripePriceId: string;
+  sizes?: string[];
 }
 
-export const promBundles = {
+// Complete suit sizing for all prom bundles
+const PROM_BUNDLE_SIZES = [
+  // SHORT sizes
+  '34S', '36S', '38S', '40S', '42S', '44S', '46S', '48S', '50S',
+  // REGULAR sizes  
+  '34R', '36R', '38R', '40R', '42R', '44R', '46R', '48R', '50R', '52R', '54R',
+  // LONG sizes
+  '38L', '40L', '42L', '44L', '46L', '48L', '50L', '52L', '54L'
+];
+
+// Helper function to add component images and sizes to a prom bundle
+function enhancePromBundle(bundle: any): PromBundle {
+  return {
+    ...bundle,
+    suit: {
+      ...bundle.suit,
+      image: getSuitImage(bundle.suit.color + (bundle.suit.type === 'tuxedo' ? 'Tuxedo' : ''))
+    },
+    shirt: {
+      ...bundle.shirt,
+      image: getShirtImage(bundle.shirt.color)
+    },
+    tie: {
+      ...bundle.tie,
+      image: getTieImage(bundle.tie.color)
+    },
+    sizes: PROM_BUNDLE_SIZES
+  };
+}
+
+const rawPromBundles = {
   bundles: [
     // TUXEDO BUNDLES
     {
@@ -114,4 +150,9 @@ export const promBundles = {
       stripePriceId: 'price_1RpvaBCHc12x7sCzRV6Hy0Im'
     }
   ]
+};
+
+// Export enhanced bundles with component images and sizes
+export const promBundles = {
+  bundles: rawPromBundles.bundles.map(enhancePromBundle)
 };
