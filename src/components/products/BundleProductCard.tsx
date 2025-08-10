@@ -68,7 +68,7 @@ export default function BundleProductCard({
       
       {/* Main Image Container */}
       <Link 
-        href={`/products/${product.id}`}
+        href={`/bundles/${product.id}`}
         className="block relative h-96 bg-gray-100 cursor-pointer group"
         onClick={(e) => {
           // Allow component toggle only if clicking on the image area, not when navigating
@@ -171,7 +171,7 @@ export default function BundleProductCard({
       
       {/* Product Info */}
       <div className="p-6">
-        <Link href={`/products/${product.id}`}>
+        <Link href={`/bundles/${product.id}`}>
           <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-burgundy-600 transition-colors">
             {product.name}
           </h3>
@@ -245,7 +245,7 @@ export default function BundleProductCard({
         {/* Actions */}
         <div className="flex gap-2">
           <Link 
-            href={`/products/${product.id}`}
+            href={`/bundles/${product.id}`}
             className="flex-1 bg-burgundy-600 text-white px-4 py-2 rounded-lg hover:bg-burgundy-700 transition-colors duration-200 flex items-center justify-center gap-2 font-medium"
           >
             View Details
