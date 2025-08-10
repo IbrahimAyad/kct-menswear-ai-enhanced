@@ -3,7 +3,7 @@
 import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useUnifiedShop } from '@/hooks/useUnifiedShop';
-import UnifiedProductGrid from '@/components/products/UnifiedProductGrid';
+import LargeProductGrid from '@/components/products/LargeProductGrid';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -15,7 +15,9 @@ import {
   Sparkles,
   TrendingUp,
   Package,
-  Tag
+  Tag,
+  Grid2x2,
+  Grid3x3
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils/cn';
@@ -26,6 +28,7 @@ function UnifiedProductsContent() {
   const searchParams = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
   const [showPresets, setShowPresets] = useState(false);
+  const [layoutMode, setLayoutMode] = useState<'2x2' | '3x3'>('2x2');
   
   const {
     products,
@@ -146,6 +149,30 @@ function UnifiedProductsContent() {
             
             {/* Controls */}
             <div className="flex items-center gap-2">
+              {/* Layout Toggle */}
+              <div className="hidden md:flex items-center bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setLayoutMode('2x2')}
+                  className={cn(
+                    "p-2 rounded transition-colors",
+                    layoutMode === '2x2' ? 'bg-white shadow-sm' : 'hover:bg-gray-200'
+                  )}
+                  title="Large Grid"
+                >
+                  <Grid2x2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setLayoutMode('3x3')}
+                  className={cn(
+                    "p-2 rounded transition-colors",
+                    layoutMode === '3x3' ? 'bg-white shadow-sm' : 'hover:bg-gray-200'
+                  )}
+                  title="Medium Grid"
+                >
+                  <Grid3x3 className="w-4 h-4" />
+                </button>
+              </div>
+
               <Button
                 variant="outline"
                 size="sm"
@@ -416,20 +443,16 @@ function UnifiedProductsContent() {
           </div>
         )}
         
-        {/* Product Grid */}
-        <UnifiedProductGrid
+        {/* Product Grid - Large 2x2 Layout */}
+        <LargeProductGrid
           products={products}
           loading={loading}
-          gridLayout="mixed"
-          showBundlesFirst={true}
           onQuickView={(product) => {
             // Handle quick view
             console.log('Quick view:', product);
           }}
-          onAddToCart={(product) => {
-            // Handle add to cart
-            console.log('Add to cart:', product);
-          }}
+          showLayoutToggle={false}
+          defaultLayout={layoutMode}
         />
         
         {/* Pagination */}
