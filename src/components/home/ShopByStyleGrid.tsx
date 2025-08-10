@@ -14,9 +14,23 @@ const categories = [
   {
     name: 'Shirts',
     items: '124 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
     link: '/collections/dress-shirts',
     bgColor: 'bg-gradient-to-br from-gray-50 to-gray-100'
+  },
+  {
+    name: 'Vest',
+    items: '52 items',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/vest-tie-main-2.jpg',
+    link: '/collections/vests',
+    bgColor: 'bg-gradient-to-br from-burgundy-50 to-burgundy-100'
+  },
+  {
+    name: 'Jackets',
+    items: '58 items',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png',
+    link: '/collections/jackets',
+    bgColor: 'bg-gradient-to-br from-slate-100 to-slate-200'
   },
   {
     name: 'Pants',
@@ -28,16 +42,9 @@ const categories = [
   {
     name: 'Knitwear',
     items: '45 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main.jpg',
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/9ac91a19-5951-43d4-6a98-c9d658765c00/public',
     link: '/collections/knitwear',
     bgColor: 'bg-gradient-to-br from-beige-50 to-beige-100'
-  },
-  {
-    name: 'Jackets',
-    items: '58 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png',
-    link: '/collections/jackets',
-    bgColor: 'bg-gradient-to-br from-slate-100 to-slate-200'
   },
   {
     name: 'Accessories',
@@ -49,9 +56,23 @@ const categories = [
   {
     name: 'Shoes',
     items: '67 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png',
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/7d203d2a-63b7-46d3-9749-1f203e4ccc00/public',
     link: '/collections/shoes',
     bgColor: 'bg-gradient-to-br from-gray-200 to-gray-300'
+  },
+  {
+    name: 'Velvet Blazers',
+    items: '32 items',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
+    link: '/collections/velvet-blazers',
+    bgColor: 'bg-gradient-to-br from-emerald-50 to-emerald-100'
+  },
+  {
+    name: 'Vest & Tie',
+    items: '48 items',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
+    link: '/collections/vest-tie',
+    bgColor: 'bg-gradient-to-br from-sage-50 to-sage-100'
   },
   {
     name: 'Complete Looks',
@@ -85,7 +106,7 @@ const categories = [
   {
     name: 'Prom 2025',
     items: 'Formal',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light-Blue-Dress-Shirt.jpg',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp',
     link: '/collections/prom',
     bgColor: 'bg-gradient-to-br from-purple-100 to-blue-200'
   },
@@ -99,7 +120,7 @@ const categories = [
   {
     name: 'Suspender Bowtie',
     items: '28 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/accessories/suspenders/red-suspender-bowtie.jpg',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
     link: '/collections/accessories/suspender-bowtie',
     bgColor: 'bg-gradient-to-br from-pink-50 to-pink-100'
   },
@@ -117,7 +138,7 @@ export function ShopByStyleGrid() {
   return (
     <section className="py-8 bg-gray-50">
       <div className="container-main">
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8 gap-2 md:gap-4">
+        <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-9 gap-2 md:gap-4">
           {categories.map((category) => (
             <Link 
               key={category.name} 
