@@ -11,7 +11,11 @@ export interface ConversationalPattern {
   }
 }
 
-export const CONVERSATIONAL_PATTERNS: Record<string, ConversationalPattern> = {
+// Import comprehensive training questions
+import { TRAINING_QUESTIONS, mergeTrainingQuestions } from './training-questions'
+
+// Merge training questions with existing patterns
+export const CONVERSATIONAL_PATTERNS: Record<string, ConversationalPattern> = mergeTrainingQuestions({
   // Product & Inventory
   'suits_availability': {
     keywords: ['do you have suits', 'suits available', 'suit inventory'],

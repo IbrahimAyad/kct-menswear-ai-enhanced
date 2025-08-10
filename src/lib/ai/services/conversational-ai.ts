@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { getConversationalResponse, STYLE_DISCOVERY_QUESTIONS } from '@/lib/ai/knowledge-base'
+import { getShortResponse, formatChatResponse } from '../chat-responses'
 import type { 
   ConversationContext, 
   AIResponse, 
@@ -33,31 +34,34 @@ export class ConversationalAI {
 
   async processMessage(message: string, context: ConversationContext): Promise<AIResponse> {
     try {
-      // First check if we have a trained conversational pattern
-      const conversationalResponse = getConversationalResponse(message, context.extractedPreferences)
+      // Get conversation state
+      const state = this.getConversationState(context.sessionId)
       
-      // If we found a specific pattern, use the enhanced conversational approach
-      if (conversationalResponse.response !== "I'm here to help you find the perfect style solution.") {
+      // First try to get a short, contextual response
+      const shortResponse = getShortResponse(message, {
+        stage: state.stage,
+        mood: state.mood,
+        history: state.topicHistory
+      })
+      
+      // Format the response for chat
+      const formattedResponse = formatChatResponse(shortResponse)
+      
+      // If we have a good match, use it immediately
+      if (shortResponse.intent !== 'fallback') {
         const aiResponse: AIResponse = {
-          message: `${conversationalResponse.response} ${conversationalResponse.followUp}`,
-          intent: 'style-consultation',
-          confidence: 0.9,
-          suggestedActions: conversationalResponse.suggestions.map(suggestion => ({
-            type: 'quick-reply',
-            label: suggestion,
-            data: { reply: suggestion }
-          })),
+          message: formattedResponse.message,
+          intent: shortResponse.intent || 'general-question',
+          confidence: 0.85,
+          suggestedActions: formattedResponse.suggestedActions,
           productRecommendations: []
         }
         
-        // Still update conversation state
-        this.updateConversationStateFromPattern(context.sessionId, message, conversationalResponse)
+        // Update conversation state
+        this.updateConversationStateFromShortResponse(context.sessionId, message, shortResponse)
         
         return aiResponse
       }
-      
-      // Get or create conversation state
-      const state = this.getConversationState(context.sessionId)
       
       // Extract intent and entities from the message
       const intent = await this.extractIntent(message, context, state)
@@ -445,6 +449,30 @@ export class ConversationalAI {
     this.conversationStates.set(sessionId, state)
   }
 
+  private updateConversationStateFromShortResponse(
+    sessionId: string,
+    message: string,
+    response: any
+  ): void {
+    const state = this.getConversationState(sessionId)
+    
+    // Update stage based on response intent
+    if (response.intent) {
+      if (['wedding', 'product', 'styling'].includes(response.intent)) {
+        state.stage = 'discovery'
+      } else if (['sizing', 'comparison'].includes(response.intent)) {
+        state.stage = 'consideration'
+      }
+    }
+    
+    // Track topic
+    if (response.intent && !state.topicHistory.includes(response.intent)) {
+      state.topicHistory.push(response.intent)
+    }
+    
+    this.conversationStates.set(sessionId, state)
+  }
+
   private updateConversationStateFromPattern(
     sessionId: string, 
     message: string, 
@@ -482,19 +510,29 @@ export class ConversationalAI {
 
   private getFallbackResponse(): AIResponse {
     return {
-      message: "I apologize, but I'm having trouble understanding. Could you please rephrase your question? I'm here to help you find the perfect outfit!",
+      message: "Let me help you with that. What are you looking for?",
       intent: 'general-question',
       confidence: 0.3,
       suggestedActions: [
         {
-          type: 'navigate',
-          label: 'Browse Collections',
-          data: { url: '/products' }
+          type: 'quick-reply',
+          label: 'Find a suit',
+          data: { reply: 'I need a suit' }
         },
         {
-          type: 'contact-support',
-          label: 'Contact Support',
-          data: {}
+          type: 'quick-reply',
+          label: 'Style advice',
+          data: { reply: 'I need style advice' }
+        },
+        {
+          type: 'quick-reply',
+          label: 'Sizing help',
+          data: { reply: 'Help with sizing' }
+        },
+        {
+          type: 'quick-reply',
+          label: 'Browse all',
+          data: { reply: 'Show me everything' }
         }
       ],
       productRecommendations: []
