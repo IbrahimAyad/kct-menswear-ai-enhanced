@@ -327,6 +327,17 @@ export interface AIResponse {
   productRecommendations: ProductSuggestion[]
   clarifyingQuestions?: string[]
   visualAids?: VisualAid[]
+  metadata?: {
+    agent?: {
+      name: string
+      avatar: string
+      title: string
+      specialty: string
+    }
+    shouldHandoff?: boolean
+    emotion?: string
+    urgency?: string
+  }
 }
 
 export interface Action {

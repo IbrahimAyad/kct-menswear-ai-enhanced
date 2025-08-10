@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { getConversationalResponse, STYLE_DISCOVERY_QUESTIONS } from '@/lib/ai/knowledge-base'
 import { getShortResponse, formatChatResponse } from '../chat-responses'
+import { conversationEngine } from '../conversation-engine'
 import type { 
   ConversationContext, 
   AIResponse, 
@@ -37,29 +38,44 @@ export class ConversationalAI {
       // Get conversation state
       const state = this.getConversationState(context.sessionId)
       
-      // First try to get a short, contextual response
-      const shortResponse = getShortResponse(message, {
-        stage: state.stage,
-        mood: state.mood,
-        history: state.topicHistory
-      })
-      
-      // Format the response for chat
-      const formattedResponse = formatChatResponse(shortResponse)
-      
-      // If we have a good match, use it immediately
-      if (shortResponse.intent !== 'fallback') {
-        const aiResponse: AIResponse = {
-          message: formattedResponse.message,
-          intent: shortResponse.intent || 'general-question',
-          confidence: 0.85,
-          suggestedActions: formattedResponse.suggestedActions,
-          productRecommendations: []
+      // Use the advanced conversation engine
+      const engineResponse = await conversationEngine.processMessage(
+        message,
+        context.sessionId,
+        {
+          stage: state.stage,
+          mood: state.mood,
+          history: state.topicHistory,
+          preferences: context.extractedPreferences,
+          userId: context.userId
         }
-        
-        // Update conversation state
-        this.updateConversationStateFromShortResponse(context.sessionId, message, shortResponse)
-        
+      )
+      
+      // Get agent info for personality
+      const agentInfo = conversationEngine.getAgentInfo(engineResponse.agent)
+      
+      // Build AI response with agent personality
+      const aiResponse: AIResponse = {
+        message: engineResponse.response,
+        intent: this.determineIntent(message),
+        confidence: engineResponse.confidence,
+        suggestedActions: engineResponse.quickReplies.map(reply => ({
+          type: 'quick-reply',
+          label: reply,
+          data: { reply }
+        })),
+        productRecommendations: [],
+        metadata: {
+          agent: agentInfo,
+          shouldHandoff: engineResponse.shouldHandoff
+        }
+      }
+      
+      // Update conversation state
+      this.updateConversationStateFromEngine(context.sessionId, engineResponse)
+      
+      // If high confidence response, return immediately
+      if (engineResponse.confidence > 0.7) {
         return aiResponse
       }
       
@@ -446,6 +462,39 @@ export class ConversationalAI {
       state.topicHistory.push(intent.type)
     }
 
+    this.conversationStates.set(sessionId, state)
+  }
+
+  private determineIntent(message: string): string {
+    const lower = message.toLowerCase()
+    if (lower.includes('wedding') || lower.includes('married')) return 'wedding-planning'
+    if (lower.includes('size') || lower.includes('fit')) return 'sizing-help'
+    if (lower.includes('color') || lower.includes('match')) return 'style-advice'
+    if (lower.includes('price') || lower.includes('cost')) return 'pricing-inquiry'
+    if (lower.includes('suit') || lower.includes('blazer')) return 'product-search'
+    return 'general-question'
+  }
+
+  private updateConversationStateFromEngine(
+    sessionId: string,
+    engineResponse: any
+  ): void {
+    const state = this.getConversationState(sessionId)
+    
+    // Update based on agent type
+    if (engineResponse.agent === 'James') {
+      state.stage = 'discovery'
+      state.topicHistory.push('wedding')
+    } else if (engineResponse.agent === 'David') {
+      state.stage = 'consideration'
+      state.topicHistory.push('sizing')
+    }
+    
+    // Update mood based on confidence
+    if (engineResponse.confidence > 0.8) {
+      state.mood = 'positive'
+    }
+    
     this.conversationStates.set(sessionId, state)
   }
 
