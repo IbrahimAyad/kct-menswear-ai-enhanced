@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Sparkles, TrendingUp, Heart, ShoppingBag, Sliders, X, Check, Clock, Tag } from 'lucide-react';
+import { Sparkles, TrendingUp, Heart, ShoppingBag, Sliders, X, Check, Clock, Tag, Grid3x3, Grid2x2, LayoutGrid } from 'lucide-react';
 import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import BundleCard from '@/components/bundles/BundleCard';
 import MinimalBundleCard from '@/components/products/MinimalBundleCard';
+import LargeBundleCard from '@/components/products/LargeBundleCard';
 import BundleFilters from '@/components/bundles/BundleFilters';
 import BundleHero from '@/components/bundles/BundleHero';
 import BundleQuickView from '@/components/bundles/BundleQuickView';
@@ -18,9 +19,12 @@ import { useFacebookPageTracking } from '@/hooks/useFacebookTracking';
 export default function BundleCollectionPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedOccasion, setSelectedOccasion] = useState<string>('all');
+  const [selectedColor, setSelectedColor] = useState<string>('all');
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [sortBy, setSortBy] = useState<'popular' | 'price-low' | 'price-high' | 'newest'>('popular');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedBundle, setSelectedBundle] = useState<any>(null);
+  const [layoutMode, setLayoutMode] = useState<'2x2' | '3x3' | '4x4'>('2x2');
   const { addItem } = useCart();
 
   // Track page views
@@ -61,10 +65,22 @@ export default function BundleCollectionPage() {
     }
   });
 
+  // Get unique colors from bundles
+  const allColors = Array.from(new Set(
+    bundleProductsWithImages.bundles.flatMap(b => [
+      b.suit?.color,
+      b.shirt?.color,
+      b.tie?.color
+    ].filter(Boolean))
+  ));
+
   // Filter and sort bundles
   const filteredBundles = bundleProductsWithImages.bundles.filter(bundle => {
     if (selectedCategory !== 'all' && bundle.category !== selectedCategory) return false;
     if (selectedOccasion !== 'all' && !bundle.occasions.includes(selectedOccasion)) return false;
+    if (selectedColor !== 'all' && 
+        ![bundle.suit?.color, bundle.shirt?.color, bundle.tie?.color].includes(selectedColor)) return false;
+    if (bundle.bundlePrice < priceRange[0] || bundle.bundlePrice > priceRange[1]) return false;
     return true;
   });
 
@@ -85,10 +101,13 @@ export default function BundleCollectionPage() {
   // Categories for filtering
   const categories = [
     { id: 'all', name: 'All Bundles', count: bundleProductsWithImages.bundles.length },
-    { id: 'classic', name: 'The Classics', count: 9 },
-    { id: 'bold', name: 'Bold & Modern', count: 8 },
-    { id: 'sophisticated', name: 'Sophisticated', count: 7 },
-    { id: 'contemporary', name: 'Contemporary', count: 6 }
+    { id: 'classic', name: 'Classic', count: bundleProductsWithImages.bundles.filter(b => b.category === 'classic').length },
+    { id: 'bold', name: 'Bold', count: bundleProductsWithImages.bundles.filter(b => b.category === 'bold').length },
+    { id: 'sophisticated', name: 'Sophisticated', count: bundleProductsWithImages.bundles.filter(b => b.category === 'sophisticated').length },
+    { id: 'contemporary', name: 'Contemporary', count: bundleProductsWithImages.bundles.filter(b => b.category === 'contemporary').length },
+    { id: 'wedding', name: 'Wedding', count: bundleProductsWithImages.bundles.filter(b => b.occasions?.includes('Wedding')).length },
+    { id: 'prom', name: 'Prom', count: bundleProductsWithImages.bundles.filter(b => b.occasions?.includes('Prom')).length },
+    { id: 'casual', name: 'Casual', count: bundleProductsWithImages.bundles.filter(b => b.pocketSquare).length }
   ];
 
   const occasions = [
@@ -97,7 +116,9 @@ export default function BundleCollectionPage() {
     { id: 'Business', name: 'Business' },
     { id: 'Black Tie', name: 'Black Tie' },
     { id: 'Cocktail Party', name: 'Cocktail' },
-    { id: 'Date Night', name: 'Date Night' }
+    { id: 'Date Night', name: 'Date Night' },
+    { id: 'Prom', name: 'Prom' },
+    { id: 'Garden Party', name: 'Garden Party' }
   ];
 
   return (
@@ -114,33 +135,62 @@ export default function BundleCollectionPage() {
                 {sortedBundles.length} Curated Styles
               </h2>
               
-              {/* Desktop Categories */}
-              <div className="hidden lg:flex items-center space-x-4">
-                {categories.map(cat => (
+              {/* Desktop Categories - Scrollable */}
+              <div className="hidden lg:flex items-center space-x-3 overflow-x-auto">
+                {categories.slice(0, 5).map(cat => (
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
                       selectedCategory === cat.id
                         ? 'bg-black text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
                     {cat.name}
-                    {cat.count && (
-                      <span className="ml-2 text-xs opacity-70">({cat.count})</span>
-                    )}
+                    <span className="ml-1.5 text-xs opacity-70">({cat.count})</span>
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
+              {/* Layout Switcher */}
+              <div className="hidden md:flex items-center bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setLayoutMode('2x2')}
+                  className={`p-2 rounded transition-colors ${
+                    layoutMode === '2x2' ? 'bg-white shadow-sm' : 'hover:bg-gray-200'
+                  }`}
+                  title="Large Grid"
+                >
+                  <Grid2x2 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setLayoutMode('3x3')}
+                  className={`p-2 rounded transition-colors ${
+                    layoutMode === '3x3' ? 'bg-white shadow-sm' : 'hover:bg-gray-200'
+                  }`}
+                  title="Medium Grid"
+                >
+                  <Grid3x3 className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setLayoutMode('4x4')}
+                  className={`p-2 rounded transition-colors ${
+                    layoutMode === '4x4' ? 'bg-white shadow-sm' : 'hover:bg-gray-200'
+                  }`}
+                  title="Compact Grid"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+              </div>
+
               {/* Sort Dropdown */}
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
+                className="px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black"
               >
                 <option value="popular">Most Popular</option>
                 <option value="newest">Newest First</option>
@@ -148,13 +198,13 @@ export default function BundleCollectionPage() {
                 <option value="price-high">Price: High to Low</option>
               </select>
 
-              {/* Mobile Filter Toggle */}
+              {/* Filter Button */}
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="lg:hidden flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50"
+                className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50"
               >
                 <Sliders className="w-4 h-4" />
-                Filters
+                <span className="hidden sm:inline">Filters</span>
               </button>
             </div>
           </div>
@@ -176,37 +226,15 @@ export default function BundleCollectionPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Featured Section */}
-        {selectedCategory === 'all' && (
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-red-500" />
-                Trending This Season
-              </h2>
-              <Link 
-                href="/bundles/trending"
-                className="text-sm font-medium text-gray-600 hover:text-black"
-              >
-                View All Trending →
-              </Link>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-              {sortedBundles.filter(b => b.trending).slice(0, 3).map((bundle) => (
-                <MinimalBundleCard
-                  key={bundle.id}
-                  product={bundleToUnifiedProduct(bundle)}
-                  onQuickView={() => setSelectedBundle(bundle)}
-                  featured
-                />
-              ))}
-            </div>
-          </div>
-        )}
 
-        {/* All Bundles Grid - Minimal Design */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-10">
+        {/* All Bundles Grid - Dynamic Layout */}
+        <div className={`grid ${
+          layoutMode === '2x2' 
+            ? 'grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12' 
+            : layoutMode === '3x3'
+            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8'
+            : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+        }`}>
           {sortedBundles.map((bundle, index) => (
             <motion.div
               key={bundle.id}
@@ -214,11 +242,19 @@ export default function BundleCollectionPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
             >
-              <MinimalBundleCard
-                product={bundleToUnifiedProduct(bundle)}
-                onQuickView={() => setSelectedBundle(bundle)}
-                featured={index < 2}
-              />
+              {layoutMode === '4x4' ? (
+                <MinimalBundleCard
+                  product={bundleToUnifiedProduct(bundle)}
+                  onQuickView={() => setSelectedBundle(bundle)}
+                  featured={index < 2}
+                />
+              ) : (
+                <LargeBundleCard
+                  product={bundleToUnifiedProduct(bundle)}
+                  onQuickView={() => setSelectedBundle(bundle)}
+                  layout={layoutMode}
+                />
+              )}
             </motion.div>
           ))}
         </div>
