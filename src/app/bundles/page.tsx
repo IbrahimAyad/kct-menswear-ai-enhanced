@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { Sparkles, TrendingUp, Heart, ShoppingBag, Sliders, X, Check, Clock, Tag } from 'lucide-react';
 import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import BundleCard from '@/components/bundles/BundleCard';
+import MinimalBundleCard from '@/components/products/MinimalBundleCard';
 import BundleFilters from '@/components/bundles/BundleFilters';
 import BundleHero from '@/components/bundles/BundleHero';
 import BundleQuickView from '@/components/bundles/BundleQuickView';
@@ -35,6 +36,30 @@ export default function BundleCollectionPage() {
       );
     }
   }, [selectedBundle]);
+
+  // Convert bundle to UnifiedProduct format for minimal cards
+  const bundleToUnifiedProduct = (bundle: any) => ({
+    id: bundle.id,
+    name: bundle.name,
+    price: bundle.bundlePrice,
+    originalPrice: bundle.originalPrice,
+    bundlePrice: bundle.bundlePrice,
+    imageUrl: bundle.imageUrl,
+    description: bundle.description,
+    category: bundle.category,
+    isBundle: true,
+    inStock: true,
+    trending: bundle.trending,
+    aiScore: bundle.aiScore,
+    occasions: bundle.occasions,
+    savings: bundle.savings,
+    bundleComponents: {
+      suit: bundle.suit,
+      shirt: bundle.shirt,
+      tie: bundle.tie,
+      pocketSquare: bundle.pocketSquare
+    }
+  });
 
   // Filter and sort bundles
   const filteredBundles = bundleProductsWithImages.bundles.filter(bundle => {
@@ -167,11 +192,11 @@ export default function BundleCollectionPage() {
               </Link>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
               {sortedBundles.filter(b => b.trending).slice(0, 3).map((bundle) => (
-                <BundleCard
+                <MinimalBundleCard
                   key={bundle.id}
-                  bundle={bundle}
+                  product={bundleToUnifiedProduct(bundle)}
                   onQuickView={() => setSelectedBundle(bundle)}
                   featured
                 />
@@ -180,8 +205,8 @@ export default function BundleCollectionPage() {
           </div>
         )}
 
-        {/* All Bundles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* All Bundles Grid - Minimal Design */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-10">
           {sortedBundles.map((bundle, index) => (
             <motion.div
               key={bundle.id}
@@ -189,9 +214,10 @@ export default function BundleCollectionPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
             >
-              <BundleCard
-                bundle={bundle}
+              <MinimalBundleCard
+                product={bundleToUnifiedProduct(bundle)}
                 onQuickView={() => setSelectedBundle(bundle)}
+                featured={index < 2}
               />
             </motion.div>
           ))}
