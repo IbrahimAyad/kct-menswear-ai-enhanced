@@ -4,6 +4,9 @@ import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useUnifiedShop } from '@/hooks/useUnifiedShop';
 import LargeProductGrid from '@/components/products/LargeProductGrid';
+import EnhancedFilterPanel from '@/components/filters/EnhancedFilterPanel';
+import MobileFilterDrawer from '@/components/filters/MobileFilterDrawer';
+import ActiveFilterPills from '@/components/filters/ActiveFilterPills';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
@@ -17,7 +20,8 @@ import {
   Package,
   Tag,
   Grid2x2,
-  Grid3x3
+  Grid3x3,
+  SlidersHorizontal
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils/cn';
@@ -177,10 +181,13 @@ function UnifiedProductsContent() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className="border-burgundy-200 hover:bg-burgundy-50 hover:border-burgundy-300 transition-colors"
+                className={cn(
+                  "border-burgundy-200 hover:bg-burgundy-50 hover:border-burgundy-300 transition-all",
+                  showFilters && "bg-burgundy-50 border-burgundy-400"
+                )}
               >
-                <Filter className="h-4 w-4 mr-2 text-burgundy-600" />
-                <span className="text-burgundy-700">Filters</span>
+                <SlidersHorizontal className="h-4 w-4 mr-2 text-burgundy-600" />
+                <span className="text-burgundy-700 hidden sm:inline">Filters</span>
                 {activeFilterCount > 0 && (
                   <Badge className="ml-2 bg-burgundy-500 text-white">
                     {activeFilterCount}
@@ -224,207 +231,55 @@ function UnifiedProductsContent() {
         </div>
       </div>
       
-      {/* Active Filters */}
+      {/* Active Filters Pills */}
       {activeFilterCount > 0 && (
-        <div className="bg-burgundy-50 border-b border-burgundy-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-sm font-medium text-burgundy-700">Active Filters:</span>
-              {Object.entries(filters).map(([key, value]) => {
-                if (!value || key === 'page' || key === 'limit' || key === 'sortBy') return null;
-                
-                const displayValue = Array.isArray(value) 
-                  ? value.map(v => formatFilterDisplay(key, v)).join(', ')
-                  : formatFilterDisplay(key, value);
-                
-                return (
-                  <Badge
-                    key={key}
-                    className="bg-white border-burgundy-200 text-burgundy-700 flex items-center gap-1"
-                  >
-                    {displayValue}
-                    <button
-                      onClick={() => updateFilters({ [key]: undefined })}
-                      className="ml-1 hover:text-burgundy-900"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </Badge>
-                );
-              })}
-              <Button
-                onClick={resetFilters}
-                variant="ghost"
-                size="sm"
-                className="text-burgundy-600 hover:text-burgundy-700"
-              >
-                Clear All
-              </Button>
-            </div>
+        <div className="bg-gradient-to-r from-burgundy-50 to-gold-50 border-b border-burgundy-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <ActiveFilterPills
+              filters={filters}
+              updateFilters={updateFilters}
+              resetFilters={resetFilters}
+            />
           </div>
         </div>
       )}
       
-      {/* Filters Panel */}
+      {/* Desktop Filters Panel */}
       <AnimatePresence>
         {showFilters && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="bg-white border-b border-gray-200"
+            className="hidden lg:block bg-white border-b border-gray-200"
           >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {/* Product Type Filter */}
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Type</label>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={filters.includeBundles !== false}
-                        onChange={(e) => updateFilters({ includeBundles: e.target.checked })}
-                        className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
-                      />
-                      <span className="text-sm">Complete Looks</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={filters.includeIndividual !== false}
-                        onChange={(e) => updateFilters({ includeIndividual: e.target.checked })}
-                        className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
-                      />
-                      <span className="text-sm">Individual Items</span>
-                    </label>
-                  </div>
-                </div>
-                
-                {/* Bundle Tier Filter */}
-                {filters.includeBundles !== false && (
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">Bundle Tier</label>
-                    <div className="space-y-2">
-                      {facets.bundleTiers.map(tier => (
-                        <label key={tier.tier} className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={isFilterActive('bundleTier', tier.tier)}
-                            onChange={() => toggleFilter('bundleTier', tier.tier)}
-                            className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
-                          />
-                          <span className="text-sm">${tier.price} ({tier.count})</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Color Filter */}
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Colors</label>
-                  <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {facets.colors.slice(0, 10).map(color => (
-                      <label key={color.name} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={isFilterActive('color', color.name)}
-                          onChange={() => toggleFilter('color', color.name)}
-                          className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
-                        />
-                        <span className="text-sm capitalize">{color.name} ({color.count})</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Occasion Filter */}
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Occasions</label>
-                  <div className="space-y-2 max-h-40 overflow-y-auto">
-                    {facets.occasions.map(occasion => (
-                      <label key={occasion.name} className="flex items-center gap-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={isFilterActive('occasions', occasion.name)}
-                          onChange={() => toggleFilter('occasions', occasion.name)}
-                          className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
-                        />
-                        <span className="text-sm">{occasion.name} ({occasion.count})</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Price Range Filter */}
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Price Range</label>
-                  <div className="space-y-2">
-                    {facets.priceRanges.map(range => (
-                      <button
-                        key={range.label}
-                        onClick={() => updateFilters({ minPrice: range.min, maxPrice: range.max })}
-                        className={cn(
-                          "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
-                          filters.minPrice === range.min && filters.maxPrice === range.max
-                            ? "bg-burgundy-100 text-burgundy-700 font-medium"
-                            : "hover:bg-gray-100"
-                        )}
-                      >
-                        {range.label} ({range.count})
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                
-                {/* Special Filters */}
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Special</label>
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={filters.trending === true}
-                        onChange={(e) => updateFilters({ trending: e.target.checked || undefined })}
-                        className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
-                      />
-                      <span className="text-sm flex items-center gap-1">
-                        <TrendingUp className="w-3 h-3" />
-                        Trending
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={filters.onSale === true}
-                        onChange={(e) => updateFilters({ onSale: e.target.checked || undefined })}
-                        className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
-                      />
-                      <span className="text-sm flex items-center gap-1">
-                        <Tag className="w-3 h-3" />
-                        On Sale
-                      </span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={filters.newArrivals === true}
-                        onChange={(e) => updateFilters({ newArrivals: e.target.checked || undefined })}
-                        className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
-                      />
-                      <span className="text-sm flex items-center gap-1">
-                        <Sparkles className="w-3 h-3" />
-                        New Arrivals
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
+            <div className="max-w-7xl mx-auto">
+              <EnhancedFilterPanel
+                filters={filters}
+                facets={facets}
+                isFilterActive={isFilterActive}
+                toggleFilter={toggleFilter}
+                updateFilters={updateFilters}
+                resetFilters={resetFilters}
+                onClose={() => setShowFilters(false)}
+                variant="dropdown"
+              />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+      
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer
+        isOpen={showFilters}
+        onClose={() => setShowFilters(false)}
+        filters={filters}
+        facets={facets}
+        isFilterActive={isFilterActive}
+        toggleFilter={toggleFilter}
+        updateFilters={updateFilters}
+        resetFilters={resetFilters}
+      />
       
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
