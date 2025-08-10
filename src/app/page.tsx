@@ -268,37 +268,6 @@ export default function ModernHomePage() {
         </div>
       </section>
 
-      {/* Trending Products - VELOCITY GRID with Live Metrics */}
-      <section className="py-12 bg-gradient-to-b from-white to-gray-50/50">
-        <div className="container-main">
-          <div className="text-center mb-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 text-burgundy mb-4"
-            >
-              <TrendingUp className="h-5 w-5" />
-              <span className="text-sm font-semibold tracking-widest uppercase">Live Trending</span>
-              <TrendingUp className="h-5 w-5" />
-            </motion.div>
-            
-            <h2 className="text-2xl md:text-3xl font-serif mb-2">Most Popular Right Now</h2>
-            <p className="text-sm text-gray-600">Real-time popularity metrics • Updated every second</p>
-          </div>
-
-          {/* Velocity Grid Component */}
-          <VelocityGrid products={trendingProducts} />
-
-          <div className="text-center mt-8">
-            <Link href="/products">
-              <Button variant="outline" className="border-burgundy text-burgundy hover:bg-burgundy hover:text-white">
-                Explore All Products
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Style Categories - Interactive Style Environments */}
       <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
@@ -327,30 +296,6 @@ export default function ModernHomePage() {
         </div>
       </section>
 
-      {/* Services Grid - Service Journey Visualization */}
-      <section className="py-16 bg-white">
-        <div className="container-main">
-          <div className="text-center mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 text-burgundy mb-4"
-            >
-              <Zap className="h-5 w-5" />
-              <span className="text-sm font-semibold tracking-widest uppercase">Your Style Journey</span>
-              <Zap className="h-5 w-5" />
-            </motion.div>
-            
-            <h2 className="text-3xl md:text-4xl font-serif mb-3">Tailored to Perfection</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover our comprehensive services designed to elevate your wardrobe • Click to explore each journey
-            </p>
-          </div>
-
-          {/* Service Journey Visualization */}
-          <ServiceJourneyVisualization />
-        </div>
-      </section>
 
     </>
   );
