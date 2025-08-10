@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-// Sample bundle data with real KCT products
+// Bundle data with actual KCT products from live site
 const featuredBundles = [
   {
     id: 'bundle-1',
@@ -20,17 +20,17 @@ const featuredBundles = [
     savings: 40,
     suit: {
       name: 'Navy Suit',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg'
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png'
     },
     shirt: {
       name: 'White Shirt',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/white/white-shirt-1.jpg'
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg'
     },
     tie: {
       name: 'Burgundy Tie',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/burgundy/burgundy-tie-1.jpg'
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg'
     },
-    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/bundles/navy-white-burgundy.jpg',
+    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png',
     slug: 'executive-power'
   },
   {
@@ -42,79 +42,79 @@ const featuredBundles = [
     savings: 50,
     suit: {
       name: 'Charcoal Suit',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/charcoal/charcoal-main-1.jpg'
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png'
     },
     shirt: {
       name: 'Light Blue Shirt',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/blue/light-blue-shirt-1.jpg'
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light-Blue-Dress-Shirt.jpg'
     },
     tie: {
       name: 'Silver Tie',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/silver/silver-tie-1.jpg'
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/silver.jpg'
     },
-    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/bundles/charcoal-blue-silver.jpg',
+    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png',
     slug: 'wedding-classic'
   },
   {
     id: 'bundle-3',
-    name: 'Modern Professional',
-    description: 'Light grey suit, pink shirt, navy tie - contemporary office style',
-    totalPrice: 219.99,
-    originalPrice: 259.99,
-    savings: 40,
+    name: 'Power Player',
+    description: 'Navy 3-piece suit, white shirt, red tie - executive presence',
+    totalPrice: 249.99,
+    originalPrice: 299.99,
+    savings: 50,
     suit: {
-      name: 'Light Grey Suit',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/light-grey-main-1.jpg'
+      name: 'Navy 3-Piece Suit',
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-3p-white-red.png'
     },
     shirt: {
-      name: 'Pink Shirt',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/pink/pink-shirt-1.jpg'
+      name: 'White Shirt',
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg'
     },
     tie: {
-      name: 'Navy Tie',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/navy/navy-tie-1.jpg'
+      name: 'Red Tie',
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/red.jpg'
     },
-    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/bundles/grey-pink-navy.jpg',
-    slug: 'modern-professional'
+    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-3p-white-red.png',
+    slug: 'power-player'
   },
   {
     id: 'bundle-4',
-    name: 'Black Tie Affair',
-    description: 'Black tuxedo, white wing collar shirt, black bow tie - formal elegance',
-    totalPrice: 299.99,
-    originalPrice: 349.99,
-    savings: 50,
+    name: 'Triple Black',
+    description: 'Black suit, black shirt, black tie - bold fashion statement',
+    totalPrice: 229.99,
+    originalPrice: 269.99,
+    savings: 40,
     suit: {
-      name: 'Black Tuxedo',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-tux-main-1.jpg'
+      name: 'Black Suit',
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png'
     },
     shirt: {
-      name: 'Wing Collar Shirt',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/white/wing-collar-1.jpg'
+      name: 'Black Shirt',
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Black-Dress-Shirt.jpg'
     },
     tie: {
-      name: 'Black Bow Tie',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/black/black-bowtie-1.jpg'
+      name: 'Black Tie',
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg'
     },
-    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/bundles/black-tie-formal.jpg',
-    slug: 'black-tie-affair'
+    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png',
+    slug: 'triple-black'
   }
 ];
 
-// Trending products for dense grid
+// Trending products with actual KCT product images
 const trendingProducts = [
-  { id: 1, name: 'Navy 2-Piece Suit', category: 'Suits', price: 189, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg' },
-  { id: 2, name: 'White Dress Shirt', category: 'Shirts', price: 49, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/white/white-shirt-1.jpg' },
-  { id: 3, name: 'Burgundy Silk Tie', category: 'Ties', price: 29, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/burgundy/burgundy-tie-1.jpg' },
-  { id: 4, name: 'Charcoal 3-Piece', category: 'Suits', price: 229, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/charcoal/charcoal-main-1.jpg' },
-  { id: 5, name: 'Light Blue Shirt', category: 'Shirts', price: 55, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/blue/light-blue-shirt-1.jpg' },
-  { id: 6, name: 'Silver Tie', category: 'Ties', price: 35, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/silver/silver-tie-1.jpg' },
-  { id: 7, name: 'Black Tuxedo', category: 'Suits', price: 279, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-tux-main-1.jpg' },
-  { id: 8, name: 'Pink Dress Shirt', category: 'Shirts', price: 59, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/pink/pink-shirt-1.jpg' },
-  { id: 9, name: 'Navy Knit Tie', category: 'Ties', price: 39, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/navy/navy-tie-1.jpg' },
-  { id: 10, name: 'Light Grey Suit', category: 'Suits', price: 199, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/light-grey-main-1.jpg' },
-  { id: 11, name: 'Lavender Shirt', category: 'Shirts', price: 52, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/lavender/lavender-shirt-1.jpg' },
-  { id: 12, name: 'Black Bow Tie', category: 'Ties', price: 25, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/black/black-bowtie-1.jpg' }
+  { id: 1, name: 'Navy 2-Piece Suit', category: 'Suits', price: 189, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png' },
+  { id: 2, name: 'White Dress Shirt', category: 'Shirts', price: 49, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg' },
+  { id: 3, name: 'Burgundy Silk Tie', category: 'Ties', price: 29, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg' },
+  { id: 4, name: 'Charcoal 3-Piece', category: 'Suits', price: 229, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png' },
+  { id: 5, name: 'Light Blue Shirt', category: 'Shirts', price: 55, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light-Blue-Dress-Shirt.jpg' },
+  { id: 6, name: 'Silver Tie', category: 'Ties', price: 35, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/silver.jpg' },
+  { id: 7, name: 'Black Tuxedo', category: 'Suits', price: 279, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png' },
+  { id: 8, name: 'Pink Dress Shirt', category: 'Shirts', price: 59, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light%20Pink-Dress-Shirt.jpg' },
+  { id: 9, name: 'Navy Knit Tie', category: 'Ties', price: 39, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy.jpg' },
+  { id: 10, name: 'Light Grey Suit', category: 'Suits', price: 199, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/grey-pink-navy.png' },
+  { id: 11, name: 'Lavender Shirt', category: 'Shirts', price: 52, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Lilac-Dress-Shirt.jpg' },
+  { id: 12, name: 'Black Bow Tie', category: 'Ties', price: 25, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg' }
 ];
 
 // Style categories with background images
@@ -123,25 +123,25 @@ const styleCategories = [
     name: 'Business Professional',
     slug: 'business',
     description: 'Sharp suits for the modern executive',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/business-meeting.jpg'
+    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png'
   },
   {
     name: 'Wedding Collection',
     slug: 'wedding',
     description: 'Elegant attire for your special day',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/wedding-party.jpg'
+    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png'
   },
   {
     name: 'Black Tie Events',
     slug: 'formal',
     description: 'Tuxedos and formal wear for galas',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/black-tie-event.jpg'
+    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png'
   },
   {
     name: 'Prom Night',
     slug: 'prom',
     description: 'Stand out styles for your big night',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/prom-celebration.jpg'
+    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-pink-pink.png'
   }
 ];
 
@@ -370,13 +370,9 @@ export default function ModernHomePage() {
           <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
             {[1,2,3,4,5,6,7,8,9,10].map((i) => (
               <div key={i} className="aspect-square relative group cursor-pointer overflow-hidden">
-                <Image
-                  src={`https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/social/customer-${i % 5 + 1}.jpg`}
-                  alt={`Customer style ${i}`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 33vw, 20vw"
-                />
+                <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                  <span className="text-gray-500 text-lg font-semibold">Customer {i}</span>
+                </div>
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
                   <div className="text-white text-center">
                     <div className="text-sm font-semibold">@customer_{i}</div>
