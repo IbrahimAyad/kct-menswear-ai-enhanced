@@ -829,7 +829,8 @@ export function getVariationStatistics() {
   const contextsUsed = new Set<string>()
   const tonesUsed = new Set<string>()
   
-  [...RESPONSE_VARIATIONS_SET_1, ...RESPONSE_VARIATIONS_SET_2].forEach(variation => {
+  const allVariations = RESPONSE_VARIATIONS_SET_1.concat(RESPONSE_VARIATIONS_SET_2)
+  allVariations.forEach(variation => {
     variation.variations.forEach(v => {
       contextsUsed.add(`${v.context.timeOfDay}-${v.context.conversationStage}-${v.context.userMood}`)
       tonesUsed.add(v.tone)
