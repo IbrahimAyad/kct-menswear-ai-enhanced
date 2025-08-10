@@ -241,7 +241,7 @@ export default function EnhancedFilterPanel({
                       className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
                     />
                     <span className="text-sm">Complete Looks</span>
-                    <Badge variant="outline" className="ml-auto">{facets.bundleTiers?.length || 0}</Badge>
+                    <span className="ml-auto text-xs text-gray-500">({facets.bundleTiers?.length || 0})</span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-gray-50">
                     <input
@@ -303,12 +303,9 @@ export default function EnhancedFilterPanel({
                             </div>
                           )}
                           {colorData && (
-                            <Badge 
-                              className="absolute -top-1 -right-1 text-xs px-1 py-0 h-4"
-                              variant="secondary"
-                            >
+                            <span className="absolute -top-1 -right-1 text-xs px-1 py-0 h-4 bg-gray-100 rounded-full">
                               {colorData.count}
-                            </Badge>
+                            </span>
                           )}
                         </button>
                       );
@@ -328,7 +325,7 @@ export default function EnhancedFilterPanel({
                           className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
                         />
                         <span className="text-sm capitalize">{color.name}</span>
-                        <Badge variant="outline" className="ml-auto text-xs">{color.count}</Badge>
+                        <span className="ml-auto text-xs text-gray-500">({color.count})</span>
                       </label>
                     ))}
                   </div>
@@ -368,14 +365,17 @@ export default function EnhancedFilterPanel({
                       <span className="text-sm text-gray-600">${localPriceRange[0]}</span>
                       <span className="text-sm text-gray-600">${localPriceRange[1]}</span>
                     </div>
-                    <Slider
-                      value={localPriceRange}
-                      onValueChange={handlePriceChange}
-                      min={0}
-                      max={1000}
-                      step={10}
-                      className="mb-3"
-                    />
+                    {typeof window !== 'undefined' && (
+                      <Slider
+                        defaultValue={localPriceRange}
+                        value={localPriceRange}
+                        onValueChange={handlePriceChange}
+                        min={0}
+                        max={1000}
+                        step={10}
+                        className="mb-3"
+                      />
+                    )}
                     <Button
                       onClick={applyPriceFilter}
                       size="sm"
@@ -402,8 +402,8 @@ export default function EnhancedFilterPanel({
                             : "bg-gray-50 hover:bg-gray-100"
                         )}
                       >
-                        {range.label}
-                        <Badge variant="outline" className="ml-1 text-xs">{range.count}</Badge>
+                        <span>{range.label}</span>
+                        <span className="ml-1 text-xs">({range.count})</span>
                       </button>
                     ))}
                   </div>
@@ -494,7 +494,7 @@ export default function EnhancedFilterPanel({
                         className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
                       />
                       <span className="text-sm">{occasion.name}</span>
-                      <Badge variant="outline" className="ml-auto text-xs">{occasion.count}</Badge>
+                      <span className="ml-auto text-xs text-gray-500">({occasion.count})</span>
                     </label>
                   ))}
                 </div>
