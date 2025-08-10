@@ -26,70 +26,73 @@ interface UnifiedVisualFilterProps {
   subtitle?: string;
 }
 
-// Default unified filters - categories and occasions together
+// R2 Bucket Base URL for actual product images
+const R2_BASE_URL = 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev';
+
+// Default unified filters - categories and occasions together with REAL product images
 const defaultFilters: VisualFilter[] = [
-  // Categories
+  // Categories - Using actual product images from your R2 bucket
   {
     id: 'suits',
     name: 'Suits',
-    image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/navy/navy-main-2.jpg`, // Navy suit - professional look
     type: 'category',
     count: 89
   },
   {
     id: 'shirts',
     name: 'Shirts',
-    image: 'https://images.unsplash.com/photo-1603252109303-2751ce8939db?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/navy/tie-shirt-navy-main.jpg`, // White shirt with tie
     type: 'category',
     count: 124
   },
   {
     id: 'pants',
     name: 'Pants',
-    image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/vest+tie+pants+bur.jpg`, // Pants from burgundy set
     type: 'category',
     count: 76
   },
   {
     id: 'knitwear',
     name: 'Knitwear',
-    image: 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/tan/tan-main.jpg`, // Tan/casual knitwear look
     type: 'category',
     count: 45
   },
   {
     id: 'jackets',
     name: 'Jackets',
-    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/midnight-blue-main-open.jpg`, // Open jacket view
     type: 'category',
     count: 58
   },
   {
     id: 'accessories',
     name: 'Accessories',
-    image: 'https://images.unsplash.com/photo-1589756823695-278bc923f962?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/vest-tie-main.jpg`, // Vest and tie accessories
     type: 'category',
     count: 93
   },
   {
     id: 'shoes',
     name: 'Shoes',
-    image: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/black/main.png`, // Black suit showing shoes
     type: 'category',
     count: 67
   },
   {
     id: 'bundles',
     name: 'Complete Looks',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/indigo/indigo-main.jpg`, // Complete indigo suit bundle
     type: 'category',
     count: 66
   },
-  // Occasions
+  // Occasions - Using appropriate suit styles for each occasion
   {
     id: 'wedding',
     name: 'Wedding Guest',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/burgundy/three-peice-burgundy-main.jpg`, // Burgundy 3-piece for weddings
     type: 'occasion',
     gradient: 'from-rose-600/40 to-pink-600/40',
     formality: 'Formal'
@@ -97,7 +100,7 @@ const defaultFilters: VisualFilter[] = [
   {
     id: 'business',
     name: 'Business',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg`, // Charcoal grey business suit
     type: 'occasion',
     gradient: 'from-slate-700/40 to-slate-900/40',
     formality: 'Formal'
@@ -105,7 +108,7 @@ const defaultFilters: VisualFilter[] = [
   {
     id: 'black-tie',
     name: 'Black Tie',
-    image: 'https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png`, // Black tuxedo
     type: 'occasion',
     gradient: 'from-gray-900/40 to-black/40',
     formality: 'Black-Tie'
@@ -113,7 +116,7 @@ const defaultFilters: VisualFilter[] = [
   {
     id: 'prom',
     name: 'Prom 2025',
-    image: 'https://images.unsplash.com/photo-1519073454383-324977baf09d?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/Tuxedo-Bundles/royal-blue-tuxedo-white-tuxedo-shirt-black-bowtie.png`, // Royal blue tuxedo for prom
     type: 'occasion',
     gradient: 'from-purple-600/40 to-blue-600/40',
     formality: 'Formal'
@@ -121,7 +124,7 @@ const defaultFilters: VisualFilter[] = [
   {
     id: 'cocktail',
     name: 'Cocktail Party',
-    image: 'https://images.unsplash.com/photo-1490195117352-aa267f47f2d9?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/emerlad/emerlad-main.jpg`, // Emerald suit for cocktail events
     type: 'occasion',
     gradient: 'from-amber-600/40 to-orange-600/40',
     formality: 'Semi-Formal'
@@ -129,7 +132,7 @@ const defaultFilters: VisualFilter[] = [
   {
     id: 'date-night',
     name: 'Date Night',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80',
+    image: `${R2_BASE_URL}/kct-prodcuts/suits/french-blue/french-blue-main.jpg`, // French blue for date night
     type: 'occasion',
     gradient: 'from-red-600/40 to-rose-600/40',
     formality: 'Casual'
