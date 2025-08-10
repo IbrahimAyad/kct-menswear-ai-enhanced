@@ -124,8 +124,8 @@ export function BuildYourLookShowcase() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-6xl font-serif mb-6"
           >
-            Build Your Perfect
-            <span className="text-burgundy block">Ensemble</span>
+            Mix and Match
+            <span className="text-burgundy block">Your Style</span>
           </motion.h2>
           
           <motion.p
@@ -134,8 +134,7 @@ export function BuildYourLookShowcase() {
             transition={{ delay: 0.2 }}
             className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
           >
-            Mix and match our premium collection to create a look that's uniquely yours. 
-            Click any item to start building your custom outfit.
+            Free shipping on orders over $200 • Expert styling advice included
           </motion.p>
         </div>
 

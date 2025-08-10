@@ -205,6 +205,11 @@ export default function ModernHomePage() {
       {/* Shop by Style Grid - Category Selection */}
       <ShopByStyleGrid />
 
+      {/* Build Your Perfect Ensemble - Moved up after Shop by Style */}
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+        <BuildYourLookShowcase />
+      </section>
+
       {/* Featured Bundles Section - NEW with hover effect */}
       <section className="py-16 bg-white">
         <div className="container-main">
@@ -233,11 +238,6 @@ export default function ModernHomePage() {
             </Link>
           </div>
         </div>
-      </section>
-
-      {/* Build Your Perfect Ensemble - MODERNIZED with less space */}
-      <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
-        <BuildYourLookShowcase />
       </section>
 
       {/* Trending Products - HIGH DENSITY GRID */}
