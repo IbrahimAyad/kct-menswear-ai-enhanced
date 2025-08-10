@@ -418,7 +418,7 @@ export const CONVERSATION_FLOWS = {
   
   'education_flow': {
     stages: [
-      { stage: 'knowledge_gap', objective: 'Identify what they don't know' },
+      { stage: 'knowledge_gap', objective: 'Identify what they don\'t know' },
       { stage: 'explanation', objective: 'Educate simply' },
       { stage: 'confirmation', objective: 'Ensure understanding' },
       { stage: 'application', objective: 'Apply to their situation' }

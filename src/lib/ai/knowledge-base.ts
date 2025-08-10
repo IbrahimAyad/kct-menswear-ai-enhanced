@@ -242,7 +242,7 @@ export const CONVERSATIONAL_PATTERNS: Record<string, ConversationalPattern> = me
       }
     }
   }
-}
+});
 
 export const STYLE_DISCOVERY_QUESTIONS = {
   'conservative_vs_modern': [
