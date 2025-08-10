@@ -3,24 +3,24 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingBag, Eye, Tag } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, Tag, TrendingUp, Star } from 'lucide-react';
 import { UnifiedProduct } from '@/types/unified-shop';
 import { useCart } from '@/hooks/useCart';
 import { cn } from '@/lib/utils';
 
-interface SimpleProductCardProps {
+interface EnhancedProductCardProps {
   product: UnifiedProduct;
   onQuickView?: (product: UnifiedProduct) => void;
   onAddToCart?: (product: UnifiedProduct) => void;
   featured?: boolean;
 }
 
-export default function SimpleProductCard({
+export default function EnhancedProductCard({
   product,
   onQuickView,
   onAddToCart,
   featured = false
-}: SimpleProductCardProps) {
+}: EnhancedProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const { addItem } = useCart();
@@ -54,7 +54,7 @@ export default function SimpleProductCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Badges - Updated positioning and styling to match bundle cards */}
+      {/* Badges */}
       <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
         {hasDiscount && (
           <span className="bg-burgundy-600 text-white px-3 py-1 rounded-full text-xs font-bold">
@@ -62,13 +62,15 @@ export default function SimpleProductCard({
           </span>
         )}
         {product.trending && (
-          <span className="bg-gold-500 text-burgundy-900 px-3 py-1 rounded-full text-xs font-bold">
+          <span className="bg-gold-500 text-burgundy-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+            <TrendingUp className="w-3 h-3" />
             Trending
           </span>
         )}
-        {!product.inStock && (
-          <span className="bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-            Out of Stock
+        {product.aiScore && product.aiScore >= 85 && (
+          <span className="bg-gold-500 text-burgundy-900 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+            <Star className="w-3 h-3" />
+            AI Pick
           </span>
         )}
       </div>
@@ -86,14 +88,17 @@ export default function SimpleProductCard({
         />
       </button>
 
-      {/* Image - Changed from aspect-[3/4] to h-96 to match bundle cards */}
-      <Link href={`/products/${product.slug || product.id}`} className="block relative h-96 overflow-hidden bg-gray-100 group">
+      {/* Image - Matching bundle card height */}
+      <Link 
+        href={`/products/${product.slug || product.id}`} 
+        className="block relative h-96 overflow-hidden bg-gray-100 group"
+      >
         {product.imageUrl ? (
           <Image
             src={product.imageUrl}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-105 transition-transform duration-700"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         ) : (
@@ -102,68 +107,71 @@ export default function SimpleProductCard({
           </div>
         )}
         
-        {/* Hover Overlay - Enhanced to match bundle cards */}
+        {/* Hover Overlay */}
         <div className={cn(
-          "absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-4 transition-opacity duration-300",
+          "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4 transition-opacity duration-300",
           isHovered ? "opacity-100" : "opacity-0"
         )}>
-          <div className="w-full flex gap-2">
-            {onQuickView && (
+          <div className="w-full">
+            <div className="flex gap-3 mb-3">
+              {onQuickView && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onQuickView(product);
+                  }}
+                  className="flex-1 bg-white text-gray-900 py-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
+                >
+                  <Eye className="w-4 h-4" />
+                  Quick View
+                </button>
+              )}
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  onQuickView(product);
+                  handleAddToCart();
                 }}
-                className="flex-1 bg-white/90 backdrop-blur-sm text-gray-900 py-2 px-3 rounded-lg hover:bg-white transition-colors flex items-center justify-center gap-2"
+                disabled={!product.inStock}
+                className={cn(
+                  "flex-1 py-2 rounded-lg transition-colors flex items-center justify-center gap-2",
+                  product.inStock
+                    ? "bg-burgundy-600 text-white hover:bg-burgundy-700"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                )}
               >
-                <Eye className="w-4 h-4" />
-                <span className="text-sm font-medium">Quick View</span>
-              </button>
-            )}
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                handleAddToCart();
-              }}
-              disabled={!product.inStock}
-              className={cn(
-                "flex-1 py-2 px-3 rounded-lg transition-colors flex items-center justify-center gap-2",
-                product.inStock
-                  ? "bg-burgundy-600 text-white hover:bg-burgundy-700"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              )}
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span className="text-sm font-medium">
+                <ShoppingBag className="w-4 h-4" />
                 {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-              </span>
-            </button>
+              </button>
+            </div>
           </div>
         </div>
       </Link>
 
-      {/* Content - Updated padding and typography to match bundle cards */}
+      {/* Content - Matching bundle card padding */}
       <div className="p-6">
-        {/* Name */}
-        <Link href={`/products/${product.slug || product.id}`}>
-          <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-burgundy-600 transition-colors">
-            {product.name}
-          </h3>
-        </Link>
+        {/* Category */}
+        {product.category && (
+          <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">
+            {product.category}
+          </p>
+        )}
 
-        {/* Description or Category */}
-        {product.description ? (
+        {/* Name */}
+        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 hover:text-burgundy-600 transition-colors">
+          <Link href={`/products/${product.slug || product.id}`}>
+            {product.name}
+          </Link>
+        </h3>
+
+        {/* Description */}
+        {product.description && (
           <p className="text-sm text-gray-600 mb-3 line-clamp-2">
             {product.description}
-          </p>
-        ) : product.category && (
-          <p className="text-sm text-gray-600 mb-3">
-            Premium {product.category}
           </p>
         )}
 
         {/* Product Details */}
-        <div className="flex flex-wrap gap-1 mb-3">
+        <div className="flex flex-wrap gap-2 mb-3">
           {product.color && (
             <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full capitalize">
               {product.color}
@@ -171,7 +179,7 @@ export default function SimpleProductCard({
           )}
           {product.size && Array.isArray(product.size) && product.size.length > 0 && (
             <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
-              {product.size.length} sizes
+              {product.size.length} sizes available
             </span>
           )}
           {product.material && (
@@ -199,37 +207,30 @@ export default function SimpleProductCard({
         </div>
 
         {/* Stock Status */}
-        {product.inStock !== undefined && (
-          <div className="border-t pt-3">
-            <div className="flex items-center gap-2">
-              <div className={cn(
-                "w-2 h-2 rounded-full",
-                product.inStock ? "bg-green-500" : "bg-gray-400"
-              )}></div>
-              <span className="text-xs text-gray-600">
-                {product.inStock ? 'Always in Stock' : 'Out of Stock'}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="flex gap-2 mt-4">
-          <Link 
-            href={`/products/${product.slug || product.id}`}
-            className="flex-1 bg-burgundy-600 text-white px-4 py-2 rounded-lg hover:bg-burgundy-700 transition-colors duration-200 flex items-center justify-center gap-2 font-medium"
-          >
-            View Details
-          </Link>
-          {onQuickView && (
-            <button
-              onClick={() => onQuickView(product)}
-              className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200"
-            >
-              <Eye className="w-5 h-5 text-gray-700" />
-            </button>
-          )}
+        <div className="flex items-center gap-2">
+          <div className={cn(
+            "w-2 h-2 rounded-full",
+            product.inStock ? "bg-green-500" : "bg-gray-400"
+          )}></div>
+          <span className="text-xs text-gray-600">
+            {product.inStock ? 'Always in Stock' : 'Out of Stock'}
+          </span>
         </div>
+
+        {/* Mobile Add to Cart */}
+        <button
+          onClick={handleAddToCart}
+          disabled={!product.inStock}
+          className={cn(
+            "md:hidden w-full mt-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2",
+            product.inStock
+              ? "bg-burgundy-600 text-white hover:bg-burgundy-700"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+          )}
+        >
+          <ShoppingBag className="w-4 h-4" />
+          {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+        </button>
       </div>
     </div>
   );

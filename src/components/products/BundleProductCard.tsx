@@ -95,73 +95,133 @@ export default function BundleProductCard({
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             
-            {/* Component Preview Overlay */}
-            <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <p className="text-white text-sm font-medium mb-2">Click to see components</p>
-              <div className="flex gap-2">
+            {/* Component Preview Overlay - Enhanced visibility */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <p className="text-white text-sm font-semibold mb-2 drop-shadow-lg">Click to see components</p>
+              <div className="flex flex-wrap gap-2">
                 {product.bundleComponents?.suit && (
-                  <div className="bg-white/20 backdrop-blur-sm rounded px-2 py-1 text-xs text-white">
+                  <div className="bg-white/30 backdrop-blur-md rounded-md px-3 py-1.5 text-xs text-white font-medium shadow-lg">
                     {product.bundleComponents.suit.color} Suit
                   </div>
                 )}
                 {product.bundleComponents?.shirt && (
-                  <div className="bg-white/20 backdrop-blur-sm rounded px-2 py-1 text-xs text-white">
+                  <div className="bg-white/30 backdrop-blur-md rounded-md px-3 py-1.5 text-xs text-white font-medium shadow-lg">
                     {product.bundleComponents.shirt.color} Shirt
                   </div>
                 )}
                 {product.bundleComponents?.tie && (
-                  <div className="bg-white/20 backdrop-blur-sm rounded px-2 py-1 text-xs text-white">
+                  <div className="bg-white/30 backdrop-blur-md rounded-md px-3 py-1.5 text-xs text-white font-medium shadow-lg">
                     {product.bundleComponents.tie.color} Tie
+                  </div>
+                )}
+                {product.bundleComponents?.pocketSquare && (
+                  <div className="bg-white/30 backdrop-blur-md rounded-md px-3 py-1.5 text-xs text-white font-medium shadow-lg">
+                    {product.bundleComponents.pocketSquare.color} Pocket Square
                   </div>
                 )}
               </div>
             </div>
           </div>
         ) : (
-          // Component breakdown view
-          <div className="grid grid-cols-3 h-full">
-            {product.bundleComponents?.suit?.image && (
+          // Component breakdown view - handles 3 or 4 items
+          <div className={`grid ${product.bundleComponents?.pocketSquare ? 'grid-cols-4' : 'grid-cols-3'} h-full`}>
+            {product.bundleComponents?.suit && (
               <div className="relative bg-gray-50">
-                <Image
-                  src={product.bundleComponents.suit.image}
-                  alt={product.bundleComponents.suit.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 33vw, 200px"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2">
-                  <p className="text-xs font-medium">Suit</p>
+                {product.bundleComponents.suit.image ? (
+                  <Image
+                    src={product.bundleComponents.suit.image}
+                    alt={`${product.bundleComponents.suit.color} Suit`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 25vw, 150px"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="text-center p-2">
+                      <div className="w-12 h-12 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
+                        <span className="text-gray-500 text-xs">S</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-black/40 text-white p-2">
+                  <p className="text-xs font-semibold">Suit</p>
                   <p className="text-xs opacity-90">{product.bundleComponents.suit.color}</p>
                 </div>
               </div>
             )}
-            {product.bundleComponents?.shirt?.image && (
+            {product.bundleComponents?.shirt && (
               <div className="relative bg-gray-50">
-                <Image
-                  src={product.bundleComponents.shirt.image}
-                  alt={product.bundleComponents.shirt.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 33vw, 200px"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2">
-                  <p className="text-xs font-medium">Shirt</p>
+                {product.bundleComponents.shirt.image ? (
+                  <Image
+                    src={product.bundleComponents.shirt.image}
+                    alt={`${product.bundleComponents.shirt.color} Shirt`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 25vw, 150px"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="text-center p-2">
+                      <div className="w-12 h-12 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
+                        <span className="text-gray-500 text-xs">SH</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-black/40 text-white p-2">
+                  <p className="text-xs font-semibold">Shirt</p>
                   <p className="text-xs opacity-90">{product.bundleComponents.shirt.color}</p>
                 </div>
               </div>
             )}
-            {product.bundleComponents?.tie?.image && (
+            {product.bundleComponents?.tie && (
               <div className="relative bg-gray-50">
-                <Image
-                  src={product.bundleComponents.tie.image}
-                  alt={product.bundleComponents.tie.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 33vw, 200px"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2">
-                  <p className="text-xs font-medium">Tie</p>
+                {product.bundleComponents.tie.image ? (
+                  <Image
+                    src={product.bundleComponents.tie.image}
+                    alt={`${product.bundleComponents.tie.color} Tie`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 25vw, 150px"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="text-center p-2">
+                      <div className="w-12 h-12 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
+                        <span className="text-gray-500 text-xs">T</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-black/40 text-white p-2">
+                  <p className="text-xs font-semibold">{product.bundleComponents.tie.style || 'Tie'}</p>
                   <p className="text-xs opacity-90">{product.bundleComponents.tie.color}</p>
+                </div>
+              </div>
+            )}
+            {product.bundleComponents?.pocketSquare && (
+              <div className="relative bg-gray-50">
+                {product.bundleComponents.pocketSquare.image ? (
+                  <Image
+                    src={product.bundleComponents.pocketSquare.image}
+                    alt={`${product.bundleComponents.pocketSquare.color} Pocket Square`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 25vw, 150px"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <div className="text-center p-2">
+                      <div className="w-12 h-12 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
+                        <span className="text-gray-500 text-xs">PS</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-black/40 text-white p-2">
+                  <p className="text-xs font-semibold">Pocket Square</p>
+                  <p className="text-xs opacity-90">{product.bundleComponents.pocketSquare.color}</p>
                 </div>
               </div>
             )}
