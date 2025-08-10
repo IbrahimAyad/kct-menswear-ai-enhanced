@@ -5,6 +5,7 @@ import { ArrowRight, Calendar, ShoppingBag, Sparkles, TrendingUp, Package } from
 import Link from "next/link";
 import { ModernBundleCard } from "@/components/home/ModernBundleCard";
 import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
+import { ShopByStyleGrid } from "@/components/home/ShopByStyleGrid";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -200,6 +201,9 @@ export default function ModernHomePage() {
           </div>
         </div>
       </section>
+
+      {/* Shop by Style Grid - Category Selection */}
+      <ShopByStyleGrid />
 
       {/* Featured Bundles Section - NEW with hover effect */}
       <section className="py-16 bg-white">
