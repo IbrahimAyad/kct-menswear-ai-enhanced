@@ -7,77 +7,77 @@ const categories = [
   {
     name: 'Suits',
     items: '89 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/suits-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png',
     link: '/collections/suits',
     bgColor: 'bg-gradient-to-br from-beige-100 to-beige-200'
   },
   {
     name: 'Shirts',
     items: '124 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/shirts-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg',
     link: '/collections/dress-shirts',
     bgColor: 'bg-gradient-to-br from-gray-50 to-gray-100'
   },
   {
     name: 'Pants',
     items: '76 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/pants-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/grey-pink-navy.png',
     link: '/collections/pants',
     bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200'
   },
   {
     name: 'Knitwear',
     items: '45 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/knitwear-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/tan-3p-white-brown.png',
     link: '/collections/knitwear',
     bgColor: 'bg-gradient-to-br from-beige-50 to-beige-100'
   },
   {
     name: 'Jackets',
     items: '58 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/jackets-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-3p-white-red.png',
     link: '/collections/jackets',
     bgColor: 'bg-gradient-to-br from-slate-100 to-slate-200'
   },
   {
     name: 'Accessories',
     items: '93 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/accessories-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg',
     link: '/collections/accessories',
     bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200'
   },
   {
     name: 'Shoes',
     items: '67 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/shoes-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png',
     link: '/collections/shoes',
     bgColor: 'bg-gradient-to-br from-gray-200 to-gray-300'
   },
   {
     name: 'Complete Looks',
     items: '66 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/complete-looks-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/royal-blue-3p-white-royal-blue.png',
     link: '/bundles',
     bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200'
   },
   {
     name: 'Wedding Guest',
     items: 'Formal',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/wedding-guest-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/burgundy-suit-pink-burgundy.png',
     link: '/collections/wedding',
     bgColor: 'bg-gradient-to-br from-pink-100 to-pink-200'
   },
   {
     name: 'Business',
     items: 'Formal',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/business-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png',
     link: '/collections/business',
     bgColor: 'bg-gradient-to-br from-gray-200 to-gray-300'
   },
   {
     name: 'Black Tie',
     items: 'Black-Tie',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/black-tie-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-tux-white-black.png',
     link: '/collections/formal',
     bgColor: 'bg-gradient-to-br from-gray-800 to-gray-900',
     textColor: 'text-white'
@@ -85,14 +85,14 @@ const categories = [
   {
     name: 'Prom 2025',
     items: 'Formal',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/prom-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-pink-pink.png',
     link: '/collections/prom',
     bgColor: 'bg-gradient-to-br from-purple-100 to-blue-200'
   },
   {
     name: 'Cocktail Party',
     items: 'Semi-Formal',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Category-Images/cocktail-model.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/brown-vest-peach-brown.png',
     link: '/collections/cocktail',
     bgColor: 'bg-gradient-to-br from-orange-100 to-amber-100'
   },
