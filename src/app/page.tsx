@@ -352,68 +352,6 @@ export default function ModernHomePage() {
         </div>
       </section>
 
-      {/* Social Proof - Instagram Style Grid */}
-      <section className="py-12 bg-white">
-        <div className="container-main">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-serif mb-2">Style Inspiration</h2>
-            <p className="text-gray-600">See how our customers style their looks</p>
-          </div>
-
-          {/* Instagram-style dense grid */}
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
-            {[1,2,3,4,5,6,7,8,9,10].map((i) => (
-              <div key={i} className="aspect-square relative group cursor-pointer overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                  <span className="text-gray-500 text-lg font-semibold">Customer {i}</span>
-                </div>
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <div className="text-sm font-semibold">@customer_{i}</div>
-                    <div className="text-xs">Wedding Guest</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-6">
-            <p className="text-sm text-gray-600">
-              Tag us <span className="font-semibold text-burgundy">@kctmenswear</span> to be featured
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA - Compressed */}
-      <section className="relative py-20 bg-gradient-to-br from-gray-900 to-black text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-64 h-64 bg-gold rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 right-10 w-80 h-80 bg-burgundy rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="container-main text-center relative z-10">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-serif mb-6 leading-tight">
-              Experience the Art of
-              <span className="block text-gold mt-2">Expert Tailoring</span>
-            </h2>
-            <p className="text-lg md:text-xl mb-8 text-gray-300">
-              Every garment is meticulously crafted to your exact measurements
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-burgundy hover:bg-burgundy-700 text-white px-8 py-3">
-                Book Your Consultation
-              </Button>
-              <Link href="/products">
-                <Button size="lg" variant="outline" className="border-white/50 text-white hover:bg-white hover:text-black px-8 py-3">
-                  Explore Collection
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
