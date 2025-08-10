@@ -46,6 +46,20 @@
     animation: shimmer 2s infinite;
   }
   
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
   /* Measurement guide animations */
   @keyframes measurePulse {
     0%, 100% {

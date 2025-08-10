@@ -24,7 +24,7 @@ export default function BundleCollectionPage() {
   const [sortBy, setSortBy] = useState<'popular' | 'price-low' | 'price-high' | 'newest'>('popular');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedBundle, setSelectedBundle] = useState<any>(null);
-  const [layoutMode, setLayoutMode] = useState<'2x2' | '3x3' | '4x4'>('2x2');
+  const [layoutMode, setLayoutMode] = useState<'2x2' | '3x3'>('2x2');
   const { addItem } = useCart();
 
   // Track page views
@@ -175,15 +175,6 @@ export default function BundleCollectionPage() {
                 >
                   <Grid3x3 className="w-4 h-4" />
                 </button>
-                <button
-                  onClick={() => setLayoutMode('4x4')}
-                  className={`p-2 rounded transition-colors ${
-                    layoutMode === '4x4' ? 'bg-white shadow-sm' : 'hover:bg-gray-200'
-                  }`}
-                  title="Compact Grid"
-                >
-                  <LayoutGrid className="w-4 h-4" />
-                </button>
               </div>
 
               {/* Sort Dropdown */}
@@ -231,9 +222,7 @@ export default function BundleCollectionPage() {
         <div className={`grid ${
           layoutMode === '2x2' 
             ? 'grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12' 
-            : layoutMode === '3x3'
-            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8'
-            : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'
+            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8'
         }`}>
           {sortedBundles.map((bundle, index) => (
             <motion.div
@@ -242,19 +231,11 @@ export default function BundleCollectionPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
             >
-              {layoutMode === '4x4' ? (
-                <MinimalBundleCard
-                  product={bundleToUnifiedProduct(bundle)}
-                  onQuickView={() => setSelectedBundle(bundle)}
-                  featured={index < 2}
-                />
-              ) : (
-                <LargeBundleCard
-                  product={bundleToUnifiedProduct(bundle)}
-                  onQuickView={() => setSelectedBundle(bundle)}
-                  layout={layoutMode}
-                />
-              )}
+              <LargeBundleCard
+                product={bundleToUnifiedProduct(bundle)}
+                onQuickView={() => setSelectedBundle(bundle)}
+                layout={layoutMode}
+              />
             </motion.div>
           ))}
         </div>
