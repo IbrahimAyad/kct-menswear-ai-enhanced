@@ -66,24 +66,6 @@ export default function LargeBundleCard({
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Smart Badges */}
-        <div className="absolute top-6 left-6 z-10 flex flex-col gap-2">
-          {savingsPercent >= 15 && (
-            <span className="bg-burgundy-600 text-white px-4 py-2 text-sm font-medium">
-              Save {savingsPercent}%
-            </span>
-          )}
-          {product.trending && (
-            <span className="bg-black text-white px-4 py-2 text-sm font-medium flex items-center gap-1">
-              <Sparkles className="w-3 h-3" /> Trending
-            </span>
-          )}
-          {product.aiScore && product.aiScore > 90 && (
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 text-sm font-medium flex items-center gap-1">
-              <Zap className="w-3 h-3" /> AI Pick
-            </span>
-          )}
-        </div>
 
         {/* Favorite with animation */}
         <button
@@ -237,14 +219,7 @@ export default function LargeBundleCard({
             <h3 className="text-xl font-light text-gray-900 mb-2 hover:underline">{product.name}</h3>
           </Link>
           
-          <div className="flex items-center gap-3 mb-3">
-            <p className="text-sm text-gray-500">{product.occasions?.[0] || 'Formal'}</p>
-            {product.aiScore && product.aiScore > 85 && (
-              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
-                {product.aiScore}% Match
-              </span>
-            )}
-          </div>
+          <p className="text-sm text-gray-500 mb-3">{product.occasions?.[0] || 'Formal'}</p>
           
           <div className="flex items-baseline gap-3 mb-4">
             <span className="text-2xl font-light">${product.bundlePrice}</span>
@@ -337,19 +312,6 @@ export default function LargeBundleCard({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Compact Smart Badges */}
-      <div className="absolute top-4 left-4 z-10 flex gap-2">
-        {savingsPercent >= 15 && (
-          <span className="bg-burgundy-600 text-white px-3 py-1.5 text-xs font-medium">
-            -{savingsPercent}%
-          </span>
-        )}
-        {product.trending && (
-          <span className="bg-black text-white p-1.5 rounded">
-            <Sparkles className="w-3 h-3" />
-          </span>
-        )}
-      </div>
 
       {/* Favorite */}
       <button
