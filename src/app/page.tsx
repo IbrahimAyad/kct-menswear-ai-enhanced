@@ -6,11 +6,14 @@ import Link from "next/link";
 import { ModernBundleCard } from "@/components/home/ModernBundleCard";
 import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
 import { ShopByStyleGrid } from "@/components/home/ShopByStyleGrid";
+import { BundleCarouselTheater } from "@/components/home/BundleCarouselTheater";
+import { VelocityGrid } from "@/components/home/VelocityGrid";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
-// Bundle data with actual KCT products from live site
+// Bundle data with actual KCT products from live site - enhanced with new properties
 const featuredBundles = [
   {
     id: 'bundle-1',
@@ -32,7 +35,9 @@ const featuredBundles = [
       image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg'
     },
     modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png',
-    slug: 'executive-power'
+    slug: 'executive-power',
+    featured: true,
+    popularity: 95
   },
   {
     id: 'bundle-2',
@@ -54,7 +59,8 @@ const featuredBundles = [
       image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/silver.jpg'
     },
     modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png',
-    slug: 'wedding-classic'
+    slug: 'wedding-classic',
+    popularity: 88
   },
   {
     id: 'bundle-3',
@@ -76,7 +82,8 @@ const featuredBundles = [
       image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/red.jpg'
     },
     modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-3p-white-red.png',
-    slug: 'power-player'
+    slug: 'power-player',
+    popularity: 82
   },
   {
     id: 'bundle-4',
@@ -98,24 +105,25 @@ const featuredBundles = [
       image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg'
     },
     modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png',
-    slug: 'triple-black'
+    slug: 'triple-black',
+    popularity: 90
   }
 ];
 
-// Trending products with actual KCT product images
+// Trending products with actual KCT product images - enhanced with metrics
 const trendingProducts = [
-  { id: 1, name: 'Navy 2-Piece Suit', category: 'Suits', price: 189, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png' },
-  { id: 2, name: 'White Dress Shirt', category: 'Shirts', price: 49, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg' },
-  { id: 3, name: 'Burgundy Silk Tie', category: 'Ties', price: 29, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg' },
-  { id: 4, name: 'Charcoal 3-Piece', category: 'Suits', price: 229, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png' },
-  { id: 5, name: 'Light Blue Shirt', category: 'Shirts', price: 55, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light-Blue-Dress-Shirt.jpg' },
-  { id: 6, name: 'Silver Tie', category: 'Ties', price: 35, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/silver.jpg' },
-  { id: 7, name: 'Black Tuxedo', category: 'Suits', price: 279, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png' },
-  { id: 8, name: 'Pink Dress Shirt', category: 'Shirts', price: 59, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light%20Pink-Dress-Shirt.jpg' },
-  { id: 9, name: 'Navy Knit Tie', category: 'Ties', price: 39, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy.jpg' },
-  { id: 10, name: 'Light Grey Suit', category: 'Suits', price: 199, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/grey-pink-navy.png' },
-  { id: 11, name: 'Lavender Shirt', category: 'Shirts', price: 52, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Lilac-Dress-Shirt.jpg' },
-  { id: 12, name: 'Black Bow Tie', category: 'Ties', price: 25, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg' }
+  { id: 1, name: 'Navy 2-Piece Suit', category: 'Suits', price: 189, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png', trending: 'up' as const, hotness: 92, recentlyViewed: 47 },
+  { id: 2, name: 'White Dress Shirt', category: 'Shirts', price: 49, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg', trending: 'up' as const, hotness: 88, recentlyViewed: 35 },
+  { id: 3, name: 'Burgundy Silk Tie', category: 'Ties', price: 29, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg', hotness: 75, recentlyViewed: 22 },
+  { id: 4, name: 'Charcoal 3-Piece', category: 'Suits', price: 229, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png', trending: 'up' as const, hotness: 85, recentlyViewed: 31 },
+  { id: 5, name: 'Light Blue Shirt', category: 'Shirts', price: 55, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light-Blue-Dress-Shirt.jpg', hotness: 70, recentlyViewed: 18 },
+  { id: 6, name: 'Silver Tie', category: 'Ties', price: 35, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/silver.jpg', hotness: 65, recentlyViewed: 15 },
+  { id: 7, name: 'Black Tuxedo', category: 'Suits', price: 279, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png', trending: 'up' as const, hotness: 90, recentlyViewed: 42 },
+  { id: 8, name: 'Pink Dress Shirt', category: 'Shirts', price: 59, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light%20Pink-Dress-Shirt.jpg', hotness: 72, recentlyViewed: 20 },
+  { id: 9, name: 'Navy Knit Tie', category: 'Ties', price: 39, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy.jpg', hotness: 68, recentlyViewed: 16 },
+  { id: 10, name: 'Light Grey Suit', category: 'Suits', price: 199, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/grey-pink-navy.png', trending: 'up' as const, hotness: 82, recentlyViewed: 28 },
+  { id: 11, name: 'Lavender Shirt', category: 'Shirts', price: 52, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Lilac-Dress-Shirt.jpg', hotness: 66, recentlyViewed: 14 },
+  { id: 12, name: 'Black Bow Tie', category: 'Ties', price: 25, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg', trending: 'up' as const, hotness: 78, recentlyViewed: 24 }
 ];
 
 // Style categories with background images
@@ -210,29 +218,35 @@ export default function ModernHomePage() {
         <BuildYourLookShowcase />
       </section>
 
-      {/* Featured Bundles Section - NEW with hover effect */}
-      <section className="py-16 bg-white">
+      {/* Featured Bundles Section - NEW Bundle Carousel Theater */}
+      <section className="py-16 bg-gradient-to-b from-white via-gray-50/50 to-white overflow-hidden">
         <div className="container-main">
           <div className="text-center mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 text-burgundy mb-4"
+            >
+              <Package className="h-5 w-5" />
+              <span className="text-sm font-semibold tracking-widest uppercase">Curated Collections</span>
+              <Package className="h-5 w-5" />
+            </motion.div>
+            
             <h2 className="text-3xl md:text-4xl font-serif mb-3">
               Complete Outfits, Perfect Styling
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Curated bundles that take the guesswork out of style - hover to see the complete look
+              Expertly curated bundles with exclusive savings - swipe to explore
             </p>
           </div>
 
-          {/* Dense 2x2 grid on desktop, 1 column mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {featuredBundles.map((bundle) => (
-              <ModernBundleCard key={bundle.id} bundle={bundle} />
-            ))}
-          </div>
+          {/* Bundle Carousel Theater */}
+          <BundleCarouselTheater bundles={featuredBundles} />
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-12">
             <Link href="/bundles">
-              <Button variant="outline" className="border-burgundy text-burgundy hover:bg-burgundy hover:text-white">
-                View All Bundles
+              <Button size="lg" variant="outline" className="border-burgundy text-burgundy hover:bg-burgundy hover:text-white">
+                Explore All Bundles
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
@@ -240,50 +254,34 @@ export default function ModernHomePage() {
         </div>
       </section>
 
-      {/* Trending Products - HIGH DENSITY GRID */}
-      <section className="py-12 bg-white">
+      {/* Trending Products - VELOCITY GRID with Live Metrics */}
+      <section className="py-12 bg-gradient-to-b from-white to-gray-50/50">
         <div className="container-main">
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-serif">Trending Now</h2>
-              <p className="text-sm text-gray-600 mt-1">Most popular items this week</p>
-            </div>
-            <Link href="/products" className="text-burgundy hover:underline text-sm font-semibold">
-              View All Products →
-            </Link>
+          <div className="text-center mb-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 text-burgundy mb-4"
+            >
+              <TrendingUp className="h-5 w-5" />
+              <span className="text-sm font-semibold tracking-widest uppercase">Live Trending</span>
+              <TrendingUp className="h-5 w-5" />
+            </motion.div>
+            
+            <h2 className="text-2xl md:text-3xl font-serif mb-2">Most Popular Right Now</h2>
+            <p className="text-sm text-gray-600">Real-time popularity metrics • Updated every second</p>
           </div>
 
-          {/* Dense 6-column grid on desktop */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-            {trendingProducts.map((product) => (
-              <div key={product.id} className="group cursor-pointer">
-                <Link href={`/products/${product.id}`}>
-                  <div className="bg-white border border-gray-100 overflow-hidden hover:border-burgundy transition-all duration-200 hover:shadow-lg">
-                    <div className="aspect-square relative">
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 768px) 50vw, 16vw"
-                      />
-                      {/* Quick add overlay */}
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                        <Button size="sm" className="bg-white text-black hover:bg-gray-100">
-                          <ShoppingBag className="w-3 h-3 mr-1" />
-                          Quick Add
-                        </Button>
-                      </div>
-                    </div>
-                    <div className="p-2">
-                      <h4 className="text-sm font-medium truncate">{product.name}</h4>
-                      <p className="text-xs text-gray-600 truncate">{product.category}</p>
-                      <div className="text-sm font-bold text-burgundy">${product.price}</div>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
+          {/* Velocity Grid Component */}
+          <VelocityGrid products={trendingProducts} />
+
+          <div className="text-center mt-8">
+            <Link href="/products">
+              <Button variant="outline" className="border-burgundy text-burgundy hover:bg-burgundy hover:text-white">
+                Explore All Products
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
