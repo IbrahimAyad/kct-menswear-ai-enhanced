@@ -155,6 +155,10 @@ export function R2StyleSwiper({
       setLikedImages(prev => [...prev, currentImage]);
     }
     
+    // Reset drag values immediately to prevent image sticking
+    dragX.set(0);
+    dragY.set(0);
+    
     // Move to next card or complete
     setTimeout(() => {
       if (currentIndex >= images.length - 1) {
@@ -167,7 +171,7 @@ export function R2StyleSwiper({
         setCurrentIndex(prev => prev + 1);
       }
       setIsAnimating(false);
-    }, 300);
+    }, 400);
   }, [currentIndex, images, likedImages, analytics, isAnimating, onSwipe, onComplete, triggerHaptic]);
 
   const handleDragStart = () => {
@@ -184,6 +188,12 @@ export function R2StyleSwiper({
   };
 
   const handleDragEnd = (event: any, info: PanInfo) => {
+    if (isAnimating) {
+      dragX.set(0);
+      dragY.set(0);
+      return;
+    }
+    
     const threshold = 75;
     const velocity = info.velocity.x;
     const offset = info.offset.x;
@@ -198,8 +208,8 @@ export function R2StyleSwiper({
       handleSwipe(offset > 0 ? 'right' : 'left', velocity);
     } else {
       // Spring back to center if not swiped
-      dragX.set(0);
-      dragY.set(0);
+      dragX.set(0, { type: "spring", stiffness: 200, damping: 30 });
+      dragY.set(0, { type: "spring", stiffness: 200, damping: 30 });
     }
   };
 
@@ -330,38 +340,48 @@ export function R2StyleSwiper({
           </div>
         )}
         
-        <AnimatePresence mode="popLayout">
-          <motion.div
-            key={currentImage.id}
-            className="absolute inset-0 cursor-grab active:cursor-grabbing"
-            style={{
-              x: dragX,
-              y: dragY,
-              rotateZ,
-              scale,
-              opacity
-            }}
-            drag
-            dragConstraints={{ left: -window.innerWidth, right: window.innerWidth, top: -50, bottom: 50 }}
-            dragElastic={1}
-            dragTransition={{ bounceStiffness: 600, bounceDamping: 30 }}
+        <AnimatePresence mode="wait">
+          {currentImage && (
+            <motion.div
+              key={`card-${currentImage.id}-${currentIndex}`}
+              className="absolute inset-0 cursor-grab active:cursor-grabbing"
+              style={{
+                x: dragX,
+                y: dragY,
+                rotateZ,
+                scale,
+                opacity
+              }}
+              drag={!isAnimating}
+              dragConstraints={{ left: -500, right: 500, top: -50, bottom: 50 }}
+              dragElastic={0.2}
+              dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
             onDragStart={handleDragStart}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
             whileTap={{ scale: 0.95 }}
-            initial={{ scale: 0.8, opacity: 0, rotateZ: 10 }}
-            animate={{ scale: 1, opacity: 1, rotateZ: 0 }}
-            exit={{ 
-              x: isAnimating ? (swipeHistory[swipeHistory.length - 1]?.direction === 'left' ? -window.innerWidth * 1.5 : window.innerWidth * 1.5) : 0,
-              opacity: 0,
-              scale: 0.5,
-              rotateZ: swipeHistory[swipeHistory.length - 1]?.direction === 'left' ? -45 : 45,
-              transition: { 
-                duration: 0.4,
-                ease: [0.32, 0, 0.67, 0]
-              }
-            }}
-          >
+              initial={{ scale: 0.9, opacity: 0, y: 50 }}
+              animate={{ 
+                scale: 1, 
+                opacity: 1, 
+                y: 0,
+                transition: {
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 20
+                }
+              }}
+              exit={{ 
+                x: isAnimating && swipeHistory.length > 0 ? 
+                  (swipeHistory[swipeHistory.length - 1]?.direction === 'left' ? -600 : 600) : 0,
+                opacity: 0,
+                scale: 0.8,
+                transition: { 
+                  duration: 0.3,
+                  ease: "easeOut"
+                }
+              }}
+            >
             <div className="relative h-full rounded-3xl overflow-hidden shadow-2xl bg-white border border-gold-200">
               {/* Product Image */}
               <img
@@ -458,6 +478,7 @@ export function R2StyleSwiper({
               )}
             </div>
           </motion.div>
+          )}
         </AnimatePresence>
       </div>
 
