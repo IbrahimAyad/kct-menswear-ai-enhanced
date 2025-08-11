@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { R2StyleSwiper } from '@/components/style/R2StyleSwiper';
 import { StyleSwiperImage, SwipeAnalytics } from '@/lib/types';
-import { ArrowLeft, Sparkles, Upload } from 'lucide-react';
+import { ArrowLeft, Sparkles, Upload, Trophy, Target, Zap, Heart, TrendingUp, Award, Crown, Star } from 'lucide-react';
 import Link from 'next/link';
 
 const CATEGORIES = [
@@ -19,10 +19,13 @@ const CATEGORIES = [
 export default function StyleSwiperR2Page() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [swipeData, setSwipeData] = useState<any[]>([]);
+  const [styleScore, setStyleScore] = useState(0);
+  const [achievements, setAchievements] = useState<string[]>([]);
+  const [dailyStreak, setDailyStreak] = useState(1);
   const [completedProfiles, setCompletedProfiles] = useState<any[]>([]);
 
   const handleSwipe = (image: StyleSwiperImage, direction: 'left' | 'right', velocity?: number) => {
-    // console.log(`Swiped ${direction} on image ${image.id}`, velocity && `at ${velocity.toFixed(0)}px/s`);
+    // Update swipe data
     setSwipeData(prev => [...prev, { 
       imageId: image.id, 
       category: image.category,
@@ -30,6 +33,21 @@ export default function StyleSwiperR2Page() {
       velocity, 
       timestamp: Date.now() 
     }]);
+    
+    // Update style score for engagement gamification
+    if (direction === 'right') {
+      setStyleScore(prev => prev + 10);
+      
+      // Check for achievements
+      const newAchievements = [];
+      if (swipeData.filter(d => d.direction === 'right').length === 4) {
+        newAchievements.push('first-love');
+      }
+      if (velocity && Math.abs(velocity) > 800) {
+        newAchievements.push('speed-demon');
+      }
+      setAchievements(prev => [...prev, ...newAchievements.filter(a => !prev.includes(a))]);
+    }
   };
 
   const handleComplete = (likedImages: StyleSwiperImage[], analytics: SwipeAnalytics) => {
@@ -56,19 +74,19 @@ export default function StyleSwiperR2Page() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-black-50 via-white to-gold-50">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-40">
+      <div className="bg-white/90 backdrop-blur-md border-b border-gold-200 sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-amber-600 transition-colors group">
+            <Link href="/" className="inline-flex items-center gap-2 text-black-600 hover:text-burgundy transition-colors group">
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               Back to Home
             </Link>
             
             <Link 
               href="/admin/style-swiper" 
-              className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              className="inline-flex items-center gap-2 bg-burgundy hover:bg-burgundy-600 text-white px-4 py-2 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl"
             >
               <Upload className="w-4 h-4" />
               Manage Images
@@ -78,30 +96,78 @@ export default function StyleSwiperR2Page() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Title Section */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 text-amber-600 mb-4">
-            <div className="h-px w-12 bg-amber-600"></div>
-            <span className="text-sm font-semibold tracking-widest uppercase">Powered by Cloudflare R2</span>
-            <div className="h-px w-12 bg-amber-600"></div>
+        {/* Enhanced Hero Section */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-3 text-burgundy mb-6">
+            <div className="h-px w-16 bg-gradient-to-r from-transparent via-burgundy to-transparent"></div>
+            <Crown className="w-5 h-5" />
+            <span className="text-sm font-semibold tracking-widest uppercase">Luxury Style Discovery</span>
+            <Crown className="w-5 h-5" />
+            <div className="h-px w-16 bg-gradient-to-r from-transparent via-burgundy to-transparent"></div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-serif mb-4">Smart Style Discovery</h1>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Experience our AI-powered style matcher with lightning-fast image delivery from Cloudflare R2
+          <h1 className="text-5xl md:text-6xl font-serif mb-6 bg-gradient-to-r from-burgundy via-black to-burgundy bg-clip-text text-transparent">
+            Your Style DNA Awaits
+          </h1>
+          <p className="text-black-600 text-xl max-w-3xl mx-auto leading-relaxed">
+            Discover your unique style preferences through our intelligent swipe experience. 
+            Each choice builds your personal style profile for curated recommendations.
           </p>
+          
+          {/* Gamification Stats */}
+          <div className="flex justify-center items-center gap-8 mt-8 mb-4">
+            <div className="text-center">
+              <div className="bg-gradient-to-br from-gold-400 to-gold-600 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2">
+                <Trophy className="w-6 h-6 text-white" />
+              </div>
+              <p className="text-sm text-black-500">Style Score</p>
+              <p className="text-lg font-bold text-burgundy">{styleScore}</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-gradient-to-br from-burgundy-400 to-burgundy-600 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <p className="text-sm text-black-500">Daily Streak</p>
+              <p className="text-lg font-bold text-burgundy">{dailyStreak}</p>
+            </div>
+            <div className="text-center">
+              <div className="bg-gradient-to-br from-gold-400 to-burgundy-400 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2">
+                <Award className="w-6 h-6 text-white" />
+              </div>
+              <p className="text-sm text-black-500">Achievements</p>
+              <p className="text-lg font-bold text-burgundy">{achievements.length}</p>
+            </div>
+          </div>
+          
+          {/* Recent Achievements */}
+          {achievements.length > 0 && (
+            <div className="flex justify-center gap-2 mt-4">
+              {achievements.slice(-3).map((achievement, i) => (
+                <div key={i} className="bg-gold-100 text-gold-800 px-3 py-1 rounded-full text-sm font-medium border border-gold-200">
+                  {achievement === 'first-love' && '💫 First Love'}
+                  {achievement === 'speed-demon' && '⚡ Speed Demon'}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Swiper Container */}
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+          {/* Premium Swiper Container */}
+          <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gold-100 relative overflow-hidden">
+            {/* Luxury background pattern */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute inset-0 bg-gradient-to-br from-burgundy-100 via-transparent to-gold-100"></div>
+            </div>
+            <div className="relative z-10">
+            <div className="mb-8">
+              <label className="block text-sm font-semibold text-black-700 mb-3 tracking-wide">
+                <Target className="w-4 h-4 inline-block mr-2 text-burgundy" />
                 Style Category
               </label>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-amber-500 focus:border-amber-500"
+                className="w-full px-4 py-3 border border-gold-200 rounded-xl focus:ring-2 focus:ring-burgundy focus:border-burgundy bg-gradient-to-r from-white to-gold-50 font-medium shadow-sm transition-all hover:shadow-md"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat.value} value={cat.value}>
@@ -120,69 +186,131 @@ export default function StyleSwiperR2Page() {
               enableHaptics={true}
               preloadImages={true}
             />
+            </div>
           </div>
 
-          {/* Analytics & Info */}
-          <div className="space-y-6">
-            {/* Features */}
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h3 className="text-xl font-serif mb-4 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-amber-600" />
-                R2 Integration Features
+          {/* Premium Analytics & Features */}
+          <div className="space-y-8">
+            {/* Style Profile Progress */}
+            <div className="bg-gradient-to-br from-white via-gold-50 to-white rounded-3xl shadow-2xl p-8 border border-gold-100 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-burgundy via-gold to-burgundy"></div>
+              <h3 className="text-2xl font-serif mb-6 text-black-800">
+                <TrendingUp className="w-6 h-6 inline-block mr-3 text-burgundy" />
+                Your Style DNA
               </h3>
               
-              <div className="space-y-3 text-sm">
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-amber-600 rounded-full mt-1.5 flex-shrink-0"></div>
-                  <div>
-                    <strong>Global CDN Delivery:</strong> Images served from Cloudflare's edge network for blazing-fast performance
+              {/* Progress visualization */}
+              <div className="space-y-4 mb-6">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-black-600">Discovery Progress</span>
+                  <span className="text-sm text-burgundy font-bold">{swipeData.length} swipes</span>
+                </div>
+                <div className="h-3 bg-gold-100 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-burgundy to-gold transition-all duration-500"
+                    style={{ width: `${Math.min((swipeData.length / 20) * 100, 100)}%` }}
+                  ></div>
+                </div>
+                
+                {swipeData.length > 0 && (
+                  <div className="grid grid-cols-2 gap-4 mt-4">
+                    <div className="text-center p-3 bg-white/70 rounded-xl border border-gold-200">
+                      <Heart className="w-5 h-5 text-green-500 mx-auto mb-1" />
+                      <p className="text-xs text-black-500">Loved</p>
+                      <p className="text-lg font-bold text-green-600">
+                        {swipeData.filter(d => d.direction === 'right').length}
+                      </p>
+                    </div>
+                    <div className="text-center p-3 bg-white/70 rounded-xl border border-gold-200">
+                      <TrendingUp className="w-5 h-5 text-burgundy mx-auto mb-1" />
+                      <p className="text-xs text-black-500">Style Score</p>
+                      <p className="text-lg font-bold text-burgundy">{styleScore}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Premium Features */}
+            <div className="bg-gradient-to-br from-burgundy-900 via-burgundy-800 to-black-800 rounded-3xl shadow-2xl p-8 text-white relative overflow-hidden">
+              <div className="absolute top-4 right-4">
+                <Crown className="w-8 h-8 text-gold opacity-20" />
+              </div>
+              <h3 className="text-2xl font-serif mb-6 text-white">
+                <Sparkles className="w-6 h-6 inline-block mr-3 text-gold" />
+                Luxury Features
+              </h3>
+              
+              <div className="space-y-4 text-sm">
+                <div className="flex items-start gap-4">
+                  <div className="w-3 h-3 bg-gradient-to-r from-gold-400 to-gold-600 rounded-full mt-1.5 flex-shrink-0 shadow-lg"></div>
+                  <div className="text-gold-100">
+                    <strong className="text-white">AI-Powered Curation:</strong> Machine learning algorithms analyze your preferences for personalized recommendations
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-amber-600 rounded-full mt-1.5 flex-shrink-0"></div>
-                  <div>
-                    <strong>Smart Categorization:</strong> Images organized by style categories for personalized discovery
+                <div className="flex items-start gap-4">
+                  <div className="w-3 h-3 bg-gradient-to-r from-gold-400 to-gold-600 rounded-full mt-1.5 flex-shrink-0 shadow-lg"></div>
+                  <div className="text-gold-100">
+                    <strong className="text-white">Style DNA Profiling:</strong> Build a comprehensive style profile based on your preferences and behavior
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-amber-600 rounded-full mt-1.5 flex-shrink-0"></div>
-                  <div>
-                    <strong>Product Linking:</strong> Each style can be linked to actual products for instant shopping
+                <div className="flex items-start gap-4">
+                  <div className="w-3 h-3 bg-gradient-to-r from-gold-400 to-gold-600 rounded-full mt-1.5 flex-shrink-0 shadow-lg"></div>
+                  <div className="text-gold-100">
+                    <strong className="text-white">Instant Shopping:</strong> Seamlessly shop curated looks with one-click purchase integration
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-amber-600 rounded-full mt-1.5 flex-shrink-0"></div>
-                  <div>
-                    <strong>Analytics Tracking:</strong> Detailed swipe analytics to understand style preferences
+                <div className="flex items-start gap-4">
+                  <div className="w-3 h-3 bg-gradient-to-r from-gold-400 to-gold-600 rounded-full mt-1.5 flex-shrink-0 shadow-lg"></div>
+                  <div className="text-gold-100">
+                    <strong className="text-white">Personal Stylist:</strong> Get expert recommendations based on your discovered style preferences
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-2 h-2 bg-amber-600 rounded-full mt-1.5 flex-shrink-0"></div>
-                  <div>
-                    <strong>Admin Interface:</strong> Easy upload and management of style images
+                <div className="flex items-start gap-4">
+                  <div className="w-3 h-3 bg-gradient-to-r from-gold-400 to-gold-600 rounded-full mt-1.5 flex-shrink-0 shadow-lg"></div>
+                  <div className="text-gold-100">
+                    <strong className="text-white">Exclusive Access:</strong> Early access to new collections and personalized style events
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Live Swipe Data */}
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h3 className="text-xl font-serif mb-4">Live Swipe Data</h3>
-              <div className="space-y-2 max-h-64 overflow-y-auto">
+            {/* Enhanced Live Analytics */}
+            <div className="bg-white rounded-3xl shadow-2xl p-8 border border-gold-100">
+              <h3 className="text-2xl font-serif mb-6 text-black-800">
+                <Star className="w-6 h-6 inline-block mr-3 text-gold" />
+                Live Style Analytics
+              </h3>
+              <div className="space-y-3 max-h-80 overflow-y-auto custom-scrollbar">
                 {swipeData.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">Start swiping to see data</p>
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 bg-gradient-to-br from-gold-100 to-burgundy-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Sparkles className="w-8 h-8 text-burgundy" />
+                    </div>
+                    <p className="text-black-500 text-lg">Start discovering your style</p>
+                    <p className="text-black-400 text-sm mt-1">Swipe through looks to build your profile</p>
+                  </div>
                 ) : (
-                  swipeData.slice(-5).reverse().map((data, index) => (
-                    <div key={index} className="flex items-center justify-between py-2 border-b">
-                      <span className="text-sm">
-                        <span className="font-medium">{data.category}</span> image
-                      </span>
+                  swipeData.slice(-8).reverse().map((data, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gradient-to-r from-white to-gold-50 rounded-xl border border-gold-100 hover:shadow-md transition-all">
                       <div className="flex items-center gap-3">
-                        <span className={`text-sm font-medium ${data.direction === 'right' ? 'text-green-600' : 'text-red-600'}`}>
-                          {data.direction === 'right' ? 'Liked' : 'Passed'}
+                        <div className={`w-3 h-3 rounded-full ${
+                          data.direction === 'right' ? 'bg-green-500' : 'bg-red-400'
+                        }`}></div>
+                        <span className="text-sm font-medium text-black-700">
+                          <span className="capitalize font-bold">{data.category}</span> style
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <span className={`text-sm font-bold px-2 py-1 rounded-full ${
+                          data.direction === 'right' 
+                            ? 'text-green-700 bg-green-100' 
+                            : 'text-red-700 bg-red-100'
+                        }`}>
+                          {data.direction === 'right' ? '💖 Loved' : '❌ Passed'}
                         </span>
                         {data.velocity && (
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-burgundy font-medium bg-burgundy-100 px-2 py-1 rounded-full">
                             {Math.abs(data.velocity).toFixed(0)}px/s
                           </span>
                         )}
@@ -193,70 +321,117 @@ export default function StyleSwiperR2Page() {
               </div>
               
               {swipeData.length > 0 && (
-                <button
-                  onClick={() => setSwipeData([])}
-                  className="mt-4 text-sm text-amber-600 hover:text-amber-700 font-medium"
-                >
-                  Clear Data
-                </button>
+                <div className="flex justify-between items-center mt-6">
+                  <div className="text-sm text-black-600">
+                    <strong>{swipeData.length}</strong> style discoveries
+                  </div>
+                  <button
+                    onClick={() => setSwipeData([])}
+                    className="text-sm text-burgundy hover:text-burgundy-600 font-medium bg-burgundy-50 hover:bg-burgundy-100 px-3 py-1 rounded-full transition-all"
+                  >
+                    Reset Session
+                  </button>
+                </div>
               )}
             </div>
 
-            {/* Actions */}
-            <div className="bg-amber-50 rounded-2xl shadow-xl p-6">
-              <h3 className="text-xl font-serif mb-4">Next Steps</h3>
-              <div className="space-y-3">
+            {/* Premium Actions */}
+            <div className="bg-gradient-to-br from-gold-50 via-white to-burgundy-50 rounded-3xl shadow-2xl p-8 border border-gold-200">
+              <h3 className="text-2xl font-serif mb-6 text-black-800">
+                <Trophy className="w-6 h-6 inline-block mr-3 text-gold" />
+                Your Style Journey
+              </h3>
+              <div className="space-y-4">
                 <Link 
                   href="/admin/style-swiper"
-                  className="block w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg font-medium text-center transition-colors"
+                  className="group block w-full bg-gradient-to-r from-burgundy to-burgundy-600 hover:from-burgundy-600 hover:to-burgundy-700 text-white py-4 rounded-xl font-semibold text-center transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl border border-burgundy-400"
                 >
-                  Upload Your Style Images
+                  <Crown className="w-5 h-5 inline-block mr-2 group-hover:rotate-12 transition-transform" />
+                  Curate Your Collection
                 </Link>
                 <button
                   onClick={resetDemo}
-                  className="block w-full bg-white hover:bg-gray-50 text-gray-700 py-3 rounded-lg font-medium border border-gray-300 transition-colors"
+                  className="block w-full bg-white hover:bg-gold-50 text-black-700 py-4 rounded-xl font-semibold border border-gold-300 hover:border-gold-400 transition-all shadow-lg hover:shadow-xl"
                 >
-                  Reset Demo
+                  <Sparkles className="w-5 h-5 inline-block mr-2" />
+                  Start Fresh Discovery
                 </button>
               </div>
               
-              <div className="mt-4 text-sm text-gray-600">
-                <p className="font-medium mb-1">How to set up:</p>
-                <ol className="list-decimal list-inside space-y-1 text-xs">
-                  <li>Add R2 credentials to your .env file</li>
-                  <li>Upload images via the admin interface</li>
-                  <li>Link images to products (optional)</li>
-                  <li>Integrate with your style quiz flow</li>
-                </ol>
+              <div className="mt-6 p-4 bg-white/70 rounded-xl border border-gold-200">
+                <p className="font-semibold mb-3 text-black-700 flex items-center">
+                  <Target className="w-4 h-4 mr-2 text-burgundy" />
+                  Build Your Style Empire:
+                </p>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center text-black-600">
+                    <div className="w-2 h-2 bg-burgundy rounded-full mr-2"></div>
+                    Discover preferences
+                  </div>
+                  <div className="flex items-center text-black-600">
+                    <div className="w-2 h-2 bg-gold rounded-full mr-2"></div>
+                    Get recommendations
+                  </div>
+                  <div className="flex items-center text-black-600">
+                    <div className="w-2 h-2 bg-burgundy rounded-full mr-2"></div>
+                    Shop curated looks
+                  </div>
+                  <div className="flex items-center text-black-600">
+                    <div className="w-2 h-2 bg-gold rounded-full mr-2"></div>
+                    Build style DNA
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Completed Profiles */}
+        {/* Premium Completed Profiles */}
         {completedProfiles.length > 0 && (
-          <div className="mt-8 bg-white rounded-2xl shadow-xl p-8">
-            <h3 className="text-2xl font-serif mb-6">Completed Style Profiles</h3>
-            <div className="grid md:grid-cols-2 gap-6">
+          <div className="mt-12 bg-gradient-to-br from-white via-gold-50 to-burgundy-50 rounded-3xl shadow-2xl p-8 border border-gold-200">
+            <h3 className="text-3xl font-serif mb-8 text-center text-black-800">
+              <Crown className="w-8 h-8 inline-block mr-3 text-gold" />
+              Your Style DNA Results
+            </h3>
+            <div className="grid md:grid-cols-2 gap-8">
               {completedProfiles.map((profile, index) => (
-                <div key={index} className="border rounded-lg p-4">
-                  <h4 className="font-medium mb-2">
-                    {profile.category === 'all' ? 'All Categories' : profile.category} Profile
-                  </h4>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Liked {profile.likedImages.length} styles
-                  </p>
-                  <div className="space-y-1 text-xs text-gray-500">
-                    <p>Total swipes: {profile.analytics.totalSwipes}</p>
-                    <p>Like rate: {((profile.analytics.rightSwipes / profile.analytics.totalSwipes) * 100).toFixed(0)}%</p>
-                    <p>Avg swipe time: {(profile.analytics.averageSwipeTime / 1000).toFixed(1)}s</p>
-                    <p>Undo count: {profile.analytics.undoCount}</p>
+                <div key={index} className="bg-white rounded-2xl shadow-xl p-6 border border-gold-100 hover:shadow-2xl transition-all">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-bold text-lg text-black-800">
+                      {profile.category === 'all' ? 'Complete Style Profile' : `${profile.category} Specialist`}
+                    </h4>
+                    <div className="bg-gradient-to-r from-gold-400 to-burgundy-400 w-10 h-10 rounded-full flex items-center justify-center">
+                      <Award className="w-5 h-5 text-white" />
+                    </div>
                   </div>
-                  <div className="mt-3 flex flex-wrap gap-1">
+                  
+                  <div className="bg-gradient-to-r from-gold-50 to-burgundy-50 p-4 rounded-xl mb-4">
+                    <p className="text-center text-2xl font-bold text-burgundy mb-1">
+                      {profile.likedImages.length}
+                    </p>
+                    <p className="text-center text-sm text-black-600">Curated Favorites</p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 mb-4 text-xs">
+                    <div className="text-center p-2 bg-gold-50 rounded-lg border border-gold-100">
+                      <p className="font-semibold text-black-700">Total Swipes</p>
+                      <p className="text-lg font-bold text-burgundy">{profile.analytics.totalSwipes}</p>
+                    </div>
+                    <div className="text-center p-2 bg-burgundy-50 rounded-lg border border-burgundy-100">
+                      <p className="font-semibold text-black-700">Love Rate</p>
+                      <p className="text-lg font-bold text-gold">
+                        {((profile.analytics.rightSwipes / profile.analytics.totalSwipes) * 100).toFixed(0)}%
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2">
                     {Object.entries(profile.analytics.categoryPreferences)
                       .filter(([_, score]) => score > 0)
+                      .sort(([,a], [,b]) => b - a)
+                      .slice(0, 4)
                       .map(([cat, score]) => (
-                        <span key={cat} className="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs">
+                        <span key={cat} className="bg-gradient-to-r from-burgundy-100 to-gold-100 text-burgundy font-medium px-3 py-1 rounded-full text-xs border border-burgundy-200">
                           {cat}: +{score}
                         </span>
                       ))}
@@ -268,5 +443,22 @@ export default function StyleSwiperR2Page() {
         )}
       </div>
     </div>
+    
+    <style jsx>{`
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, #8B0000, #D4AF37);
+        border-radius: 3px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(to bottom, #730000, #B8922C);
+      }
+    `}</style>
   );
 }

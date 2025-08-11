@@ -196,10 +196,19 @@ export function R2StyleSwiper({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-[600px]">
-        <div className="text-center">
-          <Sparkles className="w-12 h-12 text-amber-500 animate-pulse mx-auto mb-4" />
-          <p className="text-gray-600">Loading style inspirations...</p>
+      <div className="flex items-center justify-center h-[600px] bg-gradient-to-br from-gold-50 to-burgundy-50 rounded-3xl border border-gold-200">
+        <div className="text-center p-8">
+          <div className="relative mb-6">
+            <div className="w-20 h-20 bg-gradient-to-br from-burgundy-100 to-gold-100 rounded-full flex items-center justify-center mx-auto">
+              <Sparkles className="w-10 h-10 text-burgundy animate-pulse" />
+            </div>
+            <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-gold-400 to-burgundy-400 rounded-full animate-bounce"></div>
+          </div>
+          <h3 className="text-2xl font-serif text-burgundy mb-2">Curating Your Styles</h3>
+          <p className="text-black-600">Loading luxury inspirations...</p>
+          <div className="mt-4 h-2 bg-gold-100 rounded-full overflow-hidden max-w-xs mx-auto">
+            <div className="h-full bg-gradient-to-r from-burgundy to-gold animate-pulse"></div>
+          </div>
         </div>
       </div>
     );
@@ -208,7 +217,7 @@ export function R2StyleSwiper({
   if (!currentImage) {
     return (
       <motion.div 
-        className="flex items-center justify-center h-[600px] bg-gradient-to-br from-amber-50 to-white rounded-2xl shadow-xl"
+        className="flex items-center justify-center h-[600px] bg-gradient-to-br from-gold-50 via-white to-burgundy-50 rounded-3xl shadow-2xl border border-gold-200"
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
       >
@@ -218,16 +227,27 @@ export function R2StyleSwiper({
             animate={{ scale: 1 }}
             transition={{ type: "spring", delay: 0.2 }}
           >
-            <Sparkles className="w-16 h-16 text-amber-500 mx-auto mb-4" />
+            <div className="w-24 h-24 bg-gradient-to-br from-gold-100 to-burgundy-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Sparkles className="w-12 h-12 text-burgundy" />
+            </div>
           </motion.div>
-          <h3 className="text-3xl font-serif mb-4">Style Discovery Complete!</h3>
-          <p className="text-gray-600 mb-2">You liked {likedImages.length} out of {images.length} styles</p>
-          <p className="text-sm text-gray-500 mb-6">
-            Average swipe time: {(analytics.averageSwipeTime / 1000).toFixed(1)}s
-          </p>
+          <h3 className="text-4xl font-serif mb-6 bg-gradient-to-r from-burgundy via-black to-burgundy bg-clip-text text-transparent">Style Discovery Complete!</h3>
+          <div className="bg-white/70 rounded-2xl p-6 mb-6 border border-gold-200">
+            <p className="text-black-700 mb-3 text-lg">You discovered <strong className="text-burgundy">{likedImages.length}</strong> favorite styles out of <strong>{images.length}</strong> total</p>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="text-center p-2 bg-gold-50 rounded-lg">
+                <p className="text-black-500">Average Time</p>
+                <p className="font-bold text-burgundy">{(analytics.averageSwipeTime / 1000).toFixed(1)}s</p>
+              </div>
+              <div className="text-center p-2 bg-burgundy-50 rounded-lg">
+                <p className="text-black-500">Love Rate</p>
+                <p className="font-bold text-gold">{((analytics.rightSwipes / analytics.totalSwipes) * 100).toFixed(0)}%</p>
+              </div>
+            </div>
+          </div>
           <button
             onClick={() => onComplete?.(likedImages, analytics)}
-            className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 rounded-full font-semibold transition-all transform hover:scale-105 shadow-lg"
+            className="bg-gradient-to-r from-burgundy to-burgundy-600 hover:from-burgundy-600 hover:to-burgundy-700 text-white px-10 py-4 rounded-full font-bold transition-all transform hover:scale-105 shadow-2xl hover:shadow-3xl border border-burgundy-400 text-lg"
           >
             View Your Style Profile
           </button>
@@ -238,19 +258,30 @@ export function R2StyleSwiper({
 
   return (
     <div className="relative w-full max-w-md mx-auto">
-      {/* Progress Bar */}
-      <div className="mb-4">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-gray-600">Style Discovery</span>
-          <span className="text-sm text-gray-500">{currentIndex + 1} / {images.length}</span>
+      {/* Enhanced Progress Bar */}
+      <div className="mb-6">
+        <div className="flex justify-between items-center mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-burgundy rounded-full animate-pulse"></div>
+            <span className="text-sm font-semibold text-black-700 tracking-wide">Style Discovery Journey</span>
+          </div>
+          <div className="bg-gradient-to-r from-burgundy-100 to-gold-100 px-3 py-1 rounded-full border border-burgundy-200">
+            <span className="text-sm font-bold text-burgundy">{currentIndex + 1}</span>
+            <span className="text-xs text-black-500 mx-1">of</span>
+            <span className="text-sm font-bold text-gold">{images.length}</span>
+          </div>
         </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-3 bg-gradient-to-r from-gold-100 to-burgundy-100 rounded-full overflow-hidden shadow-inner">
           <motion.div 
-            className="h-full bg-gradient-to-r from-amber-400 to-amber-600"
+            className="h-full bg-gradient-to-r from-burgundy via-burgundy-600 to-gold shadow-lg"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
-            transition={{ type: "spring", stiffness: 300 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
           />
+        </div>
+        <div className="flex justify-between mt-2 text-xs">
+          <span className="text-black-500">Getting to know you...</span>
+          <span className="text-burgundy font-medium">{Math.round(progress)}% complete</span>
         </div>
       </div>
 
@@ -299,7 +330,7 @@ export function R2StyleSwiper({
               }
             }}
           >
-            <div className="relative h-full rounded-2xl overflow-hidden shadow-2xl bg-white">
+            <div className="relative h-full rounded-3xl overflow-hidden shadow-2xl bg-white border border-gold-200">
               {/* Product Image */}
               <img
                 src={currentImage.url}
@@ -308,15 +339,15 @@ export function R2StyleSwiper({
                 draggable={false}
               />
               
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              {/* Luxury Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-burgundy/10 to-transparent" />
               
               {/* Like Overlay */}
               <motion.div 
                 className="absolute inset-0 pointer-events-none"
                 style={{ opacity: likeOpacity }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-green-400/40 via-green-500/30 to-emerald-600/40" />
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/50 via-green-500/40 to-gold-400/30" />
                 <div className="flex items-center justify-center h-full">
                   <motion.div
                     style={{ scale: likeOpacity }}
@@ -324,7 +355,7 @@ export function R2StyleSwiper({
                   >
                     <Heart className="w-40 h-40 text-white fill-white drop-shadow-2xl" />
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2">
-                      <span className="text-4xl font-bold text-white drop-shadow-lg">LOVE IT!</span>
+                      <span className="text-4xl font-bold text-white drop-shadow-2xl font-serif tracking-wide">LOVE IT!</span>
                     </div>
                   </motion.div>
                 </div>
@@ -335,7 +366,7 @@ export function R2StyleSwiper({
                 className="absolute inset-0 pointer-events-none"
                 style={{ opacity: nopeOpacity }}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-red-400/40 via-red-500/30 to-rose-600/40" />
+                <div className="absolute inset-0 bg-gradient-to-br from-red-400/50 via-rose-500/40 to-burgundy-400/30" />
                 <div className="flex items-center justify-center h-full">
                   <motion.div
                     style={{ scale: nopeOpacity }}
@@ -343,7 +374,7 @@ export function R2StyleSwiper({
                   >
                     <X className="w-40 h-40 text-white drop-shadow-2xl stroke-[3]" />
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2">
-                      <span className="text-4xl font-bold text-white drop-shadow-lg">PASS!</span>
+                      <span className="text-4xl font-bold text-white drop-shadow-2xl font-serif tracking-wide">PASS!</span>
                     </div>
                   </motion.div>
                 </div>
@@ -352,12 +383,12 @@ export function R2StyleSwiper({
               {/* Image Info */}
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                 {/* Category & Tags */}
-                <div className="flex flex-wrap gap-2 mb-3">
-                  <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm capitalize">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="bg-gradient-to-r from-burgundy/80 to-gold/80 backdrop-blur-md px-4 py-2 rounded-full text-sm font-semibold capitalize border border-white/20 shadow-lg">
                     {currentImage.category}
                   </span>
                   {currentImage.metadata?.tags?.map((tag, i) => (
-                    <span key={i} className="bg-white/10 backdrop-blur-sm px-2 py-1 rounded-full text-xs">
+                    <span key={i} className="bg-white/25 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium border border-white/20">
                       {tag}
                     </span>
                   ))}
@@ -372,7 +403,7 @@ export function R2StyleSwiper({
                       e.stopPropagation();
                       onProductClick?.(currentImage.metadata!.productId!);
                     }}
-                    className="flex items-center gap-2 bg-white/90 text-black px-4 py-2 rounded-full font-medium text-sm hover:bg-white transition-colors"
+                    className="flex items-center gap-2 bg-gradient-to-r from-white to-gold-50 text-black px-5 py-3 rounded-full font-bold text-sm hover:from-gold-50 hover:to-white transition-all shadow-xl hover:shadow-2xl border border-gold-200 transform hover:scale-105"
                   >
                     <ShoppingBag className="w-4 h-4" />
                     Shop This Look
@@ -380,16 +411,17 @@ export function R2StyleSwiper({
                 )}
               </div>
               
-              {/* Style Match Indicator */}
+              {/* Enhanced Style Match Indicator */}
               {likedImages.some(img => img.category === currentImage.category) && (
                 <motion.div 
-                  className="absolute top-4 right-4 bg-amber-500 text-white px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1"
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ type: "spring", delay: 0.3 }}
+                  className="absolute top-6 right-6 bg-gradient-to-r from-gold-500 to-burgundy-500 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 shadow-2xl border border-white/20 backdrop-blur-sm"
+                  initial={{ scale: 0, rotate: -180, opacity: 0 }}
+                  animate={{ scale: 1, rotate: 0, opacity: 1 }}
+                  transition={{ type: "spring", delay: 0.3, duration: 0.6 }}
                 >
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
                   <TrendingUp className="w-4 h-4" />
-                  Matches your style
+                  <span className="font-serif">Perfect Match</span>
                 </motion.div>
               )}
             </div>
@@ -399,31 +431,32 @@ export function R2StyleSwiper({
 
       {/* Enhanced Action Buttons */}
       <div className="absolute -bottom-8 left-0 right-0 flex justify-center items-center gap-6">
-        {/* Undo Button */}
+        {/* Enhanced Undo Button */}
         <motion.button
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.1, rotate: -5 }}
           whileTap={{ scale: 0.9 }}
           onClick={handleUndo}
           disabled={currentIndex === 0}
           className={cn(
-            "w-12 h-12 rounded-full bg-gray-100 shadow-lg flex items-center justify-center transition-all",
-            currentIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"
+            "w-14 h-14 rounded-full bg-gradient-to-br from-white to-gold-50 shadow-xl border border-gold-200 flex items-center justify-center transition-all",
+            currentIndex === 0 ? "opacity-50 cursor-not-allowed" : "hover:shadow-2xl hover:border-gold-300"
           )}
         >
-          <ChevronLeft className="w-5 h-5 text-gray-600" />
+          <ChevronLeft className="w-6 h-6 text-burgundy" />
         </motion.button>
 
-        {/* Dislike Button */}
+        {/* Enhanced Dislike Button */}
         <motion.button
-          whileHover={{ scale: 1.15 }}
+          whileHover={{ scale: 1.15, rotate: -10 }}
           whileTap={{ scale: 0.85 }}
           onClick={() => handleSwipe('left')}
-          className="w-16 h-16 rounded-full bg-white shadow-xl flex items-center justify-center hover:bg-red-50 transition-all group"
+          className="w-18 h-18 rounded-full bg-gradient-to-br from-white to-red-50 shadow-2xl border border-red-200 flex items-center justify-center hover:shadow-3xl transition-all group relative overflow-hidden"
         >
-          <X className="w-7 h-7 text-red-500 group-hover:scale-110 transition-transform" />
+          <div className="absolute inset-0 bg-gradient-to-br from-red-100/50 to-red-200/30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <X className="w-8 h-8 text-red-500 group-hover:scale-110 transition-transform relative z-10 stroke-2" />
         </motion.button>
 
-        {/* Super Like Button */}
+        {/* Premium Super Like Button */}
         <motion.button
           whileHover={{ scale: 1.1, rotate: 15 }}
           whileTap={{ scale: 0.9 }}
@@ -431,45 +464,64 @@ export function R2StyleSwiper({
             triggerHaptic([10, 30, 10, 30, 10]);
             handleSwipe('right', 1000);
           }}
-          className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 shadow-xl flex items-center justify-center hover:shadow-2xl transition-all"
+          className="w-16 h-16 rounded-full bg-gradient-to-br from-gold-400 via-gold-500 to-burgundy-500 shadow-2xl border-2 border-white flex items-center justify-center hover:shadow-3xl transition-all relative overflow-hidden group"
         >
-          <Zap className="w-6 h-6 text-white" />
+          <div className="absolute inset-0 bg-gradient-to-br from-gold-300 to-burgundy-300 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <Zap className="w-7 h-7 text-white relative z-10 drop-shadow-lg" />
+          <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full opacity-80 animate-ping"></div>
         </motion.button>
 
-        {/* Like Button */}
+        {/* Enhanced Like Button */}
         <motion.button
-          whileHover={{ scale: 1.15 }}
+          whileHover={{ scale: 1.15, rotate: 5 }}
           whileTap={{ scale: 0.85 }}
           onClick={() => handleSwipe('right')}
-          className="w-16 h-16 rounded-full bg-white shadow-xl flex items-center justify-center hover:bg-green-50 transition-all group"
+          className="w-18 h-18 rounded-full bg-gradient-to-br from-white to-green-50 shadow-2xl border border-green-200 flex items-center justify-center hover:shadow-3xl transition-all group relative overflow-hidden"
         >
-          <Heart className="w-7 h-7 text-green-500 group-hover:scale-110 transition-transform" />
+          <div className="absolute inset-0 bg-gradient-to-br from-green-100/50 to-emerald-200/30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <Heart className="w-8 h-8 text-green-500 group-hover:scale-110 group-hover:fill-green-500 transition-all relative z-10" />
         </motion.button>
 
-        {/* Skip Button */}
+        {/* Enhanced Skip Button */}
         <motion.button
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           onClick={() => setCurrentIndex(Math.min(images.length - 1, currentIndex + 1))}
           disabled={!hasMoreCards}
           className={cn(
-            "w-12 h-12 rounded-full bg-gray-100 shadow-lg flex items-center justify-center transition-all",
-            !hasMoreCards ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"
+            "w-14 h-14 rounded-full bg-gradient-to-br from-white to-gold-50 shadow-xl border border-gold-200 flex items-center justify-center transition-all",
+            !hasMoreCards ? "opacity-50 cursor-not-allowed" : "hover:shadow-2xl hover:border-gold-300"
           )}
         >
-          <ChevronRight className="w-5 h-5 text-gray-600" />
+          <ChevronRight className="w-6 h-6 text-burgundy" />
         </motion.button>
       </div>
 
-      {/* Tips */}
+      {/* Enhanced Tips */}
       <motion.div 
-        className="mt-20 text-center text-sm text-gray-500"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
+        className="mt-24 text-center"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.6 }}
       >
-        <p>Swipe right to like, left to pass</p>
-        <p className="text-xs mt-1">Tap the ⚡ for styles you absolutely love!</p>
+        <div className="bg-gradient-to-r from-gold-50 to-burgundy-50 rounded-2xl p-6 border border-gold-200 shadow-lg max-w-md mx-auto">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="w-2 h-2 bg-burgundy rounded-full"></div>
+            <span className="text-sm font-semibold text-black-700 tracking-wide">Style Guide</span>
+            <div className="w-2 h-2 bg-gold rounded-full"></div>
+          </div>
+          <div className="space-y-2 text-sm">
+            <p className="text-black-600">
+              <span className="font-bold text-green-600">→</span> Swipe right to add to favorites
+            </p>
+            <p className="text-black-600">
+              <span className="font-bold text-red-500">←</span> Swipe left to pass
+            </p>
+            <p className="text-xs text-burgundy font-medium bg-gold-100 px-3 py-2 rounded-full inline-block mt-3">
+              ⚡ Tap the golden lightning for instant love!
+            </p>
+          </div>
+        </div>
       </motion.div>
     </div>
   );
