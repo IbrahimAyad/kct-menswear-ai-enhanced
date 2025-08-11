@@ -209,6 +209,44 @@ const productCategories = [
         description: 'Classic oxford shoes for formal wear'
       }
     ]
+  },
+  {
+    id: 'double-breasted',
+    name: 'Double Breasted',
+    price: 329,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
+    products: [
+      {
+        id: 'db-1',
+        name: 'Double Breasted Suit',
+        price: 329,
+        images: [
+          'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp'
+        ],
+        sizes: ['36', '38', '40', '42', '44', '46'],
+        color: 'Navy',
+        description: 'Classic double breasted suit with peak lapels'
+      }
+    ]
+  },
+  {
+    id: 'shirt-tie',
+    name: 'Shirt & Tie',
+    price: 109,
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/dd5c1f7d-722d-4e17-00be-60a3fdb33900/public',
+    products: [
+      {
+        id: 'shirt-tie-1',
+        name: 'Shirt & Tie Combo',
+        price: 109,
+        images: [
+          'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/dd5c1f7d-722d-4e17-00be-60a3fdb33900/public'
+        ],
+        sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+        color: 'White & Blue',
+        description: 'Perfectly matched shirt and tie combination'
+      }
+    ]
   }
 ];
 
@@ -252,8 +290,8 @@ export default function MinimalistSuitsCollection() {
 
   return (
     <div className="min-h-screen bg-white pt-16">
-      {/* Category Grid - 3 columns on mobile, 3-4 on desktop */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3 p-2 md:p-4">
+      {/* Category Grid - 3x3 on mobile, 4 columns on desktop */}
+      <div className="grid grid-cols-3 md:grid-cols-4 gap-1 md:gap-2 p-1 md:p-3">
         {productCategories.map((category) => (
           <motion.div
             key={category.id}
@@ -276,11 +314,11 @@ export default function MinimalistSuitsCollection() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             
             {/* Category Info */}
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <h3 className="text-white font-serif text-lg md:text-xl mb-1">
+            <div className="absolute bottom-0 left-0 right-0 p-2 md:p-3">
+              <h3 className="text-white font-serif text-sm md:text-lg mb-0.5">
                 {category.name}
               </h3>
-              <p className="text-white/90 text-base md:text-lg font-medium">
+              <p className="text-white/90 text-sm md:text-base font-medium">
                 ${category.price}
               </p>
             </div>
@@ -288,12 +326,13 @@ export default function MinimalistSuitsCollection() {
             {/* Quick View Button - Bottom Right */}
             <motion.button
               onClick={() => handleQuickView(category)}
-              className="absolute bottom-4 right-4 bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              className="absolute bottom-2 right-2 md:bottom-3 md:right-3 bg-white/90 backdrop-blur text-black px-2 py-1 md:px-3 md:py-1.5 rounded-full text-xs font-medium flex items-center gap-0.5 md:gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <Eye className="w-3 h-3" />
-              Quick View
+              <span className="hidden md:inline">Quick View</span>
+              <span className="md:hidden">View</span>
             </motion.button>
           </motion.div>
         ))}
