@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,8 @@ import {
   Minus,
   Plus,
   Eye,
-  Grid3X3
+  Grid3X3,
+  Filter
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -272,8 +273,37 @@ export default function MasterCollectionPage() {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
   const categoryScrollRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  
+  // Track scroll state for mobile optimizations
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Scroll tracking for header animation - optimized for mobile
+  const { scrollY } = useScroll();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  
+  // Mobile-first header animations - more aggressive shrinking on mobile
+  const headerScale = useTransform(scrollY, [0, 80], [1, isMobile ? 0.5 : 0.7]);
+  const headerOpacity = useTransform(scrollY, [0, 40, 80], [1, 0.9, isMobile ? 0.3 : 0.9]);
+  const headerHeight = useTransform(scrollY, [0, 80], [isMobile ? 280 : 320, isMobile ? 80 : 160]);
+  const categoryCardSize = useTransform(scrollY, [0, 80], [isMobile ? 140 : 180, isMobile ? 80 : 120]);
+  
+  // Smooth spring animation for scroll effects - faster for mobile
+  const springConfig = { stiffness: isMobile ? 400 : 300, damping: isMobile ? 35 : 30, restDelta: 0.001 };
+  const smoothHeaderHeight = useSpring(headerHeight, springConfig);
+  const smoothScale = useSpring(headerScale, springConfig);
+  const smoothOpacity = useSpring(headerOpacity, springConfig);
 
   // Filter products based on selected category
   const filteredProducts = selectedCategory === 'all' 
@@ -314,42 +344,107 @@ export default function MasterCollectionPage() {
     });
     setSelectedSize('');
     setQuantity(1);
+    setCurrentImageIndex(0);
+    
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
   };
 
   // Close modal when clicking outside
   const handleModalClick = (e: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      setSelectedProduct(null);
+      closeModal();
     }
   };
 
+  // Close modal function with cleanup
+  const closeModal = () => {
+    setSelectedProduct(null);
+    // Restore body scroll
+    document.body.style.overflow = 'unset';
+  };
+
+  // Close modal on escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedProduct) {
+        closeModal();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [selectedProduct]);
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Sticky Category Navigation Header */}
-      <div className="sticky top-16 z-40 bg-white border-b">
-        <div className="relative">
+    <>
+      <style jsx global>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+      
+      <div className="min-h-screen bg-white pt-16">
+        {/* Animated Sticky Category Navigation Header - Optimized for Mobile */}
+        <motion.div 
+          ref={headerRef}
+          className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b overflow-hidden shadow-sm"
+          style={{ 
+            height: smoothHeaderHeight,
+            opacity: smoothOpacity
+          }}
+        >
+        <div className="relative h-full">
+          {/* Mobile Filter Toggle - Floating button when collapsed */}
+          <motion.div 
+            className="md:hidden absolute top-3 right-4 z-20"
+            style={{ 
+              opacity: useTransform(scrollY, [40, 80], [0, 1]),
+              scale: useTransform(scrollY, [40, 80], [0.8, 1])
+            }}
+          >
+            <motion.button
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              className="flex items-center gap-1.5 bg-black text-white px-3 py-2 rounded-full shadow-lg text-xs font-medium"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Filter className="w-3 h-3" />
+              <span>Filter</span>
+            </motion.button>
+          </motion.div>
+
           {/* Scroll buttons */}
-          <button
+          <motion.button
             onClick={() => scrollCategories('left')}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur p-2 shadow-lg rounded-r-lg hover:bg-white transition-all"
             aria-label="Scroll left"
+            style={{ scale: smoothScale }}
           >
             <ChevronLeft className="w-5 h-5" />
-          </button>
+          </motion.button>
           
-          <button
+          <motion.button
             onClick={() => scrollCategories('right')}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur p-2 shadow-lg rounded-l-lg hover:bg-white transition-all"
             aria-label="Scroll right"
+            style={{ scale: smoothScale }}
           >
             <ChevronRight className="w-5 h-5" />
-          </button>
+          </motion.button>
 
           {/* Categories */}
-          <div
+          <motion.div
             ref={categoryScrollRef}
-            className="flex gap-3 overflow-x-auto scrollbar-hide px-12 py-4"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            className="flex gap-3 overflow-x-auto scrollbar-hide px-12 py-4 h-full items-center"
+            style={{ 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none',
+              scale: smoothScale 
+            }}
           >
             {masterCategories.map((category) => (
               <motion.button
@@ -359,10 +454,16 @@ export default function MasterCollectionPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <div className={cn(
-                  "relative w-[180px] h-[220px] rounded-lg overflow-hidden cursor-pointer",
-                  selectedCategory === category.id && "ring-2 ring-burgundy ring-offset-2"
-                )}>
+                <motion.div 
+                  className={cn(
+                    "relative rounded-lg overflow-hidden cursor-pointer transition-all duration-300",
+                    selectedCategory === category.id && "ring-2 ring-burgundy ring-offset-2"
+                  )}
+                  style={{
+                    width: categoryCardSize,
+                    height: useTransform(categoryCardSize, [120, 180], [150, 220])
+                  }}
+                >
                   {category.image ? (
                     <>
                       <Image
@@ -371,6 +472,7 @@ export default function MasterCollectionPage() {
                         fill
                         className="object-cover"
                         sizes="180px"
+                        priority={category.id === 'all'}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                     </>
@@ -379,33 +481,106 @@ export default function MasterCollectionPage() {
                       "absolute inset-0 bg-gradient-to-br flex items-center justify-center",
                       category.bgColor || "from-burgundy to-burgundy-700"
                     )}>
-                      <Grid3X3 className="w-10 h-10 text-white" />
+                      <Grid3X3 className="w-8 h-8 md:w-10 md:h-10 text-white" />
                     </div>
                   )}
-                  <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                    <h3 className="font-semibold text-base">{category.name}</h3>
-                    <p className="text-sm opacity-90">{category.count} items</p>
+                  <div className="absolute bottom-0 left-0 right-0 p-2 md:p-3 text-white">
+                    <motion.h3 
+                      className="font-semibold text-sm md:text-base leading-tight"
+                      style={{
+                        fontSize: useTransform(scrollY, [0, 100], [16, 12])
+                      }}
+                    >
+                      {category.name}
+                    </motion.h3>
+                    <motion.p 
+                      className="text-xs opacity-90"
+                      style={{
+                        opacity: useTransform(scrollY, [0, 80], [0.9, 0])
+                      }}
+                    >
+                      {category.count} items
+                    </motion.p>
                   </div>
-                </div>
+                </motion.div>
               </motion.button>
             ))}
-          </div>
+          </motion.div>
         </div>
 
-        {/* Product count bar */}
-        <div className="px-4 py-2 bg-gray-50 border-t flex justify-between items-center">
-          <span className="text-sm text-gray-600">
+        {/* Product count bar - Completely hidden on mobile when scrolled */}
+        <motion.div 
+          className="px-4 py-2 bg-gray-50/80 backdrop-blur border-t flex justify-between items-center"
+          style={{
+            opacity: useTransform(scrollY, [0, 40], [1, isMobile ? 0 : 0.5]),
+            height: useTransform(scrollY, [0, 80], [40, isMobile ? 0 : 20]),
+            display: useTransform(scrollY, [60, 80], ["flex", isMobile ? "none" : "flex"])
+          }}
+        >
+          <span className="text-sm text-gray-600 font-medium">
             {filteredProducts.length} products
           </span>
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Grid3X3 className="w-4 h-4" />
-            <span>Grid View</span>
+            <span className="hidden sm:inline">Grid View</span>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      {/* Product Grid - 3x3 on mobile */}
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 md:gap-2 p-1 md:p-3">
+      {/* Mobile Filters Overlay - Enhanced */}
+      <AnimatePresence>
+        {showMobileFilters && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="md:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowMobileFilters(false)}
+          >
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="bg-white h-full w-80 max-w-[80vw] p-6 overflow-y-auto shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-lg font-semibold">Filter Categories</h3>
+                <button 
+                  onClick={() => setShowMobileFilters(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="space-y-3">
+                {masterCategories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => {
+                      setSelectedCategory(category.id);
+                      setShowMobileFilters(false);
+                    }}
+                    className={cn(
+                      "w-full text-left p-3 rounded-lg border transition-all",
+                      selectedCategory === category.id 
+                        ? "border-burgundy bg-burgundy/5 text-burgundy" 
+                        : "border-gray-200 hover:border-gray-300"
+                    )}
+                  >
+                    <div className="font-medium">{category.name}</div>
+                    <div className="text-sm text-gray-500">{category.count} items</div>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Optimized Product Grid - Matching suits-minimal sizing exactly */}
+      <div className="grid grid-cols-3 md:grid-cols-4 gap-1 md:gap-2 p-1 md:p-3">
         <AnimatePresence mode="wait">
           {filteredProducts.map((product, index) => (
             <motion.div
@@ -415,26 +590,30 @@ export default function MasterCollectionPage() {
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ delay: index * 0.02 }}
               className="relative aspect-[3/4] rounded-lg overflow-hidden cursor-pointer group"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => handleQuickView(product)}
             >
-              {/* Product Image */}
+              {/* Product Image - Optimized loading */}
               <Image
                 src={product.image}
                 alt={product.name}
                 fill
-                className="object-cover"
-                sizes="(max-width: 768px) 33vw, 20vw"
+                className="object-cover transition-transform duration-200 group-hover:scale-105"
+                sizes="(max-width: 768px) 33vw, 25vw"
+                priority={index < 8}
+                loading={index < 8 ? "eager" : "lazy"}
               />
               
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               
-              {/* Product Info */}
+              {/* Product Info - Matching suits-minimal styling */}
               <div className="absolute bottom-0 left-0 right-0 p-2 md:p-3">
-                <h3 className="text-white font-serif text-xs md:text-sm mb-0.5 line-clamp-1">
+                <h3 className="text-white font-serif text-sm md:text-lg mb-0.5">
                   {product.name}
                 </h3>
-                <p className="text-white/90 text-xs md:text-sm font-medium">
+                <p className="text-white/90 text-sm md:text-base font-medium">
                   ${product.price}
                 </p>
               </div>
@@ -446,40 +625,48 @@ export default function MasterCollectionPage() {
                 </div>
               )}
 
-              {/* Quick View on Hover */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                <button className="bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1">
-                  <Eye className="w-3 h-3" />
-                  View
-                </button>
-              </div>
+              {/* Quick View Button - Positioned like suits-minimal */}
+              <motion.button
+                className="absolute bottom-2 right-2 md:bottom-3 md:right-3 bg-white/90 backdrop-blur text-black px-2 py-1 md:px-3 md:py-1.5 rounded-full text-xs font-medium flex items-center gap-0.5 md:gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleQuickView(product);
+                }}
+              >
+                <Eye className="w-3 h-3" />
+                <span className="hidden md:inline">Quick View</span>
+                <span className="md:hidden">View</span>
+              </motion.button>
             </motion.div>
           ))}
         </AnimatePresence>
       </div>
 
-      {/* Quick View Modal */}
+      {/* Quick View Modal - Enhanced for mobile */}
       <AnimatePresence>
         {selectedProduct && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
             onClick={handleModalClick}
           >
             <motion.div
               ref={modalRef}
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 50 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className="relative bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
               <button
-                onClick={() => setSelectedProduct(null)}
-                className="absolute top-4 right-4 z-10 p-2 bg-white/90 backdrop-blur rounded-full shadow-lg"
+                onClick={closeModal}
+                className="absolute top-4 right-4 z-10 p-2 bg-white/90 backdrop-blur rounded-full shadow-lg hover:bg-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -491,7 +678,26 @@ export default function MasterCollectionPage() {
                   alt={selectedProduct.name}
                   fill
                   className="object-cover rounded-t-2xl"
+                  priority
                 />
+                
+                {/* Image Navigation Dots - if multiple images */}
+                {selectedProduct.images && selectedProduct.images.length > 1 && (
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+                    {selectedProduct.images.map((_: any, index: number) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={cn(
+                          "w-1.5 h-1.5 rounded-full transition-all",
+                          index === 0
+                            ? "bg-white w-4" 
+                            : "bg-white/50"
+                        )}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Product Details */}
@@ -570,11 +776,20 @@ export default function MasterCollectionPage() {
                   <ShoppingBag className="w-4 h-4 mr-2" />
                   Add to Bag
                 </Button>
+
+                {/* View Details Link */}
+                <Link 
+                  href={`/products/${selectedProduct.id}`}
+                  className="block text-center text-sm text-gray-600 mt-3 hover:text-black transition-colors"
+                >
+                  View Full Details
+                </Link>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+      </div>
+    </>
   );
 }
