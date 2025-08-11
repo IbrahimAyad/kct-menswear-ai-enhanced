@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -17,39 +17,46 @@ import {
   Grid3X3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useGA4 } from '@/hooks/useGA4';
 
 // Wedding categories following SuitSupply pattern
 const weddingCategories = [
   {
     id: 'all',
     name: 'All Wedding',
-    count: 76,
+    count: 38,
     image: null,
-    bgColor: 'from-slate-900 to-slate-700'
+    bgColor: 'from-emerald-800 to-cream-500'
   },
   {
-    id: 'wedding-tuxedos',
-    name: 'Wedding Tuxedos',
-    count: 24,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-tuxedo.jpg'
+    id: 'groom-suits',
+    name: 'Groom Suits',
+    count: 12,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Fall%20Wedding%20Bundles/brown-suit-white-shirt-brown-tie.png'
   },
   {
-    id: 'wedding-suits',
-    name: 'Wedding Suits',
-    count: 28,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-wedding-suit.jpg'
-  },
-  {
-    id: 'groomsmen-attire',
+    id: 'groomsmen',
     name: 'Groomsmen Attire',
-    count: 18,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-groomsmen.jpg'
+    count: 10,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/indigo-2p-white-dusty-pink.png'
+  },
+  {
+    id: 'wedding-guest',
+    name: 'Wedding Guest',
+    count: 8,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Summer%20Wedding%20Bundles/sand-suit-white-shirt-sage-green-tie.png'
+  },
+  {
+    id: 'black-tie',
+    name: 'Black Tie',
+    count: 5,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-tux-main.jpg'
   },
   {
     id: 'wedding-accessories',
     name: 'Wedding Accessories',
-    count: 6,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/accessories/wedding-bowtie-set.jpg'
+    count: 8,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/dusty-pink.jpg'
   }
 ];
 
@@ -278,13 +285,80 @@ export default function WeddingCollectionPage() {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
+  const [scrolled, setScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const categoryScrollRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  
+  // GA4 tracking
+  const {
+    trackCollectionView,
+    trackProductClick,
+    trackQuickViewModal,
+    trackAddCart,
+    trackWishlistAdd,
+    trackFilterChange
+  } = useGA4();
+  
+  // Determine if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  // Header shrink animation values - keeping collapsed state more visible
+  const headerHeight = useTransform(
+    scrollY,
+    [0, 100],
+    isMobile ? ['280px', '140px'] : ['300px', '200px']
+  );
+  
+  const headerOpacity = useTransform(
+    scrollY,
+    [0, 100],
+    [1, 0.95]
+  );
+  
+  const productCountOpacity = useTransform(
+    scrollY,
+    [0, 50],
+    isMobile ? [1, 0] : [1, 1]
+  );
+
+  const springHeaderHeight = useSpring(headerHeight, { stiffness: 400, damping: 30 });
+  const springHeaderOpacity = useSpring(headerOpacity, { stiffness: 400, damping: 30 });
+  const springProductCountOpacity = useSpring(productCountOpacity, { stiffness: 400, damping: 30 });
+  
+  // Track scroll for floating filter button
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 100);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Track collection view on mount
+  useEffect(() => {
+    trackCollectionView('Wedding Collection', weddingProducts);
+  }, []);
 
   // Filter products based on selected category
   const filteredProducts = selectedCategory === 'all' 
     ? weddingProducts 
     : weddingProducts.filter(p => p.subcategory === selectedCategory);
+
+  // Track category filter changes
+  useEffect(() => {
+    if (selectedCategory !== 'all') {
+      trackFilterChange('Wedding Collection', { category: selectedCategory });
+    }
+  }, [selectedCategory]);
 
   // Scroll category nav
   const scrollCategories = (direction: 'left' | 'right') => {
@@ -305,6 +379,11 @@ export default function WeddingCollectionPage() {
         newSet.delete(productId);
       } else {
         newSet.add(productId);
+        // Track wishlist add
+        const product = weddingProducts.find(p => p.id === productId);
+        if (product) {
+          trackWishlistAdd(product);
+        }
       }
       return newSet;
     });
@@ -313,14 +392,19 @@ export default function WeddingCollectionPage() {
   // Handle quick view
   const handleQuickView = (product: typeof weddingProducts[0]) => {
     const isAccessory = product.subcategory === 'wedding-accessories';
+    
     setSelectedProduct({
       ...product,
       images: [product.image],
-      sizes: isAccessory ? ['One Size'] : ['36', '38', '40', '42', '44', '46', '48', '50'],
+      sizes: isAccessory ? ['One Size'] : ['36', '38', '40', '42', '44', '46', '48'],
       description: 'Elegant wedding attire crafted for your special day'
     });
     setSelectedSize('');
     setQuantity(1);
+    
+    // Track quick view
+    trackQuickViewModal(product);
+    trackProductClick(product, 'Wedding Collection');
   };
 
   // Close modal when clicking outside
@@ -331,17 +415,19 @@ export default function WeddingCollectionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section with Title */}
-      <div className="bg-gray-50 px-4 py-8 md:px-8 md:py-12">
-        <h1 className="text-3xl md:text-4xl font-serif mb-2">Wedding Collection</h1>
-        <p className="text-gray-600 max-w-2xl">
-          Make your special day unforgettable with our curated wedding collection featuring elegant tuxedos, suits, and accessories in classic and contemporary styles.
-        </p>
-      </div>
-
-      {/* Sticky Category Navigation Header */}
-      <div className="sticky top-16 z-40 bg-white border-b">
+    <div className="min-h-screen bg-white pt-16">
+      {/* Collapsible Category Filter Navigation */}
+      <motion.section 
+        className={cn(
+          "sticky top-0 z-40 bg-white border-b transition-shadow duration-300",
+          scrolled ? "shadow-lg border-b-2" : "shadow-sm"
+        )}
+        style={{ 
+          height: springHeaderHeight,
+          opacity: springHeaderOpacity
+        }}
+      >
+        <div className="relative h-full">
         <div className="relative">
           {/* Scroll buttons */}
           <button
@@ -360,10 +446,13 @@ export default function WeddingCollectionPage() {
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Categories */}
+          {/* Categories - Dynamic sizing based on scroll */}
           <div
             ref={categoryScrollRef}
-            className="flex gap-3 overflow-x-auto scrollbar-hide px-12 py-4"
+            className={cn(
+              "flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-12 md:px-16 h-full items-center",
+              scrolled ? "py-2" : "py-3 md:py-4"
+            )}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {weddingCategories.map((category) => (
@@ -375,7 +464,14 @@ export default function WeddingCollectionPage() {
                 whileTap={{ scale: 0.95 }}
               >
                 <div className={cn(
-                  "relative w-[200px] h-[250px] rounded-lg overflow-hidden cursor-pointer",
+                  "relative rounded-xl overflow-hidden cursor-pointer group transition-all shadow-lg",
+                  scrolled && isMobile 
+                    ? "w-[140px] h-[100px]"  // Smaller when scrolled on mobile
+                    : isMobile 
+                      ? "w-[220px] h-[160px]"  // Large size on mobile
+                      : scrolled
+                        ? "w-[160px] h-[120px]"  // Smaller when scrolled on desktop
+                        : "w-[200px] h-[200px]",  // Normal size on desktop
                   selectedCategory === category.id && "ring-2 ring-black ring-offset-2"
                 )}>
                   {category.image ? (
@@ -384,22 +480,36 @@ export default function WeddingCollectionPage() {
                         src={category.image}
                         alt={category.name}
                         fill
-                        className="object-cover"
-                        sizes="200px"
+                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 768px) 220px, 200px"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                     </>
                   ) : (
                     <div className={cn(
                       "absolute inset-0 bg-gradient-to-br flex items-center justify-center",
-                      category.bgColor || "from-slate-900 to-slate-700"
+                      category.bgColor || "from-emerald-800 to-cream-500"
                     )}>
                       <Grid3X3 className="w-10 h-10 text-white" />
                     </div>
                   )}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <h3 className="font-semibold text-lg">{category.name}</h3>
-                    <p className="text-sm opacity-90">{category.count} items</p>
+                  {/* Text positioned at bottom with gradient overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 text-white">
+                    <h3 className={cn(
+                      "font-semibold",
+                      scrolled && isMobile ? "text-sm" : isMobile ? "text-lg" : scrolled ? "text-base" : "text-lg"
+                    )}>
+                      {category.name}
+                    </h3>
+                    {/* Hide item count on mobile when scrolled */}
+                    {(!scrolled || !isMobile) && (
+                      <p className={cn(
+                        "opacity-90",
+                        scrolled ? "text-xs" : "text-sm"
+                      )}>
+                        {category.count} items
+                      </p>
+                    )}
                   </div>
                 </div>
               </motion.button>
@@ -407,22 +517,23 @@ export default function WeddingCollectionPage() {
           </div>
         </div>
 
-        {/* Filter Bar */}
-        <div className="px-4 py-3 bg-gray-50 border-t flex justify-between items-center">
-          <span className="text-sm text-gray-600">
+        {/* Product count bar - Hidden on mobile when scrolled */}
+        <motion.div 
+          className="px-4 md:px-8 py-2 flex justify-between items-center border-t bg-gray-50"
+          style={{ opacity: springProductCountOpacity, display: scrolled && isMobile ? 'none' : 'flex' }}
+        >
+          <span className="text-xs md:text-sm text-gray-600">
             {filteredProducts.length} products
           </span>
-          <button className="text-sm font-medium flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-            </svg>
-            Filter
-          </button>
-        </div>
-      </div>
+          <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
+            <Grid3X3 className="w-4 h-4" />
+            <span>Grid View</span>
+          </div>
+        </motion.div>
+      </motion.section>
 
-      {/* Product Grid - Responsive columns */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-1 md:gap-2 p-1 md:p-3">
+      {/* Product Grid - 3x3 on mobile */}
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1 md:gap-2 p-1 md:p-3">
         <AnimatePresence mode="wait">
           {filteredProducts.map((product, index) => (
             <motion.div
@@ -444,30 +555,31 @@ export default function WeddingCollectionPage() {
               />
               
               {/* Gradient Overlay for text visibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               
               {/* Product Info */}
-              <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                <h3 className="text-white font-medium text-sm md:text-base mb-1 line-clamp-1">
+              <div className="absolute bottom-0 left-0 right-0 p-2 md:p-3">
+                <h3 className="text-white font-serif text-xs md:text-sm mb-0.5 line-clamp-1">
                   {product.name}
                 </h3>
-                <p className="text-white/90 text-sm md:text-base font-semibold">
+                <p className="text-white/90 text-xs md:text-sm font-medium">
                   ${product.price}
                 </p>
               </div>
 
               {/* Like indicator */}
               {likedProducts.has(product.id) && (
-                <div className="absolute top-3 right-3 z-10">
-                  <Heart className="w-4 h-4 md:w-5 md:h-5 text-red-500 fill-red-500" />
+                <div className="absolute top-2 right-2 z-10">
+                  <Heart className="w-3 h-3 md:w-4 md:h-4 text-red-500 fill-red-500" />
                 </div>
               )}
 
-              {/* Quick View on Hover - Desktop Only */}
-              <div className="hidden md:flex absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 items-center justify-center">
-                <button className="bg-white/90 backdrop-blur text-black px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
-                  <Eye className="w-4 h-4" />
-                  Quick View
+              {/* Quick View on Hover */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                <button className="bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1">
+                  <Eye className="w-3 h-3" />
+                  View
                 </button>
               </div>
             </motion.div>
@@ -583,6 +695,18 @@ export default function WeddingCollectionPage() {
                 <Button
                   className="w-full bg-black hover:bg-gray-800 text-white py-3"
                   disabled={!selectedSize}
+                  onClick={() => {
+                    if (selectedProduct && selectedSize) {
+                      const productWithDetails = {
+                        ...selectedProduct,
+                        size: selectedSize,
+                        quantity: quantity
+                      };
+                      trackAddCart(productWithDetails);
+                      // TODO: Actually add to cart
+                      setSelectedProduct(null); // Close modal after adding
+                    }
+                  }}
                 >
                   <ShoppingBag className="w-4 h-4 mr-2" />
                   Add to Bag

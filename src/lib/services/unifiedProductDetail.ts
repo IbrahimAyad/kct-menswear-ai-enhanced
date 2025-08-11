@@ -2,11 +2,92 @@ import { getProduct } from '@/lib/supabase/products';
 import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import { UnifiedProduct } from '@/types/unified-shop';
 
+// Demo products for V2 system testing
+const demoProducts: UnifiedProduct[] = [
+  {
+    id: 'demo-premium-suit',
+    sku: 'SUIT-NAVY-001',
+    type: 'individual',
+    name: 'Premium Navy Suit',
+    description: 'Expertly tailored navy suit crafted from premium Italian wool. Features half-canvas construction and modern slim fit for the discerning gentleman.',
+    imageUrl: '/placeholder-suit.jpg',
+    images: ['/placeholder-suit.jpg'],
+    price: 599.99,
+    originalPrice: 799.99,
+    category: 'suits',
+    color: 'Navy',
+    material: 'Italian Wool',
+    occasions: ['business', 'wedding', 'formal'],
+    tags: ['premium', 'suit', 'navy', 'formal'],
+    trending: true,
+    inStock: true,
+    stripePriceId: 'price_demo_premium_suit'
+  },
+  {
+    id: 'demo-dress-shirt',
+    sku: 'SHIRT-WHITE-001',
+    type: 'individual',
+    name: 'Classic White Dress Shirt',
+    description: 'Timeless white dress shirt in premium cotton. Available in multiple fits for the perfect silhouette.',
+    imageUrl: '/placeholder-shirt.jpg',
+    images: ['/placeholder-shirt.jpg'],
+    price: 79.99,
+    originalPrice: 99.99,
+    category: 'shirts',
+    color: 'White',
+    material: 'Premium Cotton',
+    fit: 'Multiple fits available',
+    occasions: ['business', 'formal', 'casual'],
+    tags: ['shirt', 'white', 'dress shirt', 'cotton'],
+    inStock: true,
+    stripePriceId: 'price_demo_dress_shirt'
+  },
+  {
+    id: 'demo-silk-tie',
+    sku: 'TIE-BURG-001', 
+    type: 'individual',
+    name: 'Burgundy Silk Tie',
+    description: 'Elegant burgundy silk tie perfect for any formal occasion. Available in multiple widths and styles.',
+    imageUrl: '/placeholder-tie.jpg',
+    images: ['/placeholder-tie.jpg'],
+    price: 24.99,
+    category: 'ties',
+    color: 'Burgundy',
+    material: 'Pure Silk',
+    occasions: ['business', 'formal', 'wedding'],
+    tags: ['tie', 'silk', 'burgundy', 'formal'],
+    inStock: true,
+    stripePriceId: 'price_demo_silk_tie'
+  },
+  {
+    id: 'demo-pocket-square',
+    sku: 'ACC-PS-001',
+    type: 'individual',
+    name: 'Cotton Pocket Square',
+    description: 'Classic cotton pocket square to complete your look. Available in various colors.',
+    imageUrl: '/placeholder-product.svg',
+    images: ['/placeholder-product.svg'],
+    price: 12.99,
+    category: 'accessories',
+    material: 'Cotton',
+    occasions: ['formal', 'business'],
+    tags: ['pocket square', 'cotton', 'accessory'],
+    inStock: true,
+    stripePriceId: 'price_demo_pocket_square'
+  }
+];
+
 /**
- * Get a unified product by ID or slug - checks both bundles and Supabase products
+ * Get a unified product by ID or slug - checks demo products, bundles, and Supabase products
  */
 export async function getUnifiedProduct(idOrSlug: string): Promise<UnifiedProduct | null> {
-  // First, check if it's a bundle (bundles use ID)
+  // First, check if it's a demo product
+  const demoProduct = demoProducts.find(p => p.id === idOrSlug);
+  if (demoProduct) {
+    return demoProduct;
+  }
+
+  // Then, check if it's a bundle (bundles use ID)
   const bundle = bundleProductsWithImages.bundles.find(b => b.id === idOrSlug);
   
   if (bundle) {
@@ -112,8 +193,16 @@ export async function getRelatedUnifiedProducts(
 ): Promise<UnifiedProduct[]> {
   const relatedProducts: UnifiedProduct[] = [];
   
-  // Get related bundles from the same category
+  // Get related demo products first
   if (category) {
+    const relatedDemoProducts = demoProducts
+      .filter(p => p.category === category && p.id !== productId)
+      .slice(0, limit);
+    relatedProducts.push(...relatedDemoProducts);
+  }
+  
+  // If we need more products, get related bundles from the same category
+  if (relatedProducts.length < limit && category) {
     const relatedBundles = bundleProductsWithImages.bundles
       .filter(b => b.category === category && b.id !== productId)
       .slice(0, Math.floor(limit / 2))

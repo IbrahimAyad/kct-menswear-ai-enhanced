@@ -14,302 +14,299 @@ import {
   Minus,
   Plus,
   Eye,
-  Grid3X3
+  Grid3X3,
+  Filter
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGA4 } from '@/hooks/useGA4';
 
-// Blazer categories following SuitSupply pattern
-const blazerCategories = [
+// Prom-specific categories
+const promCategories = [
   {
     id: 'all',
-    name: 'All Blazers',
-    count: 42,
+    name: 'All Prom',
+    count: 121,
     image: null,
-    bgColor: 'from-navy-900 to-burgundy-800'
+    bgColor: 'from-purple-900 to-gold-600'
   },
   {
-    id: 'velvet-blazers',
-    name: 'Velvet Blazers',
-    count: 12,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp'
+    id: 'prom-tuxedos',
+    name: 'Prom Tuxedos',
+    count: 25,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png'
   },
   {
     id: 'prom-blazers',
     name: 'Prom Blazers',
-    count: 15,
+    count: 30,
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp'
   },
   {
-    id: 'classic-blazers',
-    name: 'Classic Blazers',
-    count: 8,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/jackets.webp'
+    id: 'sparkle-sequin',
+    name: 'Sparkle & Sequin',
+    count: 15,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp'
   },
   {
-    id: 'pattern-blazers',
-    name: 'Pattern Blazers',
-    count: 7,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/red-gold-pattern-blazer.webp'
+    id: 'prom-vests',
+    name: 'Prom Vests',
+    count: 20,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png'
+  },
+  {
+    id: 'prom-accessories',
+    name: 'Prom Accessories',
+    count: 25,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png'
+  },
+  {
+    id: 'prom-shoes',
+    name: 'Prom Shoes',
+    count: 21,
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/7d203d2a-63b7-46d3-9749-1f203e4ccc00/public'
   }
 ];
 
-// Comprehensive blazer products
-const blazerProducts = [
-  // Prom Blazers Collection
+// Prom products
+const promProducts = [
+  // Prom Tuxedos
   {
-    id: 'gold-brown-floral',
-    name: 'Gold & Brown Floral Blazer',
+    id: 'burgundy-prom-tux',
+    name: 'Burgundy Prom Tuxedo',
+    price: 249,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/burgundy-tux-main.jpg',
+    category: 'prom',
+    subcategory: 'prom-tuxedos'
+  },
+  {
+    id: 'midnight-blue-prom-tux',
+    name: 'Midnight Blue Prom Tuxedo',
+    price: 299,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-tux-main.jpg',
+    category: 'prom',
+    subcategory: 'prom-tuxedos'
+  },
+  {
+    id: 'black-prom-tux',
+    name: 'Black Prom Tuxedo',
     price: 229,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png',
+    category: 'prom',
+    subcategory: 'prom-tuxedos'
+  },
+  {
+    id: 'navy-prom-tux',
+    name: 'Navy Prom Tuxedo',
+    price: 259,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-tux-main.jpg',
+    category: 'prom',
+    subcategory: 'prom-tuxedos'
+  },
+  {
+    id: 'white-prom-tux',
+    name: 'White Prom Tuxedo',
+    price: 279,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/white/white-tux-main.jpg',
+    category: 'prom',
+    subcategory: 'prom-tuxedos'
+  },
+
+  // Prom Blazers
+  {
+    id: 'rose-gold-blazer',
+    name: 'Rose Gold Prom Blazer',
+    price: 289,
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_gold_brown_floral_prom_blazer.webp',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
+    category: 'prom',
+    subcategory: 'prom-blazers'
   },
   {
-    id: 'black-floral',
-    name: 'Black Floral Blazer',
-    price: 229,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_black_floral_prom_blazer.webp',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  {
-    id: 'red-floral',
-    name: 'Red Floral Blazer',
-    price: 229,
+    id: 'red-floral-blazer',
+    name: 'Red Floral Prom Blazer',
+    price: 269,
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
+    category: 'prom',
+    subcategory: 'prom-blazers'
   },
   {
-    id: 'bronze-geometric',
-    name: 'Bronze Geometric Blazer',
-    price: 229,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_bronze_black_geometric_blazer.webp',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
+    id: 'black-floral-blazer',
+    name: 'Black Floral Prom Blazer',
+    price: 269,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_black_floral_prom_blazer.webp',
+    category: 'prom',
+    subcategory: 'prom-blazers'
   },
-  
-  // Velvet Blazers
+  {
+    id: 'bronze-geometric-blazer',
+    name: 'Bronze Geometric Blazer',
+    price: 279,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_bronze_black_geometric_blazer.webp',
+    category: 'prom',
+    subcategory: 'prom-blazers'
+  },
+  {
+    id: 'royal-blue-blazer',
+    name: 'Royal Blue Prom Blazer',
+    price: 259,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/royal-blue/royal-blazer.jpg',
+    category: 'prom',
+    subcategory: 'prom-blazers'
+  },
+
+  // Sparkle & Sequin
+  {
+    id: 'emerald-velvet-blazer',
+    name: 'Emerald Velvet Blazer',
+    price: 199,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
+    category: 'prom',
+    subcategory: 'sparkle-sequin'
+  },
   {
     id: 'royal-blue-velvet',
     name: 'Royal Blue Velvet Gold Trim',
-    price: 299,
+    price: 219,
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_royal_blue_velvet_gold_trim.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
+    category: 'prom',
+    subcategory: 'sparkle-sequin'
   },
   {
-    id: 'green-paisley-velvet',
-    name: 'Green Paisley Velvet',
-    price: 299,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  {
-    id: 'red-velvet-textured',
-    name: 'Red Velvet Textured',
-    price: 299,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_red_velvet_textured_blazer.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  {
-    id: 'burgundy-velvet',
-    name: 'Burgundy Velvet',
-    price: 279,
+    id: 'burgundy-sequin-blazer',
+    name: 'Burgundy Sequin Blazer',
+    price: 329,
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/burgundy-velvet.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
+    category: 'prom',
+    subcategory: 'sparkle-sequin'
   },
   {
-    id: 'black-velvet',
-    name: 'Black Velvet',
-    price: 279,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/black-velvet.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  {
-    id: 'emerald-velvet',
-    name: 'Emerald Velvet',
-    price: 299,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/emerald-velvet.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  
-  // Summer Blazers
-  {
-    id: 'beige-linen',
-    name: 'Beige Linen Blazer',
-    price: 189,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'light-blue-cotton',
-    name: 'Light Blue Cotton',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-blue/light-blue-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'tan-summer',
-    name: 'Tan Summer Blazer',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'cream-linen',
-    name: 'Cream Linen',
-    price: 189,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/cream/cream-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'olive-cotton',
-    name: 'Olive Cotton',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/olive/olive-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'white-linen',
-    name: 'White Linen',
-    price: 189,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/white/white-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  
-  // Sport Coats
-  {
-    id: 'navy-sport',
-    name: 'Navy Sport Coat',
-    price: 169,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'sport-coats'
-  },
-  {
-    id: 'grey-herringbone',
-    name: 'Grey Herringbone',
-    price: 189,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-herringbone-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'sport-coats'
-  },
-  {
-    id: 'brown-tweed',
-    name: 'Brown Tweed',
-    price: 199,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-tweed.jpg',
-    category: 'blazers',
-    subcategory: 'sport-coats'
-  },
-  {
-    id: 'charcoal-wool',
-    name: 'Charcoal Wool',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/charcoal-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'sport-coats'
-  },
-  
-  // Luxury Blazers
-  {
-    id: 'midnight-blue-luxury',
-    name: 'Midnight Blue Luxury',
+    id: 'gold-sparkle-blazer',
+    name: 'Gold Sparkle Blazer',
     price: 349,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'luxury-blazers'
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/gold/gold-main.jpg',
+    category: 'prom',
+    subcategory: 'sparkle-sequin'
+  },
+
+  // Prom Vests
+  {
+    id: 'dusty-sage-vest',
+    name: 'Dusty Sage Vest Set',
+    price: 89,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
+    category: 'prom',
+    subcategory: 'prom-vests'
   },
   {
-    id: 'burgundy-luxury',
-    name: 'Burgundy Luxury',
-    price: 329,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/burgundy-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'luxury-blazers'
+    id: 'burgundy-vest',
+    name: 'Burgundy Vest Set',
+    price: 89,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/burgundy-model.png',
+    category: 'prom',
+    subcategory: 'prom-vests'
   },
   {
-    id: 'royal-blue-luxury',
-    name: 'Royal Blue Luxury',
-    price: 329,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/royal-blue/royal-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'luxury-blazers'
+    id: 'navy-vest',
+    name: 'Navy Vest Set',
+    price: 79,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/navy-model.png',
+    category: 'prom',
+    subcategory: 'prom-vests'
   },
   {
-    id: 'black-luxury',
-    name: 'Black Luxury',
-    price: 349,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-luxury-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'luxury-blazers'
-  },
-  
-  // Additional Patterned Blazers
-  {
-    id: 'navy-pinstripe',
-    name: 'Navy Pinstripe',
-    price: 199,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-pinstripe-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
+    id: 'gold-vest',
+    name: 'Gold Vest Set',
+    price: 99,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/gold-model.png',
+    category: 'prom',
+    subcategory: 'prom-vests'
   },
   {
-    id: 'grey-windowpane',
-    name: 'Grey Windowpane',
-    price: 209,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-windowpane-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
+    id: 'silver-vest',
+    name: 'Silver Vest Set',
+    price: 89,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/silver/silver-vest.jpg',
+    category: 'prom',
+    subcategory: 'prom-vests'
+  },
+
+  // Prom Accessories
+  {
+    id: 'powder-blue-suspenders',
+    name: 'Powder Blue Suspender Set',
+    price: 45,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
+    category: 'prom',
+    subcategory: 'prom-accessories'
   },
   {
-    id: 'blue-check',
-    name: 'Blue Check',
-    price: 199,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/blue/blue-check-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
+    id: 'burgundy-bowtie',
+    name: 'Burgundy Bowtie Set',
+    price: 35,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg',
+    category: 'prom',
+    subcategory: 'prom-accessories'
   },
   {
-    id: 'brown-plaid',
-    name: 'Brown Plaid',
-    price: 209,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-plaid-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
+    id: 'gold-cufflinks',
+    name: 'Gold Prom Cufflinks',
+    price: 29,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/accessories.webp',
+    category: 'prom',
+    subcategory: 'prom-accessories'
   },
   {
-    id: 'grey-glen-check',
-    name: 'Grey Glen Check',
-    price: 219,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-glen-check.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
+    id: 'dusty-pink-bowtie',
+    name: 'Dusty Pink Bowtie',
+    price: 32,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/dusty-pink.jpg',
+    category: 'prom',
+    subcategory: 'prom-accessories'
   },
   {
-    id: 'navy-houndstooth',
-    name: 'Navy Houndstooth',
-    price: 219,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-houndstooth.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
+    id: 'navy-pocket-square',
+    name: 'Navy Pocket Square Set',
+    price: 25,
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/casual-bundles/navy-white-shirt-white-pocket-sqaure.png',
+    category: 'prom',
+    subcategory: 'prom-accessories'
+  },
+
+  // Prom Shoes
+  {
+    id: 'black-patent-shoes',
+    name: 'Black Patent Dress Shoes',
+    price: 129,
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/7d203d2a-63b7-46d3-9749-1f203e4ccc00/public',
+    category: 'prom',
+    subcategory: 'prom-shoes'
+  },
+  {
+    id: 'brown-leather-shoes',
+    name: 'Brown Leather Dress Shoes',
+    price: 119,
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/shoes.webp',
+    category: 'prom',
+    subcategory: 'prom-shoes'
+  },
+  {
+    id: 'burgundy-velvet-loafers',
+    name: 'Burgundy Velvet Loafers',
+    price: 149,
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/5e4f8b2c-7a3d-4f1e-9b8c-2d1a3f4e5678/public',
+    category: 'prom',
+    subcategory: 'prom-shoes'
+  },
+  {
+    id: 'gold-metallic-shoes',
+    name: 'Gold Metallic Dress Shoes',
+    price: 159,
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/8f2d1a3b-4c5e-6f7g-8h9i-0j1k2l3m4n5o/public',
+    category: 'prom',
+    subcategory: 'prom-shoes'
   }
 ];
 
-export default function BlazersCollectionPage() {
+export default function PromCollectionPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [selectedSize, setSelectedSize] = useState('');
@@ -375,18 +372,18 @@ export default function BlazersCollectionPage() {
 
   // Track collection view on mount
   useEffect(() => {
-    trackCollectionView('Blazers Collection', blazerProducts);
+    trackCollectionView('Prom Collection', promProducts);
   }, []);
 
   // Filter products based on selected category
   const filteredProducts = selectedCategory === 'all' 
-    ? blazerProducts 
-    : blazerProducts.filter(p => p.subcategory === selectedCategory);
+    ? promProducts 
+    : promProducts.filter(p => p.subcategory === selectedCategory);
 
   // Track category filter changes
   useEffect(() => {
     if (selectedCategory !== 'all') {
-      trackFilterChange('Blazers Collection', { category: selectedCategory });
+      trackFilterChange('Prom Collection', { category: selectedCategory });
     }
   }, [selectedCategory]);
 
@@ -410,7 +407,7 @@ export default function BlazersCollectionPage() {
       } else {
         newSet.add(productId);
         // Track wishlist add
-        const product = blazerProducts.find(p => p.id === productId);
+        const product = promProducts.find(p => p.id === productId);
         if (product) {
           trackWishlistAdd(product);
         }
@@ -420,19 +417,24 @@ export default function BlazersCollectionPage() {
   };
 
   // Handle quick view
-  const handleQuickView = (product: typeof blazerProducts[0]) => {
+  const handleQuickView = (product: typeof promProducts[0]) => {
+    const isAccessory = product.subcategory === 'prom-accessories';
+    const isShoe = product.subcategory === 'prom-shoes';
+    
     setSelectedProduct({
       ...product,
       images: [product.image],
-      sizes: ['36', '38', '40', '42', '44', '46', '48'],
-      description: 'Premium quality blazer tailored to perfection'
+      sizes: isAccessory ? ['One Size'] : 
+             isShoe ? ['8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12'] :
+             ['36', '38', '40', '42', '44', '46', '48'],
+      description: 'Make your prom night unforgettable with premium style'
     });
     setSelectedSize('');
     setQuantity(1);
     
     // Track quick view
     trackQuickViewModal(product);
-    trackProductClick(product, 'Blazers Collection');
+    trackProductClick(product, 'Prom Collection');
   };
 
   // Close modal when clicking outside
@@ -456,7 +458,6 @@ export default function BlazersCollectionPage() {
         }}
       >
         <div className="relative h-full">
-        <div className="relative">
           {/* Scroll buttons */}
           <button
             onClick={() => scrollCategories('left')}
@@ -483,7 +484,7 @@ export default function BlazersCollectionPage() {
             )}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {blazerCategories.map((category) => (
+            {promCategories.map((category) => (
               <motion.button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
@@ -516,7 +517,7 @@ export default function BlazersCollectionPage() {
                   ) : (
                     <div className={cn(
                       "absolute inset-0 bg-gradient-to-br flex items-center justify-center",
-                      category.bgColor || "from-navy-900 to-burgundy-800"
+                      category.bgColor || "from-purple-900 to-gold-600"
                     )}>
                       <Grid3X3 className="w-10 h-10 text-white" />
                     </div>
@@ -579,10 +580,9 @@ export default function BlazersCollectionPage() {
                 alt={product.name}
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                sizes="(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
               />
               
-              {/* Gradient Overlay for text visibility */}
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               
