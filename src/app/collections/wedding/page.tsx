@@ -428,7 +428,6 @@ export default function WeddingCollectionPage() {
         }}
       >
         <div className="relative h-full">
-        <div className="relative">
           {/* Scroll buttons */}
           <button
             onClick={() => scrollCategories('left')}
