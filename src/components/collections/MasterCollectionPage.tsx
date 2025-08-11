@@ -83,7 +83,7 @@ export function MasterCollectionPage({
   const headerHeight = useTransform(
     scrollY,
     [0, 100],
-    isMobile ? ['160px', '70px'] : ['250px', '180px']
+    isMobile ? ['200px', '80px'] : ['250px', '180px']
   );
   
   const headerOpacity = useTransform(
@@ -178,13 +178,13 @@ export function MasterCollectionPage({
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Categories - Enhanced for mobile */}
+          {/* Categories - Much larger on mobile */}
           <div
             ref={categoryScrollRef}
             className="flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-12 md:px-16 py-3 md:py-4 h-full items-center"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {/* All Products - Larger on mobile */}
+            {/* All Products - Much larger on mobile */}
             <motion.button
               onClick={() => setSelectedCategory('all')}
               className="flex-shrink-0"
@@ -193,20 +193,20 @@ export function MasterCollectionPage({
             >
               <div className={cn(
                 "relative rounded-xl overflow-hidden cursor-pointer group transition-all",
-                isMobile ? "w-[140px] h-[100px]" : "w-[180px] h-[180px]",
+                isMobile ? "w-[200px] h-[140px]" : "w-[180px] h-[180px]",
                 selectedCategory === 'all' && "ring-2 ring-burgundy"
               )}>
                 <div className="absolute inset-0 bg-gradient-to-br from-burgundy to-burgundy-700 flex items-center justify-center">
                   <div className="text-white text-center">
-                    <Grid3X3 className={cn(isMobile ? "w-6 h-6" : "w-8 h-8", "mx-auto mb-2")} />
-                    <p className={cn("font-semibold", isMobile ? "text-sm" : "text-lg")}>All Products</p>
-                    <p className={cn("opacity-80", isMobile ? "text-xs" : "text-sm")}>{products.length} items</p>
+                    <Grid3X3 className={cn(isMobile ? "w-8 h-8" : "w-8 h-8", "mx-auto mb-2")} />
+                    <p className={cn("font-semibold", isMobile ? "text-base" : "text-lg")}>All Products</p>
+                    <p className={cn("opacity-80", isMobile ? "text-sm" : "text-sm")}>{products.length} items</p>
                   </div>
                 </div>
               </div>
             </motion.button>
 
-            {/* Category Cards - Larger on mobile */}
+            {/* Category Cards - Much larger on mobile */}
             {categories.map((category) => (
               <motion.button
                 key={category.id}
@@ -217,7 +217,7 @@ export function MasterCollectionPage({
               >
                 <div className={cn(
                   "relative rounded-xl overflow-hidden cursor-pointer group transition-all",
-                  isMobile ? "w-[140px] h-[100px]" : "w-[180px] h-[180px]",
+                  isMobile ? "w-[200px] h-[140px]" : "w-[180px] h-[180px]",
                   selectedCategory === category.id && "ring-2 ring-burgundy"
                 )}>
                   <Image
@@ -228,8 +228,8 @@ export function MasterCollectionPage({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                    <h3 className={cn("font-semibold", isMobile ? "text-sm" : "text-base")}>{category.name}</h3>
-                    <p className={cn("opacity-90", isMobile ? "text-xs" : "text-sm")}>{category.count} items</p>
+                    <h3 className={cn("font-semibold", isMobile ? "text-base" : "text-base")}>{category.name}</h3>
+                    <p className={cn("opacity-90", isMobile ? "text-sm" : "text-sm")}>{category.count} items</p>
                   </div>
                 </div>
               </motion.button>
@@ -285,7 +285,7 @@ export function MasterCollectionPage({
       </AnimatePresence>
 
       {/* Products Grid - Minimal design matching reference */}
-      <section className="px-2 md:px-6 lg:px-8 py-2 md:py-6">
+      <section className="px-1 md:px-6 lg:px-8 py-2 md:py-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedCategory}
@@ -293,10 +293,7 @@ export function MasterCollectionPage({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className={cn(
-              "grid gap-2 md:gap-3",
-              isMobile ? "grid-cols-2" : "grid-cols-4"
-            )}
+            className="grid grid-cols-3 md:grid-cols-4 gap-1 md:gap-3"
           >
             {filteredProducts.slice(0, visibleProducts).map((product, index) => (
               <motion.div
@@ -318,22 +315,22 @@ export function MasterCollectionPage({
                       alt={product.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes={isMobile ? "50vw" : "25vw"}
+                      sizes="(max-width: 768px) 33vw, 25vw"
                       priority={index < 8}
                       loading={index < 8 ? 'eager' : 'lazy'}
                     />
                     
                     {/* Product Info Overlay - Bottom left like reference */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3 md:p-4">
-                      <h3 className="text-white font-medium text-sm md:text-base line-clamp-1">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 md:p-4">
+                      <h3 className="text-white font-medium text-xs md:text-base line-clamp-1">
                         {product.name}
                       </h3>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-white font-semibold text-sm md:text-lg">
+                      <div className="flex items-center gap-1 md:gap-2 mt-0.5">
+                        <span className="text-white font-semibold text-xs md:text-lg">
                           ${product.price}
                         </span>
                         {product.originalPrice && (
-                          <span className="text-white/70 line-through text-xs md:text-sm">
+                          <span className="text-white/70 line-through text-[10px] md:text-sm">
                             ${product.originalPrice}
                           </span>
                         )}
