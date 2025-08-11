@@ -1,44 +1,24 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { initGA, trackPageView } from '@/lib/analytics/google-analytics'
+import { useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { initGA, trackPageView } from '@/lib/analytics/ga4';
+import Script from 'next/script';
 
-export function GoogleAnalytics() {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-  // Initialize GA on mount
-  useEffect(() => {
-    initGA()
-  }, [])
-
-  // Track page views on route change
-  useEffect(() => {
-    if (pathname) {
-      const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '')
-      trackPageView(url)
-    }
-  }, [pathname, searchParams])
-
-  return null
-}
-
-// Script component for Next.js
 export function GoogleAnalyticsScript() {
-  const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
-
-  if (!GA_MEASUREMENT_ID) {
-    return null
-  }
-
+  if (!GA_MEASUREMENT_ID) return null;
+  
   return (
     <>
-      <script
-        async
+      <Script
+        strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
       />
-      <script
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
@@ -51,5 +31,20 @@ export function GoogleAnalyticsScript() {
         }}
       />
     </>
-  )
+  );
+}
+
+export function GoogleAnalytics() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Track page views on route change
+  useEffect(() => {
+    if (pathname && GA_MEASUREMENT_ID) {
+      const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
+      trackPageView(url);
+    }
+  }, [pathname, searchParams]);
+
+  return null;
 }

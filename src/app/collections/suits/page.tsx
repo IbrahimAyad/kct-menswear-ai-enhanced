@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -17,6 +17,7 @@ import {
   Grid3X3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useGA4 } from '@/hooks/useGA4';
 
 // Suit-specific categories
 const suitCategories = [
@@ -354,11 +355,33 @@ export default function SuitsCollectionPage() {
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
   const categoryScrollRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  
+  // GA4 tracking
+  const {
+    trackCollectionView,
+    trackProductClick,
+    trackQuickViewModal,
+    trackAddCart,
+    trackWishlistAdd,
+    trackFilterChange
+  } = useGA4();
+
+  // Track collection view on mount
+  useEffect(() => {
+    trackCollectionView('Suits Collection', suitProducts);
+  }, []);
 
   // Filter products based on selected category
   const filteredProducts = selectedCategory === 'all' 
     ? suitProducts 
     : suitProducts.filter(p => p.subcategory === selectedCategory);
+
+  // Track category filter changes
+  useEffect(() => {
+    if (selectedCategory !== 'all') {
+      trackFilterChange('Suits Collection', { category: selectedCategory });
+    }
+  }, [selectedCategory]);
 
   // Scroll category nav
   const scrollCategories = (direction: 'left' | 'right') => {
@@ -379,6 +402,11 @@ export default function SuitsCollectionPage() {
         newSet.delete(productId);
       } else {
         newSet.add(productId);
+        // Track wishlist add
+        const product = suitProducts.find(p => p.id === productId);
+        if (product) {
+          trackWishlistAdd(product);
+        }
       }
       return newSet;
     });
@@ -394,6 +422,10 @@ export default function SuitsCollectionPage() {
     });
     setSelectedSize('');
     setQuantity(1);
+    
+    // Track quick view
+    trackQuickViewModal(product);
+    trackProductClick(product, 'Suits Collection');
   };
 
   // Close modal when clicking outside
@@ -646,6 +678,18 @@ export default function SuitsCollectionPage() {
                 <Button
                   className="w-full bg-black hover:bg-gray-800 text-white py-3"
                   disabled={!selectedSize}
+                  onClick={() => {
+                    if (selectedProduct && selectedSize) {
+                      const productWithDetails = {
+                        ...selectedProduct,
+                        size: selectedSize,
+                        quantity: quantity
+                      };
+                      trackAddCart(productWithDetails);
+                      // TODO: Actually add to cart
+                      setSelectedProduct(null); // Close modal after adding
+                    }
+                  }}
                 >
                   <ShoppingBag className="w-4 h-4 mr-2" />
                   Add to Bag
