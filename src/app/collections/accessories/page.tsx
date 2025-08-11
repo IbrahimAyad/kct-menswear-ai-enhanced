@@ -528,7 +528,7 @@ export default function AccessoriesCollectionPage() {
       ...product,
       images: [product.image],
       sizes: product.subcategory === 'belts' ? ['S', 'M', 'L', 'XL'] : ['One Size'],
-      description: 'Men's accessories in refined materials elevate every detail of the modern wardrobe'
+      description: "Men's accessories in refined materials elevate every detail of the modern wardrobe"
     });
     setSelectedSize('');
     setQuantity(1);
