@@ -106,34 +106,21 @@ export function MasterCollectionPage({
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section with Title */}
-      <section className="relative h-[40vh] min-h-[400px] bg-gray-100">
-        {heroImage && (
-          <Image
-            src={heroImage}
-            alt={title}
-            fill
-            className="object-cover"
-            priority
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
-        
-        <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 lg:p-16">
-          <div className="max-w-7xl mx-auto w-full">
-            <p className="text-white/80 text-sm md:text-base mb-2">{subtitle}</p>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-4">
-              {title}
-            </h1>
-            <p className="text-white/90 text-lg md:text-xl max-w-2xl">
-              {description}
-            </p>
-          </div>
+      {/* Page Title Section */}
+      <section className="bg-white pt-20 pb-8 px-8">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-gray-600 text-sm md:text-base mb-2 uppercase tracking-wider">{subtitle}</p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-3">
+            {title}
+          </h1>
+          <p className="text-gray-600 text-lg max-w-2xl">
+            {description}
+          </p>
         </div>
       </section>
 
       {/* Category Filter Navigation */}
-      <section className="sticky top-0 z-40 bg-white border-b">
+      <section className="sticky top-0 z-40 bg-white border-t border-b">
         <div className="relative">
           {/* Scroll buttons */}
           <button
