@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { R2StyleSwiper } from '@/components/style/R2StyleSwiper';
+import { SimpleStyleSwiper } from '@/components/style/SimpleStyleSwiper';
 import { StyleSwiperImage, SwipeAnalytics } from '@/lib/types';
 import { ArrowLeft, Sparkles, Upload, Trophy, Target, Zap, Heart, TrendingUp, Award, Crown, Star } from 'lucide-react';
 import Link from 'next/link';
@@ -177,14 +177,12 @@ export default function StyleSwiperR2Page() {
               </select>
             </div>
             
-            <R2StyleSwiper
+            <SimpleStyleSwiper
               key={`${selectedCategory}-${completedProfiles.length}`}
               category={selectedCategory}
               onSwipe={handleSwipe}
               onComplete={handleComplete}
               onProductClick={handleProductClick}
-              enableHaptics={true}
-              preloadImages={true}
             />
             </div>
           </div>
