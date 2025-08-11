@@ -443,22 +443,5 @@ export default function StyleSwiperR2Page() {
         )}
       </div>
     </div>
-    
-    <style jsx>{`
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: #f1f5f9;
-        border-radius: 3px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: linear-gradient(to bottom, #8B0000, #D4AF37);
-        border-radius: 3px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: linear-gradient(to bottom, #730000, #B8922C);
-      }
-    `}</style>
   );
 }
