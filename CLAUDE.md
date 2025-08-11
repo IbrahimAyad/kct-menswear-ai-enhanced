@@ -42,6 +42,29 @@ Successfully optimized the master collection page (`/collections`) with the foll
 - Gamification features: Style Score, achievements, daily streaks
 - Clean burgundy/gold luxury color palette
 
+### Suit Collection Page - Collapsible Header (2025-08-11)
+Successfully implemented scroll-based collapsible header for suit collection page:
+
+#### Mobile Layout (Suits):
+- **Header Height**: 280px (normal), 140px (scrolled) - stays visible
+- **Category Cards**: 220x160px (normal), 140x100px (scrolled)
+- **Text Sizing**: LG (normal), SM (scrolled)
+- **Item counts**: Hidden when scrolled to save space
+
+#### Desktop Layout (Suits):
+- **Header Height**: 300px (normal), 200px (scrolled)
+- **Category Cards**: 200x200px (normal), 160x120px (scrolled)
+- **Text Sizing**: LG (normal), Base (scrolled)
+- **Item counts**: Always visible
+
+#### Updated Suit Category Images:
+- Summer Suits: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Summer%20Wedding%20Bundles/sand-suit-white-shirt-sage-green-tie.png`
+- Tuxedos: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png`
+- Classic Suits: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/casual-bundles/navy-white-shirt-white-pocket-sqaure.png`
+- Wedding Suits: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/indigo-2p-white-dusty-pink.png`
+- Luxury Suits: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Fall%20Wedding%20Bundles/brown-suit-white-shirt-brown-tie.png`
+- Three Piece: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png`
+
 ---
 
 # KCT Menswear - Next Steps & Development Guidelines
