@@ -83,13 +83,13 @@ export function MasterCollectionPage({
   const headerHeight = useTransform(
     scrollY,
     [0, 100],
-    isMobile ? ['280px', '80px'] : ['280px', '200px']
+    isMobile ? ['160px', '70px'] : ['250px', '180px']
   );
   
   const headerOpacity = useTransform(
     scrollY,
     [0, 100],
-    isMobile ? [1, 0.3] : [1, 0.9]
+    [1, 1]
   );
   
   const productCountOpacity = useTransform(
@@ -98,7 +98,7 @@ export function MasterCollectionPage({
     isMobile ? [1, 0] : [1, 1]
   );
 
-  const springHeaderHeight = useSpring(headerHeight, { stiffness: isMobile ? 400 : 300, damping: 30 });
+  const springHeaderHeight = useSpring(headerHeight, { stiffness: 400, damping: 30 });
   const springHeaderOpacity = useSpring(headerOpacity, { stiffness: 400, damping: 30 });
   const springProductCountOpacity = useSpring(productCountOpacity, { stiffness: 400, damping: 30 });
 
@@ -178,13 +178,13 @@ export function MasterCollectionPage({
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Categories */}
+          {/* Categories - Enhanced for mobile */}
           <div
             ref={categoryScrollRef}
-            className="flex gap-2 md:gap-4 overflow-x-auto scrollbar-hide px-12 md:px-16 py-2 md:py-6 h-full items-center"
+            className="flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-12 md:px-16 py-3 md:py-4 h-full items-center"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {/* All Products */}
+            {/* All Products - Larger on mobile */}
             <motion.button
               onClick={() => setSelectedCategory('all')}
               className="flex-shrink-0"
@@ -192,21 +192,21 @@ export function MasterCollectionPage({
               whileTap={{ scale: 0.95 }}
             >
               <div className={cn(
-                "relative rounded-lg overflow-hidden cursor-pointer group",
-                isMobile ? "w-[120px] h-[60px]" : "w-[200px] h-[200px]",
+                "relative rounded-xl overflow-hidden cursor-pointer group transition-all",
+                isMobile ? "w-[140px] h-[100px]" : "w-[180px] h-[180px]",
                 selectedCategory === 'all' && "ring-2 ring-burgundy"
               )}>
                 <div className="absolute inset-0 bg-gradient-to-br from-burgundy to-burgundy-700 flex items-center justify-center">
                   <div className="text-white text-center">
-                    <Grid3X3 className={cn(isMobile ? "w-5 h-5" : "w-8 h-8", "mx-auto mb-1")} />
-                    <p className={cn("font-semibold", isMobile ? "text-xs" : "text-lg")}>All Products</p>
-                    {!isMobile && <p className="text-sm opacity-80">{products.length} items</p>}
+                    <Grid3X3 className={cn(isMobile ? "w-6 h-6" : "w-8 h-8", "mx-auto mb-2")} />
+                    <p className={cn("font-semibold", isMobile ? "text-sm" : "text-lg")}>All Products</p>
+                    <p className={cn("opacity-80", isMobile ? "text-xs" : "text-sm")}>{products.length} items</p>
                   </div>
                 </div>
               </div>
             </motion.button>
 
-            {/* Category Cards */}
+            {/* Category Cards - Larger on mobile */}
             {categories.map((category) => (
               <motion.button
                 key={category.id}
@@ -216,8 +216,8 @@ export function MasterCollectionPage({
                 whileTap={{ scale: 0.95 }}
               >
                 <div className={cn(
-                  "relative rounded-lg overflow-hidden cursor-pointer group",
-                  isMobile ? "w-[120px] h-[60px]" : "w-[200px] h-[200px]",
+                  "relative rounded-xl overflow-hidden cursor-pointer group transition-all",
+                  isMobile ? "w-[140px] h-[100px]" : "w-[180px] h-[180px]",
                   selectedCategory === category.id && "ring-2 ring-burgundy"
                 )}>
                   <Image
@@ -226,10 +226,10 @@ export function MasterCollectionPage({
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-2 md:p-4 text-white">
-                    <h3 className={cn("font-semibold", isMobile ? "text-xs" : "text-lg")}>{category.name}</h3>
-                    {!isMobile && <p className="text-sm opacity-80">{category.count} items</p>}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                    <h3 className={cn("font-semibold", isMobile ? "text-sm" : "text-base")}>{category.name}</h3>
+                    <p className={cn("opacity-90", isMobile ? "text-xs" : "text-sm")}>{category.count} items</p>
                   </div>
                 </div>
               </motion.button>
@@ -237,10 +237,10 @@ export function MasterCollectionPage({
           </div>
         </div>
 
-        {/* Product Count Bar - Disappears on mobile when scrolled */}
+        {/* Product Count Bar - Hidden on mobile when scrolled */}
         <motion.div 
-          className="px-4 md:px-8 py-2 md:py-4 flex justify-between items-center border-t"
-          style={{ opacity: springProductCountOpacity }}
+          className="px-4 md:px-8 py-2 flex justify-between items-center border-t bg-gray-50"
+          style={{ opacity: springProductCountOpacity, display: scrolled && isMobile ? 'none' : 'flex' }}
         >
           <span className="text-xs md:text-sm text-gray-600">
             {filteredProducts.length} products
@@ -248,7 +248,7 @@ export function MasterCollectionPage({
         </motion.div>
       </motion.section>
 
-      {/* Floating Filter Button - Appears when header shrinks */}
+      {/* Floating Filter Button - Appears when header shrinks on mobile */}
       <AnimatePresence>
         {scrolled && isMobile && (
           <motion.button
@@ -284,8 +284,8 @@ export function MasterCollectionPage({
         )}
       </AnimatePresence>
 
-      {/* Products Grid - Optimized for 4x4 desktop, 3x3 mobile */}
-      <section className="px-1 md:px-4 lg:px-8 py-4 md:py-8">
+      {/* Products Grid - Minimal design matching reference */}
+      <section className="px-2 md:px-6 lg:px-8 py-2 md:py-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedCategory}
@@ -293,90 +293,82 @@ export function MasterCollectionPage({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-3 md:grid-cols-4 gap-1 md:gap-2"
+            className={cn(
+              "grid gap-2 md:gap-3",
+              isMobile ? "grid-cols-2" : "grid-cols-4"
+            )}
           >
             {filteredProducts.slice(0, visibleProducts).map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.03 }}
+                transition={{ delay: index * 0.02 }}
                 className="group relative"
                 onMouseEnter={() => setHoveredProduct(product.id)}
                 onMouseLeave={() => setHoveredProduct(null)}
               >
-                <div className="relative overflow-hidden bg-gray-100 rounded-lg aspect-[3/4]">
-                  {/* Badges */}
-                  <div className="absolute top-1 md:top-2 left-1 md:left-2 z-10 flex flex-col gap-1">
-                    {product.isNew && (
-                      <span className="bg-black text-white px-1 md:px-2 py-0.5 md:py-1 text-[10px] md:text-xs font-semibold">
-                        NEW
-                      </span>
-                    )}
-                    {product.isSale && (
-                      <span className="bg-red-500 text-white px-1 md:px-2 py-0.5 md:py-1 text-[10px] md:text-xs font-semibold">
-                        SALE
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Like button */}
-                  <button
-                    onClick={() => toggleLike(product.id)}
-                    className="absolute top-1 md:top-2 right-1 md:right-2 z-10 p-1 md:p-2 bg-white/90 backdrop-blur rounded-full hover:bg-white transition-all opacity-0 group-hover:opacity-100"
-                    aria-label="Add to wishlist"
-                  >
-                    <Heart 
-                      className={cn(
-                        "w-3 md:w-4 h-3 md:h-4 transition-colors",
-                        likedProducts.has(product.id) 
-                          ? "fill-red-500 text-red-500" 
-                          : "text-gray-600"
-                      )}
-                    />
-                  </button>
-
-                  {/* Product Image */}
-                  <Link href={`/products/${product.id}`}>
+                <Link href={`/products/${product.id}`} className="block">
+                  <div className="relative overflow-hidden bg-gray-50 rounded-lg aspect-[3/4]">
+                    {/* Product Image */}
                     <Image
                       src={hoveredProduct === product.id && product.hoverImage 
                         ? product.hoverImage 
                         : product.image}
                       alt={product.name}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-200"
-                      sizes="(max-width: 768px) 33vw, 25vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes={isMobile ? "50vw" : "25vw"}
                       priority={index < 8}
                       loading={index < 8 ? 'eager' : 'lazy'}
                     />
-                  </Link>
+                    
+                    {/* Product Info Overlay - Bottom left like reference */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3 md:p-4">
+                      <h3 className="text-white font-medium text-sm md:text-base line-clamp-1">
+                        {product.name}
+                      </h3>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-white font-semibold text-sm md:text-lg">
+                          ${product.price}
+                        </span>
+                        {product.originalPrice && (
+                          <span className="text-white/70 line-through text-xs md:text-sm">
+                            ${product.originalPrice}
+                          </span>
+                        )}
+                      </div>
+                    </div>
 
-                  {/* Quick View button */}
-                  <button
-                    onClick={() => setSelectedProduct(product)}
-                    className="absolute bottom-1 md:bottom-2 right-1 md:right-2 bg-white/95 backdrop-blur p-1.5 md:p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white"
-                    aria-label="Quick view"
-                  >
-                    <Eye className="w-3 md:w-4 h-3 md:h-4" />
-                  </button>
-                </div>
+                    {/* Quick View button - Top right, minimal */}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedProduct(product);
+                      }}
+                      className="absolute top-2 right-2 bg-white/90 backdrop-blur text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white"
+                      aria-label="Quick view"
+                    >
+                      Quick View
+                    </button>
 
-                {/* Product Info */}
-                <div className="p-1 md:p-3">
-                  <Link href={`/products/${product.id}`}>
-                    <h3 className="text-xs md:text-sm font-medium text-gray-900 hover:text-burgundy transition-colors line-clamp-2">
-                      {product.name}
-                    </h3>
-                  </Link>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-sm md:text-lg font-semibold">${product.price}</span>
-                    {product.originalPrice && (
-                      <span className="text-xs md:text-sm text-gray-500 line-through">
-                        ${product.originalPrice}
-                      </span>
+                    {/* Sale/New Badge - Top left */}
+                    {(product.isSale || product.isNew) && (
+                      <div className="absolute top-2 left-2 flex flex-col gap-1">
+                        {product.isNew && (
+                          <span className="bg-black text-white px-2 py-0.5 text-[10px] md:text-xs font-medium rounded">
+                            NEW
+                          </span>
+                        )}
+                        {product.isSale && (
+                          <span className="bg-red-500 text-white px-2 py-0.5 text-[10px] md:text-xs font-medium rounded">
+                            SALE
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </motion.div>
@@ -388,7 +380,7 @@ export function MasterCollectionPage({
             <Button
               onClick={loadMore}
               variant="outline"
-              className="px-8 py-3"
+              className="px-8 py-3 border-gray-300 hover:border-gray-400"
             >
               Load More ({filteredProducts.length - visibleProducts} remaining)
             </Button>
@@ -396,7 +388,7 @@ export function MasterCollectionPage({
         )}
       </section>
 
-      {/* Quick View Modal */}
+      {/* Quick View Modal - Minimal design */}
       <AnimatePresence>
         {selectedProduct && (
           <motion.div
@@ -411,11 +403,11 @@ export function MasterCollectionPage({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: 'spring', damping: 25 }}
-              className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto"
+              className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="grid md:grid-cols-2">
-                <div className="relative aspect-[3/4] bg-gray-100">
+                <div className="relative aspect-[3/4] bg-gray-50">
                   <Image
                     src={selectedProduct.image}
                     alt={selectedProduct.name}
@@ -430,7 +422,7 @@ export function MasterCollectionPage({
                   </button>
                 </div>
                 <div className="p-6 md:p-8">
-                  <h2 className="text-2xl font-semibold mb-4">{selectedProduct.name}</h2>
+                  <h2 className="text-2xl font-semibold mb-2">{selectedProduct.name}</h2>
                   <div className="flex items-center gap-3 mb-6">
                     <span className="text-3xl font-bold">${selectedProduct.price}</span>
                     {selectedProduct.originalPrice && (
@@ -439,13 +431,15 @@ export function MasterCollectionPage({
                       </span>
                     )}
                   </div>
+                  
                   <div className="space-y-4">
                     <div>
-                      <h3 className="font-medium mb-2">Category</h3>
-                      <p className="text-gray-600 capitalize">{selectedProduct.category}</p>
+                      <h3 className="font-medium mb-2 text-sm text-gray-600">CATEGORY</h3>
+                      <p className="capitalize">{selectedProduct.category}</p>
                     </div>
+                    
                     <div>
-                      <h3 className="font-medium mb-2">Tags</h3>
+                      <h3 className="font-medium mb-2 text-sm text-gray-600">TAGS</h3>
                       <div className="flex flex-wrap gap-2">
                         {selectedProduct.tags.map(tag => (
                           <span key={tag} className="px-3 py-1 bg-gray-100 rounded-full text-sm">
@@ -454,12 +448,17 @@ export function MasterCollectionPage({
                         ))}
                       </div>
                     </div>
+                    
                     <div className="flex gap-3 pt-4">
-                      <Button className="flex-1 bg-burgundy hover:bg-burgundy-600">
+                      <Button className="flex-1 bg-black hover:bg-gray-900">
                         <ShoppingBag className="w-4 h-4 mr-2" />
                         Add to Cart
                       </Button>
-                      <Button variant="outline" onClick={() => toggleLike(selectedProduct.id)}>
+                      <Button 
+                        variant="outline" 
+                        className="border-gray-300"
+                        onClick={() => toggleLike(selectedProduct.id)}
+                      >
                         <Heart className={cn(
                           "w-4 h-4",
                           likedProducts.has(selectedProduct.id) && "fill-red-500 text-red-500"
