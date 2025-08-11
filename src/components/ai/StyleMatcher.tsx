@@ -123,14 +123,16 @@ export function StyleMatcher({ className }: StyleMatcherProps) {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-2xl mx-auto"
         >
-          {/* Upload Area */}
+          {/* Enhanced Upload Area */}
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
+            onDragEnter={(e) => e.preventDefault()}
             className={cn(
-              "relative border-2 border-dashed rounded-lg p-8 transition-all",
-              "hover:border-burgundy hover:bg-burgundy/5",
-              imagePreview ? "border-burgundy bg-burgundy/5" : "border-gray-300"
+              "relative border-2 border-dashed rounded-xl p-6 sm:p-8 transition-all duration-300",
+              "hover:border-burgundy hover:bg-burgundy/5 hover:shadow-lg",
+              "group cursor-pointer",
+              imagePreview ? "border-burgundy bg-burgundy/5 shadow-md" : "border-gray-300 hover:border-burgundy/50"
             )}
           >
             <input
@@ -142,99 +144,152 @@ export function StyleMatcher({ className }: StyleMatcherProps) {
             />
 
             {imagePreview ? (
-              <div className="space-y-4">
-                <div className="relative aspect-[3/4] max-h-96 mx-auto overflow-hidden rounded-lg">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="space-y-4"
+              >
+                <div className="relative aspect-[3/4] max-h-96 mx-auto overflow-hidden rounded-xl shadow-lg">
                   <Image
                     src={imagePreview}
                     alt="Upload preview"
                     fill
-                    className="object-contain"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={resetAnalysis}
-                    className="absolute top-2 right-2 bg-white/90 hover:bg-white"
+                    className="absolute top-3 right-3 bg-white/90 hover:bg-white backdrop-blur-sm shadow-md"
+                    aria-label="Remove image and start over"
                   >
                     <X className="h-4 w-4" />
                   </Button>
+                  
+                  {/* Overlay with shimmer effect when analyzing */}
+                  {isAnalyzing && (
+                    <div className="absolute inset-0 bg-burgundy/20 backdrop-blur-sm flex items-center justify-center">
+                      <div className="bg-white rounded-full p-4 shadow-lg">
+                        <Loader2 className="h-8 w-8 text-burgundy animate-spin" />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <div className="text-center">
-                  <p className="text-sm text-gray-600 mb-4">
-                    Great choice! Click analyze to find similar styles
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-center"
+                >
+                  <p className="text-sm text-gray-600 mb-6 flex items-center justify-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    Great choice! Ready to find your style matches
                   </p>
                   <Button
                     onClick={analyzeStyle}
                     disabled={isAnalyzing}
-                    className="bg-burgundy hover:bg-burgundy-700 text-white px-8"
+                    className="bg-gradient-to-r from-burgundy to-red-600 hover:from-burgundy-700 hover:to-red-700 text-white px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50"
+                    size="lg"
                   >
                     {isAnalyzing ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Analyzing Style...
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        <span>Analyzing Style...</span>
                       </>
                     ) : (
                       <>
-                        <Sparkles className="mr-2 h-4 w-4" />
-                        Analyze Style
+                        <Sparkles className="mr-2 h-5 w-5" />
+                        <span>Analyze Style</span>
+                        <ArrowRight className="ml-2 h-5 w-5" />
                       </>
                     )}
                   </Button>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             ) : (
-              <div
+              <motion.div
                 onClick={() => fileInputRef.current?.click()}
-                className="text-center cursor-pointer"
+                className="text-center cursor-pointer py-8"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
               >
-                <div className="inline-flex p-4 bg-gray-100 rounded-full mb-4">
-                  <Upload className="h-8 w-8 text-gray-600" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">
+                <motion.div 
+                  className="inline-flex p-6 bg-gradient-to-r from-burgundy/10 to-blue-100 rounded-full mb-6 group-hover:from-burgundy/20 group-hover:to-blue-200 transition-colors duration-300"
+                  whileHover={{ rotate: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Upload className="h-10 w-10 text-burgundy" />
+                </motion.div>
+                <h3 className="text-xl font-semibold mb-3 group-hover:text-burgundy transition-colors duration-300">
                   Drop an image here or click to upload
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  Supports JPG, PNG, WebP up to 10MB
+                <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+                  Upload any fashion image to find similar styles from our collection<br />
+                  <span className="text-xs text-gray-500">Supports JPG, PNG, WebP up to 10MB</span>
                 </p>
-                <Button variant="outline">
-                  <ImageIcon className="mr-2 h-4 w-4" />
-                  Choose Image
+                <Button 
+                  variant="outline"
+                  className="border-burgundy/30 hover:border-burgundy hover:bg-burgundy/5 group-hover:shadow-md transition-all duration-300"
+                  size="lg"
+                >
+                  <ImageIcon className="mr-2 h-5 w-5" />
+                  <span>Choose Image</span>
                 </Button>
-              </div>
+
+                {/* Floating elements for visual interest */}
+                <div className="absolute top-4 left-4 w-2 h-2 bg-burgundy/20 rounded-full animate-pulse" />
+                <div className="absolute top-8 right-6 w-1 h-1 bg-blue-500/30 rounded-full animate-pulse" style={{animationDelay: '1s'}} />
+                <div className="absolute bottom-6 left-8 w-1.5 h-1.5 bg-purple-400/20 rounded-full animate-pulse" style={{animationDelay: '0.5s'}} />
+              </motion.div>
             )}
           </div>
 
-          {/* Tips */}
-          <div className="mt-8 grid md:grid-cols-3 gap-4">
-            <div className="text-center p-4">
-              <div className="inline-flex p-2 bg-burgundy/10 rounded-full mb-2">
-                <Camera className="h-5 w-5 text-burgundy" />
-              </div>
-              <h4 className="font-medium mb-1">Clear Photos</h4>
-              <p className="text-sm text-gray-600">
-                Use well-lit photos with visible outfit details
-              </p>
-            </div>
-            <div className="text-center p-4">
-              <div className="inline-flex p-2 bg-burgundy/10 rounded-full mb-2">
-                <Eye className="h-5 w-5 text-burgundy" />
-              </div>
-              <h4 className="font-medium mb-1">Full Outfit</h4>
-              <p className="text-sm text-gray-600">
-                Include as many pieces as possible for best results
-              </p>
-            </div>
-            <div className="text-center p-4">
-              <div className="inline-flex p-2 bg-burgundy/10 rounded-full mb-2">
-                <Sparkles className="h-5 w-5 text-burgundy" />
-              </div>
-              <h4 className="font-medium mb-1">Any Style</h4>
-              <p className="text-sm text-gray-600">
-                From casual to formal, we'll find matches
-              </p>
-            </div>
-          </div>
+          {/* Enhanced Tips */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6"
+          >
+            {[
+              {
+                icon: Camera,
+                title: "Clear Photos",
+                description: "Use well-lit photos with visible outfit details",
+                color: "from-burgundy to-red-600"
+              },
+              {
+                icon: Eye,
+                title: "Full Outfit",
+                description: "Include as many pieces as possible for best results",
+                color: "from-blue-600 to-indigo-600"
+              },
+              {
+                icon: Sparkles,
+                title: "Any Style",
+                description: "From casual to formal, we'll find matches",
+                color: "from-purple-600 to-pink-600"
+              }
+            ].map((tip, index) => (
+              <motion.div 
+                key={tip.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + index * 0.1 }}
+                whileHover={{ y: -2 }}
+                className="text-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+              >
+                <div className={`inline-flex p-3 bg-gradient-to-r ${tip.color} rounded-full mb-4 shadow-lg`}>
+                  <tip.icon className="h-6 w-6 text-white" />
+                </div>
+                <h4 className="font-semibold text-gray-900 mb-2">{tip.title}</h4>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {tip.description}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
       ) : (
         <motion.div
@@ -242,14 +297,21 @@ export function StyleMatcher({ className }: StyleMatcherProps) {
           animate={{ opacity: 1 }}
           className="space-y-8"
         >
-          {/* Back Button */}
-          <Button
-            variant="outline"
-            onClick={resetAnalysis}
-            className="mb-6"
+          {/* Enhanced Back Button */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="mb-8"
           >
-            ← Analyze Another Photo
-          </Button>
+            <Button
+              variant="outline"
+              onClick={resetAnalysis}
+              className="inline-flex items-center gap-2 px-6 py-3 border-burgundy/20 hover:border-burgundy hover:bg-burgundy/5 transition-colors duration-200"
+            >
+              <ArrowRight className="h-4 w-4 rotate-180" />
+              <span>Analyze Another Photo</span>
+            </Button>
+          </motion.div>
 
           {/* Analysis Results */}
           {analysis && styleMatch && (
