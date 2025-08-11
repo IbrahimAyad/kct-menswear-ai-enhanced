@@ -207,22 +207,12 @@ export function MasterCollectionPage({
                 selectedCategory === 'all' && "ring-2 ring-burgundy"
               )}>
                 <div className="absolute inset-0 bg-gradient-to-br from-burgundy to-burgundy-700 flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <Grid3X3 className={cn(
-                      scrolled && isMobile ? "w-6 h-6" : "w-10 h-10", 
-                      "mx-auto mb-2"
-                    )} />
+                  <div className="text-white text-center flex flex-col items-center justify-center">
                     <p className={cn(
                       "font-semibold",
-                      scrolled && isMobile ? "text-sm" : isMobile ? "text-lg" : "text-lg"
+                      scrolled && isMobile ? "text-base" : isMobile ? "text-2xl" : "text-xl"
                     )}>
                       All Products
-                    </p>
-                    <p className={cn(
-                      "opacity-80",
-                      scrolled && isMobile ? "text-xs" : "text-sm"
-                    )}>
-                      {products.length} items
                     </p>
                   </div>
                 </div>
@@ -253,20 +243,14 @@ export function MasterCollectionPage({
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute inset-0 flex items-center justify-center">
                     <h3 className={cn(
-                      "font-semibold",
-                      scrolled && isMobile ? "text-sm" : isMobile ? "text-lg" : "text-base"
+                      "font-semibold text-white text-center px-4",
+                      scrolled && isMobile ? "text-base" : isMobile ? "text-2xl" : "text-xl"
                     )}>
                       {category.name}
                     </h3>
-                    <p className={cn(
-                      "opacity-90",
-                      scrolled && isMobile ? "text-xs" : "text-sm"
-                    )}>
-                      {category.count} items
-                    </p>
                   </div>
                 </div>
               </motion.button>
