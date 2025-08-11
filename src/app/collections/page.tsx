@@ -2,61 +2,61 @@
 
 import { MasterCollectionPage } from '@/components/collections/MasterCollectionPage';
 
-// All categories from ShopByStyleGrid
+// All categories with updated images
 const allCategories = [
   {
     id: 'suits',
     name: 'Suits',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/suits.webp',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
     count: 89,
     description: 'Complete suit collections'
   },
   {
     id: 'shirts',
     name: 'Shirts',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/shirts.webp',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
     count: 124,
     description: 'Dress shirts and casual shirts'
   },
   {
     id: 'vest',
-    name: 'Vest',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/Vest/vest.webp',
+    name: 'Vests',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
     count: 52,
     description: 'Formal and casual vests'
   },
   {
     id: 'jackets',
     name: 'Jackets',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/jackets.webp',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp',
     count: 58,
     description: 'Blazers and sport coats'
   },
   {
     id: 'pants',
-    name: 'Pants',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/pants.webp',
+    name: 'Shirt & Tie',
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/dd5c1f7d-722d-4e17-00be-60a3fdb33900/public',
     count: 76,
     description: 'Dress pants and trousers'
   },
   {
     id: 'knitwear',
     name: 'Knitwear',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/knitwear.webp',
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/9ac91a19-5951-43d4-6a98-c9d658765c00/public',
     count: 45,
     description: 'Sweaters and knit tops'
   },
   {
     id: 'accessories',
     name: 'Accessories',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/accessories.webp',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
     count: 93,
     description: 'Ties, belts, and more'
   },
   {
     id: 'shoes',
     name: 'Shoes',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/shoes.webp',
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/7d203d2a-63b7-46d3-9749-1f203e4ccc00/public',
     count: 67,
     description: 'Formal and casual footwear'
   },

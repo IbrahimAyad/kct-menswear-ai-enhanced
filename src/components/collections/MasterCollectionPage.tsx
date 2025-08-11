@@ -206,11 +206,12 @@ export function MasterCollectionPage({
                     : "w-[200px] h-[200px]",
                 selectedCategory === 'all' && "ring-2 ring-burgundy"
               )}>
-                <div className="absolute inset-0 bg-gradient-to-br from-burgundy to-burgundy-700 flex items-center justify-center">
-                  <div className="text-white text-center flex flex-col items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-br from-burgundy to-burgundy-700">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white text-center">
                     <p className={cn(
                       "font-semibold",
-                      scrolled && isMobile ? "text-base" : isMobile ? "text-2xl" : "text-xl"
+                      scrolled && isMobile ? "text-sm" : isMobile ? "text-xl" : "text-lg"
                     )}>
                       All Products
                     </p>
@@ -244,10 +245,10 @@ export function MasterCollectionPage({
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white text-center">
                     <h3 className={cn(
-                      "font-semibold text-white text-center px-4",
-                      scrolled && isMobile ? "text-base" : isMobile ? "text-2xl" : "text-xl"
+                      "font-semibold",
+                      scrolled && isMobile ? "text-sm" : isMobile ? "text-xl" : "text-lg"
                     )}>
                       {category.name}
                     </h3>
