@@ -105,22 +105,9 @@ export function MasterCollectionPage({
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Page Title Section */}
-      <section className="bg-white pt-20 pb-8 px-8">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-gray-600 text-sm md:text-base mb-2 uppercase tracking-wider">{subtitle}</p>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-3">
-            {title}
-          </h1>
-          <p className="text-gray-600 text-lg max-w-2xl">
-            {description}
-          </p>
-        </div>
-      </section>
-
+    <div className="min-h-screen bg-white pt-16">
       {/* Category Filter Navigation */}
-      <section className="sticky top-0 z-40 bg-white border-t border-b">
+      <section className="sticky top-0 z-40 bg-white border-b">
         <div className="relative">
           {/* Scroll buttons */}
           <button
