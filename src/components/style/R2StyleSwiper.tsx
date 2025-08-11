@@ -6,6 +6,30 @@ import { ChevronLeft, ChevronRight, Heart, X, Sparkles, TrendingUp, Zap, Shoppin
 import { StyleSwiperImage, StyleSwiperProduct, SwipeAnalytics } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
+// Demo images for Style Swiper - defined outside component to prevent re-creation
+const DEMO_IMAGES: StyleSwiperImage[] = [
+  { id: '1', url: '/Swiper-v1/Season-1-bundles/navy-suit-white-burgunndy.webp', category: 'suits', metadata: { tags: ['formal', 'business'], productId: 'navy-suit-1' } },
+  { id: '2', url: '/Swiper-v1/Season-1-bundles/black-suit-black-shirt-black.webp', category: 'suits', metadata: { tags: ['formal', 'evening'], productId: 'black-suit-1' } },
+  { id: '3', url: '/Swiper-v1/Season-1-bundles/light-grey-2p-pink.webp', category: 'suits', metadata: { tags: ['casual', 'summer'], productId: 'grey-suit-1' } },
+  { id: '4', url: '/Swiper-v1/casual-bundles/navy-white-shirt-white-pocket-sqaure.webp', category: 'casual', metadata: { tags: ['casual', 'business-casual'], productId: 'navy-casual-1' } },
+  { id: '5', url: '/Swiper-v1/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.webp', category: 'formal', metadata: { tags: ['formal', 'black-tie'], productId: 'tuxedo-1' } },
+  { id: '6', url: '/Swiper-v1/Season-1-bundles/burgundy-black-black.webp', category: 'suits', metadata: { tags: ['bold', 'evening'], productId: 'burgundy-suit-1' } },
+  { id: '7', url: '/Swiper-v1/Fall Wedding Bundles/brown-suit-white-shirt-burgundy-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'fall'], productId: 'brown-suit-1' } },
+  { id: '8', url: '/Swiper-v1/Spring Wedding Bundles/indigo-2p-white-sage-green.webp', category: 'wedding', metadata: { tags: ['wedding', 'spring'], productId: 'indigo-suit-1' } },
+  { id: '9', url: '/Swiper-v1/Summer Wedding Bundles/light-grey-suit-white-shirt-sage-dusty-pink-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'summer'], productId: 'light-grey-2' } },
+  { id: '10', url: '/Swiper-v1/Season-1-bundles/navy-3p-white-red.webp', category: 'suits', metadata: { tags: ['business', 'power'], productId: 'navy-3piece-1' } },
+  { id: '11', url: '/Swiper-v1/casual-bundles/black-suit-burgundy-shirt-burgundy-pocket-sqaure.webp', category: 'casual', metadata: { tags: ['casual', 'evening'], productId: 'black-casual-1' } },
+  { id: '12', url: '/Swiper-v1/Tuxedo-Bundles/midnight-blue-tuxedo-white-tuxedo-shirt-black-bowtie.webp', category: 'formal', metadata: { tags: ['formal', 'luxury'], productId: 'midnight-tux-1' } },
+  { id: '13', url: '/Swiper-v1/Season-1-bundles/indigo-2p-white-red.webp', category: 'suits', metadata: { tags: ['business', 'modern'], productId: 'indigo-suit-2' } },
+  { id: '14', url: '/Swiper-v1/Fall Wedding Bundles/hunter-green-3p-suit-white-shirt-burgundy-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'fall', 'unique'], productId: 'green-suit-1' } },
+  { id: '15', url: '/Swiper-v1/casual-bundles/french-blue-black-shirt-black-pocket-sqaure.webp', category: 'casual', metadata: { tags: ['casual', 'modern'], productId: 'french-blue-1' } },
+  { id: '16', url: '/Swiper-v1/Season-1-bundles/brown-pink-navy.webp', category: 'suits', metadata: { tags: ['business', 'creative'], productId: 'brown-suit-2' } },
+  { id: '17', url: '/Swiper-v1/Summer Wedding Bundles/sand-suit-white-shirt-sage-green-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'summer', 'beach'], productId: 'sand-suit-1' } },
+  { id: '18', url: '/Swiper-v1/Tuxedo-Bundles/royal-blue-tuxedo-white-tuxedo-shirt-black-bowtie.webp', category: 'formal', metadata: { tags: ['formal', 'bold'], productId: 'royal-tux-1' } },
+  { id: '19', url: '/Swiper-v1/Season-1-bundles/dark-grey-white-silver.webp', category: 'suits', metadata: { tags: ['business', 'classic'], productId: 'dark-grey-1' } },
+  { id: '20', url: '/Swiper-v1/Fall Wedding Bundles/burgundy-suit-white-shirt-mustard-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'fall', 'rich'], productId: 'burgundy-wedding-1' } }
+];
+
 interface R2StyleSwiperProps {
   category?: string;
   onSwipe?: (image: StyleSwiperImage, direction: 'left' | 'right', velocity?: number) => void;
@@ -53,59 +77,31 @@ export function R2StyleSwiper({
   const likeOpacity = useTransform(dragX, [0, 50, 150], [0, 0.5, 1]);
   const nopeOpacity = useTransform(dragX, [-150, -50, 0], [1, 0.5, 0]);
 
-  // Demo images for Style Swiper
-  const demoImages: StyleSwiperImage[] = [
-    { id: '1', url: '/Swiper-v1/Season-1-bundles/navy-suit-white-burgunndy.webp', category: 'suits', metadata: { tags: ['formal', 'business'], productId: 'navy-suit-1' } },
-    { id: '2', url: '/Swiper-v1/Season-1-bundles/black-suit-black-shirt-black.webp', category: 'suits', metadata: { tags: ['formal', 'evening'], productId: 'black-suit-1' } },
-    { id: '3', url: '/Swiper-v1/Season-1-bundles/light-grey-2p-pink.webp', category: 'suits', metadata: { tags: ['casual', 'summer'], productId: 'grey-suit-1' } },
-    { id: '4', url: '/Swiper-v1/casual-bundles/navy-white-shirt-white-pocket-sqaure.webp', category: 'casual', metadata: { tags: ['casual', 'business-casual'], productId: 'navy-casual-1' } },
-    { id: '5', url: '/Swiper-v1/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.webp', category: 'formal', metadata: { tags: ['formal', 'black-tie'], productId: 'tuxedo-1' } },
-    { id: '6', url: '/Swiper-v1/Season-1-bundles/burgundy-black-black.webp', category: 'suits', metadata: { tags: ['bold', 'evening'], productId: 'burgundy-suit-1' } },
-    { id: '7', url: '/Swiper-v1/Fall Wedding Bundles/brown-suit-white-shirt-burgundy-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'fall'], productId: 'brown-suit-1' } },
-    { id: '8', url: '/Swiper-v1/Spring Wedding Bundles/indigo-2p-white-sage-green.webp', category: 'wedding', metadata: { tags: ['wedding', 'spring'], productId: 'indigo-suit-1' } },
-    { id: '9', url: '/Swiper-v1/Summer Wedding Bundles/light-grey-suit-white-shirt-sage-dusty-pink-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'summer'], productId: 'light-grey-2' } },
-    { id: '10', url: '/Swiper-v1/Season-1-bundles/navy-3p-white-red.webp', category: 'suits', metadata: { tags: ['business', 'power'], productId: 'navy-3piece-1' } },
-    { id: '11', url: '/Swiper-v1/casual-bundles/black-suit-burgundy-shirt-burgundy-pocket-sqaure.webp', category: 'casual', metadata: { tags: ['casual', 'evening'], productId: 'black-casual-1' } },
-    { id: '12', url: '/Swiper-v1/Tuxedo-Bundles/midnight-blue-tuxedo-white-tuxedo-shirt-black-bowtie.webp', category: 'formal', metadata: { tags: ['formal', 'luxury'], productId: 'midnight-tux-1' } },
-    { id: '13', url: '/Swiper-v1/Season-1-bundles/indigo-2p-white-red.webp', category: 'suits', metadata: { tags: ['business', 'modern'], productId: 'indigo-suit-2' } },
-    { id: '14', url: '/Swiper-v1/Fall Wedding Bundles/hunter-green-3p-suit-white-shirt-burgundy-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'fall', 'unique'], productId: 'green-suit-1' } },
-    { id: '15', url: '/Swiper-v1/casual-bundles/french-blue-black-shirt-black-pocket-sqaure.webp', category: 'casual', metadata: { tags: ['casual', 'modern'], productId: 'french-blue-1' } },
-    { id: '16', url: '/Swiper-v1/Season-1-bundles/brown-pink-navy.webp', category: 'suits', metadata: { tags: ['business', 'creative'], productId: 'brown-suit-2' } },
-    { id: '17', url: '/Swiper-v1/Summer Wedding Bundles/sand-suit-white-shirt-sage-green-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'summer', 'beach'], productId: 'sand-suit-1' } },
-    { id: '18', url: '/Swiper-v1/Tuxedo-Bundles/royal-blue-tuxedo-white-tuxedo-shirt-black-bowtie.webp', category: 'formal', metadata: { tags: ['formal', 'bold'], productId: 'royal-tux-1' } },
-    { id: '19', url: '/Swiper-v1/Season-1-bundles/dark-grey-white-silver.webp', category: 'suits', metadata: { tags: ['business', 'classic'], productId: 'dark-grey-1' } },
-    { id: '20', url: '/Swiper-v1/Fall Wedding Bundles/burgundy-suit-white-shirt-mustard-tie.webp', category: 'wedding', metadata: { tags: ['wedding', 'fall', 'rich'], productId: 'burgundy-wedding-1' } }
-  ];
-
   // Fetch images from R2 or use demo images
   useEffect(() => {
-    const fetchImages = async () => {
+    const loadImages = async () => {
       setLoading(true);
-      try {
-        const response = await fetch(`/api/style-swiper/images?category=${category}`);
-        const data = await response.json();
-        if (data.success && data.images && data.images.length > 0) {
-          setImages(data.images);
-        } else {
-          // Use demo images if no R2 images available
-          const filteredImages = category === 'all' 
-            ? demoImages 
-            : demoImages.filter(img => img.category === category);
-          setImages(filteredImages.length > 0 ? filteredImages : demoImages);
-        }
-      } catch (error) {
-        console.error('Error fetching images, using demo:', error);
-        // Fallback to demo images
-        const filteredImages = category === 'all' 
-          ? demoImages 
-          : demoImages.filter(img => img.category === category);
-        setImages(filteredImages.length > 0 ? filteredImages : demoImages);
-      } finally {
+      
+      // Always use demo images for now since R2 is not set up
+      const filteredImages = category === 'all' 
+        ? DEMO_IMAGES 
+        : DEMO_IMAGES.filter(img => img.category === category);
+      
+      // Set images with a small delay to ensure smooth loading
+      setTimeout(() => {
+        setImages(filteredImages.length > 0 ? filteredImages : DEMO_IMAGES);
         setLoading(false);
-      }
+      }, 100);
     };
 
-    fetchImages();
+    loadImages();
+  }, [category]);
+  
+  // Reset index when category changes
+  useEffect(() => {
+    setCurrentIndex(0);
+    setLikedImages([]);
+    setSwipeHistory([]);
   }, [category]);
   
   // Preload next images for smooth transitions
@@ -161,7 +157,8 @@ export function R2StyleSwiper({
     
     // Move to next card or complete
     setTimeout(() => {
-      if (currentIndex === images.length - 1) {
+      if (currentIndex >= images.length - 1) {
+        // Complete the swiper session
         onComplete?.(
           direction === 'right' ? [...likedImages, currentImage] : likedImages,
           analytics
@@ -226,7 +223,7 @@ export function R2StyleSwiper({
   };
 
   const currentImage = images[currentIndex];
-  const progress = ((currentIndex + 1) / images.length) * 100;
+  const progress = images.length > 0 ? ((currentIndex + 1) / images.length) * 100 : 0;
   const hasMoreCards = currentIndex < images.length - 1;
 
   if (loading) {
@@ -249,7 +246,7 @@ export function R2StyleSwiper({
     );
   }
 
-  if (!currentImage) {
+  if (!currentImage || images.length === 0) {
     return (
       <motion.div 
         className="flex items-center justify-center h-[600px] bg-gradient-to-br from-gold-50 via-white to-burgundy-50 rounded-3xl shadow-2xl border border-gold-200"
