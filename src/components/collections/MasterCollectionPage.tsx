@@ -79,17 +79,17 @@ export function MasterCollectionPage({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Header shrink animation values
+  // Header shrink animation values - keeping collapsed state more visible
   const headerHeight = useTransform(
     scrollY,
     [0, 100],
-    isMobile ? ['200px', '80px'] : ['250px', '180px']
+    isMobile ? ['220px', '120px'] : ['250px', '180px']
   );
   
   const headerOpacity = useTransform(
     scrollY,
     [0, 100],
-    [1, 1]
+    [1, 0.95]
   );
   
   const productCountOpacity = useTransform(
@@ -154,7 +154,10 @@ export function MasterCollectionPage({
     <div className="min-h-screen bg-white pt-16">
       {/* Collapsible Category Filter Navigation */}
       <motion.section 
-        className="sticky top-0 z-40 bg-white border-b"
+        className={cn(
+          "sticky top-0 z-40 bg-white border-b transition-shadow duration-300",
+          scrolled ? "shadow-lg border-b-2" : "shadow-sm"
+        )}
         style={{ 
           height: springHeaderHeight,
           opacity: springHeaderOpacity
@@ -178,13 +181,16 @@ export function MasterCollectionPage({
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Categories - Much larger on mobile */}
+          {/* Categories - Match suit collection page sizing */}
           <div
             ref={categoryScrollRef}
-            className="flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-12 md:px-16 py-3 md:py-4 h-full items-center"
+            className={cn(
+              "flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-12 md:px-16 h-full items-center",
+              scrolled ? "py-2" : "py-3 md:py-4"
+            )}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {/* All Products - Much larger on mobile */}
+            {/* All Products - Match suit collection sizing */}
             <motion.button
               onClick={() => setSelectedCategory('all')}
               className="flex-shrink-0"
@@ -192,21 +198,38 @@ export function MasterCollectionPage({
               whileTap={{ scale: 0.95 }}
             >
               <div className={cn(
-                "relative rounded-xl overflow-hidden cursor-pointer group transition-all",
-                isMobile ? "w-[200px] h-[140px]" : "w-[180px] h-[180px]",
+                "relative rounded-xl overflow-hidden cursor-pointer group transition-all shadow-lg",
+                scrolled && isMobile 
+                  ? "w-[160px] h-[90px]"  // Smaller when scrolled but still visible
+                  : isMobile 
+                    ? "w-[280px] h-[180px]"  // Large size matching suit collection
+                    : "w-[200px] h-[200px]",
                 selectedCategory === 'all' && "ring-2 ring-burgundy"
               )}>
                 <div className="absolute inset-0 bg-gradient-to-br from-burgundy to-burgundy-700 flex items-center justify-center">
                   <div className="text-white text-center">
-                    <Grid3X3 className={cn(isMobile ? "w-8 h-8" : "w-8 h-8", "mx-auto mb-2")} />
-                    <p className={cn("font-semibold", isMobile ? "text-base" : "text-lg")}>All Products</p>
-                    <p className={cn("opacity-80", isMobile ? "text-sm" : "text-sm")}>{products.length} items</p>
+                    <Grid3X3 className={cn(
+                      scrolled && isMobile ? "w-6 h-6" : "w-10 h-10", 
+                      "mx-auto mb-2"
+                    )} />
+                    <p className={cn(
+                      "font-semibold",
+                      scrolled && isMobile ? "text-sm" : isMobile ? "text-lg" : "text-lg"
+                    )}>
+                      All Products
+                    </p>
+                    <p className={cn(
+                      "opacity-80",
+                      scrolled && isMobile ? "text-xs" : "text-sm"
+                    )}>
+                      {products.length} items
+                    </p>
                   </div>
                 </div>
               </div>
             </motion.button>
 
-            {/* Category Cards - Much larger on mobile */}
+            {/* Category Cards - Match suit collection sizing */}
             {categories.map((category) => (
               <motion.button
                 key={category.id}
@@ -216,8 +239,12 @@ export function MasterCollectionPage({
                 whileTap={{ scale: 0.95 }}
               >
                 <div className={cn(
-                  "relative rounded-xl overflow-hidden cursor-pointer group transition-all",
-                  isMobile ? "w-[200px] h-[140px]" : "w-[180px] h-[180px]",
+                  "relative rounded-xl overflow-hidden cursor-pointer group transition-all shadow-lg",
+                  scrolled && isMobile 
+                    ? "w-[160px] h-[90px]"  // Smaller when scrolled but still visible
+                    : isMobile 
+                      ? "w-[280px] h-[180px]"  // Large size matching suit collection
+                      : "w-[200px] h-[200px]",
                   selectedCategory === category.id && "ring-2 ring-burgundy"
                 )}>
                   <Image
@@ -228,8 +255,18 @@ export function MasterCollectionPage({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                    <h3 className={cn("font-semibold", isMobile ? "text-base" : "text-base")}>{category.name}</h3>
-                    <p className={cn("opacity-90", isMobile ? "text-sm" : "text-sm")}>{category.count} items</p>
+                    <h3 className={cn(
+                      "font-semibold",
+                      scrolled && isMobile ? "text-sm" : isMobile ? "text-lg" : "text-base"
+                    )}>
+                      {category.name}
+                    </h3>
+                    <p className={cn(
+                      "opacity-90",
+                      scrolled && isMobile ? "text-xs" : "text-sm"
+                    )}>
+                      {category.count} items
+                    </p>
                   </div>
                 </div>
               </motion.button>
