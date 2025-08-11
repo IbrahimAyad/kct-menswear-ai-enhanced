@@ -102,7 +102,11 @@ export function R2StyleSwiper({
     setCurrentIndex(0);
     setLikedImages([]);
     setSwipeHistory([]);
-  }, [category]);
+    // Reset drag values to ensure clean state
+    dragX.set(0);
+    dragY.set(0);
+    setIsAnimating(false);
+  }, [category, dragX, dragY]);
   
   // Preload next images for smooth transitions
   useEffect(() => {
@@ -115,13 +119,21 @@ export function R2StyleSwiper({
     }
   }, [currentIndex, images, preloadImages]);
 
+  // Cleanup effect to reset drag values on unmount
+  useEffect(() => {
+    return () => {
+      dragX.set(0);
+      dragY.set(0);
+    };
+  }, [dragX, dragY]);
+
   const triggerHaptic = useCallback((pattern: number | number[] = 10) => {
     if (enableHaptics && navigator.vibrate) {
       navigator.vibrate(pattern);
     }
   }, [enableHaptics]);
 
-  const handleSwipe = useCallback((direction: 'left' | 'right', velocity: number = 0) => {
+  const handleSwipe = useCallback((direction: 'left' | 'right', velocity: number = 0, fromButton: boolean = false) => {
     if (!images[currentIndex] || isAnimating) return;
     
     setIsAnimating(true);
@@ -155,9 +167,34 @@ export function R2StyleSwiper({
       setLikedImages(prev => [...prev, currentImage]);
     }
     
-    // Reset drag values immediately to prevent image sticking
-    dragX.set(0);
-    dragY.set(0);
+    // For button clicks, animate the card exit first before resetting drag values
+    if (fromButton) {
+      // Animate the card out with proper direction
+      const exitX = direction === 'left' ? -600 : 600;
+      dragX.set(exitX, { 
+        type: "spring", 
+        stiffness: 400, 
+        damping: 25,
+        duration: 0.3 
+      });
+      
+      // Also animate slight vertical movement for more natural feel
+      dragY.set(-20, {
+        type: "spring", 
+        stiffness: 400, 
+        damping: 25,
+        duration: 0.3 
+      });
+      
+      // Reset drag values after animation with a slight delay to ensure smooth transition
+      setTimeout(() => {
+        dragX.set(0);
+        dragY.set(0);
+      }, 380);
+    } else {
+      // For swipe gestures, don't reset immediately - let the exit animation handle it
+      // The dragEnd handler will manage the reset
+    }
     
     // Move to next card or complete
     setTimeout(() => {
@@ -171,7 +208,7 @@ export function R2StyleSwiper({
         setCurrentIndex(prev => prev + 1);
       }
       setIsAnimating(false);
-    }, 400);
+    }, fromButton ? 400 : 350);
   }, [currentIndex, images, likedImages, analytics, isAnimating, onSwipe, onComplete, triggerHaptic]);
 
   const handleDragStart = () => {
@@ -189,8 +226,7 @@ export function R2StyleSwiper({
 
   const handleDragEnd = (event: any, info: PanInfo) => {
     if (isAnimating) {
-      dragX.set(0);
-      dragY.set(0);
+      // Don't reset during animation to prevent conflicts
       return;
     }
     
@@ -203,11 +239,13 @@ export function R2StyleSwiper({
     
     // Velocity-based swiping with momentum consideration
     if (Math.abs(velocity) > 200 || momentum > 50) {
-      handleSwipe(velocity > 0 ? 'right' : 'left', velocity);
+      handleSwipe(velocity > 0 ? 'right' : 'left', velocity, false);
+      // Don't reset drag values here - let the animation complete naturally
     } else if (Math.abs(offset) > threshold) {
-      handleSwipe(offset > 0 ? 'right' : 'left', velocity);
+      handleSwipe(offset > 0 ? 'right' : 'left', velocity, false);
+      // Don't reset drag values here - let the animation complete naturally
     } else {
-      // Spring back to center if not swiped
+      // Spring back to center if not swiped - this is safe since no animation is happening
       dragX.set(0, { type: "spring", stiffness: 200, damping: 30 });
       dragY.set(0, { type: "spring", stiffness: 200, damping: 30 });
     }
@@ -328,7 +366,7 @@ export function R2StyleSwiper({
       </div>
 
       {/* Card Stack */}
-      <div className="relative h-[600px] perspective-1000">
+      <div className="relative h-[600px] perspective-1000 overflow-hidden">
         {/* Background cards preview */}
         {hasMoreCards && images[currentIndex + 1] && (
           <div className="absolute inset-0 scale-95 opacity-40 translate-y-4">
@@ -344,7 +382,7 @@ export function R2StyleSwiper({
           {currentImage && (
             <motion.div
               key={`card-${currentImage.id}-${currentIndex}`}
-              className="absolute inset-0 cursor-grab active:cursor-grabbing"
+              className="absolute inset-0 cursor-grab active:cursor-grabbing will-change-transform"
               style={{
                 x: dragX,
                 y: dragY,
@@ -353,9 +391,10 @@ export function R2StyleSwiper({
                 opacity
               }}
               drag={!isAnimating}
-              dragConstraints={{ left: -500, right: 500, top: -50, bottom: 50 }}
-              dragElastic={0.2}
-              dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
+              dragConstraints={{ left: -400, right: 400, top: -30, bottom: 30 }}
+              dragElastic={0.1}
+              dragTransition={{ bounceStiffness: 300, bounceDamping: 25 }}
+              dragMomentum={false}
             onDragStart={handleDragStart}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
@@ -372,10 +411,9 @@ export function R2StyleSwiper({
                 }
               }}
               exit={{ 
-                x: isAnimating && swipeHistory.length > 0 ? 
-                  (swipeHistory[swipeHistory.length - 1]?.direction === 'left' ? -600 : 600) : 0,
                 opacity: 0,
                 scale: 0.8,
+                y: 50,
                 transition: { 
                   duration: 0.3,
                   ease: "easeOut"
@@ -502,7 +540,7 @@ export function R2StyleSwiper({
         <motion.button
           whileHover={{ scale: 1.15, rotate: -10 }}
           whileTap={{ scale: 0.85 }}
-          onClick={() => handleSwipe('left')}
+          onClick={() => handleSwipe('left', 0, true)}
           className="w-18 h-18 rounded-full bg-gradient-to-br from-white to-red-50 shadow-2xl border border-red-200 flex items-center justify-center hover:shadow-3xl transition-all group relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-red-100/50 to-red-200/30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -515,7 +553,7 @@ export function R2StyleSwiper({
           whileTap={{ scale: 0.9 }}
           onClick={() => {
             triggerHaptic([10, 30, 10, 30, 10]);
-            handleSwipe('right', 1000);
+            handleSwipe('right', 1000, true);
           }}
           className="w-16 h-16 rounded-full bg-gradient-to-br from-gold-400 via-gold-500 to-burgundy-500 shadow-2xl border-2 border-white flex items-center justify-center hover:shadow-3xl transition-all relative overflow-hidden group"
         >
@@ -528,7 +566,7 @@ export function R2StyleSwiper({
         <motion.button
           whileHover={{ scale: 1.15, rotate: 5 }}
           whileTap={{ scale: 0.85 }}
-          onClick={() => handleSwipe('right')}
+          onClick={() => handleSwipe('right', 0, true)}
           className="w-18 h-18 rounded-full bg-gradient-to-br from-white to-green-50 shadow-2xl border border-green-200 flex items-center justify-center hover:shadow-3xl transition-all group relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-green-100/50 to-emerald-200/30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
