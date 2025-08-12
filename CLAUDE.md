@@ -1,5 +1,83 @@
 # KCT Menswear - Next Steps & Development Guidelines
 
+## 🔴 CRITICAL: Core Products Definition (Updated 2025-08-12)
+
+### Core Products = 28 Stripe Products (Not in Supabase)
+These products use ONLY Stripe for checkout and have working payment links:
+
+#### SUITS (14 colors × 2 styles = 28 products)
+All suits available in 2-piece ($299.99) and 3-piece ($349.99):
+1. **Navy Suit**
+   - 2-Piece: `price_1Rpv2tCHc12x7sCzVvLRto3m`
+   - 3-Piece: `price_1Rpv31CHc12x7sCzlFtlUflr`
+2. **Beige Suit**
+   - 2-Piece: `price_1Rpv3FCHc12x7sCzg9nHaXkM`
+   - 3-Piece: `price_1Rpv3QCHc12x7sCzMVTfaqEE`
+3. **Black Suit**
+   - 2-Piece: `price_1Rpv3cCHc12x7sCzLtiatn73`
+   - 3-Piece: `price_1Rpv3iCHc12x7sCzJYg14SL8`
+4. **Brown Suit**
+   - 2-Piece: `price_1Rpv3zCHc12x7sCzKMSpA4hP`
+   - 3-Piece: `price_1Rpv4ECHc12x7sCzhUuL9uCE`
+5. **Burgundy Suit**
+   - 2-Piece: `price_1Rpv4XCHc12x7sCzSC3Mbtey`
+   - 3-Piece: `price_1Rpv4eCHc12x7sCzwbuknObE`
+6. **Charcoal Grey Suit**
+   - 2-Piece: `price_1Rpv4sCHc12x7sCzgMUu7hLq`
+   - 3-Piece: `price_1Rpv4zCHc12x7sCzerWp2R07`
+7. **Dark Brown Suit**
+   - 2-Piece: `price_1Rpv5DCHc12x7sCzdWjcaCY4`
+   - 3-Piece: `price_1Rpv5JCHc12x7sCzPd619lQ8`
+8. **Emerald Suit**
+   - 2-Piece: `price_1Rpv5XCHc12x7sCzzP57OQvP`
+   - 3-Piece: `price_1Rpv5eCHc12x7sCzIAVMbB7m`
+9. **Hunter Green Suit**
+   - 2-Piece: `price_1Rpv5vCHc12x7sCzAlFuGQNL`
+   - 3-Piece: `price_1Rpv61CHc12x7sCzIboI1eC8`
+10. **Indigo Suit**
+    - 2-Piece: `price_1Rpv6ECHc12x7sCz7JjWOP0p`
+    - 3-Piece: `price_1Rpv6KCHc12x7sCzzaFWFxef`
+11. **Light Grey Suit**
+    - 2-Piece: `price_1Rpv6WCHc12x7sCzDJI7Ypav`
+    - 3-Piece: `price_1Rpv6dCHc12x7sCz3JOmrvuA`
+12. **Midnight Blue Suit**
+    - 2-Piece: `price_1Rpv6sCHc12x7sCz6OZIkTR2`
+    - 3-Piece: `price_1Rpv6yCHc12x7sCz1LFaN5gS`
+13. **Sand Suit**
+    - 2-Piece: `price_1Rpv7GCHc12x7sCzV9qUCc7I`
+    - 3-Piece: `price_1Rpv7PCHc12x7sCzbXQ9a1MG`
+14. **Tan Suit**
+    - 2-Piece: `price_1Rpv7dCHc12x7sCzoWrXk2Ot`
+    - 3-Piece: `price_1Rpv7mCHc12x7sCzixeUm5ep`
+
+#### TIES (Dynamic Pricing - Any Color)
+- **Ultra Skinny Tie (2.25")**: `price_1RpvHlCHc12x7sCzp0TVNS92` - $29.99
+- **Skinny Tie (2.75")**: `price_1RpvHyCHc12x7sCzjX1WV931` - $29.99
+- **Classic Width Tie (3.25")**: `price_1RpvI9CHc12x7sCzE8Q9emhw` - $29.99
+- **Pre-tied Bow Tie**: `price_1RpvIMCHc12x7sCzj6ZTx21q` - $29.99
+
+#### TIE BUNDLES
+- **5-Tie Bundle**: `price_1RpvQqCHc12x7sCzfRrWStZb` - $119.99 (Buy 4 Get 1 Free)
+- **8-Tie Bundle**: `price_1RpvRACHc12x7sCzVYFZh6Ia` - $179.99 (Buy 6 Get 2 Free)
+- **11-Tie Bundle**: `price_1RpvRSCHc12x7sCzpo0fgH6A` - $239.99 (Buy 8 Get 3 Free)
+
+#### DRESS SHIRTS (Dynamic Pricing - Any Color)
+- **Slim Cut Dress Shirt**: `price_1RpvWnCHc12x7sCzzioA64qD` - $69.99
+- **Classic Fit Dress Shirt**: `price_1RpvXACHc12x7sCz2Ngkmp64` - $69.99
+
+#### OUTFIT BUNDLES (Suit + Shirt + Tie Combinations)
+- **Starter Bundle**: `price_1RpvZUCHc12x7sCzM4sp9DY5` - $199.99
+- **Professional Bundle**: `price_1RpvZtCHc12x7sCzny7VmEWD` - $249.99
+- **Executive Bundle**: `price_1RpvaBCHc12x7sCzRV6Hy0Im` - $279.99
+- **Premium Bundle**: `price_1RpvfvCHc12x7sCzq1jYfG9o` - $299.99
+
+### Important Notes:
+- **ALL CORE PRODUCTS** have working Stripe payment links
+- **Dynamic Color Selection**: Ties and shirts use text fields for color selection
+- **Size Customization**: Suits (34S-54L), Shirts (14.5-18)
+- **Bundle Customization**: Customers specify selections in text fields
+- **Already Processing Payments**: These products work NOW with Stripe checkout
+
 ## 🎯 Successfully Implemented Features (2025-08-11)
 
 ### Master Collection Page - Final Version

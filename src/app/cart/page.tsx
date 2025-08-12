@@ -15,6 +15,8 @@ import { CheckoutBenefits } from "@/components/checkout/CheckoutBenefits";
 import { useCartPersistence } from "@/hooks/useCartPersistence";
 import { trackBeginCheckout, trackRemoveFromCart, trackViewCart } from "@/lib/analytics/google-analytics";
 import { trackInitiateCheckout } from "@/lib/analytics/facebook-pixel";
+import { createClient } from '@/lib/supabase/client';
+import { getCoreProductById, isCoreProduct } from '@/lib/config/coreProducts';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
@@ -87,31 +89,69 @@ export default function CartPage() {
     });
 
     try {
-      const response = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items: items,
-          customerEmail: user?.email,
-        }),
+      const supabase = createClient();
+      
+      // Format items for Edge Function based on product type
+      const formattedItems = items.map(item => {
+        const coreProduct = getCoreProductById(item.productId);
+        
+        if (coreProduct && coreProduct.stripe_price_id) {
+          // Core product - use Stripe price ID
+          return {
+            type: 'stripe',
+            stripe_price_id: coreProduct.stripe_price_id,
+            quantity: item.quantity,
+            customization: {
+              size: item.size
+            }
+          };
+        } else {
+          // Catalog product from Supabase
+          return {
+            type: 'catalog',
+            product_id: item.productId,
+            variant_id: item.productId,
+            name: item.name || 'Product',
+            price: (item.price || 0) / 100, // Convert cents to dollars
+            quantity: item.quantity,
+            sku: item.productId,
+            customization: {
+              size: item.size
+            }
+          };
+        }
       });
 
-      if (!response.ok) {
-        throw new Error('Checkout failed');
+      // Call Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('create-checkout-secure', {
+        body: {
+          items: formattedItems,
+          customer_email: user?.email || undefined,
+          user_id: user?.id || null,
+          cart_id: localStorage.getItem('guest-cart-id') || undefined,
+          success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${window.location.origin}/cart`,
+          metadata: {
+            source: 'website'
+          }
+        }
+      });
+
+      if (error) {
+        console.error('Checkout error:', error);
+        throw new Error(error.message || 'Failed to create checkout session');
       }
 
-      const { sessionId, url } = await response.json();
-
-      if (url) {
-        window.location.href = url;
-      } else {
+      if (data?.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else if (data?.sessionId) {
+        // Fallback to client-side redirect
         const stripe = await stripePromise;
         if (stripe) {
-          const { error } = await stripe.redirectToCheckout({ sessionId });
+          const { error } = await stripe.redirectToCheckout({ sessionId: data.sessionId });
           if (error) {
-
+            console.error('Stripe redirect error:', error);
             alert('Unable to redirect to checkout. Please try again.');
           }
         }
@@ -129,31 +169,70 @@ export default function CartPage() {
 
     setIsProcessingCheckout(true);
     try {
-      const response = await fetch('/api/stripe/checkout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          items: items,
-          customerEmail: guestEmail,
-        }),
+      const supabase = createClient();
+      
+      // Format items for Edge Function based on product type
+      const formattedItems = items.map(item => {
+        const coreProduct = getCoreProductById(item.productId);
+        
+        if (coreProduct && coreProduct.stripe_price_id) {
+          // Core product - use Stripe price ID
+          return {
+            type: 'stripe',
+            stripe_price_id: coreProduct.stripe_price_id,
+            quantity: item.quantity,
+            customization: {
+              size: item.size
+            }
+          };
+        } else {
+          // Catalog product from Supabase
+          return {
+            type: 'catalog',
+            product_id: item.productId,
+            variant_id: item.productId,
+            name: item.name || 'Product',
+            price: (item.price || 0) / 100, // Convert cents to dollars
+            quantity: item.quantity,
+            sku: item.productId,
+            customization: {
+              size: item.size
+            }
+          };
+        }
       });
 
-      if (!response.ok) {
-        throw new Error('Checkout failed');
+      // Call Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('create-checkout-secure', {
+        body: {
+          items: formattedItems,
+          customer_email: guestEmail,
+          user_id: null,
+          cart_id: localStorage.getItem('guest-cart-id') || undefined,
+          success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${window.location.origin}/cart`,
+          metadata: {
+            source: 'website',
+            guest_checkout: true
+          }
+        }
+      });
+
+      if (error) {
+        console.error('Checkout error:', error);
+        throw new Error(error.message || 'Failed to create checkout session');
       }
 
-      const { sessionId, url } = await response.json();
-
-      if (url) {
-        window.location.href = url;
-      } else {
+      if (data?.url) {
+        // Redirect to Stripe Checkout
+        window.location.href = data.url;
+      } else if (data?.sessionId) {
+        // Fallback to client-side redirect
         const stripe = await stripePromise;
         if (stripe) {
-          const { error } = await stripe.redirectToCheckout({ sessionId });
+          const { error } = await stripe.redirectToCheckout({ sessionId: data.sessionId });
           if (error) {
-
+            console.error('Stripe redirect error:', error);
             alert('Unable to redirect to checkout. Please try again.');
           }
         }
