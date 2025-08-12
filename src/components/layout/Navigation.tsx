@@ -15,6 +15,7 @@ import MobileNavigation from "./MobileNavigation";
 import EnhancedMobileNav from "./EnhancedMobileNav";
 import { useStoreInfo } from "@/contexts/SettingsContext";
 import { navigationConfig } from "@/lib/config/navigation-presets";
+import { useUIStore } from "@/store/uiStore";
 
 // Updated nav items with preset URLs
 const navItems = [
@@ -31,10 +32,10 @@ const navItems = [
 
 export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { cartSummary } = useCart();
   const storeInfo = useStoreInfo();
+  const { setIsCartOpen } = useUIStore();
 
   // Keyboard shortcut for search (Cmd/Ctrl + K)
   useEffect(() => {
@@ -158,8 +159,7 @@ export function Navigation() {
     {/* Instant Search */}
     <InstantSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     
-    {/* Cart Drawer - Disabled in favor of SimpleCartDrawer */}
-    {/* <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} /> */}
+    {/* Cart Drawer is now handled by SimpleCartDrawer in layout.tsx using global UI store */}
     </>
   );
 }

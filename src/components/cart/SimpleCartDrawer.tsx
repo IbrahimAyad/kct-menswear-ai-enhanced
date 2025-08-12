@@ -6,10 +6,11 @@ import { X, ShoppingCart, Trash2, Plus, Minus } from 'lucide-react';
 import { CheckoutButton } from './CheckoutButton';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useUIStore } from '@/store/uiStore';
 
 export function SimpleCartDrawer() {
   const { items, cartSummary, removeFromCart, clearCart, updateQuantity } = useSimpleCart();
-  const [isOpen, setIsOpen] = useState(false);
+  const { isCartOpen, setIsCartOpen } = useUIStore();
   const [dragProgress, setDragProgress] = useState(0);
 
   // Haptic feedback
@@ -22,12 +23,12 @@ export function SimpleCartDrawer() {
   // Close drawer on escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        setIsOpen(false);
+      if (e.key === 'Escape' && isCartOpen) {
+        setIsCartOpen(false);
       }
     };
 
-    if (isOpen) {
+    if (isCartOpen) {
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
     }
@@ -36,7 +37,7 @@ export function SimpleCartDrawer() {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isCartOpen, setIsCartOpen]);
 
   const handleDrag = (_: any, info: PanInfo) => {
     const progress = Math.max(0, Math.min(1, info.offset.x / 300));
@@ -45,7 +46,7 @@ export function SimpleCartDrawer() {
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     if (info.offset.x > 150 || info.velocity.x > 500) {
-      setIsOpen(false);
+      setIsCartOpen(false);
       triggerHaptic(30);
     }
     setDragProgress(0);
@@ -58,7 +59,7 @@ export function SimpleCartDrawer() {
       {/* Mobile: Floating Cart Icon (hidden on desktop where we have nav cart) */}
       <motion.button
         onClick={() => {
-          setIsOpen(true);
+          setIsCartOpen(true);
           triggerHaptic();
         }}
         className="fixed top-4 right-4 bg-black text-white p-3 rounded-full shadow-lg z-40 md:hidden"
@@ -80,19 +81,19 @@ export function SimpleCartDrawer() {
 
       {/* Enhanced Cart Drawer */}
       <AnimatePresence>
-        {isOpen && (
+        {isCartOpen && (
           <div className="fixed inset-0 z-50 overflow-hidden">
             {/* Backdrop */}
             <motion.div 
               className="absolute inset-0 bg-black/60 backdrop-blur-sm" 
-              onClick={() => setIsOpen(false)}
+              onClick={() => setIsCartOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               role="button"
               tabIndex={0}
               aria-label="Close cart drawer"
-              onKeyDown={(e) => e.key === 'Enter' && setIsOpen(false)}
+              onKeyDown={(e) => e.key === 'Enter' && setIsCartOpen(false)}
             />
             
             {/* Drawer */}
@@ -124,7 +125,7 @@ export function SimpleCartDrawer() {
                   <span className="text-xs text-gray-500 hidden sm:block">Swipe right to close</span>
                   <button 
                     onClick={() => {
-                      setIsOpen(false);
+                      setIsCartOpen(false);
                       triggerHaptic();
                     }}
                     className="p-2 hover:bg-gray-200 rounded-full transition-colors"
