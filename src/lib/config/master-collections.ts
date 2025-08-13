@@ -268,6 +268,7 @@ export const masterCollections: MasterCollection[] = [
         id: 'all-business',
         name: 'All Business & Casual',
         filterParams: {
+          categories: ['Classic 2-Piece Suits', 'Dress Shirts', 'Dress Pants', 'Sport Coats', 'Blazers', 'Casual Shirts'],
           tags: ['business', 'professional', 'casual', 'smart-casual']
         },
         count: 156
@@ -405,4 +406,50 @@ export function buildCollectionUrl(masterId: string, subId?: string): string {
   }
   
   return `${master.route}?filter=${subId}`;
+}
+
+// Enhanced filter preset function for smart routing
+export function getSmartFilters(masterId: string, subId: string) {
+  const filters = getSubCollectionFilters(masterId, subId);
+  if (!filters) return null;
+  
+  return {
+    categories: filters.categories || [],
+    tags: filters.tags || [],
+    priceRange: filters.priceRange || null,
+    // Generate API-ready filter object
+    toApiParams: () => ({
+      categories: filters.categories,
+      tags: filters.tags,
+      minPrice: filters.priceRange?.min,
+      maxPrice: filters.priceRange?.max
+    })
+  };
+}
+
+// Helper to get all available filter options for a collection
+export function getCollectionFilterOptions(masterId: string) {
+  const master = getMasterCollection(masterId);
+  if (!master) return null;
+  
+  const allCategories = new Set<string>();
+  const allTags = new Set<string>();
+  let hasPrice = false;
+  
+  master.subCollections.forEach(sub => {
+    sub.filterParams.categories?.forEach(cat => allCategories.add(cat));
+    sub.filterParams.tags?.forEach(tag => allTags.add(tag));
+    if (sub.filterParams.priceRange) hasPrice = true;
+  });
+  
+  return {
+    categories: Array.from(allCategories),
+    tags: Array.from(allTags),
+    hasPriceFilter: hasPrice,
+    subCollections: master.subCollections.map(sub => ({
+      id: sub.id,
+      name: sub.name,
+      count: sub.count
+    }))
+  };
 }
