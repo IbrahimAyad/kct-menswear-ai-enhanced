@@ -2,6 +2,7 @@ import { UnifiedProduct, UnifiedProductFilters, UnifiedSearchResult, BUNDLE_TIER
 import { Bundle } from '@/lib/products/bundleProducts';
 import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import { EnhancedProduct } from '@/lib/supabase/types';
+import { getAllCoreProducts } from '@/lib/config/coreProducts';
 
 /**
  * Convert a bundle to UnifiedProduct format
@@ -182,6 +183,26 @@ export async function unifiedSearch(
 ): Promise<UnifiedSearchResult> {
   let results: UnifiedProduct[] = [];
   
+  // Convert core products to unified format
+  const coreProducts = getAllCoreProducts();
+  const unifiedCoreProducts = coreProducts.map(coreProduct => ({
+    id: coreProduct.id,
+    sku: coreProduct.id,
+    type: 'individual' as const,
+    name: coreProduct.name,
+    description: coreProduct.description || `Premium ${coreProduct.name} from our core collection`,
+    imageUrl: coreProduct.image || '/placeholder-product.svg',
+    images: coreProduct.image ? [coreProduct.image] : ['/placeholder-product.svg'],
+    price: coreProduct.price / 100, // Convert cents to dollars
+    category: coreProduct.category,
+    stripePriceId: coreProduct.stripe_price_id,
+    occasions: ['business', 'formal', 'wedding'],
+    tags: [coreProduct.category, 'core', 'premium'],
+    trending: false,
+    inStock: true,
+    stockLevel: 100
+  }));
+  
   // Convert bundles to unified format
   const unifiedBundles = bundleProductsWithImages.bundles.map(bundleToUnifiedProduct);
   
@@ -194,12 +215,12 @@ export async function unifiedSearch(
   }
   
   if (filters.includeIndividual !== false) {
-    results.push(...unifiedIndividual);
+    results.push(...unifiedCoreProducts, ...unifiedIndividual);
   }
   
-  // If no preference, include both
+  // If no preference, include all types
   if (filters.includeBundles === undefined && filters.includeIndividual === undefined) {
-    results = [...unifiedBundles, ...unifiedIndividual];
+    results = [...unifiedCoreProducts, ...unifiedBundles, ...unifiedIndividual];
   }
   
   // Apply filters
