@@ -1,4 +1,4 @@
-name: Weekly AI Test Suite
+name: Weekly AI Test Suite v2
 
 on:
   schedule:
