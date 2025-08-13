@@ -52,32 +52,32 @@ export function SimpleCartDrawer() {
     setDragProgress(0);
   };
 
-  if (items.length === 0) return null;
-
   return (
     <>
       {/* Mobile: Floating Cart Icon (hidden on desktop where we have nav cart) */}
-      <motion.button
-        onClick={() => {
-          setIsCartOpen(true);
-          triggerHaptic();
-        }}
-        className="fixed top-4 right-4 bg-black text-white p-3 rounded-full shadow-lg z-40 md:hidden"
-        aria-label={`Open shopping cart with ${items.length} items`}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <ShoppingCart size={20} aria-hidden="true" />
-        <motion.span 
-          className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium" 
-          aria-hidden="true"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          key={items.length}
+      {items.length > 0 && (
+        <motion.button
+          onClick={() => {
+            setIsCartOpen(true);
+            triggerHaptic();
+          }}
+          className="fixed top-4 right-4 bg-black text-white p-3 rounded-full shadow-lg z-40 md:hidden"
+          aria-label={`Open shopping cart with ${items.length} items`}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
         >
-          {items.length > 99 ? '99+' : items.length}
-        </motion.span>
-      </motion.button>
+          <ShoppingCart size={20} aria-hidden="true" />
+          <motion.span 
+            className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium" 
+            aria-hidden="true"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            key={items.length}
+          >
+            {items.length > 99 ? '99+' : items.length}
+          </motion.span>
+        </motion.button>
+      )}
 
       {/* Enhanced Cart Drawer */}
       <AnimatePresence>
@@ -139,7 +139,20 @@ export function SimpleCartDrawer() {
               {/* Cart Items */}
               <div className="flex-1 overflow-y-auto">
                 <div className="p-4 space-y-4">
-                  <AnimatePresence mode="popLayout">
+                  {items.length === 0 ? (
+                    <div className="text-center py-12">
+                      <ShoppingCart className="mx-auto h-12 w-12 text-gray-400" />
+                      <h3 className="mt-2 text-sm font-medium text-gray-900">Your cart is empty</h3>
+                      <p className="mt-1 text-sm text-gray-500">Start adding items to your cart.</p>
+                      <button
+                        onClick={() => setIsCartOpen(false)}
+                        className="mt-4 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+                      >
+                        Continue Shopping
+                      </button>
+                    </div>
+                  ) : (
+                    <AnimatePresence mode="popLayout">
                     {items.map((item) => (
                       <motion.div 
                         key={`${item.productId}-${item.size}`}
@@ -215,7 +228,8 @@ export function SimpleCartDrawer() {
                         </div>
                       </motion.div>
                     ))}
-                  </AnimatePresence>
+                    </AnimatePresence>
+                  )}
                 </div>
               </div>
               
