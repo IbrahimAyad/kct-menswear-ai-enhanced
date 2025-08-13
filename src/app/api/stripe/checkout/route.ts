@@ -28,9 +28,15 @@ export async function POST(req: NextRequest) {
 
     // Build line items with metadata
     const lineItems = items.map((item: any) => {
-
+      // Enhanced error handling for missing Stripe price ID
       if (!item.stripePriceId) {
-        throw new Error(`Missing stripePriceId for item: ${item.name || item.id}`);
+        console.error('Missing Stripe price ID for item:', {
+          productId: item.productId || item.id,
+          name: item.name,
+          size: item.size,
+          category: item.category
+        });
+        throw new Error(`Product "${item.name || item.id}" (size: ${item.size || 'N/A'}) is not configured for checkout. Please contact support.`);
       }
 
       return {

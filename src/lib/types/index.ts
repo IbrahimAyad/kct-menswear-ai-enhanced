@@ -59,6 +59,9 @@ export interface CartItem {
   price?: number;
   image?: string;
   metadata?: CartItemMetadata;
+  // Stripe integration fields
+  stripePriceId?: string;
+  stripeProductId?: string;
 }
 
 // Style Types

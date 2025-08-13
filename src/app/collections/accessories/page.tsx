@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,489 +14,50 @@ import {
   Minus,
   Plus,
   Eye,
-  Grid3X3
+  Grid3X3,
+  AlertCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-// Accessories categories following SuitSupply pattern
-const accessoriesCategories = [
-  {
-    id: 'all',
-    name: 'All Accessories',
-    count: 245,
-    image: null,
-    bgColor: 'from-zinc-900 to-zinc-700'
-  },
-  {
-    id: 'ties-bowties',
-    name: 'Ties & Bow Ties',
-    count: 118,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg'
-  },
-  {
-    id: 'belts',
-    name: 'Belts',
-    count: 32,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/belt-brown.webp'
-  },
-  {
-    id: 'pocket-squares',
-    name: 'Pocket Squares',
-    count: 45,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/pocket-square.webp'
-  },
-  {
-    id: 'socks',
-    name: 'Socks',
-    count: 28,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/socks-black.webp'
-  },
-  {
-    id: 'suspenders',
-    name: 'Suspenders',
-    count: 24,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png'
-  },
-  {
-    id: 'tuxedo-accessories',
-    name: 'Tuxedo Accessories',
-    count: 38,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/tuxedo-accessories.webp'
-  }
-];
-
-// Comprehensive accessories products based on KCT scan
-const accessoriesProducts = [
-  // Ties - Popular Colors
-  {
-    id: 'tie-burgundy',
-    name: 'Burgundy Silk Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'tie-navy',
-    name: 'Navy Silk Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'tie-silver',
-    name: 'Silver Silk Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/silver.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'tie-black',
-    name: 'Black Silk Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'tie-red',
-    name: 'Red Power Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/red.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'tie-champagne',
-    name: 'Champagne Silk Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/champagne.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'tie-pink',
-    name: 'Pink Silk Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/pink.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'tie-royal-blue',
-    name: 'Royal Blue Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/royal-blue.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'tie-gold',
-    name: 'Gold Silk Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/gold.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'tie-ivory',
-    name: 'Ivory Silk Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/ivory.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  
-  // Bow Ties - Various Colors
-  {
-    id: 'bowtie-black',
-    name: 'Black Bow Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black-bowtie.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'bowtie-burgundy',
-    name: 'Burgundy Bow Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy-bowtie.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'bowtie-navy',
-    name: 'Navy Bow Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy-bowtie.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'bowtie-yellow',
-    name: 'Yellow Bow Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/yellow-bowtie.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'bowtie-pink',
-    name: 'Pink Bow Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/pink-bowtie.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'bowtie-coral',
-    name: 'Coral Bow Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/coral-bowtie.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'bowtie-emerald',
-    name: 'Emerald Bow Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/emerald-bowtie.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  {
-    id: 'bowtie-lilac',
-    name: 'Lilac Bow Tie',
-    price: 25,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/lilac-bowtie.jpg',
-    category: 'accessories',
-    subcategory: 'ties-bowties'
-  },
-  
-  // Suspenders
-  {
-    id: 'suspenders-black',
-    name: 'Black Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/black-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'suspenders-navy',
-    name: 'Navy Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/navy-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'suspenders-burgundy',
-    name: 'Burgundy Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/burgundy-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'suspenders-grey',
-    name: 'Grey Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/grey-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'suspenders-white',
-    name: 'White Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/white-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'suspenders-pink',
-    name: 'Pink Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/pink-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'suspenders-turquoise',
-    name: 'Turquoise Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/turquoise-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'suspenders-gold',
-    name: 'Gold Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/gold-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'suspenders-mint',
-    name: 'Mint Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/mint-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'suspenders-lilac',
-    name: 'Lilac Suspenders',
-    price: 30,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/lilac-suspenders.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  
-  // Suspender & Bowtie Sets
-  {
-    id: 'set-powder-blue',
-    name: 'Powder Blue Set',
-    price: 59,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'set-burgundy',
-    name: 'Burgundy Set',
-    price: 59,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/burgundy-set.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  {
-    id: 'set-navy',
-    name: 'Navy Set',
-    price: 59,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/navy-set.png',
-    category: 'accessories',
-    subcategory: 'suspenders'
-  },
-  
-  // Pocket Squares
-  {
-    id: 'pocket-white',
-    name: 'White Pocket Square',
-    price: 15,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/pocket-square-white.webp',
-    category: 'accessories',
-    subcategory: 'pocket-squares'
-  },
-  {
-    id: 'pocket-burgundy',
-    name: 'Burgundy Pocket Square',
-    price: 15,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/pocket-square-burgundy.webp',
-    category: 'accessories',
-    subcategory: 'pocket-squares'
-  },
-  {
-    id: 'pocket-navy',
-    name: 'Navy Pocket Square',
-    price: 15,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/pocket-square-navy.webp',
-    category: 'accessories',
-    subcategory: 'pocket-squares'
-  },
-  {
-    id: 'pocket-silver',
-    name: 'Silver Pocket Square',
-    price: 15,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/pocket-square-silver.webp',
-    category: 'accessories',
-    subcategory: 'pocket-squares'
-  },
-  {
-    id: 'pocket-pattern',
-    name: 'Patterned Pocket Square',
-    price: 18,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/pocket-square-pattern.webp',
-    category: 'accessories',
-    subcategory: 'pocket-squares'
-  },
-  {
-    id: 'pocket-paisley',
-    name: 'Paisley Pocket Square',
-    price: 18,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/pocket-square-paisley.webp',
-    category: 'accessories',
-    subcategory: 'pocket-squares'
-  },
-  
-  // Belts
-  {
-    id: 'belt-black',
-    name: 'Black Leather Belt',
-    price: 45,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/belt-black.webp',
-    category: 'accessories',
-    subcategory: 'belts'
-  },
-  {
-    id: 'belt-brown',
-    name: 'Brown Leather Belt',
-    price: 45,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/belt-brown.webp',
-    category: 'accessories',
-    subcategory: 'belts'
-  },
-  {
-    id: 'belt-tan',
-    name: 'Tan Leather Belt',
-    price: 45,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/belt-tan.webp',
-    category: 'accessories',
-    subcategory: 'belts'
-  },
-  {
-    id: 'belt-reversible',
-    name: 'Reversible Belt',
-    price: 55,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/belt-reversible.webp',
-    category: 'accessories',
-    subcategory: 'belts'
-  },
-  
-  // Socks
-  {
-    id: 'socks-black',
-    name: 'Black Dress Socks',
-    price: 12,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/socks-black.webp',
-    category: 'accessories',
-    subcategory: 'socks'
-  },
-  {
-    id: 'socks-navy',
-    name: 'Navy Dress Socks',
-    price: 12,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/socks-navy.webp',
-    category: 'accessories',
-    subcategory: 'socks'
-  },
-  {
-    id: 'socks-grey',
-    name: 'Grey Dress Socks',
-    price: 12,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/socks-grey.webp',
-    category: 'accessories',
-    subcategory: 'socks'
-  },
-  {
-    id: 'socks-burgundy',
-    name: 'Burgundy Socks',
-    price: 12,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/socks-burgundy.webp',
-    category: 'accessories',
-    subcategory: 'socks'
-  },
-  {
-    id: 'socks-pattern',
-    name: 'Patterned Socks',
-    price: 15,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/socks-pattern.webp',
-    category: 'accessories',
-    subcategory: 'socks'
-  },
-  
-  // Tuxedo Accessories
-  {
-    id: 'cufflinks-silver',
-    name: 'Silver Cufflinks',
-    price: 35,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/cufflinks-silver.webp',
-    category: 'accessories',
-    subcategory: 'tuxedo-accessories'
-  },
-  {
-    id: 'cufflinks-gold',
-    name: 'Gold Cufflinks',
-    price: 45,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/cufflinks-gold.webp',
-    category: 'accessories',
-    subcategory: 'tuxedo-accessories'
-  },
-  {
-    id: 'studs-silver',
-    name: 'Silver Shirt Studs',
-    price: 25,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/studs-silver.webp',
-    category: 'accessories',
-    subcategory: 'tuxedo-accessories'
-  },
-  {
-    id: 'cummerbund-black',
-    name: 'Black Cummerbund',
-    price: 39,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/cummerbund-black.webp',
-    category: 'accessories',
-    subcategory: 'tuxedo-accessories'
-  }
-];
+import { getAccessoriesCollection, filterProductsByCategory, type CollectionProduct, type CategoryInfo } from '@/lib/services/collectionService';
 
 export default function AccessoriesCollectionPage() {
+  // State for Supabase data
+  const [categories, setCategories] = useState<CategoryInfo[]>([]);
+  const [allProducts, setAllProducts] = useState<CollectionProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // UI state
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [selectedProduct, setSelectedProduct] = useState<CollectionProduct | null>(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
   const categoryScrollRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  // Load accessories data from Supabase
+  useEffect(() => {
+    const loadAccessories = async () => {
+      setLoading(true);
+      try {
+        const result = await getAccessoriesCollection();
+        setCategories(result.categories);
+        setAllProducts(result.products);
+        setError(result.error || null);
+      } catch (err) {
+        console.error('Error loading accessories collection:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load accessories');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAccessories();
+  }, []);
+
   // Filter products based on selected category
-  const filteredProducts = selectedCategory === 'all' 
-    ? accessoriesProducts 
-    : accessoriesProducts.filter(p => p.subcategory === selectedCategory);
+  const filteredProducts = filterProductsByCategory(allProducts, selectedCategory);
 
   // Scroll category nav
   const scrollCategories = (direction: 'left' | 'right') => {
@@ -523,12 +84,10 @@ export default function AccessoriesCollectionPage() {
   };
 
   // Handle quick view
-  const handleQuickView = (product: typeof accessoriesProducts[0]) => {
+  const handleQuickView = (product: CollectionProduct) => {
     setSelectedProduct({
       ...product,
-      images: [product.image],
-      sizes: product.subcategory === 'belts' ? ['S', 'M', 'L', 'XL'] : ['One Size'],
-      description: "Men's accessories in refined materials elevate every detail of the modern wardrobe"
+      description: product.description || "Men's accessories in refined materials elevate every detail of the modern wardrobe"
     });
     setSelectedSize('');
     setQuantity(1);
@@ -540,6 +99,36 @@ export default function AccessoriesCollectionPage() {
       setSelectedProduct(null);
     }
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading accessories collection...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-2">Unable to load accessories</h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -577,7 +166,7 @@ export default function AccessoriesCollectionPage() {
             className="flex gap-3 overflow-x-auto scrollbar-hide px-12 py-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {accessoriesCategories.map((category) => (
+            {categories.map((category) => (
               <motion.button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
@@ -652,6 +241,10 @@ export default function AccessoriesCollectionPage() {
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/placeholder-product.jpg';
+                }}
               />
               
               {/* Gradient Overlay for text visibility */}
@@ -715,10 +308,14 @@ export default function AccessoriesCollectionPage() {
               {/* Product Image */}
               <div className="relative aspect-square bg-gray-100">
                 <Image
-                  src={selectedProduct.images[0]}
+                  src={selectedProduct.images?.[0] || selectedProduct.image}
                   alt={selectedProduct.name}
                   fill
                   className="object-cover rounded-t-2xl"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder-product.jpg';
+                  }}
                 />
               </div>
 
@@ -753,7 +350,7 @@ export default function AccessoriesCollectionPage() {
                 <div className="mb-4">
                   <p className="text-sm text-gray-700 mb-2">Size</p>
                   <div className="flex flex-wrap gap-2">
-                    {selectedProduct.sizes.map((size: string) => (
+                    {(selectedProduct.sizes || ['One Size']).map((size: string) => (
                       <button
                         key={size}
                         onClick={() => setSelectedSize(size)}

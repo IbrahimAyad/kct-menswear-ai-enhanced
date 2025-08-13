@@ -80,14 +80,36 @@ export function bundleToUnifiedProduct(bundle: any): UnifiedProduct {
  * Convert Supabase product to UnifiedProduct format
  */
 export function supabaseProductToUnified(product: any): UnifiedProduct {
+  // Extract image URL from various possible formats
+  let imageUrl = '';
+  if (product.featured_image?.src) {
+    imageUrl = product.featured_image.src;
+  } else if (product.images?.[0]?.src) {
+    imageUrl = product.images[0].src;
+  } else if (product.images?.[0] && typeof product.images[0] === 'string') {
+    imageUrl = product.images[0];
+  } else {
+    imageUrl = '/placeholder-product.jpg';
+  }
+  
+  // Extract all images
+  let allImages: string[] = [];
+  if (product.images && Array.isArray(product.images)) {
+    allImages = product.images.map((img: any) => {
+      if (typeof img === 'string') return img;
+      if (img.src) return img.src;
+      return '';
+    }).filter(Boolean);
+  }
+  
   return {
     id: product.id,
     sku: product.sku || product.id,
     type: 'individual',
     name: product.title || product.name,
     description: product.description || '',
-    imageUrl: product.featured_image?.src || product.images?.[0]?.src || '',
-    images: product.images?.map((img: any) => typeof img === 'string' ? img : img.src),
+    imageUrl: imageUrl,
+    images: allImages,
     price: parseFloat(product.price || '0'),
     originalPrice: product.compare_at_price ? parseFloat(product.compare_at_price) : undefined,
     isBundle: false,
@@ -210,17 +232,20 @@ export async function unifiedSearch(
   const unifiedIndividual = individualProducts.map(supabaseProductToUnified);
   
   // Combine based on filter preferences
-  if (filters.includeBundles !== false) {
-    results.push(...unifiedBundles);
-  }
-  
-  if (filters.includeIndividual !== false) {
-    results.push(...unifiedCoreProducts, ...unifiedIndividual);
-  }
-  
-  // If no preference, include all types
+  // Default behavior: include both bundles and individual products
   if (filters.includeBundles === undefined && filters.includeIndividual === undefined) {
-    results = [...unifiedCoreProducts, ...unifiedBundles, ...unifiedIndividual];
+    // Include all types by default
+    results = [...unifiedBundles, ...unifiedIndividual, ...unifiedCoreProducts];
+  } else {
+    // Respect explicit filter preferences
+    if (filters.includeBundles !== false) {
+      results.push(...unifiedBundles);
+    }
+    
+    if (filters.includeIndividual !== false) {
+      results.push(...unifiedIndividual);
+      results.push(...unifiedCoreProducts);
+    }
   }
   
   // Apply filters

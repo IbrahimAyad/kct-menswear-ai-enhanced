@@ -14,304 +14,23 @@ import {
   Minus,
   Plus,
   Eye,
-  Grid3X3
+  Grid3X3,
+  AlertCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGA4 } from '@/hooks/useGA4';
-
-// Blazer categories following SuitSupply pattern
-const blazerCategories = [
-  {
-    id: 'all',
-    name: 'All Blazers',
-    count: 42,
-    image: null,
-    bgColor: 'from-navy-900 to-burgundy-800'
-  },
-  {
-    id: 'velvet-blazers',
-    name: 'Velvet Blazers',
-    count: 12,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp'
-  },
-  {
-    id: 'prom-blazers',
-    name: 'Prom Blazers',
-    count: 15,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp'
-  },
-  {
-    id: 'classic-blazers',
-    name: 'Classic Blazers',
-    count: 8,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/jackets.webp'
-  },
-  {
-    id: 'pattern-blazers',
-    name: 'Pattern Blazers',
-    count: 7,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/red-gold-pattern-blazer.webp'
-  }
-];
-
-// Comprehensive blazer products
-const blazerProducts = [
-  // Prom Blazers Collection
-  {
-    id: 'gold-brown-floral',
-    name: 'Gold & Brown Floral Blazer',
-    price: 229,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_gold_brown_floral_prom_blazer.webp',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  {
-    id: 'black-floral',
-    name: 'Black Floral Blazer',
-    price: 229,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_black_floral_prom_blazer.webp',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  {
-    id: 'red-floral',
-    name: 'Red Floral Blazer',
-    price: 229,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  {
-    id: 'bronze-geometric',
-    name: 'Bronze Geometric Blazer',
-    price: 229,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_bronze_black_geometric_blazer.webp',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  
-  // Velvet Blazers
-  {
-    id: 'royal-blue-velvet',
-    name: 'Royal Blue Velvet Gold Trim',
-    price: 299,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_royal_blue_velvet_gold_trim.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  {
-    id: 'green-paisley-velvet',
-    name: 'Green Paisley Velvet',
-    price: 299,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  {
-    id: 'red-velvet-textured',
-    name: 'Red Velvet Textured',
-    price: 299,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_red_velvet_textured_blazer.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  {
-    id: 'burgundy-velvet',
-    name: 'Burgundy Velvet',
-    price: 279,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/burgundy-velvet.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  {
-    id: 'black-velvet',
-    name: 'Black Velvet',
-    price: 279,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/black-velvet.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  {
-    id: 'emerald-velvet',
-    name: 'Emerald Velvet',
-    price: 299,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/emerald-velvet.webp',
-    category: 'blazers',
-    subcategory: 'velvet-blazers'
-  },
-  
-  // Summer Blazers
-  {
-    id: 'beige-linen',
-    name: 'Beige Linen Blazer',
-    price: 189,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'light-blue-cotton',
-    name: 'Light Blue Cotton',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-blue/light-blue-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'tan-summer',
-    name: 'Tan Summer Blazer',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'cream-linen',
-    name: 'Cream Linen',
-    price: 189,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/cream/cream-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'olive-cotton',
-    name: 'Olive Cotton',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/olive/olive-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  {
-    id: 'white-linen',
-    name: 'White Linen',
-    price: 189,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/white/white-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'summer-blazers'
-  },
-  
-  // Sport Coats
-  {
-    id: 'navy-sport',
-    name: 'Navy Sport Coat',
-    price: 169,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'sport-coats'
-  },
-  {
-    id: 'grey-herringbone',
-    name: 'Grey Herringbone',
-    price: 189,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-herringbone-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'sport-coats'
-  },
-  {
-    id: 'brown-tweed',
-    name: 'Brown Tweed',
-    price: 199,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-tweed.jpg',
-    category: 'blazers',
-    subcategory: 'sport-coats'
-  },
-  {
-    id: 'charcoal-wool',
-    name: 'Charcoal Wool',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/charcoal-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'sport-coats'
-  },
-  
-  // Luxury Blazers
-  {
-    id: 'midnight-blue-luxury',
-    name: 'Midnight Blue Luxury',
-    price: 349,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'luxury-blazers'
-  },
-  {
-    id: 'burgundy-luxury',
-    name: 'Burgundy Luxury',
-    price: 329,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/burgundy-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'luxury-blazers'
-  },
-  {
-    id: 'royal-blue-luxury',
-    name: 'Royal Blue Luxury',
-    price: 329,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/royal-blue/royal-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'luxury-blazers'
-  },
-  {
-    id: 'black-luxury',
-    name: 'Black Luxury',
-    price: 349,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-luxury-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'luxury-blazers'
-  },
-  
-  // Additional Patterned Blazers
-  {
-    id: 'navy-pinstripe',
-    name: 'Navy Pinstripe',
-    price: 199,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-pinstripe-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  {
-    id: 'grey-windowpane',
-    name: 'Grey Windowpane',
-    price: 209,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-windowpane-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  {
-    id: 'blue-check',
-    name: 'Blue Check',
-    price: 199,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/blue/blue-check-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  {
-    id: 'brown-plaid',
-    name: 'Brown Plaid',
-    price: 209,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-plaid-blazer.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  {
-    id: 'grey-glen-check',
-    name: 'Grey Glen Check',
-    price: 219,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-glen-check.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  },
-  {
-    id: 'navy-houndstooth',
-    name: 'Navy Houndstooth',
-    price: 219,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-houndstooth.jpg',
-    category: 'blazers',
-    subcategory: 'patterned-blazers'
-  }
-];
+import { getBlazersCollection, filterProductsByCategory, type CollectionProduct, type CategoryInfo } from '@/lib/services/collectionService';
 
 export default function BlazersCollectionPage() {
+  // State for Supabase data
+  const [categories, setCategories] = useState<CategoryInfo[]>([]);
+  const [allProducts, setAllProducts] = useState<CollectionProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // UI state
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [selectedProduct, setSelectedProduct] = useState<CollectionProduct | null>(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
@@ -330,6 +49,31 @@ export default function BlazersCollectionPage() {
     trackWishlistAdd,
     trackFilterChange
   } = useGA4();
+
+  // Load blazers data from Supabase
+  useEffect(() => {
+    const loadBlazers = async () => {
+      setLoading(true);
+      try {
+        const result = await getBlazersCollection();
+        setCategories(result.categories);
+        setAllProducts(result.products);
+        setError(result.error || null);
+
+        // Track collection view
+        if (result.products.length > 0) {
+          trackCollectionView('Blazers Collection', result.products);
+        }
+      } catch (err) {
+        console.error('Error loading blazers collection:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load blazers');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadBlazers();
+  }, [trackCollectionView]);
   
   // Determine if mobile
   useEffect(() => {
@@ -373,15 +117,8 @@ export default function BlazersCollectionPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Track collection view on mount
-  useEffect(() => {
-    trackCollectionView('Blazers Collection', blazerProducts);
-  }, []);
-
   // Filter products based on selected category
-  const filteredProducts = selectedCategory === 'all' 
-    ? blazerProducts 
-    : blazerProducts.filter(p => p.subcategory === selectedCategory);
+  const filteredProducts = filterProductsByCategory(allProducts, selectedCategory);
 
   // Track category filter changes
   useEffect(() => {
@@ -410,7 +147,7 @@ export default function BlazersCollectionPage() {
       } else {
         newSet.add(productId);
         // Track wishlist add
-        const product = blazerProducts.find(p => p.id === productId);
+        const product = allProducts.find(p => p.id === productId);
         if (product) {
           trackWishlistAdd(product);
         }
@@ -420,12 +157,10 @@ export default function BlazersCollectionPage() {
   };
 
   // Handle quick view
-  const handleQuickView = (product: typeof blazerProducts[0]) => {
+  const handleQuickView = (product: CollectionProduct) => {
     setSelectedProduct({
       ...product,
-      images: [product.image],
-      sizes: ['36', '38', '40', '42', '44', '46', '48'],
-      description: 'Premium quality blazer tailored to perfection'
+      description: product.description || 'Premium quality blazer tailored to perfection'
     });
     setSelectedSize('');
     setQuantity(1);
@@ -441,6 +176,36 @@ export default function BlazersCollectionPage() {
       setSelectedProduct(null);
     }
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white pt-16">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading blazers collection...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white pt-16">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-2">Unable to load blazers</h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white pt-16">
@@ -482,7 +247,7 @@ export default function BlazersCollectionPage() {
             )}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {blazerCategories.map((category) => (
+            {categories.map((category) => (
               <motion.button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
@@ -579,6 +344,10 @@ export default function BlazersCollectionPage() {
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/placeholder-product.jpg';
+                }}
               />
               
               {/* Gradient Overlay for text visibility */}
@@ -643,10 +412,14 @@ export default function BlazersCollectionPage() {
               {/* Product Image */}
               <div className="relative aspect-square bg-gray-100">
                 <Image
-                  src={selectedProduct.images[0]}
+                  src={selectedProduct.images?.[0] || selectedProduct.image}
                   alt={selectedProduct.name}
                   fill
                   className="object-cover rounded-t-2xl"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder-product.jpg';
+                  }}
                 />
               </div>
 
@@ -681,7 +454,7 @@ export default function BlazersCollectionPage() {
                 <div className="mb-4">
                   <p className="text-sm text-gray-700 mb-2">Size</p>
                   <div className="flex flex-wrap gap-2">
-                    {selectedProduct.sizes.map((size: string) => (
+                    {(selectedProduct.sizes || ['One Size']).map((size: string) => (
                       <button
                         key={size}
                         onClick={() => setSelectedSize(size)}

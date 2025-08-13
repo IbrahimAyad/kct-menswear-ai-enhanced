@@ -15,342 +15,23 @@ import {
   Plus,
   Eye,
   Grid3X3,
-  Filter
+  Filter,
+  AlertCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGA4 } from '@/hooks/useGA4';
-
-// Suit-specific categories
-const suitCategories = [
-  {
-    id: 'all',
-    name: 'All Suits',
-    count: 89,
-    image: null,
-    bgColor: 'from-gray-900 to-gray-700'
-  },
-  {
-    id: 'classic-suits',
-    name: 'Classic Suits',
-    count: 32,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/casual-bundles/navy-white-shirt-white-pocket-sqaure.png'
-  },
-  {
-    id: 'summer-suits',
-    name: 'Summer Suits',
-    count: 18,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Summer%20Wedding%20Bundles/sand-suit-white-shirt-sage-green-tie.png'
-  },
-  {
-    id: 'wedding-suits',
-    name: 'Wedding Suits',
-    count: 24,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/indigo-2p-white-dusty-pink.png'
-  },
-  {
-    id: 'luxury-suits',
-    name: 'Luxury Suits',
-    count: 15,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Fall%20Wedding%20Bundles/brown-suit-white-shirt-brown-tie.png'
-  },
-  {
-    id: 'double-breasted',
-    name: 'Double Breasted',
-    count: 12,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp'
-  },
-  {
-    id: 'three-piece',
-    name: 'Three Piece',
-    count: 28,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png'
-  },
-  {
-    id: 'tuxedos',
-    name: 'Tuxedos',
-    count: 16,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png'
-  }
-];
-
-// Suit products
-const suitProducts = [
-  // Classic Suits
-  {
-    id: 'navy-classic',
-    name: 'Navy Classic',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  },
-  {
-    id: 'black-classic',
-    name: 'Black Classic',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  },
-  {
-    id: 'charcoal-classic',
-    name: 'Charcoal Classic',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  },
-  {
-    id: 'grey-classic',
-    name: 'Grey Classic',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  },
-  {
-    id: 'brown-classic',
-    name: 'Brown Classic',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/main.png',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  },
-  {
-    id: 'olive-classic',
-    name: 'Olive Classic',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/olive/olive-main.jpg',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  },
-  
-  // Summer Suits
-  {
-    id: 'beige-summer',
-    name: 'Beige Summer',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main.jpg',
-    category: 'suits',
-    subcategory: 'summer-suits'
-  },
-  {
-    id: 'tan-summer',
-    name: 'Tan Summer',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-main.jpg',
-    category: 'suits',
-    subcategory: 'summer-suits'
-  },
-  {
-    id: 'light-blue-summer',
-    name: 'Light Blue Summer',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-blue/light-blue-main.jpg',
-    category: 'suits',
-    subcategory: 'summer-suits'
-  },
-  {
-    id: 'cream-summer',
-    name: 'Cream Summer',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/cream/cream-main.jpg',
-    category: 'suits',
-    subcategory: 'summer-suits'
-  },
-  
-  // Wedding Suits
-  {
-    id: 'burgundy-wedding',
-    name: 'Burgundy Wedding',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/burgundy-main.jpg',
-    category: 'suits',
-    subcategory: 'wedding-suits'
-  },
-  {
-    id: 'royal-blue-wedding',
-    name: 'Royal Blue Wedding',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/royal-blue/royal-blue-main.jpg',
-    category: 'suits',
-    subcategory: 'wedding-suits'
-  },
-  {
-    id: 'purple-wedding',
-    name: 'Purple Wedding',
-    price: 179,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/purple/purple-main.jpg',
-    category: 'suits',
-    subcategory: 'wedding-suits'
-  },
-  {
-    id: 'silver-wedding',
-    name: 'Silver Wedding',
-    price: 199,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/silver/silver-main.jpg',
-    category: 'suits',
-    subcategory: 'wedding-suits'
-  },
-  
-  // Luxury Suits
-  {
-    id: 'midnight-blue-luxury',
-    name: 'Midnight Blue',
-    price: 249,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-main.jpg',
-    category: 'suits',
-    subcategory: 'luxury-suits'
-  },
-  {
-    id: 'emerald-luxury',
-    name: 'Emerald Luxury',
-    price: 269,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerald/emerald-main.jpg',
-    category: 'suits',
-    subcategory: 'luxury-suits'
-  },
-  {
-    id: 'gold-luxury',
-    name: 'Gold Luxury',
-    price: 299,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/gold/gold-main.jpg',
-    category: 'suits',
-    subcategory: 'luxury-suits'
-  },
-  
-  // Double Breasted
-  {
-    id: 'db-navy',
-    name: 'Navy Double Breasted',
-    price: 229,
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
-    category: 'suits',
-    subcategory: 'double-breasted'
-  },
-  {
-    id: 'db-grey',
-    name: 'Grey Double Breasted',
-    price: 229,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-db-main.jpg',
-    category: 'suits',
-    subcategory: 'double-breasted'
-  },
-  {
-    id: 'db-black',
-    name: 'Black Double Breasted',
-    price: 229,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-db-main.jpg',
-    category: 'suits',
-    subcategory: 'double-breasted'
-  },
-  
-  // Three Piece Suits
-  {
-    id: '3p-navy',
-    name: 'Navy Three Piece',
-    price: 249,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-3p-main.jpg',
-    category: 'suits',
-    subcategory: 'three-piece'
-  },
-  {
-    id: '3p-charcoal',
-    name: 'Charcoal Three Piece',
-    price: 249,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/charcoal-3p-main.jpg',
-    category: 'suits',
-    subcategory: 'three-piece'
-  },
-  {
-    id: '3p-burgundy',
-    name: 'Burgundy Three Piece',
-    price: 249,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/burgundy-3p-main.jpg',
-    category: 'suits',
-    subcategory: 'three-piece'
-  },
-  {
-    id: '3p-grey',
-    name: 'Grey Three Piece',
-    price: 249,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/grey-3p-main.jpg',
-    category: 'suits',
-    subcategory: 'three-piece'
-  },
-  
-  // Tuxedos
-  {
-    id: 'black-tux',
-    name: 'Black Tuxedo',
-    price: 299,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-tux-main.jpg',
-    category: 'suits',
-    subcategory: 'tuxedos'
-  },
-  {
-    id: 'white-tux',
-    name: 'White Tuxedo',
-    price: 299,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/white/white-tux-main.jpg',
-    category: 'suits',
-    subcategory: 'tuxedos'
-  },
-  {
-    id: 'burgundy-tux',
-    name: 'Burgundy Tuxedo',
-    price: 299,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/burgundy-tux-main.jpg',
-    category: 'suits',
-    subcategory: 'tuxedos'
-  },
-  {
-    id: 'midnight-tux',
-    name: 'Midnight Tuxedo',
-    price: 329,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-tux-main.jpg',
-    category: 'suits',
-    subcategory: 'tuxedos'
-  },
-  
-  // Additional Classic Suits to fill grid
-  {
-    id: 'navy-pinstripe',
-    name: 'Navy Pinstripe',
-    price: 199,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-pinstripe-main.jpg',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  },
-  {
-    id: 'grey-pinstripe',
-    name: 'Grey Pinstripe',
-    price: 199,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-pinstripe-main.jpg',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  },
-  {
-    id: 'blue-windowpane',
-    name: 'Blue Windowpane',
-    price: 209,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/blue/blue-windowpane-main.jpg',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  },
-  {
-    id: 'grey-herringbone',
-    name: 'Grey Herringbone',
-    price: 219,
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/grey-herringbone-main.jpg',
-    category: 'suits',
-    subcategory: 'classic-suits'
-  }
-];
+import { getSuitsCollection, filterProductsByCategory, type CollectionProduct, type CategoryInfo } from '@/lib/services/collectionService';
 
 export default function SuitsCollectionPage() {
+  // State for Supabase data
+  const [categories, setCategories] = useState<CategoryInfo[]>([]);
+  const [allProducts, setAllProducts] = useState<CollectionProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // UI state
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [selectedProduct, setSelectedProduct] = useState<CollectionProduct | null>(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
@@ -369,6 +50,31 @@ export default function SuitsCollectionPage() {
     trackWishlistAdd,
     trackFilterChange
   } = useGA4();
+
+  // Load suits data from Supabase
+  useEffect(() => {
+    const loadSuits = async () => {
+      setLoading(true);
+      try {
+        const result = await getSuitsCollection();
+        setCategories(result.categories);
+        setAllProducts(result.products);
+        setError(result.error || null);
+
+        // Track collection view
+        if (result.products.length > 0) {
+          trackCollectionView('Suits Collection', result.products);
+        }
+      } catch (err) {
+        console.error('Error loading suits collection:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load suits');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSuits();
+  }, [trackCollectionView]);
   
   // Determine if mobile
   useEffect(() => {
@@ -412,15 +118,8 @@ export default function SuitsCollectionPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Track collection view on mount
-  useEffect(() => {
-    trackCollectionView('Suits Collection', suitProducts);
-  }, []);
-
   // Filter products based on selected category
-  const filteredProducts = selectedCategory === 'all' 
-    ? suitProducts 
-    : suitProducts.filter(p => p.subcategory === selectedCategory);
+  const filteredProducts = filterProductsByCategory(allProducts, selectedCategory);
 
   // Track category filter changes
   useEffect(() => {
@@ -449,7 +148,7 @@ export default function SuitsCollectionPage() {
       } else {
         newSet.add(productId);
         // Track wishlist add
-        const product = suitProducts.find(p => p.id === productId);
+        const product = allProducts.find(p => p.id === productId);
         if (product) {
           trackWishlistAdd(product);
         }
@@ -459,12 +158,10 @@ export default function SuitsCollectionPage() {
   };
 
   // Handle quick view
-  const handleQuickView = (product: typeof suitProducts[0]) => {
+  const handleQuickView = (product: CollectionProduct) => {
     setSelectedProduct({
       ...product,
-      images: [product.image],
-      sizes: ['36', '38', '40', '42', '44', '46', '48'],
-      description: 'Premium quality suit tailored to perfection'
+      description: product.description || 'Premium quality suit tailored to perfection'
     });
     setSelectedSize('');
     setQuantity(1);
@@ -480,6 +177,36 @@ export default function SuitsCollectionPage() {
       setSelectedProduct(null);
     }
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white pt-16">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading suits collection...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white pt-16">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-2">Unable to load suits</h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white pt-16">
@@ -521,7 +248,7 @@ export default function SuitsCollectionPage() {
             )}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {suitCategories.map((category) => (
+            {categories.map((category) => (
               <motion.button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
@@ -618,6 +345,10 @@ export default function SuitsCollectionPage() {
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/placeholder-product.jpg';
+                }}
               />
               
               {/* Gradient Overlay */}
@@ -681,10 +412,14 @@ export default function SuitsCollectionPage() {
               {/* Product Image */}
               <div className="relative aspect-square bg-gray-100">
                 <Image
-                  src={selectedProduct.images[0]}
+                  src={selectedProduct.images?.[0] || selectedProduct.image}
                   alt={selectedProduct.name}
                   fill
                   className="object-cover rounded-t-2xl"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder-product.jpg';
+                  }}
                 />
               </div>
 
@@ -719,7 +454,7 @@ export default function SuitsCollectionPage() {
                 <div className="mb-4">
                   <p className="text-sm text-gray-700 mb-2">Size</p>
                   <div className="flex flex-wrap gap-2">
-                    {selectedProduct.sizes.map((size: string) => (
+                    {(selectedProduct.sizes || ['One Size']).map((size: string) => (
                       <button
                         key={size}
                         onClick={() => setSelectedSize(size)}

@@ -48,6 +48,8 @@ export interface ProductVariant {
   color?: string;
   inventory_count: number;
   status: 'active' | 'out_of_stock';
+  stripe_price_id?: string; // Add Stripe price ID for checkout
+  stripe_product_id?: string; // Add Stripe product ID reference
 }
 
 /**
@@ -208,6 +210,36 @@ export function isOnSale(product: Product): boolean {
  */
 export function getDisplayPrice(product: Product): number {
   return product.sale_price || product.base_price;
+}
+
+/**
+ * Get Stripe price ID for a product variant or product
+ */
+export function getStripePriceId(product: Product, size?: string): string | null {
+  // First try to find stripe_price_id in variant for specific size
+  if (size && product.variants) {
+    const variant = product.variants.find(v => v.size === size);
+    if (variant?.stripe_price_id) {
+      return variant.stripe_price_id;
+    }
+  }
+
+  // Fallback to metadata stripe_price_id
+  if (product.metadata?.stripe_price_id) {
+    return product.metadata.stripe_price_id;
+  }
+
+  // Legacy fallback - try to map to static stripe products
+  if (product.category === 'Suits' && product.metadata?.color) {
+    const colorKey = product.metadata.color.toLowerCase().replace(/\s+/g, '');
+    const staticStripe = require('@/lib/services/stripeProductService').stripeProducts.suits[colorKey];
+    if (staticStripe) {
+      // Default to two-piece unless metadata specifies three-piece
+      return product.metadata.piece_count === '3' ? staticStripe.threePiece : staticStripe.twoPiece;
+    }
+  }
+
+  return null;
 }
 
 /**

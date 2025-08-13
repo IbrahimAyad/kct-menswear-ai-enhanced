@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { CartItem, Product } from "@/lib/types";
 import { adminClient } from "@/lib/api/adminClient";
+import { getStripePriceId } from "@/lib/shared/supabase-products";
 
 interface CartStore {
   items: CartItem[];
@@ -38,6 +39,9 @@ export const useCartStore = create<CartStore>()(
             };
           }
 
+          // Get Stripe price ID for this product/size combination
+          const stripePriceId = getStripePriceId(product, size);
+
           return {
             items: [
               ...state.items,
@@ -50,6 +54,8 @@ export const useCartStore = create<CartStore>()(
                 price: product.price,
                 image: product.images?.[0],
                 metadata: product.metadata,
+                stripePriceId, // Add Stripe price ID for checkout
+                stripeProductId: product.metadata?.stripe_product_id,
               } as CartItem,
             ],
           };
