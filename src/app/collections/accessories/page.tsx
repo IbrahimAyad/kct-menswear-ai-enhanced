@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { Suspense, useState, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,15 +18,126 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { getAccessoriesCollection, filterProductsByCategory, type CollectionProduct, type CategoryInfo } from '@/lib/services/collectionService';
+import { useUnifiedShop } from '@/hooks/useUnifiedShop';
+import { UnifiedProduct } from '@/types/unified-shop';
 
-export default function AccessoriesCollectionPage() {
-  // State for Supabase data
-  const [categories, setCategories] = useState<CategoryInfo[]>([]);
-  const [allProducts, setAllProducts] = useState<CollectionProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  
+// Types for the existing UI
+interface CollectionProduct {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  category: string;
+  subcategory?: string;
+  description?: string;
+  images?: string[];
+  sizes?: string[];
+  sku?: string;
+  sale_price?: number;
+}
+
+interface CategoryInfo {
+  id: string;
+  name: string;
+  count: number;
+  image: string | null;
+  bgColor?: string;
+}
+
+// Helper function to map UnifiedProduct to CollectionProduct format
+function mapUnifiedProductToCollectionProduct(unifiedProduct: UnifiedProduct): CollectionProduct {
+  return {
+    id: unifiedProduct.id,
+    name: unifiedProduct.name,
+    price: unifiedProduct.price,
+    image: unifiedProduct.imageUrl,
+    category: unifiedProduct.category || 'accessories',
+    subcategory: unifiedProduct.tags?.find(tag => 
+      ['ties', 'belts', 'bowties', 'suspenders', 'cummerbunds', 'pocket-squares', 'cufflinks'].includes(tag)
+    ) || 'general',
+    description: unifiedProduct.description,
+    images: unifiedProduct.images || [unifiedProduct.imageUrl],
+    sizes: unifiedProduct.size || ['One Size'],
+    sku: unifiedProduct.sku,
+    sale_price: unifiedProduct.originalPrice ? unifiedProduct.price : undefined
+  };
+}
+
+// Helper function to generate categories from products
+function generateAccessoriesCategories(products: CollectionProduct[]): CategoryInfo[] {
+  const subcategoryCounts = products.reduce((acc, product) => {
+    const subcat = product.subcategory || 'general';
+    acc[subcat] = (acc[subcat] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const categoryMapping: Record<string, string> = {
+    'ties': 'Ties',
+    'belts': 'Belts', 
+    'bowties': 'Bow Ties',
+    'suspenders': 'Suspenders',
+    'cummerbunds': 'Cummerbunds',
+    'pocket-squares': 'Pocket Squares',
+    'cufflinks': 'Cufflinks',
+    'general': 'Other Accessories'
+  };
+
+  return [
+    {
+      id: 'all',
+      name: 'All Accessories',
+      count: products.length,
+      image: null,
+      bgColor: 'from-zinc-900 to-zinc-700'
+    },
+    ...Object.entries(subcategoryCounts)
+      .filter(([, count]) => count > 0)
+      .map(([subcat, count]) => ({
+        id: subcat,
+        name: categoryMapping[subcat] || formatCategoryName(subcat),
+        count,
+        image: null
+      }))
+  ];
+}
+
+// Helper function to format category names
+function formatCategoryName(subcategory: string): string {
+  return subcategory
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+// Helper function to filter products by category
+function filterProductsByCategory(products: CollectionProduct[], selectedCategory: string): CollectionProduct[] {
+  if (selectedCategory === 'all') {
+    return products;
+  }
+  return products.filter(product => product.subcategory === selectedCategory);
+}
+
+function AccessoriesContent() {
+  // Fetch products from API using the unified shop hook with accessories filter
+  const { products: unifiedProducts, loading, error } = useUnifiedShop({
+    initialFilters: { 
+      category: ['accessories'],
+      includeAccessories: true 
+    },
+    autoFetch: true,
+    debounceDelay: 300
+  });
+
+  // Transform UnifiedProducts to CollectionProduct format
+  const allProducts = useMemo(() => {
+    return unifiedProducts.map(mapUnifiedProductToCollectionProduct);
+  }, [unifiedProducts]);
+
+  // Generate categories from actual products
+  const categories = useMemo(() => {
+    return generateAccessoriesCategories(allProducts);
+  }, [allProducts]);
+
   // UI state
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedProduct, setSelectedProduct] = useState<CollectionProduct | null>(null);
@@ -35,26 +146,6 @@ export default function AccessoriesCollectionPage() {
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
   const categoryScrollRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
-
-  // Load accessories data from Supabase
-  useEffect(() => {
-    const loadAccessories = async () => {
-      setLoading(true);
-      try {
-        const result = await getAccessoriesCollection();
-        setCategories(result.categories);
-        setAllProducts(result.products);
-        setError(result.error || null);
-      } catch (err) {
-        console.error('Error loading accessories collection:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load accessories');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadAccessories();
-  }, []);
 
   // Filter products based on selected category
   const filteredProducts = filterProductsByCategory(allProducts, selectedCategory);
@@ -401,5 +492,22 @@ export default function AccessoriesCollectionPage() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function AccessoriesCollectionPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading accessories collection...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <AccessoriesContent />
+    </Suspense>
   );
 }

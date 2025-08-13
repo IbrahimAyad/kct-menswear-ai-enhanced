@@ -118,8 +118,9 @@ class LiveTrainingRunner {
         throw new Error(`Failed to start conversation: ${startResponse.statusCode}`);
       }
 
-      const sessionId = startResponse.data.session_id || startResponse.data.sessionId;
+      const sessionId = startResponse.data.data?.session_id || startResponse.data.data?.sessionId || startResponse.data.session_id || startResponse.data.sessionId;
       if (!sessionId) {
+        console.log('Debug - Start response:', JSON.stringify(startResponse.data, null, 2));
         throw new Error('No session ID returned');
       }
 

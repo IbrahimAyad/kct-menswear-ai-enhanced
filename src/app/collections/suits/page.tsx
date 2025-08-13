@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { Suspense, useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,14 +20,125 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGA4 } from '@/hooks/useGA4';
-import { getSuitsCollection, filterProductsByCategory, type CollectionProduct, type CategoryInfo } from '@/lib/services/collectionService';
+import { useUnifiedShop } from '@/hooks/useUnifiedShop';
+import { UnifiedProduct } from '@/types/unified-shop';
 
-export default function SuitsCollectionPage() {
-  // State for Supabase data
-  const [categories, setCategories] = useState<CategoryInfo[]>([]);
-  const [allProducts, setAllProducts] = useState<CollectionProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+// Types for the existing UI
+interface CollectionProduct {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  category: string;
+  subcategory?: string;
+  description?: string;
+  images?: string[];
+  sizes?: string[];
+  sku?: string;
+  sale_price?: number;
+}
+
+interface CategoryInfo {
+  id: string;
+  name: string;
+  count: number;
+  image: string | null;
+  bgColor?: string;
+}
+
+// Helper function to map UnifiedProduct to CollectionProduct format
+function mapUnifiedProductToCollectionProduct(unifiedProduct: UnifiedProduct): CollectionProduct {
+  return {
+    id: unifiedProduct.id,
+    name: unifiedProduct.name,
+    price: unifiedProduct.price,
+    image: unifiedProduct.imageUrl,
+    category: unifiedProduct.category || 'suits',
+    subcategory: unifiedProduct.tags?.find(tag => 
+      ['two-piece', 'three-piece', 'tuxedos', 'double-breasted', 'modern', 'classic', 'slim-fit'].includes(tag)
+    ) || 'general',
+    description: unifiedProduct.description,
+    images: unifiedProduct.images || [unifiedProduct.imageUrl],
+    sizes: unifiedProduct.size || ['38R', '40R', '42R', '44R'],
+    sku: unifiedProduct.sku,
+    sale_price: unifiedProduct.originalPrice ? unifiedProduct.price : undefined
+  };
+}
+
+// Helper function to generate categories from products
+function generateSuitsCategories(products: CollectionProduct[]): CategoryInfo[] {
+  const subcategoryCounts = products.reduce((acc, product) => {
+    const subcat = product.subcategory || 'general';
+    acc[subcat] = (acc[subcat] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const categoryMapping: Record<string, string> = {
+    'two-piece': 'Two-Piece Suits',
+    'three-piece': 'Three-Piece Suits',
+    'tuxedos': 'Tuxedos',
+    'double-breasted': 'Double-Breasted',
+    'modern': 'Modern Fit',
+    'classic': 'Classic Fit',
+    'slim-fit': 'Slim Fit',
+    'general': 'All Suits'
+  };
+
+  return [
+    {
+      id: 'all',
+      name: 'All Suits',
+      count: products.length,
+      image: null,
+      bgColor: 'from-slate-900 to-slate-700'
+    },
+    ...Object.entries(subcategoryCounts)
+      .filter(([, count]) => count > 0)
+      .map(([subcat, count]) => ({
+        id: subcat,
+        name: categoryMapping[subcat] || formatCategoryName(subcat),
+        count,
+        image: null
+      }))
+  ];
+}
+
+// Helper function to format category names
+function formatCategoryName(subcategory: string): string {
+  return subcategory
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+// Helper function to filter products by category
+function filterProductsByCategory(products: CollectionProduct[], selectedCategory: string): CollectionProduct[] {
+  if (selectedCategory === 'all') {
+    return products;
+  }
+  return products.filter(product => product.subcategory === selectedCategory);
+}
+
+function SuitsContent() {
+  // Fetch products from API using the unified shop hook with suits filter
+  const { products: unifiedProducts, loading, error } = useUnifiedShop({
+    initialFilters: { 
+      category: ['suits'],
+      includeIndividual: true 
+    },
+    autoFetch: true,
+    debounceDelay: 300
+  });
+
+  // Transform UnifiedProducts to CollectionProduct format
+  const allProducts = useMemo(() => {
+    return unifiedProducts.map(mapUnifiedProductToCollectionProduct);
+  }, [unifiedProducts]);
+
+  // Generate categories from actual products
+  const categories = useMemo(() => {
+    return generateSuitsCategories(allProducts);
+  }, [allProducts]);
   
   // UI state
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -51,30 +162,12 @@ export default function SuitsCollectionPage() {
     trackFilterChange
   } = useGA4();
 
-  // Load suits data from Supabase
+  // Track collection view when products load
   useEffect(() => {
-    const loadSuits = async () => {
-      setLoading(true);
-      try {
-        const result = await getSuitsCollection();
-        setCategories(result.categories);
-        setAllProducts(result.products);
-        setError(result.error || null);
-
-        // Track collection view
-        if (result.products.length > 0) {
-          trackCollectionView('Suits Collection', result.products);
-        }
-      } catch (err) {
-        console.error('Error loading suits collection:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load suits');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadSuits();
-  }, [trackCollectionView]);
+    if (allProducts.length > 0) {
+      trackCollectionView('Suits Collection', allProducts);
+    }
+  }, [allProducts, trackCollectionView]);
   
   // Determine if mobile
   useEffect(() => {
@@ -126,7 +219,7 @@ export default function SuitsCollectionPage() {
     if (selectedCategory !== 'all') {
       trackFilterChange('Suits Collection', { category: selectedCategory });
     }
-  }, [selectedCategory]);
+  }, [selectedCategory, trackFilterChange]);
 
   // Scroll category nav
   const scrollCategories = (direction: 'left' | 'right') => {
@@ -181,7 +274,7 @@ export default function SuitsCollectionPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-white pt-16">
+      <div className="min-h-screen bg-white">
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
@@ -195,7 +288,7 @@ export default function SuitsCollectionPage() {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-white pt-16">
+      <div className="min-h-screen bg-white">
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
@@ -209,11 +302,11 @@ export default function SuitsCollectionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white pt-16">
+    <div className="min-h-screen bg-white">
       {/* Collapsible Category Filter Navigation */}
       <motion.section 
         className={cn(
-          "sticky top-0 z-40 bg-white border-b transition-shadow duration-300",
+          "sticky top-16 z-40 bg-white border-b transition-shadow duration-300",
           scrolled ? "shadow-lg border-b-2" : "shadow-sm"
         )}
         style={{ 
@@ -517,5 +610,22 @@ export default function SuitsCollectionPage() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function SuitsCollectionPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading suits collection...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <SuitsContent />
+    </Suspense>
   );
 }

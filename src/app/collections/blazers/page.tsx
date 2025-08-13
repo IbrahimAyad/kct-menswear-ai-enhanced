@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
+import { Suspense, useState, useRef, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { 
   X, 
@@ -18,15 +17,124 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useGA4 } from '@/hooks/useGA4';
-import { getBlazersCollection, filterProductsByCategory, type CollectionProduct, type CategoryInfo } from '@/lib/services/collectionService';
+import { useUnifiedShop } from '@/hooks/useUnifiedShop';
+import { UnifiedProduct } from '@/types/unified-shop';
 
-export default function BlazersCollectionPage() {
-  // State for Supabase data
-  const [categories, setCategories] = useState<CategoryInfo[]>([]);
-  const [allProducts, setAllProducts] = useState<CollectionProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+// Types for the existing UI
+interface CollectionProduct {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  category: string;
+  subcategory?: string;
+  description?: string;
+  images?: string[];
+  sizes?: string[];
+  sku?: string;
+  sale_price?: number;
+}
+
+interface CategoryInfo {
+  id: string;
+  name: string;
+  count: number;
+  image: string | null;
+  bgColor?: string;
+}
+
+// Helper function to map UnifiedProduct to CollectionProduct format
+function mapUnifiedProductToCollectionProduct(unifiedProduct: UnifiedProduct): CollectionProduct {
+  return {
+    id: unifiedProduct.id,
+    name: unifiedProduct.name,
+    price: unifiedProduct.price,
+    image: unifiedProduct.imageUrl,
+    category: unifiedProduct.category || 'blazers',
+    subcategory: unifiedProduct.tags?.find(tag => 
+      ['blazers', 'sport-coats', 'dinner-jackets', 'casual-blazers', 'formal-blazers', 'tuxedo-jackets'].includes(tag)
+    ) || 'general',
+    description: unifiedProduct.description,
+    images: unifiedProduct.images || [unifiedProduct.imageUrl],
+    sizes: unifiedProduct.size || ['S', 'M', 'L', 'XL'],
+    sku: unifiedProduct.sku,
+    sale_price: unifiedProduct.originalPrice ? unifiedProduct.price : undefined
+  };
+}
+
+// Helper function to generate categories from products
+function generateBlazersCategories(products: CollectionProduct[]): CategoryInfo[] {
+  const subcategoryCounts = products.reduce((acc, product) => {
+    const subcat = product.subcategory || 'general';
+    acc[subcat] = (acc[subcat] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const categoryMapping: Record<string, string> = {
+    'blazers': 'Classic Blazers',
+    'sport-coats': 'Sport Coats', 
+    'dinner-jackets': 'Dinner Jackets',
+    'casual-blazers': 'Casual Blazers',
+    'formal-blazers': 'Formal Blazers',
+    'tuxedo-jackets': 'Tuxedo Jackets',
+    'general': 'Other Blazers'
+  };
+
+  return [
+    {
+      id: 'all',
+      name: 'All Blazers',
+      count: products.length,
+      image: null,
+      bgColor: 'from-navy-900 to-burgundy-800'
+    },
+    ...Object.entries(subcategoryCounts)
+      .filter(([, count]) => count > 0)
+      .map(([subcat, count]) => ({
+        id: subcat,
+        name: categoryMapping[subcat] || formatCategoryName(subcat),
+        count,
+        image: null
+      }))
+  ];
+}
+
+// Helper function to format category names
+function formatCategoryName(subcategory: string): string {
+  return subcategory
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+// Helper function to filter products by category
+function filterProductsByCategory(products: CollectionProduct[], selectedCategory: string): CollectionProduct[] {
+  if (selectedCategory === 'all') {
+    return products;
+  }
+  return products.filter(product => product.subcategory === selectedCategory);
+}
+
+function BlazersContent() {
+  // Fetch products from API using the unified shop hook with blazers filter
+  const { products: unifiedProducts, loading, error } = useUnifiedShop({
+    initialFilters: { 
+      category: ['blazers', 'jackets'],
+      includeIndividual: true 
+    },
+    autoFetch: true,
+    debounceDelay: 300
+  });
+
+  // Transform UnifiedProducts to CollectionProduct format
+  const allProducts = useMemo(() => {
+    return unifiedProducts.map(mapUnifiedProductToCollectionProduct);
+  }, [unifiedProducts]);
+
+  // Generate categories from actual products
+  const categories = useMemo(() => {
+    return generateBlazersCategories(allProducts);
+  }, [allProducts]);
   
   // UI state
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -34,98 +142,11 @@ export default function BlazersCollectionPage() {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
-  const [scrolled, setScrolled] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const categoryScrollRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  
-  // GA4 tracking
-  const {
-    trackCollectionView,
-    trackProductClick,
-    trackQuickViewModal,
-    trackAddCart,
-    trackWishlistAdd,
-    trackFilterChange
-  } = useGA4();
-
-  // Load blazers data from Supabase
-  useEffect(() => {
-    const loadBlazers = async () => {
-      setLoading(true);
-      try {
-        const result = await getBlazersCollection();
-        setCategories(result.categories);
-        setAllProducts(result.products);
-        setError(result.error || null);
-
-        // Track collection view
-        if (result.products.length > 0) {
-          trackCollectionView('Blazers Collection', result.products);
-        }
-      } catch (err) {
-        console.error('Error loading blazers collection:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load blazers');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadBlazers();
-  }, [trackCollectionView]);
-  
-  // Determine if mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-  
-  // Header shrink animation values - keeping collapsed state more visible
-  const headerHeight = useTransform(
-    scrollY,
-    [0, 100],
-    isMobile ? ['280px', '140px'] : ['300px', '200px']
-  );
-  
-  const headerOpacity = useTransform(
-    scrollY,
-    [0, 100],
-    [1, 0.95]
-  );
-  
-  const productCountOpacity = useTransform(
-    scrollY,
-    [0, 50],
-    isMobile ? [1, 0] : [1, 1]
-  );
-
-  const springHeaderHeight = useSpring(headerHeight, { stiffness: 400, damping: 30 });
-  const springHeaderOpacity = useSpring(headerOpacity, { stiffness: 400, damping: 30 });
-  const springProductCountOpacity = useSpring(productCountOpacity, { stiffness: 400, damping: 30 });
-  
-  // Track scroll for floating filter button
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Filter products based on selected category
   const filteredProducts = filterProductsByCategory(allProducts, selectedCategory);
-
-  // Track category filter changes
-  useEffect(() => {
-    if (selectedCategory !== 'all') {
-      trackFilterChange('Blazers Collection', { category: selectedCategory });
-    }
-  }, [selectedCategory]);
 
   // Scroll category nav
   const scrollCategories = (direction: 'left' | 'right') => {
@@ -146,11 +167,6 @@ export default function BlazersCollectionPage() {
         newSet.delete(productId);
       } else {
         newSet.add(productId);
-        // Track wishlist add
-        const product = allProducts.find(p => p.id === productId);
-        if (product) {
-          trackWishlistAdd(product);
-        }
       }
       return newSet;
     });
@@ -164,10 +180,6 @@ export default function BlazersCollectionPage() {
     });
     setSelectedSize('');
     setQuantity(1);
-    
-    // Track quick view
-    trackQuickViewModal(product);
-    trackProductClick(product, 'Blazers Collection');
   };
 
   // Close modal when clicking outside
@@ -180,7 +192,7 @@ export default function BlazersCollectionPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-white pt-16">
+      <div className="min-h-screen bg-white">
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
@@ -194,7 +206,7 @@ export default function BlazersCollectionPage() {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-white pt-16">
+      <div className="min-h-screen bg-white">
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
@@ -208,19 +220,18 @@ export default function BlazersCollectionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white pt-16">
-      {/* Collapsible Category Filter Navigation */}
-      <motion.section 
-        className={cn(
-          "sticky top-0 z-40 bg-white border-b transition-shadow duration-300",
-          scrolled ? "shadow-lg border-b-2" : "shadow-sm"
-        )}
-        style={{ 
-          height: springHeaderHeight,
-          opacity: springHeaderOpacity
-        }}
-      >
-        <div className="relative h-full">
+    <div className="min-h-screen bg-white">
+      {/* Hero Section with Title */}
+      <div className="bg-gray-50 px-4 py-8 md:px-8 md:py-12">
+        <h1 className="text-3xl md:text-4xl font-serif mb-2">Blazers Collection</h1>
+        <p className="text-gray-600 max-w-2xl">
+          Premium quality blazers tailored to perfection for every occasion and style.
+        </p>
+      </div>
+
+      {/* Sticky Category Navigation Header */}
+      <div className="sticky top-16 z-40 bg-white border-b">
+        <div className="relative">
           {/* Scroll buttons */}
           <button
             onClick={() => scrollCategories('left')}
@@ -238,13 +249,10 @@ export default function BlazersCollectionPage() {
             <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Categories - Dynamic sizing based on scroll */}
+          {/* Categories */}
           <div
             ref={categoryScrollRef}
-            className={cn(
-              "flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide px-12 md:px-16 h-full items-center",
-              scrolled ? "py-2" : "py-3 md:py-4"
-            )}
+            className="flex gap-3 overflow-x-auto scrollbar-hide px-12 py-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categories.map((category) => (
@@ -256,14 +264,7 @@ export default function BlazersCollectionPage() {
                 whileTap={{ scale: 0.95 }}
               >
                 <div className={cn(
-                  "relative rounded-xl overflow-hidden cursor-pointer group transition-all shadow-lg",
-                  scrolled && isMobile 
-                    ? "w-[140px] h-[100px]"  // Smaller when scrolled on mobile
-                    : isMobile 
-                      ? "w-[220px] h-[160px]"  // Large size on mobile
-                      : scrolled
-                        ? "w-[160px] h-[120px]"  // Smaller when scrolled on desktop
-                        : "w-[200px] h-[200px]",  // Normal size on desktop
+                  "relative w-[200px] h-[250px] rounded-lg overflow-hidden cursor-pointer",
                   selectedCategory === category.id && "ring-2 ring-black ring-offset-2"
                 )}>
                   {category.image ? (
@@ -272,8 +273,8 @@ export default function BlazersCollectionPage() {
                         src={category.image}
                         alt={category.name}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        sizes="(max-width: 768px) 220px, 200px"
+                        className="object-cover"
+                        sizes="200px"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                     </>
@@ -285,23 +286,9 @@ export default function BlazersCollectionPage() {
                       <Grid3X3 className="w-10 h-10 text-white" />
                     </div>
                   )}
-                  {/* Text positioned at bottom with gradient overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 text-white">
-                    <h3 className={cn(
-                      "font-semibold",
-                      scrolled && isMobile ? "text-sm" : isMobile ? "text-lg" : scrolled ? "text-base" : "text-lg"
-                    )}>
-                      {category.name}
-                    </h3>
-                    {/* Hide item count on mobile when scrolled */}
-                    {(!scrolled || !isMobile) && (
-                      <p className={cn(
-                        "opacity-90",
-                        scrolled ? "text-xs" : "text-sm"
-                      )}>
-                        {category.count} items
-                      </p>
-                    )}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <h3 className="font-semibold text-lg">{category.name}</h3>
+                    <p className="text-sm opacity-90">{category.count} items</p>
                   </div>
                 </div>
               </motion.button>
@@ -309,23 +296,22 @@ export default function BlazersCollectionPage() {
           </div>
         </div>
 
-        {/* Product count bar - Hidden on mobile when scrolled */}
-        <motion.div 
-          className="px-4 md:px-8 py-2 flex justify-between items-center border-t bg-gray-50"
-          style={{ opacity: springProductCountOpacity, display: scrolled && isMobile ? 'none' : 'flex' }}
-        >
-          <span className="text-xs md:text-sm text-gray-600">
+        {/* Filter Bar */}
+        <div className="px-4 py-3 bg-gray-50 border-t flex justify-between items-center">
+          <span className="text-sm text-gray-600">
             {filteredProducts.length} products
           </span>
-          <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
-            <Grid3X3 className="w-4 h-4" />
-            <span>Grid View</span>
-          </div>
-        </motion.div>
-      </motion.section>
+          <button className="text-sm font-medium flex items-center gap-2">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            Filter
+          </button>
+        </div>
+      </div>
 
-      {/* Product Grid - 3x3 on mobile */}
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1 md:gap-2 p-1 md:p-3">
+      {/* Product Grid - Responsive columns */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-1 md:gap-2 p-1 md:p-3">
         <AnimatePresence mode="wait">
           {filteredProducts.map((product, index) => (
             <motion.div
@@ -334,7 +320,7 @@ export default function BlazersCollectionPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ delay: index * 0.02 }}
-              className="relative aspect-[3/4] rounded-lg overflow-hidden cursor-pointer group"
+              className="relative aspect-square rounded-lg overflow-hidden cursor-pointer group"
               onClick={() => handleQuickView(product)}
             >
               {/* Product Image */}
@@ -343,7 +329,7 @@ export default function BlazersCollectionPage() {
                 alt={product.name}
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = '/placeholder-product.jpg';
@@ -351,31 +337,30 @@ export default function BlazersCollectionPage() {
               />
               
               {/* Gradient Overlay for text visibility */}
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               
               {/* Product Info */}
-              <div className="absolute bottom-0 left-0 right-0 p-2 md:p-3">
-                <h3 className="text-white font-serif text-xs md:text-sm mb-0.5 line-clamp-1">
+              <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                <h3 className="text-white font-medium text-sm md:text-base mb-1 line-clamp-1">
                   {product.name}
                 </h3>
-                <p className="text-white/90 text-xs md:text-sm font-medium">
+                <p className="text-white/90 text-sm md:text-base font-semibold">
                   ${product.price}
                 </p>
               </div>
 
               {/* Like indicator */}
               {likedProducts.has(product.id) && (
-                <div className="absolute top-2 right-2 z-10">
-                  <Heart className="w-3 h-3 md:w-4 md:h-4 text-red-500 fill-red-500" />
+                <div className="absolute top-3 right-3 z-10">
+                  <Heart className="w-4 h-4 md:w-5 md:h-5 text-red-500 fill-red-500" />
                 </div>
               )}
 
-              {/* Quick View on Hover */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                <button className="bg-white/90 backdrop-blur text-black px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1">
-                  <Eye className="w-3 h-3" />
-                  View
+              {/* Quick View on Hover - Desktop Only */}
+              <div className="hidden md:flex absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 items-center justify-center">
+                <button className="bg-white/90 backdrop-blur text-black px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
+                  <Eye className="w-4 h-4" />
+                  Quick View
                 </button>
               </div>
             </motion.div>
@@ -497,12 +482,6 @@ export default function BlazersCollectionPage() {
                   disabled={!selectedSize}
                   onClick={() => {
                     if (selectedProduct && selectedSize) {
-                      const productWithDetails = {
-                        ...selectedProduct,
-                        size: selectedSize,
-                        quantity: quantity
-                      };
-                      trackAddCart(productWithDetails);
                       // TODO: Actually add to cart
                       setSelectedProduct(null); // Close modal after adding
                     }
@@ -517,5 +496,22 @@ export default function BlazersCollectionPage() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function BlazersCollectionPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white">
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading blazers collection...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <BlazersContent />
+    </Suspense>
   );
 }
