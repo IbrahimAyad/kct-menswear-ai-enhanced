@@ -56,23 +56,9 @@ export async function GET(request: NextRequest) {
                 alt_text,
                 position,
                 image_type
-              ),
-              product_variants (
-                id,
-                product_id,
-                name,
-                sku,
-                price,
-                inventory_count,
-                status,
-                stripe_price_id,
-                stripe_product_id,
-                stripe_active
               )
             `)
-            .not('stripe_price_id', 'is', null)
-            .not('stripe_price_id', 'eq', '')
-            .limit(500); // Increased limit - only get products with Stripe IDs
+            .limit(500); // Increased limit to get more products
           
           // Apply basic filters to reduce data transfer
           if (filters.category?.length) {
@@ -121,15 +107,12 @@ export async function GET(request: NextRequest) {
                   (a.position || 999) - (b.position || 999)
                 ).map((img: any) => ({ src: img.image_url })) || [];
                 
-                // Get first variant's Stripe price ID (or from any available variant)
-                const firstVariant = product.product_variants?.[0];
-                const stripePriceId = firstVariant?.stripe_price_id || null;
-                const stripeActive = firstVariant?.stripe_active || false;
+                // Get Stripe price ID from product directly since we removed variants
+                const stripePriceId = product.stripe_price_id || null;
+                const stripeActive = true; // Default to true
                 
-                // Use variant price if available, otherwise base price
-                const displayPrice = firstVariant?.price 
-                  ? (firstVariant.price / 100).toString() 
-                  : (product.base_price / 100).toString();
+                // Use base price
+                const displayPrice = (product.base_price / 100).toString();
                 
                 return {
                   id: product.id,
@@ -155,7 +138,7 @@ export async function GET(request: NextRequest) {
                   // Add Stripe integration data
                   stripePriceId: stripePriceId,
                   stripeActive: stripeActive,
-                  variants: product.product_variants || []
+                  variants: []
                 };
               });
               console.log(`Fetched and mapped ${individualProducts.length} products from Supabase`);

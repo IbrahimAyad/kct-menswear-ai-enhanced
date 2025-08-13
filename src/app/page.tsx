@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ModernBundleCard } from "@/components/home/ModernBundleCard";
 import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
 import { ShopByStyleGrid } from "@/components/home/ShopByStyleGrid";
-import { BundleCarouselTheater } from "@/components/home/BundleCarouselTheater";
+import { EnhancedDarkBundleCarousel } from "@/components/home/EnhancedDarkBundleCarousel";
 import { VelocityGrid } from "@/components/home/VelocityGrid";
 import { InteractiveStyleEnvironments } from "@/components/home/InteractiveStyleEnvironments";
 import { ServiceJourneyVisualization } from "@/components/home/ServiceJourneyVisualization";
@@ -15,12 +15,12 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
-// Bundle data with actual KCT products from live site - enhanced with new properties
+// Enhanced bundle data with all premium properties for dark mode carousel
 const featuredBundles = [
   {
     id: 'bundle-1',
     name: 'Executive Power Bundle',
-    description: 'Navy suit, white shirt, burgundy tie - perfect for boardroom dominance',
+    description: 'Navy suit, white shirt, burgundy tie - perfect for boardroom dominance and client meetings',
     totalPrice: 229.99,
     originalPrice: 269.99,
     savings: 40,
@@ -39,12 +39,15 @@ const featuredBundles = [
     modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png',
     slug: 'executive-power',
     featured: true,
-    popularity: 95
+    popularity: 95,
+    rating: 4.9,
+    trending: true,
+    aiScore: 98
   },
   {
     id: 'bundle-2',
     name: 'Wedding Classic Bundle',
-    description: 'Charcoal suit, light blue shirt, silver tie - timeless wedding style',
+    description: 'Charcoal suit, light blue shirt, silver tie - timeless wedding elegance',
     totalPrice: 249.99,
     originalPrice: 299.99,
     savings: 50,
@@ -62,12 +65,14 @@ const featuredBundles = [
     },
     modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png',
     slug: 'wedding-classic',
-    popularity: 88
+    popularity: 88,
+    rating: 4.8,
+    limitedStock: true
   },
   {
     id: 'bundle-3',
-    name: 'Power Player',
-    description: 'Navy 3-piece suit, white shirt, red tie - executive presence',
+    name: 'Power Player Premium',
+    description: 'Navy 3-piece suit, white shirt, red tie - command the room with executive presence',
     totalPrice: 249.99,
     originalPrice: 299.99,
     savings: 50,
@@ -85,12 +90,15 @@ const featuredBundles = [
     },
     modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-3p-white-red.png',
     slug: 'power-player',
-    popularity: 82
+    popularity: 92,
+    rating: 4.7,
+    trending: true,
+    aiScore: 94
   },
   {
     id: 'bundle-4',
-    name: 'Triple Black',
-    description: 'Black suit, black shirt, black tie - bold fashion statement',
+    name: 'Triple Black Signature',
+    description: 'Black suit, black shirt, black tie - bold fashion statement for evening events',
     totalPrice: 229.99,
     originalPrice: 269.99,
     savings: 40,
@@ -108,7 +116,35 @@ const featuredBundles = [
     },
     modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png',
     slug: 'triple-black',
-    popularity: 90
+    popularity: 90,
+    rating: 4.6,
+    aiScore: 95
+  },
+  {
+    id: 'bundle-5',
+    name: 'Rose Gold Elegance',
+    description: 'Light grey suit, pink shirt, navy tie - modern sophistication meets classic style',
+    totalPrice: 219.99,
+    originalPrice: 259.99,
+    savings: 40,
+    suit: {
+      name: 'Light Grey Suit',
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/grey-pink-navy.png'
+    },
+    shirt: {
+      name: 'Pink Shirt',
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light%20Pink-Dress-Shirt.jpg'
+    },
+    tie: {
+      name: 'Navy Tie',
+      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy.jpg'
+    },
+    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/grey-pink-navy.png',
+    slug: 'rose-gold-elegance',
+    popularity: 85,
+    rating: 4.8,
+    trending: true,
+    limitedStock: true
   }
 ];
 
@@ -237,34 +273,38 @@ export default function ModernHomePage() {
         <BuildYourLookShowcase />
       </section>
 
-      {/* Featured Bundles Section - NEW Bundle Carousel Theater */}
-      <section className="py-16 bg-gradient-to-b from-white via-gray-50/50 to-white overflow-hidden">
+      {/* Featured Bundles Section - Enhanced Dark Bundle Carousel */}
+      <section className="py-16 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
         <div className="container-main">
           <div className="text-center mb-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 text-burgundy mb-4"
+              className="inline-flex items-center gap-2 text-gold mb-4"
             >
-              <Package className="h-5 w-5" />
-              <span className="text-sm font-semibold tracking-widest uppercase">Curated Collections</span>
-              <Package className="h-5 w-5" />
+              <Sparkles className="h-5 w-5" />
+              <span className="text-sm font-semibold tracking-widest uppercase">Premium Collections</span>
+              <Sparkles className="h-5 w-5" />
             </motion.div>
             
-            <h2 className="text-3xl md:text-4xl font-serif mb-3">
-              Complete Outfits, Perfect Styling
+            <h2 className="text-3xl md:text-4xl font-serif mb-3 text-white">
+              Luxury Bundles, Exclusive Savings
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Expertly curated bundles with exclusive savings - swipe to explore
+            <p className="text-gray-300 max-w-2xl mx-auto">
+              Experience our premium dark mode carousel with 3D effects and interactive features
             </p>
           </div>
 
-          {/* Bundle Carousel Theater */}
-          <BundleCarouselTheater bundles={featuredBundles} />
+          {/* Enhanced Dark Bundle Carousel */}
+          <EnhancedDarkBundleCarousel 
+            bundles={featuredBundles} 
+            autoPlay={true}
+            showParticles={true}
+          />
 
           <div className="text-center mt-12">
             <Link href="/bundles">
-              <Button size="lg" variant="outline" className="border-burgundy text-burgundy hover:bg-burgundy hover:text-white">
+              <Button size="lg" className="bg-gold hover:bg-gold/90 text-black font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                 Explore All Bundles
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
