@@ -243,6 +243,11 @@ export function isCoreProduct(productId: string): boolean {
   return ALL_CORE_PRODUCTS.some(product => product.id === productId);
 }
 
+// Helper function to get all core products
+export function getAllCoreProducts(): CoreProduct[] {
+  return ALL_CORE_PRODUCTS;
+}
+
 // Get all suit sizes
 export const SUIT_SIZES = [
   '34S', '34R',
