@@ -51,6 +51,7 @@ export async function GET(request: NextRequest) {
             .from('products')
             .select(`
               *,
+              primary_image,
               product_images (
                 image_url,
                 alt_text,
@@ -109,15 +110,18 @@ export async function GET(request: NextRequest) {
             } else {
               // Map raw Supabase products to expected format
               individualProducts = (data || []).map((product: any) => {
-                // Get primary image from product_images relation
-                const primaryImage = product.product_images?.find((img: any) => 
-                  img.image_type === 'primary' || img.position === 1
-                ) || product.product_images?.[0];
+                // CRITICAL: Primary image is stored directly in products.primary_image field!
+                const primaryImageUrl = product.primary_image || null;
                 
-                // Get all images sorted by position
-                const allImages = product.product_images?.sort((a: any, b: any) => 
+                // Get additional gallery images from product_images table if available
+                const galleryImages = product.product_images?.sort((a: any, b: any) => 
                   (a.position || 999) - (b.position || 999)
                 ).map((img: any) => ({ src: img.image_url })) || [];
+                
+                // Combine primary image with gallery images
+                const allImages = primaryImageUrl 
+                  ? [{ src: primaryImageUrl }, ...galleryImages]
+                  : galleryImages;
                 
                 // Get first variant data
                 const firstVariant = product.product_variants?.[0];
@@ -138,18 +142,20 @@ export async function GET(request: NextRequest) {
                 return {
                   id: product.id,
                   title: product.name, // Map name to title
+                  name: product.name, // Also include name
                   description: product.description,
                   price: displayPrice, // Use variant price if available
                   compare_at_price: null, // Not available in current schema
                   category: product.product_type || product.category || 'uncategorized', // Use product_type as category
                   product_type: product.product_type,
+                  primary_image: primaryImageUrl, // Pass primary_image field directly
                   sku: product.sku,
                   handle: product.handle,
                   tags: product.tags || [],
                   meta_description: product.meta_description,
                   available: totalInventory > 0,
                   inventory_quantity: totalInventory,
-                  featured_image: primaryImage ? { src: primaryImage.image_url } : null,
+                  featured_image: primaryImageUrl ? { src: primaryImageUrl } : null,
                   images: allImages,
                   vendor: product.vendor,
                   sizes: product.additional_info?.sizes_available?.split(', ') || [],

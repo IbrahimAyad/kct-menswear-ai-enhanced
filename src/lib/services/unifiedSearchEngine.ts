@@ -82,7 +82,10 @@ export function bundleToUnifiedProduct(bundle: any): UnifiedProduct {
 export function supabaseProductToUnified(product: any): UnifiedProduct {
   // Extract image URL from various possible formats
   let imageUrl = '';
-  if (product.featured_image?.src) {
+  // CRITICAL: Check for primary_image field first (Supabase products)
+  if (product.primary_image) {
+    imageUrl = product.primary_image;
+  } else if (product.featured_image?.src) {
     imageUrl = product.featured_image.src;
   } else if (product.images?.[0]?.src) {
     imageUrl = product.images[0].src;

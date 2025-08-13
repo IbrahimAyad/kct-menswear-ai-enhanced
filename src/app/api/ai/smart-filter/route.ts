@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
           .from('products')
           .select(`
             *,
+            primary_image,
             product_images (
               image_url,
               alt_text,
@@ -50,9 +51,18 @@ export async function POST(request: NextRequest) {
         if (!error && data) {
           // Map to unified format
           individualProducts = data.map((product: any) => {
-            const primaryImage = product.product_images?.find((img: any) => 
-              img.image_type === 'primary' || img.position === 1
-            ) || product.product_images?.[0];
+            // CRITICAL: Primary image is in products.primary_image field!
+            const primaryImageUrl = product.primary_image || null;
+            
+            // Get gallery images from product_images table
+            const galleryImages = product.product_images?.map((img: any) => ({ 
+              src: img.image_url 
+            })) || [];
+            
+            // Combine primary image with gallery images
+            const allImages = primaryImageUrl 
+              ? [{ src: primaryImageUrl }, ...galleryImages]
+              : galleryImages;
             
             const firstVariant = product.product_variants?.[0];
             const totalInventory = product.product_variants?.reduce(
@@ -72,15 +82,14 @@ export async function POST(request: NextRequest) {
               price: displayPrice,  // Keep as string for supabaseProductToUnified
               category: product.product_type || product.category || 'uncategorized',
               product_type: product.product_type,
+              primary_image: primaryImageUrl,  // Pass primary_image directly
               sku: product.sku,
               handle: product.handle,
               tags: product.tags || [],
               available: totalInventory > 0,
               inventory_quantity: totalInventory,
-              images: product.product_images?.map((img: any) => ({ 
-                src: img.image_url 
-              })) || [],  // Format images for supabaseProductToUnified
-              featured_image: primaryImage ? { src: primaryImage.image_url } : null,
+              images: allImages,  // Use combined images array
+              featured_image: primaryImageUrl ? { src: primaryImageUrl } : null,
               vendor: product.vendor,
               sizes: product.additional_info?.sizes_available?.split(', ') || [],
               material: product.additional_info?.material,
