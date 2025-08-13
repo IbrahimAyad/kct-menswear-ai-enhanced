@@ -80,7 +80,7 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
 
   const availableSizes = getAvailableSizes();
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
     if (!selectedSize && !product.isBundle) {
       toast.error('Please select a size')
       return
@@ -89,15 +89,16 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
     try {
       // For bundles, add all components
       if (product.isBundle && product.bundleComponents) {
+        let allAdded = true;
         for (const component of product.bundleComponents) {
-          addItem({
+          const added = addItem({
             id: `${product.id}-${component.type}`,
             name: `${component.name} (${product.name})`,
-            price: product.price / product.bundleComponents.length,
-            image: component.image || product.imageUrl || '/placeholder.jpg',
+            price: Math.round(product.price / product.bundleComponents.length * 100), // Convert to cents
+            image: component.image || product.imageUrl || '/placeholder-product.svg',
             quantity: quantity,
             selectedSize: selectedSize || 'M',
-            stripePriceId: '',
+            stripePriceId: product.stripePriceId,
             category: product.category,
             bundleId: product.id,
             metadata: {
@@ -105,36 +106,45 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
               componentType: component.type
             }
           });
+          if (!added) allAdded = false;
         }
-        toast.success(
-          <div className="flex items-center gap-2">
-            <Package className="h-4 w-4" />
-            <span>Complete look added to cart!</span>
-          </div>
-        )
+        if (allAdded) {
+          toast.success(
+            <div className="flex items-center gap-2">
+              <Package className="h-4 w-4" />
+              <span>Complete look added to cart!</span>
+            </div>
+          )
+        }
       } else {
         // For individual products
-        const price = selectedStyle === '3-piece' && isSuit 
+        const priceInDollars = selectedStyle === '3-piece' && isSuit 
           ? product.price + 20 // Add $20 for vest
           : product.price;
+        
+        const priceInCents = Math.round(priceInDollars * 100);
 
-        addItem({
+        const added = addItem({
           id: product.id,
           name: product.name,
-          price: price,
-          image: product.imageUrl || '/placeholder.jpg',
+          price: priceInCents, // Price in cents
+          image: product.imageUrl || '/placeholder-product.svg',
           quantity: quantity,
           selectedSize: selectedSize,
-          stripePriceId: '',
+          stripePriceId: product.stripePriceId || '',
           category: product.category,
           metadata: {
-            style: isSuit ? selectedStyle : undefined
+            style: isSuit ? selectedStyle : undefined,
+            productType: product.type || 'catalog'
           }
         });
         
-        toast.success(`${product.name} added to cart!`)
+        if (added) {
+          toast.success(`${product.name} added to cart!`)
+        }
       }
     } catch (error) {
+      console.error('Add to cart error:', error);
       toast.error('Failed to add to cart')
     }
   }
