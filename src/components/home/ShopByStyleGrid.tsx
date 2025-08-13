@@ -2,151 +2,255 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
-const categories = [
+// Define the collections that map to our master collections and database
+const collectionsConfig = [
+  // Row 1 - Main Product Categories
   {
     name: 'Suits',
-    items: '89 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg',
     link: '/collections/suits',
-    bgColor: 'bg-gradient-to-br from-beige-100 to-beige-200'
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg',
+    bgColor: 'bg-gradient-to-br from-beige-100 to-beige-200',
+    dbCategory: ['Classic 2-Piece Suits', 'Classic 3-Piece Suits', 'Double Breasted Suits'],
+    masterId: 'suits'
   },
   {
     name: 'Shirts',
-    items: '124 items',
+    link: '/collections/shirts',
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
-    link: '/collections/dress-shirts',
-    bgColor: 'bg-gradient-to-br from-gray-50 to-gray-100'
+    bgColor: 'bg-gradient-to-br from-gray-50 to-gray-100',
+    dbCategory: ['Dress Shirts', 'Casual Shirts', 'Formal Shirts'],
+    masterId: 'shirts'
   },
   {
-    name: 'Vest',
-    items: '52 items',
+    name: 'Vests',
+    link: '/collections/vests',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/vest-tie-main-2.jpg',
-    link: '/collections/accessories',
-    bgColor: 'bg-gradient-to-br from-burgundy-50 to-burgundy-100'
+    bgColor: 'bg-gradient-to-br from-burgundy-50 to-burgundy-100',
+    dbCategory: ['Vests', 'Vest Sets'],
+    masterId: 'vests'
   },
   {
     name: 'Jackets',
-    items: '58 items',
+    link: '/collections/jackets',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png',
-    link: '/collections/blazers',
-    bgColor: 'bg-gradient-to-br from-slate-100 to-slate-200'
+    bgColor: 'bg-gradient-to-br from-slate-100 to-slate-200',
+    dbCategory: ['Sport Coats', 'Blazers', 'Dinner Jackets'],
+    masterId: 'jackets'
   },
   {
     name: 'Pants',
-    items: '76 items',
+    link: '/collections/pants',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg',
-    link: '/collections/suits',
-    bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200'
+    bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200',
+    dbCategory: ['Dress Pants', 'Suit Pants', 'Formal Trousers'],
+    masterId: 'pants'
   },
   {
     name: 'Knitwear',
-    items: '45 items',
-    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/9ac91a19-5951-43d4-6a98-c9d658765c00/public',
     link: '/collections/knitwear',
-    bgColor: 'bg-gradient-to-br from-beige-50 to-beige-100'
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/9ac91a19-5951-43d4-6a98-c9d658765c00/public',
+    bgColor: 'bg-gradient-to-br from-beige-50 to-beige-100',
+    dbCategory: ['Sweaters', 'Cardigans', 'Knit Vests'],
+    masterId: 'knitwear'
   },
   {
     name: 'Accessories',
-    items: '93 items',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg',
     link: '/collections/accessories',
-    bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200'
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg',
+    bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200',
+    dbCategory: ['Ties', 'Bow Ties', 'Pocket Squares', 'Cufflinks', 'Belts', 'Suspenders'],
+    masterId: 'accessories'
   },
   {
     name: 'Shoes',
-    items: '67 items',
-    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/7d203d2a-63b7-46d3-9749-1f203e4ccc00/public',
     link: '/collections/shoes',
-    bgColor: 'bg-gradient-to-br from-gray-200 to-gray-300'
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/7d203d2a-63b7-46d3-9749-1f203e4ccc00/public',
+    bgColor: 'bg-gradient-to-br from-gray-200 to-gray-300',
+    dbCategory: ['Dress Shoes', 'Formal Shoes', 'Loafers', 'Oxfords'],
+    masterId: 'shoes'
   },
   {
     name: 'Velvet Blazers',
-    items: '32 items',
+    link: '/collections/suits?filter=velvet',
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
-    link: '/collections/blazers',
-    bgColor: 'bg-gradient-to-br from-emerald-50 to-emerald-100'
+    bgColor: 'bg-gradient-to-br from-emerald-50 to-emerald-100',
+    dbTags: ['velvet', 'luxury'],
+    masterId: 'suits'
   },
+  
+  // Row 2 - Style/Occasion Categories
   {
     name: 'Vest & Tie',
-    items: '48 items',
+    link: '/collections/accessories?filter=vest-tie-sets',
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
-    link: '/collections/accessories',
-    bgColor: 'bg-gradient-to-br from-sage-50 to-sage-100'
+    bgColor: 'bg-gradient-to-br from-sage-50 to-sage-100',
+    dbTags: ['vest-set', 'vest-tie-set'],
+    masterId: 'accessories'
   },
   {
     name: 'Complete Looks',
-    items: '66 items',
+    link: '/collections/complete-looks',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg',
-    link: '/collections/suits',
-    bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200'
+    bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200',
+    dbCategory: ['Bundles', 'Complete Outfits'],
+    masterId: 'complete-looks'
   },
   {
     name: 'Wedding Guest',
-    items: 'Formal',
+    link: '/collections/wedding?filter=wedding-guest',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-main.jpg',
-    link: '/collections/wedding',
-    bgColor: 'bg-gradient-to-br from-pink-100 to-pink-200'
+    bgColor: 'bg-gradient-to-br from-pink-100 to-pink-200',
+    dbTags: ['wedding', 'wedding-guest'],
+    masterId: 'wedding',
+    occasionText: 'Formal'
   },
   {
     name: 'Business',
-    items: 'Formal',
+    link: '/collections/business',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg',
-    link: '/collections/formal',
-    bgColor: 'bg-gradient-to-br from-gray-200 to-gray-300'
+    bgColor: 'bg-gradient-to-br from-gray-200 to-gray-300',
+    dbTags: ['business', 'professional'],
+    masterId: 'business-casual',
+    occasionText: 'Formal'
   },
   {
     name: 'Black Tie',
-    items: 'Black-Tie',
+    link: '/collections/wedding?filter=black-tie',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png',
-    link: '/collections/formal',
     bgColor: 'bg-gradient-to-br from-gray-800 to-gray-900',
-    textColor: 'text-white'
+    textColor: 'text-white',
+    dbCategory: ['Tuxedos', 'Dinner Jackets'],
+    masterId: 'wedding',
+    occasionText: 'Black-Tie'
   },
   {
     name: 'Prom 2025',
-    items: 'Formal',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp',
     link: '/collections/prom',
-    bgColor: 'bg-gradient-to-br from-purple-100 to-blue-200'
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp',
+    bgColor: 'bg-gradient-to-br from-purple-100 to-blue-200',
+    dbTags: ['prom', 'prom-2025'],
+    masterId: 'prom',
+    occasionText: 'Formal'
   },
   {
     name: 'Cocktail Party',
-    items: 'Semi-Formal',
+    link: '/collections/business?filter=cocktail',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-main.jpg',
-    link: '/collections/formal',
-    bgColor: 'bg-gradient-to-br from-orange-100 to-amber-100'
+    bgColor: 'bg-gradient-to-br from-orange-100 to-amber-100',
+    dbTags: ['cocktail', 'semi-formal'],
+    masterId: 'business-casual',
+    occasionText: 'Semi-Formal'
   },
   {
     name: 'Suspender Bowtie',
-    items: '28 items',
+    link: '/collections/accessories?filter=suspender-sets',
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
-    link: '/collections/accessories',
-    bgColor: 'bg-gradient-to-br from-pink-50 to-pink-100'
+    bgColor: 'bg-gradient-to-br from-pink-50 to-pink-100',
+    dbTags: ['suspenders', 'bowtie', 'suspender-set'],
+    masterId: 'accessories'
   },
   {
     name: 'Date Night',
-    items: 'Casual',
-    image: '',
-    link: '/collections/suits',
+    link: '/collections/business?filter=date-night',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/indigo/indigo-main.jpg',
     bgColor: 'bg-gradient-to-br from-pink-100 to-pink-200',
-    isEmpty: true
+    dbTags: ['casual', 'date-night'],
+    masterId: 'business-casual',
+    occasionText: 'Casual'
   }
 ];
 
+interface CollectionData {
+  name: string;
+  link: string;
+  image: string;
+  bgColor: string;
+  textColor?: string;
+  itemCount: number;
+  occasionText?: string;
+}
+
 export function ShopByStyleGrid() {
+  const [collections, setCollections] = useState<CollectionData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProductCounts() {
+      try {
+        const supabase = createClient();
+        const collectionsWithCounts: CollectionData[] = [];
+
+        for (const config of collectionsConfig) {
+          let count = 0;
+
+          // Build query based on category or tags
+          if (config.dbCategory) {
+            const { count: categoryCount } = await supabase
+              .from('products')
+              .select('*', { count: 'exact', head: true })
+              .in('product_type', config.dbCategory)
+              .eq('visibility', true)
+              .eq('status', 'active');
+            
+            count = categoryCount || 0;
+          } else if (config.dbTags) {
+            const { count: tagCount } = await supabase
+              .from('products')
+              .select('*', { count: 'exact', head: true })
+              .overlaps('tags', config.dbTags)
+              .eq('visibility', true)
+              .eq('status', 'active');
+            
+            count = tagCount || 0;
+          }
+
+          collectionsWithCounts.push({
+            name: config.name,
+            link: config.link,
+            image: config.image,
+            bgColor: config.bgColor,
+            textColor: config.textColor,
+            itemCount: count,
+            occasionText: config.occasionText
+          });
+        }
+
+        setCollections(collectionsWithCounts);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching product counts:', error);
+        // Fallback to static data if database fetch fails
+        setCollections(collectionsConfig.map(config => ({
+          name: config.name,
+          link: config.link,
+          image: config.image,
+          bgColor: config.bgColor,
+          textColor: config.textColor,
+          itemCount: 0,
+          occasionText: config.occasionText
+        })));
+        setLoading(false);
+      }
+    }
+
+    fetchProductCounts();
+  }, []);
+
   return (
     <section className="py-8 bg-gray-50">
       <div className="container-main">
         <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-9 gap-2 md:gap-4">
-          {categories.map((category) => (
+          {collections.map((category) => (
             <Link 
               key={category.name} 
               href={category.link}
               className="group cursor-pointer"
             >
               <div className={`relative rounded-2xl overflow-hidden aspect-[3/4] ${category.bgColor} transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}>
-                {!category.isEmpty ? (
+                {category.image ? (
                   <Image
                     src={category.image}
                     alt={category.name}
@@ -166,7 +270,15 @@ export function ShopByStyleGrid() {
                 {/* Content */}
                 <div className={`absolute bottom-0 left-0 right-0 p-2 md:p-3 ${category.textColor || 'text-white'}`}>
                   <h3 className="font-semibold text-xs md:text-sm mb-0.5 md:mb-1">{category.name}</h3>
-                  <p className="text-[10px] md:text-xs opacity-90">{category.items}</p>
+                  <p className="text-[10px] md:text-xs opacity-90">
+                    {category.occasionText || (
+                      loading ? (
+                        <span className="inline-block h-2 w-12 bg-white/20 animate-pulse rounded" />
+                      ) : (
+                        `${category.itemCount} items`
+                      )
+                    )}
+                  </p>
                 </div>
               </div>
             </Link>

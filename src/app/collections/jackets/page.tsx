@@ -9,10 +9,10 @@ function LoadingState() {
   );
 }
 
-export default function ShirtsCollectionPage() {
+export default function JacketsCollectionPage() {
   return (
     <Suspense fallback={<LoadingState />}>
-      <SmartCollectionPage collectionId="shirts" />
+      <SmartCollectionPage collectionId="jackets" />
     </Suspense>
   );
 }
