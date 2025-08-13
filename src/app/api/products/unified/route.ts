@@ -13,6 +13,11 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     
+    // Log environment check for debugging
+    const hasSupabaseUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const hasSupabaseKey = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    console.log('Supabase env check:', { hasSupabaseUrl, hasSupabaseKey });
+    
     // Generate cache key from search params
     const cacheKey = searchParams.toString();
     
@@ -38,7 +43,9 @@ export async function GET(request: NextRequest) {
       try {
         const supabase = await createClient();
         
-        if (supabase) {
+        if (!supabase) {
+          console.error('Supabase client is null - check environment variables');
+        } else {
           // Build Supabase query based on filters - include product images
           let query = supabase
             .from('products')
@@ -169,13 +176,39 @@ export async function GET(request: NextRequest) {
     
   } catch (error) {
     console.error('Unified products API error:', error);
-    return NextResponse.json(
-      { 
-        error: 'Failed to fetch products',
-        message: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    );
+    
+    // Return bundles only if Supabase fails (graceful degradation)
+    try {
+      const results = await unifiedSearch(filters, []);
+      return NextResponse.json({
+        ...results,
+        warning: 'Database connection issue - showing bundles only'
+      });
+    } catch (fallbackError) {
+      return NextResponse.json(
+        { 
+          error: 'Failed to fetch products',
+          message: error instanceof Error ? error.message : 'Unknown error',
+          products: [],
+          totalCount: 0,
+          filteredCount: 0,
+          facets: {
+            categories: [],
+            colors: [],
+            occasions: [],
+            priceRanges: [],
+            bundleTiers: []
+          },
+          pagination: {
+            currentPage: 1,
+            totalPages: 0,
+            hasNext: false,
+            hasPrev: false
+          }
+        },
+        { status: 500 }
+      );
+    }
   }
 }
 
