@@ -1,10 +1,16 @@
-// Mega Training Runner - Tests ALL 1000+ scenarios with 5-exchange conversations
-// This script runs comprehensive training on the entire AI system
+// Railway-Optimized Mega Training Runner
+// Batched training with resource management and throttling
+// Tests scenarios in chunks to prevent Railway resource exhaustion
 
-console.log('\n🚀 MEGA CONVERSATION TRAINING SYSTEM');
+const config = require('./training-config');
+const https = require('https');
+const http = require('http');
+
+console.log('\n🚀 RAILWAY-OPTIMIZED MEGA TRAINING SYSTEM');
 console.log('=' .repeat(70));
-console.log('Running 5-exchange conversations on ALL 1000+ training scenarios');
-console.log('This will test the complete AI system capability\n');
+console.log('Running batched training with resource management');
+console.log(`Testing against: ${config.CHAT_API_URL}`);
+console.log('Designed for Railway production environment\n');
 
 // Import the mega trainer (simulated for Node.js environment)
 class MegaTrainingRunner {
@@ -12,38 +18,116 @@ class MegaTrainingRunner {
     this.startTime = Date.now();
     this.results = [];
     this.categoryStats = new Map();
+    
+    // Railway optimization settings
+    this.BATCH_SIZE = 25; // Process 25 scenarios per batch
+    this.BATCH_DELAY = 2000; // 2 second pause between batches
+    this.REQUEST_DELAY = 200; // 200ms between API calls
+    this.MAX_CONCURRENT = 3; // Max 3 concurrent conversations
+    this.MEMORY_CHECK_INTERVAL = 50; // Check every 50 requests
+  }
+
+  async makeApiRequest(endpoint, method = 'GET', data = null) {
+    return new Promise((resolve, reject) => {
+      const url = new URL(config.CHAT_API_URL + endpoint);
+      const options = {
+        hostname: url.hostname,
+        port: url.port || (url.protocol === 'https:' ? 443 : 80),
+        path: url.pathname + url.search,
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': config.CHAT_API_KEY
+        },
+        timeout: 10000 // 10 second timeout
+      };
+
+      if (data) {
+        const jsonData = JSON.stringify(data);
+        options.headers['Content-Length'] = Buffer.byteLength(jsonData);
+      }
+
+      const lib = url.protocol === 'https:' ? https : http;
+      const req = lib.request(options, (res) => {
+        let responseData = '';
+        
+        res.on('data', (chunk) => {
+          responseData += chunk;
+        });
+        
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(responseData);
+            resolve({
+              statusCode: res.statusCode,
+              data: parsed,
+              headers: res.headers
+            });
+          } catch (e) {
+            resolve({
+              statusCode: res.statusCode,
+              data: responseData,
+              headers: res.headers
+            });
+          }
+        });
+      });
+
+      req.on('error', reject);
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Request timeout'));
+      });
+
+      if (data) {
+        req.write(JSON.stringify(data));
+      }
+      
+      req.end();
+    });
+  }
+
+  async sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async checkMemoryAndPause() {
+    // Simulate memory check (in real scenario, you'd check actual memory)
+    const memoryUsage = process.memoryUsage();
+    const usedMB = Math.round(memoryUsage.heapUsed / 1024 / 1024);
+    
+    if (usedMB > 100) { // If over 100MB, pause longer
+      console.log(`⚠️ High memory usage (${usedMB}MB), pausing for 5 seconds...`);
+      await this.sleep(5000);
+    }
   }
 
   // Simulate running conversations on all scenarios
   async runAllScenarios() {
     console.log('📊 Starting comprehensive training...\n');
     
-    // Categories with scenario counts
+    // Railway-optimized categories (reduced for initial testing)
     const categories = [
-      { name: 'Wedding Planning', count: 125, baseId: 'wedding' },
-      { name: 'Prom & Formal', count: 98, baseId: 'prom' },
-      { name: 'Professional/Career', count: 156, baseId: 'career' },
-      { name: 'Sizing & Fit', count: 87, baseId: 'sizing' },
-      { name: 'Style Advice', count: 134, baseId: 'style' },
-      { name: 'Budget Concerns', count: 76, baseId: 'budget' },
-      { name: 'Emergency Situations', count: 45, baseId: 'emergency' },
-      { name: 'Tech Industry', count: 89, baseId: 'tech' },
-      { name: 'Dating Scenarios', count: 67, baseId: 'dating' },
-      { name: 'Medical Professionals', count: 43, baseId: 'medical' },
-      { name: 'Cultural Events', count: 38, baseId: 'cultural' },
-      { name: 'Age Milestones', count: 29, baseId: 'age' },
-      { name: 'Body Confidence', count: 38, baseId: 'body' }
+      { name: 'Wedding Planning', count: 25, baseId: 'wedding' },
+      { name: 'Professional/Career', count: 25, baseId: 'career' },
+      { name: 'Style Advice', count: 25, baseId: 'style' },
+      { name: 'Sizing & Fit', count: 25, baseId: 'sizing' },
+      { name: 'Budget Concerns', count: 25, baseId: 'budget' }
     ];
+    
+    console.log(`🎯 Railway-optimized training: ${categories.reduce((sum, cat) => sum + cat.count, 0)} total scenarios`);
+    console.log(`📦 Batch size: ${this.BATCH_SIZE} scenarios per batch`);
+    console.log(`⏱️ Estimated duration: ${Math.ceil(categories.reduce((sum, cat) => sum + cat.count, 0) / this.BATCH_SIZE) * 2} minutes\n`);
 
     let totalScenarios = 0;
     let totalSuccessful = 0;
     let totalExchanges = 0;
 
-    // Process each category
+    // Process each category in batches
     for (const category of categories) {
       console.log(`\n📁 Processing ${category.name} (${category.count} scenarios)...`);
       
-      const categoryResults = await this.processCategory(category);
+      const categoryResults = await this.processCategoryWithBatching(category);
       totalScenarios += categoryResults.total;
       totalSuccessful += categoryResults.successful;
       totalExchanges += categoryResults.exchanges;
@@ -184,6 +268,151 @@ class MegaTrainingRunner {
           { customer: 'sold on buying thanks', ai: 'Smart investment! Bring him in for fitting. Tuesday-Thursday best selection. He\'ll get years of use from this.' }
         ]
       }
+    ];
+  }
+
+  async processCategoryWithBatching(category) {
+    const scenarioCount = category.count;
+    let successful = 0;
+    let exchanges = 0;
+    let requestCount = 0;
+    
+    // Process scenarios in batches
+    for (let batchStart = 0; batchStart < scenarioCount; batchStart += this.BATCH_SIZE) {
+      const batchEnd = Math.min(batchStart + this.BATCH_SIZE, scenarioCount);
+      
+      console.log(`   📦 Batch ${Math.floor(batchStart / this.BATCH_SIZE) + 1}: Processing scenarios ${batchStart + 1}-${batchEnd}...`);
+      
+      // Process batch
+      for (let i = batchStart; i < batchEnd; i++) {
+        const scenarioId = `${category.baseId}_scenario_${i + 1}`;
+        
+        try {
+          const conversationResult = await this.runLiveConversation(scenarioId, category);
+          if (conversationResult.success) {
+            successful++;
+            exchanges += conversationResult.exchanges;
+          }
+          requestCount++;
+          
+          // Rate limiting: pause between requests
+          await this.sleep(this.REQUEST_DELAY);
+          
+          // Memory check every N requests
+          if (requestCount % this.MEMORY_CHECK_INTERVAL === 0) {
+            await this.checkMemoryAndPause();
+          }
+          
+        } catch (error) {
+          console.log(`     ⚠️ Scenario ${scenarioId} failed: ${error.message}`);
+        }
+      }
+      
+      // Pause between batches (except last batch)
+      if (batchEnd < scenarioCount) {
+        console.log(`   ⏸️ Pausing ${this.BATCH_DELAY}ms between batches...`);
+        await this.sleep(this.BATCH_DELAY);
+      }
+    }
+    
+    return {
+      total: scenarioCount,
+      successful: successful,
+      exchanges: exchanges,
+      averageExchanges: exchanges / successful || 0
+    };
+  }
+
+  async runLiveConversation(scenarioId, category) {
+    try {
+      // 1. Start conversation
+      const startResponse = await this.makeApiRequest(
+        '/api/v3/chat/conversation/start',
+        'POST',
+        {
+          customer_id: `mega_training_${scenarioId}`,
+          context: {
+            category: category.name,
+            scenario_id: scenarioId,
+            training_type: 'mega_training'
+          }
+        }
+      );
+
+      if (startResponse.statusCode !== 200) {
+        throw new Error(`Failed to start conversation: ${startResponse.statusCode}`);
+      }
+
+      const sessionId = startResponse.data.data?.session_id || startResponse.data.session_id;
+      if (!sessionId) {
+        throw new Error('No session ID returned');
+      }
+
+      // 2. Run conversation exchanges (simplified to 2 for Railway)
+      let exchangeCount = 0;
+      const messages = this.getMessagesForCategory(category.baseId);
+      
+      for (let i = 0; i < Math.min(2, messages.length); i++) {
+        const messageResponse = await this.makeApiRequest(
+          '/api/v3/chat/conversation/message',
+          'POST',
+          {
+            session_id: sessionId,
+            message: messages[i],
+            context_hints: { category: category.name }
+          }
+        );
+
+        if (messageResponse.statusCode === 200) {
+          exchangeCount++;
+        }
+        
+        // Small delay between messages
+        await this.sleep(100);
+      }
+
+      return {
+        success: exchangeCount > 0,
+        exchanges: exchangeCount,
+        sessionId: sessionId
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        exchanges: 0,
+        error: error.message
+      };
+    }
+  }
+
+  getMessagesForCategory(categoryId) {
+    const messageMap = {
+      'wedding': [
+        'I need a suit for my wedding in October',
+        'What color would work best for an outdoor ceremony?'
+      ],
+      'career': [
+        'I need professional attire for job interviews',
+        'What would work for a tech company environment?'
+      ],
+      'style': [
+        'I want to update my style for the new year',
+        'What would you recommend for someone in their 30s?'
+      ],
+      'sizing': [
+        'I\'m not sure about my suit size',
+        'How should a jacket fit in the shoulders?'
+      ],
+      'budget': [
+        'I need a suit but I\'m on a tight budget',
+        'What\'s the best value option you have?'
+      ]
+    };
+    
+    return messageMap[categoryId] || [
+      'I need help with menswear',
+      'What would you recommend?'
     ];
   }
 }
