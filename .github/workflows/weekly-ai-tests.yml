@@ -17,6 +17,10 @@ on:
           - regression
           - edge_cases
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   weekly-tests:
     runs-on: ubuntu-latest
