@@ -50,20 +50,53 @@ interface CategoryInfo {
 
 // Helper function to map UnifiedProduct to CollectionProduct format
 function mapUnifiedProductToCollectionProduct(unifiedProduct: UnifiedProduct): CollectionProduct {
+  // Handle various image URL formats
+  const getImageUrl = (product: UnifiedProduct): string => {
+    // Try imageUrl first
+    if (product.imageUrl && product.imageUrl !== '/placeholder-product.jpg') {
+      return product.imageUrl;
+    }
+    
+    // Try first image in images array
+    if (product.images?.length && product.images[0] !== '/placeholder-product.jpg') {
+      return product.images[0];
+    }
+    
+    // For bundles, try to get the bundle's main image
+    if (product.isBundle && product.bundleComponents?.suit?.image) {
+      return product.bundleComponents.suit.image;
+    }
+    
+    // Fallback to placeholder
+    return '/placeholder-product.jpg';
+  };
+  
+  // Handle sizes - convert from various formats
+  const getSizes = (product: UnifiedProduct): string[] => {
+    if (product.size && Array.isArray(product.size)) {
+      return product.size;
+    }
+    if (typeof product.size === 'string') {
+      return product.size.split(',').map(s => s.trim());
+    }
+    // Default sizes for suits/formal wear
+    return ['36R', '38R', '40R', '42R', '44R', '46R'];
+  };
+  
   return {
     id: unifiedProduct.id,
     name: unifiedProduct.name,
-    price: unifiedProduct.price,
-    image: unifiedProduct.imageUrl,
+    price: typeof unifiedProduct.price === 'string' ? parseFloat(unifiedProduct.price) : unifiedProduct.price,
+    image: getImageUrl(unifiedProduct),
     category: unifiedProduct.category || 'wedding',
     subcategory: unifiedProduct.tags?.find(tag => 
-      ['groom', 'groomsmen', 'wedding-guest', 'black-tie', 'formal'].includes(tag)
+      ['groom', 'groomsmen', 'wedding-guest', 'black-tie', 'formal', 'tuxedo'].includes(tag.toLowerCase())
     ) || 'general',
-    description: unifiedProduct.description,
-    images: unifiedProduct.images || [unifiedProduct.imageUrl],
-    sizes: unifiedProduct.size || ['38R', '40R', '42R', '44R'],
+    description: unifiedProduct.description || `Premium ${unifiedProduct.name} perfect for weddings and formal occasions`,
+    images: unifiedProduct.images && unifiedProduct.images.length > 0 ? unifiedProduct.images : [getImageUrl(unifiedProduct)],
+    sizes: getSizes(unifiedProduct),
     sku: unifiedProduct.sku,
-    sale_price: unifiedProduct.originalPrice ? unifiedProduct.price : undefined
+    sale_price: unifiedProduct.originalPrice && unifiedProduct.originalPrice > unifiedProduct.price ? unifiedProduct.originalPrice : undefined
   };
 }
 
@@ -88,16 +121,18 @@ function WeddingContent() {
   const allWeddingCategories = masterCollection?.subCollections
     .find(sub => sub.id === 'all-wedding')?.filterParams.tags || ['wedding', 'formal'];
   
-  // Smart filtering: Use both categories and tags for comprehensive product fetching
-  const allWeddingDbCategories = masterCollection?.subCollections
-    .find(sub => sub.id === 'all-wedding')?.filterParams.categories || 
-    ['Classic 3-Piece Suits', 'Tuxedos', 'Classic 2-Piece Suits', 'Ties', 'Bow Ties'];
+  // Smart filtering: Use broader categories to get more products
+  const allWeddingDbCategories = [
+    'Tuxedos', 'Suits', 'Classic 2-Piece Suits', 'Classic 3-Piece Suits', 
+    'Ties', 'Bow Ties', 'Pocket Squares', 'Dress Shirts', 'Formal Shoes'
+  ];
   
   const { products: unifiedProducts, loading, error } = useUnifiedShop({
     initialFilters: { 
-      category: allWeddingDbCategories, // Use singular 'category' to match API
-      tags: allWeddingCategories,
-      includeIndividual: true 
+      category: allWeddingDbCategories,
+      tags: [...allWeddingCategories, 'groom', 'groomsmen', 'black-tie', 'formal-wear'],
+      includeIndividual: true,
+      includeBundles: true // Explicitly include bundles for more products
     },
     autoFetch: true,
     debounceDelay: 300
@@ -118,6 +153,8 @@ function WeddingContent() {
   
   // UI state
   const [selectedCategory, setSelectedCategory] = useState(currentFilter || 'all-wedding');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 24; // Items per page
   
   // Update selectedCategory when currentFilter changes (URL navigation)
   useEffect(() => {
@@ -193,7 +230,56 @@ function WeddingContent() {
   }, []);
 
   // Smart filter products based on selected category
-  const filteredProducts = smartFilterProducts(allProducts, 'wedding', selectedCategory);
+  const allFilteredProducts = useMemo(() => {
+    if (selectedCategory === 'all-wedding') {
+      return allProducts;
+    }
+    
+    // Get filter config for the selected category
+    const categoryConfig = categories.find(cat => cat.id === selectedCategory);
+    const subCollection = masterCollection?.subCollections.find(sub => sub.id === selectedCategory);
+    
+    if (!subCollection) return allProducts;
+    
+    return allProducts.filter(product => {
+      const { categories: filterCategories, tags: filterTags } = subCollection.filterParams;
+      
+      // Check category match
+      if (filterCategories?.length) {
+        const hasMatchingCategory = filterCategories.some(cat => 
+          product.category?.toLowerCase().includes(cat.toLowerCase()) ||
+          cat.toLowerCase().includes(product.category?.toLowerCase() || '')
+        );
+        if (hasMatchingCategory) return true;
+      }
+      
+      // Check tag match
+      if (filterTags?.length) {
+        const productTagsStr = product.tags?.join(' ').toLowerCase() || '';
+        const productNameStr = product.name.toLowerCase();
+        
+        const hasMatchingTag = filterTags.some(tag => {
+          const tagLower = tag.toLowerCase();
+          return productTagsStr.includes(tagLower) || 
+                 productNameStr.includes(tagLower) ||
+                 product.subcategory?.toLowerCase().includes(tagLower);
+        });
+        if (hasMatchingTag) return true;
+      }
+      
+      return false;
+    });
+  }, [allProducts, selectedCategory, categories, masterCollection]);
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(allFilteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const filteredProducts = allFilteredProducts.slice(startIndex, startIndex + itemsPerPage);
+  
+  // Reset to page 1 when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory]);
   
   // Track smart filtering
   useEffect(() => {
@@ -259,30 +345,71 @@ function WeddingContent() {
     }
   };
 
-  // Loading state
+  // Loading state with skeleton
   if (loading) {
     return (
       <div className="min-h-screen bg-white">
-        <div className="flex items-center justify-center h-96">
+        {/* Header skeleton */}
+        <div className="sticky top-16 z-40 bg-white border-b h-[200px] md:h-[300px]">
+          <div className="flex gap-4 p-4 h-full items-center overflow-x-auto">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="flex-shrink-0 w-[200px] h-[160px] bg-gray-200 rounded-xl animate-pulse" />
+            ))}
+          </div>
+        </div>
+        
+        {/* Product grid skeleton */}
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1 md:gap-2 p-1 md:p-3">
+          {Array.from({ length: 18 }).map((_, i) => (
+            <div key={i} className="aspect-[3/4] bg-gray-200 rounded-lg animate-pulse" />
+          ))}
+        </div>
+        
+        <div className="flex items-center justify-center py-8">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading wedding collection...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-2"></div>
+            <p className="text-gray-600 text-sm">Loading wedding collection...</p>
           </div>
         </div>
       </div>
     );
   }
 
-  // Error state
+  // Error state with better UX
   if (error) {
     return (
       <div className="min-h-screen bg-white">
-        <div className="flex items-center justify-center h-96">
-          <div className="text-center">
+        <div className="flex items-center justify-center h-96 px-4">
+          <div className="text-center max-w-md">
             <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
             <h2 className="text-xl font-semibold mb-2">Unable to load wedding collection</h2>
-            <p className="text-gray-600 mb-4">{error}</p>
-            <Button onClick={() => window.location.reload()}>Try Again</Button>
+            <p className="text-gray-600 mb-4 text-sm">
+              {error.includes('timeout') 
+                ? 'The request took too long. Please check your connection and try again.'
+                : error.includes('network') 
+                  ? 'Network error. Please check your internet connection.'
+                  : 'Something went wrong while loading products. Please try again.'}
+            </p>
+            <div className="flex gap-2 justify-center">
+              <Button 
+                onClick={() => window.location.reload()}
+                className="bg-black hover:bg-gray-800"
+              >
+                Try Again
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => window.history.back()}
+              >
+                Go Back
+              </Button>
+            </div>
+            {process.env.NODE_ENV === 'development' && (
+              <details className="mt-4 text-left">
+                <summary className="text-sm text-gray-500 cursor-pointer">Technical Details</summary>
+                <pre className="text-xs text-gray-400 mt-2 p-2 bg-gray-50 rounded overflow-auto">{error}</pre>
+              </details>
+            )}
           </div>
         </div>
       </div>
@@ -400,7 +527,17 @@ function WeddingContent() {
           style={{ opacity: springProductCountOpacity, display: scrolled && isMobile ? 'none' : 'flex' }}
         >
           <span className="text-xs md:text-sm text-gray-600">
-            {filteredProducts.length} products
+            {allFilteredProducts.length} product{allFilteredProducts.length !== 1 ? 's' : ''}
+            {selectedCategory !== 'all-wedding' && (
+              <span className="text-gray-400 ml-1">
+                in {categories.find(c => c.id === selectedCategory)?.name || 'this category'}
+              </span>
+            )}
+            {totalPages > 1 && (
+              <span className="text-gray-400 ml-2">
+                • Page {currentPage} of {totalPages}
+              </span>
+            )}
           </span>
           <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600">
             <Grid3X3 className="w-4 h-4" />
@@ -410,9 +547,35 @@ function WeddingContent() {
       </motion.section>
 
       {/* Product Grid - 3x3 on mobile */}
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1 md:gap-2 p-1 md:p-3">
-        <AnimatePresence mode="wait">
-          {filteredProducts.map((product, index) => (
+      <div className="p-1 md:p-3">
+        {allFilteredProducts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 px-4">
+            <div className="text-center max-w-md">
+              <div className="mb-4">
+                <Grid3X3 className="h-16 w-16 text-gray-300 mx-auto" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">No products found</h3>
+              <p className="text-gray-600 mb-4">
+                {selectedCategory === 'all-wedding' 
+                  ? 'We\'re currently updating our wedding collection. Please check back soon!'
+                  : `No products found in ${categories.find(c => c.id === selectedCategory)?.name || 'this category'}. Try selecting a different category.`
+                }
+              </p>
+              <Button 
+                onClick={() => {
+                  setSelectedCategory('all-wedding');
+                  updateFilter('all-wedding');
+                }}
+                variant="outline"
+              >
+                View All Wedding
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1 md:gap-2">
+            <AnimatePresence mode="wait">
+              {filteredProducts.map((product, index) => (
             <motion.div
               key={`${selectedCategory}-${product.id}`}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -427,12 +590,29 @@ function WeddingContent() {
                 src={product.image}
                 alt={product.name}
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="(max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  target.src = '/placeholder-product.jpg';
+                  // Try different fallback images based on category
+                  if (target.src.includes('placeholder-product.jpg')) {
+                    return; // Already using final fallback
+                  }
+                  
+                  // Try category-specific placeholder first
+                  if (product.category?.toLowerCase().includes('tuxedo')) {
+                    target.src = '/placeholder-suit.jpg';
+                  } else if (product.category?.toLowerCase().includes('shirt')) {
+                    target.src = '/placeholder-shirt.jpg';
+                  } else if (product.category?.toLowerCase().includes('shoe')) {
+                    target.src = '/placeholder-shoes.jpg';
+                  } else if (product.category?.toLowerCase().includes('tie')) {
+                    target.src = '/placeholder-tie.jpg';
+                  } else {
+                    target.src = '/placeholder-product.jpg';
+                  }
                 }}
+                priority={index < 6} // Prioritize first 6 images
               />
               
               {/* Gradient Overlay */}
@@ -443,9 +623,21 @@ function WeddingContent() {
                 <h3 className="text-white font-serif text-xs md:text-sm mb-0.5 line-clamp-1">
                   {product.name}
                 </h3>
-                <p className="text-white/90 text-xs md:text-sm font-medium">
-                  ${product.price}
-                </p>
+                <div className="flex items-center gap-1">
+                  {product.sale_price && (
+                    <span className="text-white/60 text-xs line-through">
+                      ${product.sale_price}
+                    </span>
+                  )}
+                  <p className="text-white/90 text-xs md:text-sm font-medium">
+                    ${typeof product.price === 'number' ? product.price.toFixed(2) : product.price}
+                  </p>
+                  {product.sale_price && (
+                    <span className="bg-red-500 text-white text-xs px-1 rounded ml-1">
+                      SALE
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Like indicator */}
@@ -463,8 +655,68 @@ function WeddingContent() {
                 </button>
               </div>
             </motion.div>
-          ))}
-        </AnimatePresence>
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
+        
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 py-8 px-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="flex items-center gap-1"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Previous
+            </Button>
+            
+            <div className="flex items-center gap-1">
+              {/* Show page numbers */}
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                
+                return (
+                  <Button
+                    key={pageNum}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={cn(
+                      "w-8 h-8 p-0",
+                      currentPage === pageNum && "bg-black text-white"
+                    )}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
+            </div>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="flex items-center gap-1"
+            >
+              Next
+              <ChevronRight className="w-4 h-4" />
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Quick View Modal */}

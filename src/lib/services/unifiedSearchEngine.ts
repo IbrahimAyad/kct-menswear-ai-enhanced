@@ -308,9 +308,13 @@ function applyFilters(products: UnifiedProduct[], filters: UnifiedProductFilters
       if (!filters.type.includes(product.type)) return false;
     }
     
-    // Category filter
+    // Category filter (case-insensitive)
     if (filters.category && filters.category.length > 0) {
-      if (!product.category || !filters.category.includes(product.category)) return false;
+      if (!product.category) return false;
+      // Convert both to lowercase for case-insensitive comparison
+      const productCategoryLower = product.category.toLowerCase();
+      const filterCategoriesLower = filters.category.map(c => c.toLowerCase());
+      if (!filterCategoriesLower.includes(productCategoryLower)) return false;
     }
     
     // Bundle tier filter

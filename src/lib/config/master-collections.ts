@@ -94,8 +94,8 @@ export const masterCollections: MasterCollection[] = [
         id: 'all-wedding',
         name: 'All Wedding',
         filterParams: {
-          categories: ['Classic 3-Piece Suits', 'Tuxedos', 'Classic 2-Piece Suits', 'Ties', 'Bow Ties'],
-          tags: ['wedding', 'formal']
+          categories: ['Suits', 'Tuxedos', 'Formal Suits', 'Premium Suits', 'Ties', 'Bow Ties'],
+          tags: ['wedding', 'wedding-guest', 'formal', 'special-occasion']
         },
         count: 126
       },
@@ -156,8 +156,9 @@ export const masterCollections: MasterCollection[] = [
         id: 'all-prom',
         name: 'All Prom',
         filterParams: {
-          categories: ['Tuxedos', 'Blazers', 'Slim Fit Suits', 'Modern Fit Suits', 'Dress Shoes'],
-          tags: ['prom', 'prom-2025']
+          // Use broader categories that actually exist in database
+          categories: ['Suits', 'Tuxedos', 'Blazers', 'Formal Suits', 'Premium Suits'],
+          tags: ['prom', 'prom-2025', 'tuxedo', 'formal', 'special-occasion']
         },
         count: 98
       },
@@ -165,8 +166,8 @@ export const masterCollections: MasterCollection[] = [
         id: 'prom-tuxedos',
         name: 'Prom Tuxedos',
         filterParams: {
-          categories: ['Tuxedos'],
-          tags: ['prom', 'tuxedo']
+          categories: ['Formal Tuxedos'],
+          tags: ['prom', 'tuxedo', 'prom tuxedo']
         },
         count: 24
       },

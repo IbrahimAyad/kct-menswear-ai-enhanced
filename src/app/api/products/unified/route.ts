@@ -61,9 +61,8 @@ export async function GET(request: NextRequest) {
                 id,
                 title,
                 price,
-                stripe_price_id,
-                inventory_count,
-                stripe_active
+                inventory_quantity,
+                available
               )
             `)
             .eq('visibility', true)
@@ -72,7 +71,9 @@ export async function GET(request: NextRequest) {
           
           // Apply basic filters to reduce data transfer
           if (filters.category?.length) {
-            query = query.in('product_type', filters.category);
+            // Convert categories to lowercase for case-insensitive matching
+            const lowercaseCategories = filters.category.map(c => c.toLowerCase());
+            query = query.in('product_type', lowercaseCategories);
           }
           
           if (filters.color?.length) {
@@ -118,15 +119,15 @@ export async function GET(request: NextRequest) {
                   (a.position || 999) - (b.position || 999)
                 ).map((img: any) => ({ src: img.image_url })) || [];
                 
-                // Get Stripe price ID from the first variant (where it actually exists!)
+                // Get first variant data
                 const firstVariant = product.product_variants?.[0];
-                const stripePriceId = firstVariant?.stripe_price_id || null;
-                const stripeActive = firstVariant?.stripe_active || false;
+                const stripePriceId = product.stripe_price_id || null; // Use product-level stripe_price_id
+                const stripeActive = firstVariant?.available || false;
                 
                 // Calculate total inventory from all variants
                 const totalInventory = product.product_variants?.reduce(
-                  (sum: number, v: any) => sum + (v.inventory_count || 0), 0
-                ) || 0;
+                  (sum: number, v: any) => sum + (v.inventory_quantity || 0), 0
+                ) || product.total_inventory || 0;
                 
                 // Use variant price or fallback to base price
                 const variantPrice = firstVariant?.price || product.base_price || 0;
@@ -140,7 +141,7 @@ export async function GET(request: NextRequest) {
                   description: product.description,
                   price: displayPrice, // Use variant price if available
                   compare_at_price: null, // Not available in current schema
-                  category: product.category,
+                  category: product.product_type || product.category || 'uncategorized', // Use product_type as category
                   product_type: product.product_type,
                   sku: product.sku,
                   handle: product.handle,
@@ -155,13 +156,23 @@ export async function GET(request: NextRequest) {
                   material: product.additional_info?.material,
                   fit: product.additional_info?.fit_type,
                   ai_score: 80 + Math.floor(Math.random() * 20), // Generate AI score
-                  // Add Stripe integration data from variants
+                  // Add Stripe integration data
                   stripePriceId: stripePriceId,
                   stripeActive: stripeActive,
                   variants: product.product_variants || []
                 };
               });
               console.log(`Fetched and mapped ${individualProducts.length} products from Supabase`);
+              // Debug: Log sample products
+              if (individualProducts.length > 0) {
+                console.log('Sample Supabase product:', {
+                  id: individualProducts[0].id,
+                  title: individualProducts[0].title,
+                  category: individualProducts[0].category,
+                  product_type: individualProducts[0].product_type,
+                  price: individualProducts[0].price
+                });
+              }
             }
           } catch (timeoutError) {
             console.error('Supabase query timeout - continuing with bundles only');
@@ -174,7 +185,9 @@ export async function GET(request: NextRequest) {
     }
     
     // Perform unified search
+    console.log(`Calling unifiedSearch with ${individualProducts.length} individual products and filters:`, filters);
     const results = await unifiedSearch(filters, individualProducts);
+    console.log(`UnifiedSearch returned ${results.totalCount} total products`);
     
     // Add preset metadata to results if applicable
     if (presetData) {
