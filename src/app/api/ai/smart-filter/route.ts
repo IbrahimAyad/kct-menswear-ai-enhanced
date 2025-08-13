@@ -1,0 +1,162 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { smartFilterEngine, SmartFilterConfig } from '@/lib/ai/smart-filter-engine';
+import { createClient } from '@/lib/supabase/server';
+import { unifiedSearch } from '@/lib/services/unifiedSearchEngine';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const filterConfig: SmartFilterConfig = body;
+    
+    console.log('Smart filter request:', filterConfig);
+    
+    // Step 1: Fetch all available products
+    const supabase = await createClient();
+    let individualProducts = [];
+    
+    // Fetch from Supabase if not disabled
+    if (filterConfig.categories || !body.skipDatabase) {
+      try {
+        let query = supabase
+          .from('products')
+          .select(`
+            *,
+            product_images (
+              image_url,
+              alt_text,
+              position,
+              image_type
+            ),
+            product_variants (
+              id,
+              title,
+              price,
+              inventory_quantity,
+              available
+            )
+          `)
+          .eq('visibility', true)
+          .eq('status', 'active')
+          .limit(1000);
+        
+        const { data, error } = await query;
+        
+        if (!error && data) {
+          // Map to unified format
+          individualProducts = data.map((product: any) => {
+            const primaryImage = product.product_images?.find((img: any) => 
+              img.image_type === 'primary' || img.position === 1
+            ) || product.product_images?.[0];
+            
+            const firstVariant = product.product_variants?.[0];
+            const totalInventory = product.product_variants?.reduce(
+              (sum: number, v: any) => sum + (v.inventory_quantity || 0), 0
+            ) || product.total_inventory || 0;
+            
+            const variantPrice = firstVariant?.price || product.base_price || 0;
+            const displayPrice = variantPrice > 1000 
+              ? (variantPrice / 100).toString() 
+              : variantPrice.toString();
+            
+            return {
+              id: product.id,
+              title: product.name,
+              description: product.description,
+              price: displayPrice,
+              category: product.product_type || product.category || 'uncategorized',
+              product_type: product.product_type,
+              sku: product.sku,
+              handle: product.handle,
+              tags: product.tags || [],
+              available: totalInventory > 0,
+              inventory_quantity: totalInventory,
+              featured_image: primaryImage ? { src: primaryImage.image_url } : null,
+              vendor: product.vendor,
+              sizes: product.additional_info?.sizes_available?.split(', ') || [],
+              material: product.additional_info?.material,
+              fit: product.additional_info?.fit_type
+            };
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching products from Supabase:', error);
+      }
+    }
+    
+    // Step 2: Get unified products (including bundles and core products)
+    const unifiedResults = await unifiedSearch({}, individualProducts);
+    const allProducts = unifiedResults.products;
+    
+    console.log(`Processing ${allProducts.length} total products`);
+    
+    // Step 3: Apply smart filtering
+    const filterResults = await smartFilterEngine.applySmartFilters(
+      allProducts,
+      filterConfig
+    );
+    
+    console.log(`Smart filter returned ${filterResults.products.length} products`);
+    
+    // Step 4: Enhance response with additional data
+    const response = {
+      success: true,
+      ...filterResults,
+      // Add search analytics
+      analytics: {
+        searchId: generateSearchId(),
+        timestamp: new Date().toISOString(),
+        filtersApplied: Object.keys(filterConfig).filter(k => filterConfig[k as keyof SmartFilterConfig]),
+        resultCount: filterResults.products.length,
+        hasAlternatives: filterResults.alternativeFilters.length > 0,
+        hasSuggestions: filterResults.suggestions.length > 0
+      }
+    };
+    
+    return NextResponse.json(response);
+    
+  } catch (error) {
+    console.error('Smart filter API error:', error);
+    return NextResponse.json(
+      { 
+        success: false,
+        error: 'Failed to apply smart filters',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// GET endpoint for testing
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  
+  // Parse query parameters into filter config
+  const filterConfig: SmartFilterConfig = {
+    searchQuery: searchParams.get('q') || undefined,
+    categories: searchParams.get('categories')?.split(','),
+    colors: searchParams.get('colors')?.split(','),
+    sizes: searchParams.get('sizes')?.split(','),
+    occasions: searchParams.get('occasions')?.split(','),
+    priceRange: searchParams.get('minPrice') && searchParams.get('maxPrice') ? {
+      min: Number(searchParams.get('minPrice')),
+      max: Number(searchParams.get('maxPrice'))
+    } : undefined,
+    trendingOnly: searchParams.get('trending') === 'true',
+    seasonalRelevance: searchParams.get('seasonal') === 'true',
+    includeOutfitSuggestions: searchParams.get('outfits') === 'true',
+    maxResults: searchParams.get('limit') ? Number(searchParams.get('limit')) : undefined
+  };
+  
+  // Use POST logic
+  const mockRequest = new Request(request.url, {
+    method: 'POST',
+    body: JSON.stringify(filterConfig)
+  });
+  
+  return POST(mockRequest as NextRequest);
+}
+
+function generateSearchId(): string {
+  return `search_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
