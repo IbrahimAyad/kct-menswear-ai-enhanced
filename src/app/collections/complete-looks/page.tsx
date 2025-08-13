@@ -23,6 +23,7 @@ import { useGA4 } from '@/hooks/useGA4';
 import { useUnifiedShop } from '@/hooks/useUnifiedShop';
 import { UnifiedProduct } from '@/types/unified-shop';
 import { getMasterCollection } from '@/lib/config/master-collections';
+import { useSmartCollectionRouting, smartFilterProducts, trackSmartFilter } from '@/lib/utils/smart-collection-routing';
 
 // Types for the existing UI
 interface CollectionProduct {
@@ -80,53 +81,25 @@ function generateCompleteLooksCategories(): CategoryInfo[] {
   }));
 }
 
-// Smart filter function to get products by category with optimized API calls
-function getSmartFilteredProducts(allProducts: CollectionProduct[], selectedCategory: string, masterCollection: any) {
-  if (selectedCategory === 'all-bundles') {
-    return allProducts;
-  }
-  
-  const subCollection = masterCollection?.subCollections.find((sub: any) => sub.id === selectedCategory);
-  if (!subCollection) return allProducts;
-  
-  return allProducts.filter(product => {
-    // Multi-criteria smart filtering
-    const matchesTags = subCollection.filterParams.tags?.some((tag: string) => 
-      product.subcategory === tag || 
-      product.description?.toLowerCase().includes(tag) ||
-      product.category?.toLowerCase().includes(tag)
-    );
-    
-    const matchesCategories = subCollection.filterParams.categories?.some((category: string) => 
-      product.category === category
-    );
-    
-    // Price range filtering for bundles
-    const matchesPriceRange = subCollection.filterParams.priceRange ? 
-      product.price >= subCollection.filterParams.priceRange.min && 
-      product.price <= subCollection.filterParams.priceRange.max : true;
-    
-    return (matchesTags || matchesCategories) && matchesPriceRange;
-  });
-}
-
-// Enhanced filter function that uses smart routing and URL params
-function filterProductsByCategory(products: CollectionProduct[], selectedCategory: string): CollectionProduct[] {
-  const masterCollection = getMasterCollection('complete-looks');
-  return getSmartFilteredProducts(products, selectedCategory, masterCollection);
-}
 
 function CompleteLooksContent() {
   // Fetch products from API using the unified shop hook with complete looks filter
   const masterCollection = getMasterCollection('complete-looks');
   const allCompleteLooksCategories = masterCollection?.subCollections
+    .find(sub => sub.id === 'all-bundles')?.filterParams.tags || 
+    ['bundles', 'complete-looks', 'starter-bundles', 'professional-bundles'];
+    
+  // Smart filtering: Use both categories and tags for comprehensive product fetching
+  const allCompleteLooksDbCategories = masterCollection?.subCollections
     .find(sub => sub.id === 'all-bundles')?.filterParams.categories || 
     ['Bundles', 'Complete Outfits'];
   
   const { products: unifiedProducts, loading, error } = useUnifiedShop({
     initialFilters: { 
-      category: allCompleteLooksCategories,
-      includeIndividual: true 
+      category: allCompleteLooksDbCategories, // Use singular 'category' to match API
+      tags: allCompleteLooksCategories,
+      includeIndividual: true,
+      includeBundles: true // Explicitly include bundles for complete looks
     },
     autoFetch: true,
     debounceDelay: 300
@@ -142,8 +115,16 @@ function CompleteLooksContent() {
     return generateCompleteLooksCategories();
   }, []);
   
+  // Smart routing for URL-based filtering
+  const { currentFilter, updateFilter } = useSmartCollectionRouting('complete-looks');
+  
   // UI state
-  const [selectedCategory, setSelectedCategory] = useState('all-bundles');
+  const [selectedCategory, setSelectedCategory] = useState(currentFilter || 'all-bundles');
+  
+  // Update selectedCategory when currentFilter changes (URL navigation)
+  useEffect(() => {
+    setSelectedCategory(currentFilter || 'all-bundles');
+  }, [currentFilter]);
   const [selectedProduct, setSelectedProduct] = useState<CollectionProduct | null>(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -213,8 +194,15 @@ function CompleteLooksContent() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Filter products based on selected category
-  const filteredProducts = filterProductsByCategory(allProducts, selectedCategory);
+  // Smart filter products based on selected category
+  const filteredProducts = smartFilterProducts(allProducts, 'complete-looks', selectedCategory);
+  
+  // Track smart filtering
+  useEffect(() => {
+    if (filteredProducts.length > 0) {
+      trackSmartFilter('complete-looks', selectedCategory, filteredProducts.length);
+    }
+  }, [selectedCategory, filteredProducts.length]);
 
   // Track category filter changes
   useEffect(() => {
@@ -346,7 +334,10 @@ function CompleteLooksContent() {
             {categories.map((category) => (
               <motion.button
                 key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
+                onClick={() => {
+                  setSelectedCategory(category.id);
+                  updateFilter(category.id);
+                }}
                 className="flex-shrink-0"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

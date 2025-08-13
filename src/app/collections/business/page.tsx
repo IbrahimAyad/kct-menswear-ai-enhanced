@@ -126,7 +126,7 @@ function BusinessContent() {
   
   const { products: unifiedProducts, loading, error } = useUnifiedShop({
     initialFilters: { 
-      categories: allBusinessDbCategories,
+      category: allBusinessDbCategories, // Use singular 'category' to match API
       tags: allBusinessCategories,
       includeIndividual: true 
     },

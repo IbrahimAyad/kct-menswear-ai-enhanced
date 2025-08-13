@@ -263,6 +263,9 @@ export interface Database {
           tags: string[] | null
           additional_info: Json | null
           view_count: number
+          total_inventory: number | null
+          in_stock: boolean | null
+          stripe_price_id: string | null
           created_at: string
           updated_at: string
         }
@@ -290,6 +293,9 @@ export interface Database {
           tags?: string[] | null
           additional_info?: Json | null
           view_count?: number
+          total_inventory?: number | null
+          in_stock?: boolean | null
+          stripe_price_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -317,6 +323,9 @@ export interface Database {
           tags?: string[] | null
           additional_info?: Json | null
           view_count?: number
+          total_inventory?: number | null
+          in_stock?: boolean | null
+          stripe_price_id?: string | null
           created_at?: string
           updated_at?: string
         }

@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
         if (!supabase) {
           console.error('Supabase client is null - check environment variables');
         } else {
-          // Build Supabase query based on filters - include product images and variants
+          // Build Supabase query based on filters - include product images only (variants removed due to schema issues)
           let query = supabase
             .from('products')
             .select(`
@@ -58,6 +58,8 @@ export async function GET(request: NextRequest) {
                 image_type
               )
             `)
+            .eq('visibility', true)
+            .eq('status', 'active')
             .limit(500); // Increased limit to get more products
           
           // Apply basic filters to reduce data transfer
@@ -94,6 +96,7 @@ export async function GET(request: NextRequest) {
             
             if (error) {
               console.error('Supabase query error:', error);
+              console.error('Query details:', { filters, activePreset });
             } else {
               // Map raw Supabase products to expected format
               individualProducts = (data || []).map((product: any) => {
@@ -111,8 +114,10 @@ export async function GET(request: NextRequest) {
                 const stripePriceId = product.stripe_price_id || null;
                 const stripeActive = true; // Default to true
                 
-                // Use base price
-                const displayPrice = (product.base_price / 100).toString();
+                // Use base price - handle both cents and dollar formats
+                const displayPrice = product.base_price 
+                  ? (product.base_price > 1000 ? (product.base_price / 100).toString() : product.base_price.toString())
+                  : '0';
                 
                 return {
                   id: product.id,
@@ -126,8 +131,8 @@ export async function GET(request: NextRequest) {
                   handle: product.handle,
                   tags: product.tags || [],
                   meta_description: product.meta_description,
-                  available: product.in_stock,
-                  inventory_quantity: product.total_inventory,
+                  available: product.in_stock !== false,
+                  inventory_quantity: product.total_inventory || 0,
                   featured_image: primaryImage ? { src: primaryImage.image_url } : null,
                   images: allImages,
                   vendor: product.vendor,

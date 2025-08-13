@@ -94,6 +94,7 @@ export const masterCollections: MasterCollection[] = [
         id: 'all-wedding',
         name: 'All Wedding',
         filterParams: {
+          categories: ['Classic 3-Piece Suits', 'Tuxedos', 'Classic 2-Piece Suits', 'Ties', 'Bow Ties'],
           tags: ['wedding', 'formal']
         },
         count: 126
@@ -155,6 +156,7 @@ export const masterCollections: MasterCollection[] = [
         id: 'all-prom',
         name: 'All Prom',
         filterParams: {
+          categories: ['Tuxedos', 'Blazers', 'Slim Fit Suits', 'Modern Fit Suits', 'Dress Shoes'],
           tags: ['prom', 'prom-2025']
         },
         count: 98
@@ -207,7 +209,8 @@ export const masterCollections: MasterCollection[] = [
         id: 'all-accessories',
         name: 'All Accessories',
         filterParams: {
-          categories: ['Ties', 'Bow Ties', 'Pocket Squares', 'Cufflinks', 'Belts', 'Suspenders']
+          categories: ['Ties', 'Bow Ties', 'Pocket Squares', 'Cufflinks', 'Belts', 'Suspenders'],
+          tags: ['ties', 'bow-ties', 'pocket-squares', 'accessories']
         },
         count: 193
       },
@@ -261,7 +264,7 @@ export const masterCollections: MasterCollection[] = [
   {
     id: 'business-casual',
     name: 'Business & Casual',
-    route: '/collections/business-casual',
+    route: '/collections/business',
     description: 'From boardroom to date night - versatile styles for every occasion',
     subCollections: [
       {

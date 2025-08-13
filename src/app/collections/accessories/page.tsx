@@ -23,6 +23,7 @@ import { useGA4 } from '@/hooks/useGA4';
 import { useUnifiedShop } from '@/hooks/useUnifiedShop';
 import { UnifiedProduct } from '@/types/unified-shop';
 import { getMasterCollection } from '@/lib/config/master-collections';
+import { useSmartCollectionRouting, smartFilterProducts, trackSmartFilter } from '@/lib/utils/smart-collection-routing';
 
 // Types for the existing UI
 interface CollectionProduct {
@@ -80,47 +81,23 @@ function generateAccessoriesCategories(): CategoryInfo[] {
   }));
 }
 
-// Smart filter function to get products by category with optimized API calls
-function getSmartFilteredProducts(allProducts: CollectionProduct[], selectedCategory: string, masterCollection: any) {
-  if (selectedCategory === 'all-accessories') {
-    return allProducts;
-  }
-  
-  const subCollection = masterCollection?.subCollections.find((sub: any) => sub.id === selectedCategory);
-  if (!subCollection) return allProducts;
-  
-  return allProducts.filter(product => {
-    // Multi-criteria smart filtering
-    const matchesTags = subCollection.filterParams.tags?.some((tag: string) => 
-      product.subcategory === tag || 
-      product.description?.toLowerCase().includes(tag) ||
-      product.category?.toLowerCase().includes(tag)
-    );
-    
-    const matchesCategories = subCollection.filterParams.categories?.some((category: string) => 
-      product.category === category
-    );
-    
-    return matchesTags || matchesCategories;
-  });
-}
-
-// Enhanced filter function that uses smart routing and URL params
-function filterProductsByCategory(products: CollectionProduct[], selectedCategory: string): CollectionProduct[] {
-  const masterCollection = getMasterCollection('accessories');
-  return getSmartFilteredProducts(products, selectedCategory, masterCollection);
-}
 
 function AccessoriesContent() {
   // Fetch products from API using the unified shop hook with accessories filter
   const masterCollection = getMasterCollection('accessories');
   const allAccessoriesCategories = masterCollection?.subCollections
+    .find(sub => sub.id === 'all-accessories')?.filterParams.tags || 
+    ['ties', 'bow-ties', 'pocket-squares', 'accessories'];
+    
+  // Smart filtering: Use both categories and tags for comprehensive product fetching
+  const allAccessoriesDbCategories = masterCollection?.subCollections
     .find(sub => sub.id === 'all-accessories')?.filterParams.categories || 
     ['Ties', 'Bow Ties', 'Pocket Squares', 'Cufflinks', 'Belts', 'Suspenders'];
   
   const { products: unifiedProducts, loading, error } = useUnifiedShop({
     initialFilters: { 
-      category: allAccessoriesCategories,
+      category: allAccessoriesDbCategories, // Use singular 'category' to match API
+      tags: allAccessoriesCategories,
       includeIndividual: true 
     },
     autoFetch: true,
@@ -137,8 +114,16 @@ function AccessoriesContent() {
     return generateAccessoriesCategories();
   }, []);
   
+  // Smart routing for URL-based filtering
+  const { currentFilter, updateFilter } = useSmartCollectionRouting('accessories');
+  
   // UI state
-  const [selectedCategory, setSelectedCategory] = useState('all-accessories');
+  const [selectedCategory, setSelectedCategory] = useState(currentFilter || 'all-accessories');
+  
+  // Update selectedCategory when currentFilter changes (URL navigation)
+  useEffect(() => {
+    setSelectedCategory(currentFilter || 'all-accessories');
+  }, [currentFilter]);
   const [selectedProduct, setSelectedProduct] = useState<CollectionProduct | null>(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -208,8 +193,15 @@ function AccessoriesContent() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Filter products based on selected category
-  const filteredProducts = filterProductsByCategory(allProducts, selectedCategory);
+  // Smart filter products based on selected category
+  const filteredProducts = smartFilterProducts(allProducts, 'accessories', selectedCategory);
+  
+  // Track smart filtering
+  useEffect(() => {
+    if (filteredProducts.length > 0) {
+      trackSmartFilter('accessories', selectedCategory, filteredProducts.length);
+    }
+  }, [selectedCategory, filteredProducts.length]);
 
   // Track category filter changes
   useEffect(() => {
@@ -341,7 +333,10 @@ function AccessoriesContent() {
             {categories.map((category) => (
               <motion.button
                 key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
+                onClick={() => {
+                  setSelectedCategory(category.id);
+                  updateFilter(category.id);
+                }}
                 className="flex-shrink-0"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
