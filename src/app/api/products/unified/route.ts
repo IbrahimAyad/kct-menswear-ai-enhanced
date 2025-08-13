@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
         if (!supabase) {
           console.error('Supabase client is null - check environment variables');
         } else {
-          // Build Supabase query based on filters - include product images only (variants removed due to schema issues)
+          // Build Supabase query - properly join with product_variants for Stripe data
           let query = supabase
             .from('products')
             .select(`
@@ -56,6 +56,14 @@ export async function GET(request: NextRequest) {
                 alt_text,
                 position,
                 image_type
+              ),
+              product_variants (
+                id,
+                title,
+                price,
+                stripe_price_id,
+                inventory_count,
+                stripe_active
               )
             `)
             .eq('visibility', true)
@@ -110,14 +118,21 @@ export async function GET(request: NextRequest) {
                   (a.position || 999) - (b.position || 999)
                 ).map((img: any) => ({ src: img.image_url })) || [];
                 
-                // Get Stripe price ID from product directly since we removed variants
-                const stripePriceId = product.stripe_price_id || null;
-                const stripeActive = true; // Default to true
+                // Get Stripe price ID from the first variant (where it actually exists!)
+                const firstVariant = product.product_variants?.[0];
+                const stripePriceId = firstVariant?.stripe_price_id || null;
+                const stripeActive = firstVariant?.stripe_active || false;
                 
-                // Use base price - handle both cents and dollar formats
-                const displayPrice = product.base_price 
-                  ? (product.base_price > 1000 ? (product.base_price / 100).toString() : product.base_price.toString())
-                  : '0';
+                // Calculate total inventory from all variants
+                const totalInventory = product.product_variants?.reduce(
+                  (sum: number, v: any) => sum + (v.inventory_count || 0), 0
+                ) || 0;
+                
+                // Use variant price or fallback to base price
+                const variantPrice = firstVariant?.price || product.base_price || 0;
+                const displayPrice = variantPrice > 1000 
+                  ? (variantPrice / 100).toString() 
+                  : variantPrice.toString();
                 
                 return {
                   id: product.id,
@@ -131,8 +146,8 @@ export async function GET(request: NextRequest) {
                   handle: product.handle,
                   tags: product.tags || [],
                   meta_description: product.meta_description,
-                  available: product.in_stock !== false,
-                  inventory_quantity: product.total_inventory || 0,
+                  available: totalInventory > 0,
+                  inventory_quantity: totalInventory,
                   featured_image: primaryImage ? { src: primaryImage.image_url } : null,
                   images: allImages,
                   vendor: product.vendor,
@@ -140,10 +155,10 @@ export async function GET(request: NextRequest) {
                   material: product.additional_info?.material,
                   fit: product.additional_info?.fit_type,
                   ai_score: 80 + Math.floor(Math.random() * 20), // Generate AI score
-                  // Add Stripe integration data
+                  // Add Stripe integration data from variants
                   stripePriceId: stripePriceId,
                   stripeActive: stripeActive,
-                  variants: []
+                  variants: product.product_variants || []
                 };
               });
               console.log(`Fetched and mapped ${individualProducts.length} products from Supabase`);
