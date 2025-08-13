@@ -22,21 +22,21 @@ const categories = [
     name: 'Vest',
     items: '52 items',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/vest-tie-main-2.jpg',
-    link: '/collections/vests',
+    link: '/collections/accessories',
     bgColor: 'bg-gradient-to-br from-burgundy-50 to-burgundy-100'
   },
   {
     name: 'Jackets',
     items: '58 items',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png',
-    link: '/collections/jackets',
+    link: '/collections/blazers',
     bgColor: 'bg-gradient-to-br from-slate-100 to-slate-200'
   },
   {
     name: 'Pants',
     items: '76 items',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg',
-    link: '/collections/pants',
+    link: '/collections/suits',
     bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200'
   },
   {
@@ -64,21 +64,21 @@ const categories = [
     name: 'Velvet Blazers',
     items: '32 items',
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
-    link: '/collections/velvet-blazers',
+    link: '/collections/blazers',
     bgColor: 'bg-gradient-to-br from-emerald-50 to-emerald-100'
   },
   {
     name: 'Vest & Tie',
     items: '48 items',
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
-    link: '/collections/vest-tie',
+    link: '/collections/accessories',
     bgColor: 'bg-gradient-to-br from-sage-50 to-sage-100'
   },
   {
     name: 'Complete Looks',
     items: '66 items',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg',
-    link: '/bundles',
+    link: '/collections/suits',
     bgColor: 'bg-gradient-to-br from-gray-100 to-gray-200'
   },
   {
@@ -92,7 +92,7 @@ const categories = [
     name: 'Business',
     items: 'Formal',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg',
-    link: '/collections/business',
+    link: '/collections/formal',
     bgColor: 'bg-gradient-to-br from-gray-200 to-gray-300'
   },
   {
@@ -114,21 +114,21 @@ const categories = [
     name: 'Cocktail Party',
     items: 'Semi-Formal',
     image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-main.jpg',
-    link: '/collections/cocktail',
+    link: '/collections/formal',
     bgColor: 'bg-gradient-to-br from-orange-100 to-amber-100'
   },
   {
     name: 'Suspender Bowtie',
     items: '28 items',
     image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
-    link: '/collections/accessories/suspender-bowtie',
+    link: '/collections/accessories',
     bgColor: 'bg-gradient-to-br from-pink-50 to-pink-100'
   },
   {
     name: 'Date Night',
     items: 'Casual',
     image: '',
-    link: '/collections/date-night',
+    link: '/collections/suits',
     bgColor: 'bg-gradient-to-br from-pink-100 to-pink-200',
     isEmpty: true
   }
