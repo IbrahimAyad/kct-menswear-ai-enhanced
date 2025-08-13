@@ -1,5 +1,18 @@
+import { Suspense } from 'react';
 import SmartCollectionPage from '@/components/collections/SmartCollectionPage';
 
-export default function BusinessCollectionPage() {
-  return <SmartCollectionPage collectionId="business" />;
+function LoadingState() {
+  return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-burgundy"></div>
+    </div>
+  );
+}
+
+export default function BusinessPage() {
+  return (
+    <Suspense fallback={<LoadingState />}>
+      <SmartCollectionPage collectionId="business" />
+    </Suspense>
+  );
 }

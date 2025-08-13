@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, Suspense } from 'react';
 import { useUnifiedShop } from '@/hooks/useUnifiedShop';
 import { getDbFiltersFromMarketing, getCollectionById } from '@/lib/config/collection-mapping';
 import { UnifiedProduct } from '@/types/unified-shop';
