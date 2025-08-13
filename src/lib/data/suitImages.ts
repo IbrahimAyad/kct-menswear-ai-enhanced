@@ -26,7 +26,7 @@ export const suitImages = {
     ],
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/navy/navy-main-2.jpg`,
   },
-  charcoalGrey: {
+  charcoal: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg`,
     gallery: [
       `${R2_BASE_URL}/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg`,
@@ -35,7 +35,7 @@ export const suitImages = {
     ],
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg`,
   },
-  lightGrey: {
+  lightgrey: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg`,
     gallery: [
       `${R2_BASE_URL}/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg`,
@@ -76,7 +76,7 @@ export const suitImages = {
     ],
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/brown/brown-suit-main.jpg`,
   },
-  darkBrown: {
+  darkbrown: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/dark-brown/brown-main.jpg`,
     gallery: [
       `${R2_BASE_URL}/kct-prodcuts/suits/dark-brown/brown-main.jpg`,
@@ -102,7 +102,7 @@ export const suitImages = {
     ],
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/emerlad/emerlad-main.jpg`,
   },
-  hunterGreen: {
+  hunter: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/hunter-green/hunter-main.jpg`,
     gallery: [
       `${R2_BASE_URL}/kct-prodcuts/suits/hunter-green/hunter-main.jpg`,
@@ -110,7 +110,7 @@ export const suitImages = {
     ],
     thumbnail: `${R2_BASE_URL}/kct-prodcuts/suits/hunter-green/hunter-main.jpg`,
   },
-  midnightBlue: {
+  midnight: {
     main: `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/midnight-blue-main.jpg`,
     gallery: [
       `${R2_BASE_URL}/kct-prodcuts/suits/midnight-blue/midnight-blue-main.jpg`,

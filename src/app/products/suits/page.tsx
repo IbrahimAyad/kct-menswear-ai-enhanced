@@ -1,35 +1,92 @@
-import { stripeProducts } from '@/lib/services/stripeProductService';
-import { getSuitImages } from '@/lib/data/suitImages';
-import { tuxedoProducts } from '@/lib/products/tuxedoProducts';
-import { Filter, ChevronDown } from 'lucide-react';
-import SuitCard from '@/components/products/SuitCard';
-import TuxedoCard from '@/components/products/TuxedoCard';
+'use client';
 
-export const metadata = {
-  title: 'Premium Men\'s Suits - 2 & 3 Piece | KCT Menswear',
-  description: 'Shop our collection of premium men\'s suits. Available in 14 colors with 2-piece ($179.99) and 3-piece ($199.99) options. Sizes 34-54 with free alterations.',
-};
+import { useState, useEffect } from 'react';
+import { getAllCoreProducts } from '@/lib/config/coreProducts';
+import { getSuitImages } from '@/lib/data/suitImages';
+import { Filter, ChevronDown } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
+
+// Removed metadata since this is now a client component
 
 export default function SuitsPage() {
-  // Convert stripe products to display format
-  const suits = Object.entries(stripeProducts.suits).map(([color, data]) => {
-    const images = getSuitImages(color);
-    return {
-      id: data.productId,
-      name: `${color.charAt(0).toUpperCase() + color.slice(1).replace(/([A-Z])/g, ' $1')} Suit`,
-      color,
-      twoPiecePrice: 179.99,
-      threePiecePrice: 199.99,
-      image: images.main,
-      ...data,
+  const [suits, setSuits] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get all core products and filter for suits
+    const coreProducts = getAllCoreProducts();
+    const suitProducts = coreProducts.filter(p => p.category === 'suits');
+    
+    // Group suits by color (each color has 2-piece and 3-piece)
+    const suitsByColor = new Map<string, any>();
+    
+    suitProducts.forEach(suit => {
+      // Extract color from ID (e.g., 'suit-navy-2p' -> 'navy')
+      const match = suit.id.match(/suit-([^-]+)-([23]p)/);
+      if (match) {
+        const color = match[1];
+        const type = match[2];
+        
+        if (!suitsByColor.has(color)) {
+          // Get images for this color
+          const images = getSuitImages(color);
+          
+          suitsByColor.set(color, {
+            id: `suit-${color}`,
+            color,
+            name: formatColorName(color) + ' Suit',
+            image: images?.main || `/placeholder-suit.jpg`,
+            twoPiecePrice: 299.99,
+            threePiecePrice: 349.99,
+            twoPieceId: null,
+            threePieceId: null,
+            twoPiecePriceId: null,
+            threePiecePriceId: null,
+          });
+        }
+        
+        const suitData = suitsByColor.get(color);
+        if (type === '2p') {
+          suitData.twoPieceId = suit.id;
+          suitData.twoPiecePriceId = suit.stripe_price_id;
+        } else if (type === '3p') {
+          suitData.threePieceId = suit.id;
+          suitData.threePiecePriceId = suit.stripe_price_id;
+        }
+      }
+    });
+    
+    setSuits(Array.from(suitsByColor.values()));
+    setLoading(false);
+  }, []);
+  
+  // Helper function to format color names
+  const formatColorName = (color: string): string => {
+    const colorMap: { [key: string]: string } = {
+      'navy': 'Navy',
+      'beige': 'Beige',
+      'black': 'Black',
+      'brown': 'Brown',
+      'burgundy': 'Burgundy',
+      'charcoal': 'Charcoal Grey',
+      'darkbrown': 'Dark Brown',
+      'emerald': 'Emerald',
+      'hunter': 'Hunter Green',
+      'indigo': 'Indigo',
+      'lightgrey': 'Light Grey',
+      'midnight': 'Midnight Blue',
+      'sand': 'Sand',
+      'tan': 'Tan',
     };
-  });
+    return colorMap[color] || color.charAt(0).toUpperCase() + color.slice(1);
+  };
   
   // Group suits by color family for better organization
   const colorFamilies = {
-    'Classic': ['black', 'navy', 'charcoalGrey', 'lightGrey'],
-    'Earth Tones': ['tan', 'sand', 'beige', 'brown', 'darkBrown'],
-    'Statement': ['burgundy', 'emerald', 'hunterGreen', 'midnightBlue', 'indigo'],
+    'Classic': ['black', 'navy', 'charcoal', 'lightgrey'],
+    'Earth Tones': ['tan', 'sand', 'beige', 'brown', 'darkbrown'],
+    'Statement': ['burgundy', 'emerald', 'hunter', 'midnight', 'indigo'],
   };
   
   return (
@@ -119,21 +176,44 @@ export default function SuitsPage() {
               {suits
                 .filter(suit => colors.includes(suit.color))
                 .map((suit) => (
-                  <SuitCard key={suit.id} suit={suit} />
+                  <div key={suit.id} className="group">
+                    <Link href={suit.twoPieceId ? `/products/${suit.twoPieceId}` : '#'}>
+                      <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden mb-4 relative">
+                        <Image
+                          src={suit.image}
+                          alt={suit.name}
+                          width={300}
+                          height={400}
+                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/placeholder-suit.jpg';
+                          }}
+                        />
+                      </div>
+                      <h3 className="font-medium text-lg mb-1">{suit.name}</h3>
+                      <div className="flex items-baseline space-x-2">
+                        <span className="text-sm text-gray-600">From</span>
+                        <span className="font-semibold">${suit.twoPiecePrice.toFixed(2)}</span>
+                      </div>
+                      <div className="mt-2 flex space-x-2">
+                        <span className="text-xs bg-gray-100 px-2 py-1 rounded">2-Piece</span>
+                        <span className="text-xs bg-gray-100 px-2 py-1 rounded">3-Piece</span>
+                      </div>
+                    </Link>
+                  </div>
                 ))}
             </div>
           </div>
         ))}
         
-        {/* Statement Tuxedos Section */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Statement Tuxedos</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {tuxedoProducts.map((tuxedo) => (
-              <TuxedoCard key={tuxedo.id} tuxedo={tuxedo} />
-            ))}
+        {/* Loading State */}
+        {loading && (
+          <div className="flex justify-center items-center py-12">
+            <div className="w-8 h-8 border-4 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
           </div>
-        </div>
+        )}
 
         {/* Call to Action */}
         <div className="mt-16 bg-gray-900 text-white rounded-lg p-8 text-center">
