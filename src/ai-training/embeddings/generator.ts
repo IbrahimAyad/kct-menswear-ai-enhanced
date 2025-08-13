@@ -2,15 +2,21 @@ import { OpenAI } from 'openai';
 import { config } from '../config';
 import { ProcessedProduct } from '../data/processor';
 import { VectorPoint, vectorStore } from './vector-store';
+import crypto from 'crypto';
+import fs from 'fs/promises';
+import path from 'path';
 
 export class EmbeddingsGenerator {
   private openai: OpenAI;
   private embeddingCache: Map<string, number[]> = new Map();
+  private hashCachePath: string;
+  private productHashCache: Record<string, string> = {};
 
   constructor() {
     this.openai = new OpenAI({
       apiKey: config.openai.apiKey,
     });
+    this.hashCachePath = path.join(process.cwd(), 'src/ai-training/.cache/product_hashes.json');
   }
 
   async generateEmbedding(text: string): Promise<number[]> {
@@ -43,14 +49,30 @@ export class EmbeddingsGenerator {
     const vectors: VectorPoint[] = [];
     const batchSize = 20; // OpenAI batch limit
 
-    console.log(`Generating embeddings for ${products.length} products...`);
+    await this.loadHashCache();
 
-    for (let i = 0; i < products.length; i += batchSize) {
-      const batch = products.slice(i, i + batchSize);
+    // Compute content hashes and filter unchanged products (delta training)
+    const productsToEmbed: Array<{ product: ProcessedProduct; hash: string }> = [];
+    for (const product of products) {
+      const hash = this.computeProductHash(product);
+      if (this.productHashCache[product.id] !== hash) {
+        productsToEmbed.push({ product, hash });
+      }
+    }
+
+    if (productsToEmbed.length === 0) {
+      console.log('No product changes detected. Skipping embedding generation.');
+      return [];
+    }
+
+    console.log(`Generating embeddings for ${productsToEmbed.length} changed products (of ${products.length} total)...`);
+
+    for (let i = 0; i < productsToEmbed.length; i += batchSize) {
+      const batch = productsToEmbed.slice(i, i + batchSize);
       
       try {
         // Prepare texts for batch embedding
-        const texts = batch.map(product => this.createEmbeddingText(product));
+        const texts = batch.map(({ product }) => this.createEmbeddingText(product));
         
         // Generate embeddings in batch
         const response = await this.openai.embeddings.create({
@@ -60,7 +82,7 @@ export class EmbeddingsGenerator {
 
         // Process each embedding
         for (let j = 0; j < batch.length; j++) {
-          const product = batch[j];
+          const { product, hash } = batch[j];
           const embedding = response.data[j].embedding;
           
           vectors.push({
@@ -68,9 +90,12 @@ export class EmbeddingsGenerator {
             vector: embedding,
             payload: this.createPayload(product),
           });
+
+          // Update hash cache for this product
+          this.productHashCache[product.id] = hash;
         }
 
-        console.log(`Processed batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(products.length / batchSize)}`);
+        console.log(`Processed batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(productsToEmbed.length / batchSize)}`);
         
         // Rate limiting
         await this.delay(1000);
@@ -81,6 +106,7 @@ export class EmbeddingsGenerator {
     }
 
     console.log(`Generated ${vectors.length} embeddings`);
+    await this.saveHashCache();
     return vectors;
   }
 
@@ -210,6 +236,44 @@ export class EmbeddingsGenerator {
   clearCache(): void {
     this.embeddingCache.clear();
     console.log('Cleared embedding cache');
+  }
+
+  private computeProductHash(product: ProcessedProduct): string {
+    const toHash = JSON.stringify({
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      searchableText: product.searchableText,
+      features: product.features,
+      priceHints: product.variants?.map(v => v.price) || [],
+      tags: product.tags || [],
+      color: product.color,
+      material: product.material,
+      fit: product.fit,
+      occasion: product.occasion,
+      season: product.season,
+      style: product.style,
+    });
+    return crypto.createHash('sha256').update(toHash).digest('hex');
+  }
+
+  private async loadHashCache(): Promise<void> {
+    try {
+      await fs.mkdir(path.dirname(this.hashCachePath), { recursive: true });
+      const raw = await fs.readFile(this.hashCachePath, 'utf-8');
+      this.productHashCache = JSON.parse(raw);
+    } catch {
+      this.productHashCache = {};
+    }
+  }
+
+  private async saveHashCache(): Promise<void> {
+    try {
+      await fs.mkdir(path.dirname(this.hashCachePath), { recursive: true });
+      await fs.writeFile(this.hashCachePath, JSON.stringify(this.productHashCache, null, 2));
+    } catch (err) {
+      console.warn('Could not persist product hash cache:', err);
+    }
   }
 }
 

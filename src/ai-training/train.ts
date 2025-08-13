@@ -53,22 +53,26 @@ class TrainingPipeline {
       );
       await dataProcessor.saveProcessedData(processedDataPath);
 
-      // Step 3: Generate embeddings
-      console.log('\n🧮 Step 3: Generating embeddings...');
+      // Step 3: Generate embeddings (delta-aware)
+      console.log('\n🧮 Step 3: Generating embeddings (delta-aware)...');
       const vectors = await embeddingsGenerator.generateProductEmbeddings(processedProducts);
       this.stats.embeddingsGenerated = vectors.length;
-      console.log(`✅ Generated ${vectors.length} embeddings`);
+      console.log(`✅ Generated ${vectors.length} new/updated embeddings`);
 
       // Step 4: Initialize vector database
       console.log('\n💾 Step 4: Initializing vector database...');
       await vectorStore.initialize();
       console.log('✅ Vector database initialized');
 
-      // Step 5: Store embeddings in vector database
+      // Step 5: Store embeddings in vector database (skip if none)
       console.log('\n📦 Step 5: Storing embeddings...');
-      await vectorStore.upsertVectors(vectors);
-      this.stats.vectorsStored = vectors.length;
-      console.log(`✅ Stored ${vectors.length} vectors`);
+      if (vectors.length > 0) {
+        await vectorStore.upsertVectors(vectors);
+        this.stats.vectorsStored = vectors.length;
+        console.log(`✅ Stored ${vectors.length} vectors`);
+      } else {
+        console.log('ℹ️ No vectors to store (no changes detected)');
+      }
 
       // Step 6: Generate training knowledge base
       console.log('\n📚 Step 6: Generating knowledge base...');

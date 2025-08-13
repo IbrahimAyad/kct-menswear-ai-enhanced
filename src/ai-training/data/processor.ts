@@ -94,7 +94,7 @@ export class DataProcessor {
   private deduplicateProducts(products: any[]): any[] {
     const seen = new Set();
     return products.filter(product => {
-      const key = product.id || product.handle || product.title;
+      const key = (product.id || product.handle || product.title || '').toString().toLowerCase().trim();
       if (seen.has(key)) {
         return false;
       }
@@ -121,6 +121,7 @@ export class DataProcessor {
   private createSearchableText(product: Product): string {
     const parts = [
       product.title,
+      product.seo_title,
       product.description,
       product.body_html?.replace(/<[^>]*>/g, ''), // Strip HTML
       product.meta_description,
@@ -137,7 +138,7 @@ export class DataProcessor {
       product.care_instructions,
     ].filter(Boolean);
 
-    return parts.join(' ').toLowerCase();
+    return parts.join(' ').replace(/\s+/g, ' ').toLowerCase().trim();
   }
 
   private extractFeatures(product: Product): ProcessedProduct['features'] {
@@ -213,6 +214,10 @@ export class DataProcessor {
       'tan': 'brown',
       'beige': 'neutral',
       'cream': 'neutral',
+      'charcoal': 'gray',
+      'ivory': 'neutral',
+      'wine': 'red',
+      'maroon': 'red',
     };
 
     const text = (product.color || product.title || '').toLowerCase();

@@ -96,7 +96,7 @@ export class VectorStore {
   async upsertVectors(vectors: VectorPoint[]): Promise<void> {
     try {
       const points = vectors.map((vector, index) => ({
-        id: index,
+        id: vector.id || index,
         vector: vector.vector,
         payload: vector.payload,
       }));
