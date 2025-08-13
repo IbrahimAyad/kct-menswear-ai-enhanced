@@ -231,6 +231,13 @@ export async function unifiedSearch(
   // Convert individual products to unified format
   const unifiedIndividual = individualProducts.map(supabaseProductToUnified);
   
+  // console.log('UnifiedSearch - converting products:', {
+  //   bundles: unifiedBundles.length,
+  //   individual: unifiedIndividual.length,
+  //   core: unifiedCoreProducts.length,
+  //   filters: filters
+  // });
+  
   // Combine based on filter preferences
   // Default behavior: include both bundles and individual products
   if (filters.includeBundles === undefined && filters.includeIndividual === undefined) {
@@ -248,8 +255,12 @@ export async function unifiedSearch(
     }
   }
   
+  // console.log('Before filters - total results:', results.length);
+  
   // Apply filters
   results = applyFilters(results, filters);
+  
+  // console.log('After filters - total results:', results.length);
   
   // Apply sorting
   results = applySorting(results, filters.sortBy);

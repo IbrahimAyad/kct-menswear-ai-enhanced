@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const filterConfig: SmartFilterConfig = body;
     
-    console.log('Smart filter request:', filterConfig);
+    // console.log('Smart filter request:', filterConfig);
     
     // Step 1: Fetch all available products
     const supabase = await createClient();
@@ -41,6 +41,12 @@ export async function POST(request: NextRequest) {
         
         const { data, error } = await query;
         
+        // console.log('Supabase query result:', { 
+        //   dataCount: data?.length, 
+        //   error: error?.message,
+        //   hasData: !!data 
+        // });
+        
         if (!error && data) {
           // Map to unified format
           individualProducts = data.map((product: any) => {
@@ -60,9 +66,10 @@ export async function POST(request: NextRequest) {
             
             return {
               id: product.id,
-              title: product.name,
+              title: product.name,  // Use 'title' for compatibility with supabaseProductToUnified
+              name: product.name,
               description: product.description,
-              price: displayPrice,
+              price: displayPrice,  // Keep as string for supabaseProductToUnified
               category: product.product_type || product.category || 'uncategorized',
               product_type: product.product_type,
               sku: product.sku,
@@ -70,6 +77,9 @@ export async function POST(request: NextRequest) {
               tags: product.tags || [],
               available: totalInventory > 0,
               inventory_quantity: totalInventory,
+              images: product.product_images?.map((img: any) => ({ 
+                src: img.image_url 
+              })) || [],  // Format images for supabaseProductToUnified
               featured_image: primaryImage ? { src: primaryImage.image_url } : null,
               vendor: product.vendor,
               sizes: product.additional_info?.sizes_available?.split(', ') || [],
@@ -77,6 +87,8 @@ export async function POST(request: NextRequest) {
               fit: product.additional_info?.fit_type
             };
           });
+          
+          // console.log('Mapped individual products:', individualProducts.length);
         }
       } catch (error) {
         console.error('Error fetching products from Supabase:', error);
@@ -84,10 +96,12 @@ export async function POST(request: NextRequest) {
     }
     
     // Step 2: Get unified products (including bundles and core products)
-    const unifiedResults = await unifiedSearch({}, individualProducts);
+    // console.log('Before unifiedSearch - individual products:', individualProducts.length);
+    // Pass a high limit to get all products, not just the first page
+    const unifiedResults = await unifiedSearch({ limit: 1000 }, individualProducts);
     const allProducts = unifiedResults.products;
     
-    console.log(`Processing ${allProducts.length} total products`);
+    // console.log(`After unifiedSearch - total products: ${allProducts.length} (${individualProducts.length} individual + bundles)`);
     
     // Step 3: Apply smart filtering
     const filterResults = await smartFilterEngine.applySmartFilters(
@@ -95,7 +109,7 @@ export async function POST(request: NextRequest) {
       filterConfig
     );
     
-    console.log(`Smart filter returned ${filterResults.products.length} products`);
+    // console.log(`Smart filter returned ${filterResults.products.length} products`);
     
     // Step 4: Enhance response with additional data
     const response = {
