@@ -8,6 +8,9 @@
 /* Chat mobile styles */
 @import '../styles/chat-mobile.css';
 
+/* Enhanced Bundle Carousel Styles */
+@import '../styles/enhanced-bundle-carousel.css';
+
 /* Custom Scrollbar Styles for Style Swiper */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;

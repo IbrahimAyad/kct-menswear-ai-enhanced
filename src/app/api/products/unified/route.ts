@@ -70,7 +70,9 @@ export async function GET(request: NextRequest) {
                 stripe_active
               )
             `)
-            .limit(100); // Limit to prevent timeout
+            .not('stripe_price_id', 'is', null)
+            .not('stripe_price_id', 'eq', '')
+            .limit(500); // Increased limit - only get products with Stripe IDs
           
           // Apply basic filters to reduce data transfer
           if (filters.category?.length) {

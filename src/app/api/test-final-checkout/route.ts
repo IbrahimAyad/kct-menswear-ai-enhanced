@@ -54,14 +54,25 @@ export async function GET(request: NextRequest) {
     
     const allHaveStripePriceId = lineItems.every(item => item.price);
     
-    // Test 4: Check overall statistics
-    const { data: stats } = await supabase
+    // Test 4: Check overall statistics (FIXED: Get actual count, not limited data)
+    const { count: totalCount } = await supabase
       .from('product_variants')
-      .select('stripe_price_id, stripe_active');
+      .select('*', { count: 'exact', head: true });
     
-    const totalVariants = stats?.length || 0;
-    const withStripeId = stats?.filter(v => v.stripe_price_id)?.length || 0;
-    const activeStripe = stats?.filter(v => v.stripe_active)?.length || 0;
+    const { count: withStripeCount } = await supabase
+      .from('product_variants')
+      .select('*', { count: 'exact', head: true })
+      .not('stripe_price_id', 'is', null)
+      .not('stripe_price_id', 'eq', '');
+    
+    const { count: activeCount } = await supabase
+      .from('product_variants')
+      .select('*', { count: 'exact', head: true })
+      .eq('stripe_active', true);
+    
+    const totalVariants = totalCount || 0;
+    const withStripeId = withStripeCount || 0;
+    const activeStripe = activeCount || 0;
     
     // Test 5: Sample 10 products to check their readiness
     const { data: sampleProducts } = await supabase
