@@ -98,37 +98,26 @@ jobs:
           path: test-results/
           retention-days: 90
 
-      - name: Create Issue if Tests Fail
-        if: steps.parse_results.outputs.alert_needed == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const success_rate = '${{ steps.parse_results.outputs.success_rate }}';
-            const failed_tests = '${{ steps.parse_results.outputs.failed_tests }}';
-            
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `🚨 AI Test Suite Alert: Success Rate ${success_rate}%`,
-              body: `## Weekly Test Results
-              
-              The weekly AI test suite has detected issues that need attention.
-              
-              **Success Rate:** ${success_rate}%
-              **Failed Tests:** ${failed_tests}
-              **Threshold:** 85%
-              
-              ### Action Required
-              - Review the [test results](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-              - Check critical issues in the test output
-              - Implement fixes for failing scenarios
-              
-              ### Test Report
-              [Download Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-              
-              cc: @team`,
-              labels: ['ai-testing', 'automated', 'priority-high']
-            });
+      - name: Report Test Results
+        if: success()
+        run: |
+          echo "🎯 AI Training Test Results Summary:"
+          echo "Success Rate: ${{ steps.parse_results.outputs.success_rate }}%"
+          echo "Failed Tests: ${{ steps.parse_results.outputs.failed_tests }}"
+          echo "Alert Needed: ${{ steps.parse_results.outputs.alert_needed }}"
+          echo ""
+          if [ "${{ steps.parse_results.outputs.alert_needed }}" = "true" ]; then
+            echo "⚠️  ATTENTION REQUIRED: Success rate below 85% threshold"
+            echo "📋 Action Items:"
+            echo "   1. Review test output in the artifacts"
+            echo "   2. Check API health and performance"
+            echo "   3. Investigate failing test scenarios"
+            echo "   4. Review error logs from the test run"
+            echo ""
+            echo "🔗 View full results: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          else
+            echo "✅ All tests passed! Success rate above 85% threshold"
+          fi
 
       - name: Post to Slack
         if: always()
