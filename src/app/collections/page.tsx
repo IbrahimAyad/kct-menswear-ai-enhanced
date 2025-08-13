@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import { useUnifiedShop } from '@/hooks/useUnifiedShop';
 import { MasterCollectionPage } from '@/components/collections/MasterCollectionPage';
 import { UnifiedProduct } from '@/types/unified-shop';
@@ -88,7 +88,7 @@ function mapUnifiedProductToCollectionProduct(unifiedProduct: UnifiedProduct) {
   };
 }
 
-export default function CollectionsPage() {
+function CollectionsContent() {
   // Fetch products from API using the unified shop hook
   const { products: unifiedProducts, loading, error, facets } = useUnifiedShop({
     autoFetch: true,
@@ -151,5 +151,20 @@ export default function CollectionsPage() {
       products={mappedProducts}
       heroImage="https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/hero-collection.webp"
     />
+  );
+}
+
+export default function CollectionsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-burgundy mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading collections...</p>
+        </div>
+      </div>
+    }>
+      <CollectionsContent />
+    </Suspense>
   );
 }
