@@ -35,11 +35,16 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Run Weekly Test Suite
+      - name: Run Live API Training
         id: run_tests
+        env:
+          CHAT_API_URL: ${{ secrets.CHAT_API_URL }}
+          CHAT_API_KEY: ${{ secrets.CHAT_API_KEY }}
+          RUN_LIVE_TESTS: true
         run: |
-          echo "🚀 Starting Weekly AI Test Suite"
-          node run-weekly-tests.js > test-output.txt 2>&1
+          echo "🚀 Starting Live AI Training Suite"
+          echo "Testing API: $CHAT_API_URL"
+          node run-live-training.js > test-output.txt 2>&1
           echo "test_exit_code=$?" >> $GITHUB_OUTPUT
           
       - name: Parse Test Results

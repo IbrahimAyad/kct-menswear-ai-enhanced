@@ -1,6 +1,7 @@
 import { getProduct } from '@/lib/supabase/products';
 import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import { UnifiedProduct } from '@/types/unified-shop';
+import { getCoreProductById, getAllCoreProducts } from '@/lib/config/coreProducts';
 
 // Demo products for V2 system testing
 const demoProducts: UnifiedProduct[] = [
@@ -78,10 +79,31 @@ const demoProducts: UnifiedProduct[] = [
 ];
 
 /**
- * Get a unified product by ID or slug - checks demo products, bundles, and Supabase products
+ * Get a unified product by ID or slug - checks core products, demo products, bundles, and Supabase products
  */
 export async function getUnifiedProduct(idOrSlug: string): Promise<UnifiedProduct | null> {
-  // First, check if it's a demo product
+  // First, check if it's a core product
+  const coreProduct = getCoreProductById(idOrSlug);
+  if (coreProduct) {
+    return {
+      id: coreProduct.id,
+      sku: coreProduct.id,
+      type: 'individual',
+      name: coreProduct.name,
+      description: coreProduct.description || `Premium ${coreProduct.name} from our core collection`,
+      imageUrl: coreProduct.image || '/placeholder-product.svg',
+      images: coreProduct.image ? [coreProduct.image] : ['/placeholder-product.svg'],
+      price: coreProduct.price / 100, // Convert cents to dollars
+      category: coreProduct.category,
+      stripePriceId: coreProduct.stripe_price_id,
+      occasions: ['business', 'formal', 'wedding'],
+      tags: [coreProduct.category, 'core', 'premium'],
+      inStock: true,
+      stockLevel: 100
+    };
+  }
+
+  // Then, check if it's a demo product
   const demoProduct = demoProducts.find(p => p.id === idOrSlug);
   if (demoProduct) {
     return demoProduct;
@@ -193,11 +215,36 @@ export async function getRelatedUnifiedProducts(
 ): Promise<UnifiedProduct[]> {
   const relatedProducts: UnifiedProduct[] = [];
   
-  // Get related demo products first
+  // Get related core products first
   if (category) {
+    const coreProducts = getAllCoreProducts();
+    const relatedCoreProducts = coreProducts
+      .filter(p => p.category === category && p.id !== productId)
+      .slice(0, limit)
+      .map(coreProduct => ({
+        id: coreProduct.id,
+        sku: coreProduct.id,
+        type: 'individual' as const,
+        name: coreProduct.name,
+        description: coreProduct.description || `Premium ${coreProduct.name}`,
+        imageUrl: coreProduct.image || '/placeholder-product.svg',
+        images: coreProduct.image ? [coreProduct.image] : ['/placeholder-product.svg'],
+        price: coreProduct.price / 100,
+        category: coreProduct.category,
+        stripePriceId: coreProduct.stripe_price_id,
+        occasions: ['business', 'formal', 'wedding'],
+        tags: [coreProduct.category, 'core', 'premium'],
+        inStock: true,
+        stockLevel: 100
+      }));
+    relatedProducts.push(...relatedCoreProducts);
+  }
+  
+  // If we need more, get related demo products
+  if (relatedProducts.length < limit && category) {
     const relatedDemoProducts = demoProducts
       .filter(p => p.category === category && p.id !== productId)
-      .slice(0, limit);
+      .slice(0, limit - relatedProducts.length);
     relatedProducts.push(...relatedDemoProducts);
   }
   
