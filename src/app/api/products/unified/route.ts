@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
         if (!supabase) {
           console.error('Supabase client is null - check environment variables');
         } else {
-          // Build Supabase query based on filters - include product images
+          // Build Supabase query based on filters - include product images and variants
           let query = supabase
             .from('products')
             .select(`
@@ -56,6 +56,18 @@ export async function GET(request: NextRequest) {
                 alt_text,
                 position,
                 image_type
+              ),
+              product_variants (
+                id,
+                product_id,
+                name,
+                sku,
+                price,
+                inventory_count,
+                status,
+                stripe_price_id,
+                stripe_product_id,
+                stripe_active
               )
             `)
             .limit(100); // Limit to prevent timeout
@@ -107,11 +119,21 @@ export async function GET(request: NextRequest) {
                   (a.position || 999) - (b.position || 999)
                 ).map((img: any) => ({ src: img.image_url })) || [];
                 
+                // Get first variant's Stripe price ID (or from any available variant)
+                const firstVariant = product.product_variants?.[0];
+                const stripePriceId = firstVariant?.stripe_price_id || null;
+                const stripeActive = firstVariant?.stripe_active || false;
+                
+                // Use variant price if available, otherwise base price
+                const displayPrice = firstVariant?.price 
+                  ? (firstVariant.price / 100).toString() 
+                  : (product.base_price / 100).toString();
+                
                 return {
                   id: product.id,
                   title: product.name, // Map name to title
                   description: product.description,
-                  price: (product.base_price / 100).toString(), // Convert cents to dollars as string
+                  price: displayPrice, // Use variant price if available
                   compare_at_price: null, // Not available in current schema
                   category: product.category,
                   product_type: product.product_type,
@@ -127,7 +149,11 @@ export async function GET(request: NextRequest) {
                   sizes: product.additional_info?.sizes_available?.split(', ') || [],
                   material: product.additional_info?.material,
                   fit: product.additional_info?.fit_type,
-                  ai_score: 80 + Math.floor(Math.random() * 20) // Generate AI score
+                  ai_score: 80 + Math.floor(Math.random() * 20), // Generate AI score
+                  // Add Stripe integration data
+                  stripePriceId: stripePriceId,
+                  stripeActive: stripeActive,
+                  variants: product.product_variants || []
                 };
               });
               console.log(`Fetched and mapped ${individualProducts.length} products from Supabase`);
