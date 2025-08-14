@@ -9,6 +9,7 @@ import HomeCollectionGrid from "@/components/home/HomeCollectionGrid";
 import { EnhancedDarkBundleCarousel } from "@/components/home/EnhancedDarkBundleCarousel";
 import TrustIndicators from "@/components/home/TrustIndicators";
 import TrendingNowSection from "@/components/home/TrendingNowSection";
+import AnimatedHeroSection from "@/components/home/AnimatedHeroSection";
 import { VelocityGrid } from "@/components/home/VelocityGrid";
 import { InteractiveStyleEnvironments } from "@/components/home/InteractiveStyleEnvironments";
 import { ServiceJourneyVisualization } from "@/components/home/ServiceJourneyVisualization";
@@ -211,61 +212,8 @@ export default function ModernHomePage() {
 
   return (
     <>
-      {/* Hero Section with Full Screen Design */}
-      <section className="relative h-screen w-full overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <div className="w-full h-full relative">
-            <img 
-              src="/KCT-Home-Banner-Update.jpg"
-              alt="KCT Menswear Premium Collection"
-              className="w-full h-full object-cover object-[25%_center] md:object-center scale-105 transition-transform duration-700 hover:scale-100"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/60" />
-          </div>
-        </div>
-
-        <div className="relative z-10 flex items-center justify-center h-full">
-          <div className="text-center text-white px-4 max-w-5xl mx-auto">
-            <div className="space-y-2 mb-8 animate-fade-up">
-              <div className="h-px w-24 bg-gold mx-auto"></div>
-              <p className="text-gold text-sm tracking-[0.3em] uppercase">Excellence in Every Stitch</p>
-              <div className="h-px w-24 bg-gold mx-auto"></div>
-            </div>
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-serif font-bold mb-6 animate-fade-up tracking-tight leading-[0.9]" style={{ animationDelay: '0.2s' }}>
-              Elevate Your
-              <span className="block text-gold">Style</span>
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-12 font-light animate-fade-up max-w-3xl mx-auto leading-relaxed text-gray-100" style={{ animationDelay: '0.4s' }}>
-              Premium men's formal wear crafted with uncompromising attention to detail
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-up" style={{ animationDelay: '0.6s' }}>
-              <Link href="/products">
-                <Button size="lg" className="group bg-burgundy hover:bg-burgundy-700 text-white px-8 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                  Shop Collection
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-2" />
-                </Button>
-              </Link>
-              <Link href="/style-swiper-r2">
-                <Button size="lg" variant="outline" className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm text-white border-purple-400/50 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white px-8 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="relative z-10 flex items-center">
-                    Style Profile Atelier AI
-                    <Sparkles className="ml-2 h-5 w-5 animate-pulse" />
-                  </div>
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-xs tracking-widest uppercase">Scroll</span>
-            <div className="w-px h-12 bg-white/50"></div>
-          </div>
-        </div>
-      </section>
+      {/* Animated Hero Section with Mobile Optimization */}
+      <AnimatedHeroSection />
 
       {/* Trust Indicators - Build confidence immediately after hero */}
       <TrustIndicators />
