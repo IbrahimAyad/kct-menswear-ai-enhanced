@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
 import { motion, PanInfo } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Heart, X, Sparkles, Zap, ShoppingBag } from 'lucide-react';
 import { StyleSwiperImage, SwipeAnalytics } from '@/lib/types';
@@ -45,40 +45,51 @@ export function SimpleStyleSwiper({
 }: SimpleStyleSwiperProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [likedImages, setLikedImages] = useState<StyleSwiperImage[]>([]);
-  const [removedCards, setRemovedCards] = useState<Set<number>>(new Set());
+  const [isAnimating, setIsAnimating] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Filter images by category
-  const images = category === 'all' 
-    ? DEMO_IMAGES 
-    : DEMO_IMAGES.filter(img => img.category === category);
+  // Memoize filtered images to prevent recalculation on every render
+  const images = useMemo(() => {
+    return category === 'all' 
+      ? DEMO_IMAGES 
+      : DEMO_IMAGES.filter(img => img.category === category);
+  }, [category]);
   
   const currentImage = images[currentIndex];
   const progress = images.length > 0 ? ((currentIndex + 1) / images.length) * 100 : 0;
   
   const handleCardRemoval = useCallback((direction: 'left' | 'right') => {
-    if (!currentImage) return;
+    if (!currentImage || isAnimating) return;
     
-    // Mark card as removed
-    setRemovedCards(prev => new Set(prev).add(currentIndex));
+    setIsAnimating(true);
     
-    // Handle like
+    // Handle like immediately to avoid stale closure
+    const newLikedImages = direction === 'right' 
+      ? [...likedImages, currentImage] 
+      : likedImages;
+    
     if (direction === 'right') {
-      setLikedImages(prev => [...prev, currentImage]);
+      setLikedImages(newLikedImages);
     }
     
     // Call parent handler
     onSwipe?.(currentImage, direction);
     
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
     // Move to next card after animation
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       if (currentIndex >= images.length - 1) {
         // Complete
         onComplete?.(
-          direction === 'right' ? [...likedImages, currentImage] : likedImages,
+          newLikedImages,
           {
             totalSwipes: currentIndex + 1,
-            leftSwipes: currentIndex + 1 - likedImages.length,
-            rightSwipes: likedImages.length,
+            leftSwipes: currentIndex + 1 - newLikedImages.length,
+            rightSwipes: newLikedImages.length,
             averageSwipeTime: 0,
             swipeVelocities: [],
             undoCount: 0,
@@ -87,13 +98,14 @@ export function SimpleStyleSwiper({
         );
       } else {
         setCurrentIndex(prev => prev + 1);
-        setRemovedCards(new Set()); // Clear removed cards for clean state
       }
-    }, 300);
-  }, [currentIndex, currentImage, images.length, likedImages, onSwipe, onComplete]);
+      setIsAnimating(false);
+      timeoutRef.current = null;
+    }, 200); // Reduced timeout for snappier response
+  }, [currentIndex, currentImage, images.length, likedImages, onSwipe, onComplete, isAnimating]);
   
-  const handleDragEnd = (event: any, info: PanInfo, index: number) => {
-    if (index !== currentIndex || removedCards.has(index)) return;
+  const handleDragEnd = useCallback((event: any, info: PanInfo, index: number) => {
+    if (index !== currentIndex || isAnimating) return;
     
     const threshold = 100;
     const offset = info.offset.x;
@@ -101,17 +113,35 @@ export function SimpleStyleSwiper({
     if (Math.abs(offset) > threshold) {
       handleCardRemoval(offset > 0 ? 'right' : 'left');
     }
-  };
+  }, [currentIndex, isAnimating, handleCardRemoval]);
   
-  const handleUndo = () => {
-    if (currentIndex > 0) {
+  const handleUndo = useCallback(() => {
+    if (currentIndex > 0 && !isAnimating) {
+      // Clear any pending timeouts
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      
       setCurrentIndex(prev => prev - 1);
       if (likedImages[likedImages.length - 1]?.id === images[currentIndex - 1]?.id) {
         setLikedImages(prev => prev.slice(0, -1));
       }
-      setRemovedCards(new Set());
     }
-  };
+  }, [currentIndex, isAnimating, likedImages, images]);
+  
+  // Cleanup timeout on unmount
+  const cleanupTimeout = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
+  
+  // Cleanup effect
+  useEffect(() => {
+    return cleanupTimeout;
+  }, [cleanupTimeout]);
   
   if (!currentImage) {
     return (
@@ -147,13 +177,12 @@ export function SimpleStyleSwiper({
         </div>
       </div>
 
-      {/* Card Stack - Simple approach */}
+      {/* Card Stack - Optimized approach */}
       <div className="relative h-[600px]" style={{ perspective: 1000 }}>
-        {/* Show only current and next card */}
+        {/* Show only current and next card for better performance */}
         {images.slice(currentIndex, currentIndex + 2).map((image, index) => {
           const isTop = index === 0;
           const cardIndex = currentIndex + index;
-          const isRemoved = removedCards.has(cardIndex);
           
           return (
             <motion.div
@@ -168,30 +197,31 @@ export function SimpleStyleSwiper({
               }}
               initial={false}
               animate={
-                isRemoved
-                  ? { 
-                      x: 0,
-                      opacity: 0,
-                      scale: 0.8
-                    }
-                  : isTop
+                isTop
                   ? { 
                       scale: 1,
                       y: 0,
-                      opacity: 1
+                      opacity: 1,
+                      x: 0
                     }
                   : { 
                       scale: 0.95,
                       y: 20,
-                      opacity: 0.5
+                      opacity: 0.5,
+                      x: 0
                     }
               }
-              drag={isTop && !isRemoved ? "x" : false}
+              drag={isTop && !isAnimating ? "x" : false}
               dragConstraints={{ left: -300, right: 300 }}
               dragElastic={0.5}
               onDragEnd={(e, info) => handleDragEnd(e, info, cardIndex)}
-              whileDrag={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              whileDrag={isTop ? { scale: 1.02 } : {}}
+              transition={{ 
+                type: "spring", 
+                stiffness: 300, 
+                damping: 30,
+                mass: 0.8 // Lighter feel for better responsiveness
+              }}
             >
               <div className="relative h-full rounded-3xl overflow-hidden bg-white border border-gold-200">
                 <img
@@ -199,6 +229,8 @@ export function SimpleStyleSwiper({
                   alt={`Style ${cardIndex + 1}`}
                   className="w-full h-full object-cover"
                   draggable={false}
+                  loading={isTop ? "eager" : "lazy"}
+                  decoding="async"
                 />
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -235,42 +267,54 @@ export function SimpleStyleSwiper({
       <div className="absolute -bottom-8 left-0 right-0 flex justify-center items-center gap-6">
         <button
           onClick={handleUndo}
-          disabled={currentIndex === 0}
+          disabled={currentIndex === 0 || isAnimating}
           className={cn(
-            "w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center",
-            currentIndex === 0 ? "opacity-50" : "hover:scale-110"
+            "w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center transition-all duration-200",
+            currentIndex === 0 || isAnimating ? "opacity-50 cursor-not-allowed" : "hover:scale-110 active:scale-95"
           )}
         >
           <ChevronLeft className="w-6 h-6 text-burgundy" />
         </button>
 
         <button
-          onClick={() => handleCardRemoval('left')}
-          className="w-18 h-18 rounded-full bg-white shadow-2xl flex items-center justify-center hover:scale-110"
+          onClick={() => !isAnimating && handleCardRemoval('left')}
+          disabled={isAnimating}
+          className={cn(
+            "w-18 h-18 rounded-full bg-white shadow-2xl flex items-center justify-center transition-all duration-200",
+            isAnimating ? "opacity-50 cursor-not-allowed" : "hover:scale-110 active:scale-95"
+          )}
         >
           <X className="w-8 h-8 text-red-500" />
         </button>
 
         <button
-          onClick={() => handleCardRemoval('right')}
-          className="w-16 h-16 rounded-full bg-gradient-to-br from-gold-400 to-burgundy-500 shadow-2xl flex items-center justify-center hover:scale-110"
+          onClick={() => !isAnimating && handleCardRemoval('right')}
+          disabled={isAnimating}
+          className={cn(
+            "w-16 h-16 rounded-full bg-gradient-to-br from-gold-400 to-burgundy-500 shadow-2xl flex items-center justify-center transition-all duration-200",
+            isAnimating ? "opacity-50 cursor-not-allowed" : "hover:scale-110 active:scale-95"
+          )}
         >
           <Zap className="w-7 h-7 text-white" />
         </button>
 
         <button
-          onClick={() => handleCardRemoval('right')}
-          className="w-18 h-18 rounded-full bg-white shadow-2xl flex items-center justify-center hover:scale-110"
+          onClick={() => !isAnimating && handleCardRemoval('right')}
+          disabled={isAnimating}
+          className={cn(
+            "w-18 h-18 rounded-full bg-white shadow-2xl flex items-center justify-center transition-all duration-200",
+            isAnimating ? "opacity-50 cursor-not-allowed" : "hover:scale-110 active:scale-95"
+          )}
         >
           <Heart className="w-8 h-8 text-green-500" />
         </button>
 
         <button
-          onClick={() => setCurrentIndex(Math.min(images.length - 1, currentIndex + 1))}
-          disabled={currentIndex >= images.length - 1}
+          onClick={() => !isAnimating && setCurrentIndex(Math.min(images.length - 1, currentIndex + 1))}
+          disabled={currentIndex >= images.length - 1 || isAnimating}
           className={cn(
-            "w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center",
-            currentIndex >= images.length - 1 ? "opacity-50" : "hover:scale-110"
+            "w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center transition-all duration-200",
+            currentIndex >= images.length - 1 || isAnimating ? "opacity-50 cursor-not-allowed" : "hover:scale-110 active:scale-95"
           )}
         >
           <ChevronRight className="w-6 h-6 text-burgundy" />

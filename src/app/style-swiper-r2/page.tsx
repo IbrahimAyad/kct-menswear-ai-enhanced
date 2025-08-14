@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { SimpleStyleSwiper } from '@/components/style/SimpleStyleSwiper';
 import { StyleSwiperImage, SwipeAnalytics } from '@/lib/types';
-import { ArrowLeft, Sparkles, Upload, Trophy, Target, Zap, Heart, TrendingUp, Award, Crown, Star } from 'lucide-react';
+import { ArrowLeft, Sparkles, Upload, Trophy, Target, Zap, Heart, TrendingUp, Award, Crown, Star, Ruler } from 'lucide-react';
 import Link from 'next/link';
+import { EnhancedSizeBot } from '@/components/sizing/EnhancedSizeBot';
+import { motion } from 'framer-motion';
 
 const CATEGORIES = [
   { value: 'all', label: 'All Styles' },
@@ -23,6 +25,8 @@ export default function StyleSwiperR2Page() {
   const [achievements, setAchievements] = useState<string[]>([]);
   const [dailyStreak, setDailyStreak] = useState(1);
   const [completedProfiles, setCompletedProfiles] = useState<any[]>([]);
+  const [showSizeBot, setShowSizeBot] = useState(false);
+  const [userSize, setUserSize] = useState<any>(null);
 
   const handleSwipe = (image: StyleSwiperImage, direction: 'left' | 'right', velocity?: number) => {
     // Update swipe data
@@ -189,6 +193,58 @@ export default function StyleSwiperR2Page() {
 
           {/* Premium Analytics & Features */}
           <div className="space-y-8">
+            {/* AI Size Finder Card */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-gradient-to-br from-burgundy/10 via-white to-gold/10 rounded-3xl shadow-2xl p-8 border border-gold-200 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-burgundy/20 to-transparent rounded-full blur-3xl"></div>
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-2xl font-serif mb-2 text-black-800 flex items-center gap-2">
+                      <Ruler className="w-6 h-6 text-burgundy" />
+                      AI Size Finder
+                    </h3>
+                    <p className="text-gray-600 text-sm">Get your perfect fit with our AI-powered sizing technology</p>
+                  </div>
+                  {userSize && (
+                    <div className="text-center bg-white rounded-lg p-2 shadow-sm border border-gold-200">
+                      <p className="text-xs text-gray-500">Your Size</p>
+                      <p className="text-2xl font-bold text-burgundy">{userSize.primarySize}</p>
+                    </div>
+                  )}
+                </div>
+                
+                <button
+                  onClick={() => setShowSizeBot(true)}
+                  className="w-full bg-gradient-to-r from-burgundy to-burgundy-700 hover:from-burgundy-700 hover:to-burgundy-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3"
+                >
+                  <Sparkles className="w-5 h-5" />
+                  {userSize ? 'Update My Size' : 'Find My Perfect Size'}
+                  <Sparkles className="w-5 h-5" />
+                </button>
+                
+                {userSize && (
+                  <div className="mt-4 p-3 bg-white/70 rounded-lg border border-gold-200">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-600">Confidence</span>
+                      <span className="font-semibold text-burgundy">{Math.round((userSize.confidence || 0.9) * 100)}%</span>
+                    </div>
+                    <div className="mt-2 w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(userSize.confidence || 0.9) * 100}%` }}
+                        transition={{ duration: 1, ease: "easeOut" }}
+                        className="h-full bg-gradient-to-r from-burgundy to-gold"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+
             {/* Style Profile Progress */}
             <div className="bg-gradient-to-br from-white via-gold-50 to-white rounded-3xl shadow-2xl p-8 border border-gold-100 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-burgundy via-gold to-burgundy"></div>
@@ -440,6 +496,18 @@ export default function StyleSwiperR2Page() {
           </div>
         )}
       </div>
+
+      {/* Enhanced Size Bot Modal */}
+      {showSizeBot && (
+        <EnhancedSizeBot
+          onClose={() => setShowSizeBot(false)}
+          onSizeSelected={(recommendation) => {
+            setUserSize(recommendation);
+            setShowSizeBot(false);
+          }}
+          productType="suit"
+        />
+      )}
     </div>
   );
 }
