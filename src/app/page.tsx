@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, ShoppingBag, Sparkles, TrendingUp, Package, Zap, Brain } from "lucide-react";
+import { ArrowRight, Calendar, ShoppingBag, Sparkles, TrendingUp, Package, Zap, Brain, Check } from "lucide-react";
 import Link from "next/link";
 import { ModernBundleCard } from "@/components/home/ModernBundleCard";
 import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
@@ -312,6 +312,47 @@ export default function ModernHomePage() {
 
           {/* Interactive Style Environments Component */}
           <InteractiveStyleEnvironments categories={styleCategories} />
+          
+          {/* CTA Section - Shop All Products */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mt-16 text-center"
+          >
+            <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-8 md:p-10">
+              <h3 className="text-2xl md:text-3xl font-serif mb-4">
+                Can't Decide? Explore Everything
+              </h3>
+              <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+                Browse our complete collection of suits, shirts, ties, and accessories. 
+                Find exactly what you're looking for with advanced filters and sorting.
+              </p>
+              <Link href="/products">
+                <Button 
+                  size="lg" 
+                  className="bg-burgundy hover:bg-burgundy-700 text-white px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                >
+                  Shop All Products
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <div className="flex items-center justify-center gap-6 mt-6 text-sm text-gray-600">
+                <span className="flex items-center gap-1">
+                  <Check className="h-4 w-4 text-green-600" />
+                  39+ Products
+                </span>
+                <span className="flex items-center gap-1">
+                  <Check className="h-4 w-4 text-green-600" />
+                  Advanced Filters
+                </span>
+                <span className="flex items-center gap-1">
+                  <Check className="h-4 w-4 text-green-600" />
+                  Bundle Deals
+                </span>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
