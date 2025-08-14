@@ -5,7 +5,7 @@ import { ArrowRight, Calendar, ShoppingBag, Sparkles, TrendingUp, Package, Zap, 
 import Link from "next/link";
 import { ModernBundleCard } from "@/components/home/ModernBundleCard";
 import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
-import { ShopByStyleGrid } from "@/components/home/ShopByStyleGrid";
+import HomeCollectionGrid from "@/components/home/HomeCollectionGrid";
 import { EnhancedDarkBundleCarousel } from "@/components/home/EnhancedDarkBundleCarousel";
 import { VelocityGrid } from "@/components/home/VelocityGrid";
 import { InteractiveStyleEnvironments } from "@/components/home/InteractiveStyleEnvironments";
@@ -265,8 +265,8 @@ export default function ModernHomePage() {
         </div>
       </section>
 
-      {/* Shop by Style Grid - Category Selection */}
-      <ShopByStyleGrid />
+      {/* Shop by Category Grid - Updated Collection Layout */}
+      <HomeCollectionGrid />
 
       {/* Build Your Perfect Ensemble - Moved up after Shop by Style */}
       <section className="py-8 bg-gradient-to-br from-gray-50 to-white">
