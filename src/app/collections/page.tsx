@@ -1,149 +1,193 @@
-import { Suspense } from 'react';
-import { DynamicMasterCollectionClient } from '@/components/collections/DynamicMasterCollectionClient';
-import { Metadata } from 'next';
+'use client';
 
-// SEO Metadata for the collections page
-export const metadata: Metadata = {
-  title: 'Master Collection | KCT Menswear - Premium Men\'s Formal Wear',
-  description: 'Discover KCT Menswear\'s complete collection of premium suits, dress shirts, accessories, and formal wear. Precision-tailored pieces in timeless colors for every occasion.',
-  keywords: [
-    'men\'s suits',
-    'formal wear',
-    'dress shirts',
-    'wedding suits',
-    'prom suits',
-    'business attire',
-    'menswear collection',
-    'tailored suits',
-    'formal accessories',
-    'men\'s fashion'
-  ],
-  openGraph: {
-    title: 'Master Collection | KCT Menswear',
-    description: 'Premium men\'s formal wear collection featuring suits, shirts, and accessories for every occasion.',
-    images: [
-      {
-        url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/hero-collection.webp',
-        width: 1200,
-        height: 630,
-        alt: 'KCT Menswear Master Collection'
-      }
-    ],
-    type: 'website'
+import { Suspense, useMemo } from 'react';
+import { useUnifiedShop } from '@/hooks/useUnifiedShop';
+import { MasterCollectionPage } from '@/components/collections/MasterCollectionPage';
+import { UnifiedProduct } from '@/types/unified-shop';
+
+// All categories with updated images and dynamic counts
+const allCategories = [
+  {
+    id: 'suits',
+    name: 'Suits',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
+    count: 0, // Will be updated dynamically
+    description: 'Complete suit collections'
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Master Collection | KCT Menswear',
-    description: 'Premium men\'s formal wear collection featuring suits, shirts, and accessories for every occasion.',
-    images: ['https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/hero-collection.webp']
+  {
+    id: 'shirts',
+    name: 'Shirts',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
+    count: 0,
+    description: 'Dress shirts and casual shirts'
   },
-  alternates: {
-    canonical: 'https://kctmenswear.com/collections'
+  {
+    id: 'vest',
+    name: 'Vests',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
+    count: 0,
+    description: 'Formal and casual vests'
+  },
+  {
+    id: 'jackets',
+    name: 'Jackets',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp',
+    count: 0,
+    description: 'Blazers and sport coats'
+  },
+  {
+    id: 'pants',
+    name: 'Shirt & Tie',
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/dd5c1f7d-722d-4e17-00be-60a3fdb33900/public',
+    count: 0,
+    description: 'Dress pants and trousers'
+  },
+  {
+    id: 'knitwear',
+    name: 'Knitwear',
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/9ac91a19-5951-43d4-6a98-c9d658765c00/public',
+    count: 0,
+    description: 'Sweaters and knit tops'
+  },
+  {
+    id: 'accessories',
+    name: 'Accessories',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
+    count: 0,
+    description: 'Ties, belts, and more'
+  },
+  {
+    id: 'shoes',
+    name: 'Shoes',
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/7d203d2a-63b7-46d3-9749-1f203e4ccc00/public',
+    count: 0,
+    description: 'Dress shoes and boots'
   }
-};
+];
 
 function CollectionsContent() {
+  const { products, loading, error } = useUnifiedShop();
+
+  // Calculate category counts
+  const categoriesWithCounts = useMemo(() => {
+    if (!products) return allCategories;
+    
+    return allCategories.map(category => {
+      const count = products.filter(product => {
+        const productCategory = product.category?.toLowerCase() || '';
+        const categoryId = category.id.toLowerCase();
+        
+        // Match logic for different categories
+        if (categoryId === 'suits') {
+          return productCategory.includes('suit') || 
+                 productCategory.includes('tuxedo') ||
+                 productCategory.includes('blazer');
+        }
+        if (categoryId === 'shirts') {
+          return productCategory.includes('shirt');
+        }
+        if (categoryId === 'vest') {
+          return productCategory.includes('vest');
+        }
+        if (categoryId === 'jackets') {
+          return productCategory.includes('jacket') || 
+                 productCategory.includes('blazer') ||
+                 productCategory.includes('coat');
+        }
+        if (categoryId === 'pants') {
+          return productCategory.includes('pant') || 
+                 productCategory.includes('trouser');
+        }
+        if (categoryId === 'knitwear') {
+          return productCategory.includes('knit') || 
+                 productCategory.includes('sweater') ||
+                 productCategory.includes('cardigan');
+        }
+        if (categoryId === 'accessories') {
+          return productCategory.includes('tie') || 
+                 productCategory.includes('bow') ||
+                 productCategory.includes('belt') ||
+                 productCategory.includes('suspender') ||
+                 productCategory.includes('pocket') ||
+                 productCategory.includes('cufflink');
+        }
+        if (categoryId === 'shoes') {
+          return productCategory.includes('shoe') || 
+                 productCategory.includes('boot');
+        }
+        
+        return false;
+      }).length;
+      
+      return { ...category, count };
+    });
+  }, [products]);
+
+  // Transform products for MasterCollectionPage
+  const transformedProducts = useMemo(() => {
+    if (!products) return [];
+    
+    return products.map((product: UnifiedProduct) => ({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.price > 100 ? product.price * 1.2 : undefined,
+      image: product.image,
+      hoverImage: product.additionalImages?.[0],
+      category: product.category?.toLowerCase().includes('suit') ? 'suits' :
+                product.category?.toLowerCase().includes('shirt') ? 'shirts' :
+                product.category?.toLowerCase().includes('vest') ? 'vest' :
+                product.category?.toLowerCase().includes('jacket') || product.category?.toLowerCase().includes('blazer') ? 'jackets' :
+                product.category?.toLowerCase().includes('pant') ? 'pants' :
+                product.category?.toLowerCase().includes('knit') || product.category?.toLowerCase().includes('sweater') ? 'knitwear' :
+                product.category?.toLowerCase().includes('tie') || product.category?.toLowerCase().includes('belt') ? 'accessories' :
+                product.category?.toLowerCase().includes('shoe') ? 'shoes' : 'other',
+      tags: product.tags || [],
+      isNew: product.tags?.includes('new-arrival'),
+      isSale: product.tags?.includes('sale')
+    }));
+  }, [products]);
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Oops! Something went wrong</h2>
+          <p className="text-gray-600">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <DynamicMasterCollectionClient
+    <MasterCollectionPage
       title="Master Collection"
       subtitle="COMPLETE MENSWEAR"
-      description="Precision-tailored pieces in timeless colors enhance every part of a man's wardrobe. Discover our curated selection of premium suits, dress shirts, and accessories."
+      description="Precision-tailored pieces in timeless colors enhance every part of a man's wardrobe"
+      categories={categoriesWithCounts}
+      products={transformedProducts}
       heroImage="https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/hero-collection.webp"
-      showHero={true}
-      enablePresets={true}
-      defaultViewMode="grid-4"
     />
   );
 }
 
 export default function CollectionsPage() {
   return (
-    <>
-      {/* Structured Data for SEO */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            "name": "Master Collection - KCT Menswear",
-            "description": "Premium men's formal wear collection featuring suits, shirts, and accessories for every occasion.",
-            "url": "https://kctmenswear.com/collections",
-            "image": "https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/hero-collection.webp",
-            "mainEntity": {
-              "@type": "ItemList",
-              "name": "Men's Formal Wear Collection",
-              "description": "Complete collection of premium menswear including suits, dress shirts, accessories, and formal wear.",
-              "numberOfItems": "500+",
-              "itemListElement": [
-                {
-                  "@type": "Product",
-                  "name": "Men's Suits",
-                  "description": "Premium tailored suits for business, wedding, and formal occasions",
-                  "category": "Suits"
-                },
-                {
-                  "@type": "Product", 
-                  "name": "Dress Shirts",
-                  "description": "Classic and modern dress shirts in various fits and colors",
-                  "category": "Shirts"
-                },
-                {
-                  "@type": "Product",
-                  "name": "Formal Accessories",
-                  "description": "Ties, bowties, pocket squares, and other formal accessories",
-                  "category": "Accessories"
-                }
-              ]
-            },
-            "breadcrumb": {
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  "position": 1,
-                  "name": "Home",
-                  "item": "https://kctmenswear.com"
-                },
-                {
-                  "@type": "ListItem",
-                  "position": 2,
-                  "name": "Collections",
-                  "item": "https://kctmenswear.com/collections"
-                }
-              ]
-            },
-            "provider": {
-              "@type": "Organization",
-              "name": "KCT Menswear",
-              "url": "https://kctmenswear.com",
-              "logo": "https://kctmenswear.com/logo.png"
-            }
-          })
-        }}
-      />
-
-      <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
-          <div className="text-center">
-            <div className="relative mb-8">
-              <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-burgundy mx-auto"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-6 h-6 bg-burgundy rounded-full animate-pulse"></div>
-              </div>
-            </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading Master Collection</h2>
-            <p className="text-gray-600 animate-pulse">Curating the perfect pieces for you...</p>
-            <div className="mt-4 flex justify-center space-x-1">
-              <div className="w-2 h-2 bg-burgundy rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-burgundy rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-              <div className="w-2 h-2 bg-burgundy rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
+        <div className="text-center">
+          <div className="relative mb-8">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200 border-t-burgundy mx-auto"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-6 h-6 bg-burgundy rounded-full animate-pulse"></div>
             </div>
           </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading Collections</h2>
+          <p className="text-gray-600 animate-pulse">Preparing your shopping experience...</p>
         </div>
-      }>
-        <CollectionsContent />
-      </Suspense>
-    </>
+      </div>
+    }>
+      <CollectionsContent />
+    </Suspense>
   );
 }
