@@ -14,7 +14,7 @@ const homeCollections = [
   {
     id: 'suits',
     name: 'Suits',
-    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/d4e7c1ed-3f3f-4b8f-3892-e0bbeb2d8f00/public',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
     href: '/collections?category=suits',
     count: 0,
     gradient: 'from-gray-100 to-gray-200'
@@ -22,7 +22,7 @@ const homeCollections = [
   {
     id: 'shirts',
     name: 'Shirts',
-    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/9d5c1f7d-722d-4e17-00be-60a3fdb33900/public',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
     href: '/collections?category=shirts',
     count: 0,
     gradient: 'from-blue-50 to-blue-100'
@@ -46,7 +46,7 @@ const homeCollections = [
   {
     id: 'pants',
     name: 'Pants',
-    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/8b7c1ed-4f5f-5b9f-4892-f0cbeb3d9f00/public',
+    image: 'https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/dd5c1f7d-722d-4e17-00be-60a3fdb33900/public',
     href: '/collections?category=pants',
     count: 0,
     gradient: 'from-slate-100 to-slate-200'
@@ -80,7 +80,7 @@ const homeCollections = [
   {
     id: 'velvet-blazers',
     name: 'Velvet Blazers',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_velvet_blazer_2025_1060.webp',
+    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
     href: '/collections?tags=velvet,blazer',
     count: 0,
     gradient: 'from-emerald-50 to-emerald-100'
