@@ -16,39 +16,39 @@ interface SmartTip {
 const DEFAULT_TIPS: SmartTip[] = [
   {
     id: 'welcome',
-    message: "👋 Welcome! I'm your AI style assistant. Swipe right on styles you love!",
+    message: "Welcome! I'm Atelier AI, your personal style curator. Swipe right on styles you love!",
     type: 'tip',
-    duration: 5000
+    duration: 6000
   },
   {
     id: 'first-like',
-    message: "Great choice! Your style profile is taking shape 🎨",
+    message: "Excellent taste! I'm learning your style preferences 🎨",
     type: 'compliment',
-    duration: 3000
-  },
-  {
-    id: 'style-match',
-    message: "I've noticed you prefer classic styles. Want to see more? 👔",
-    type: 'insight',
     duration: 4000
   },
   {
+    id: 'style-match',
+    message: "Based on your choices, you prefer classic elegance. Shall I curate more? 👔",
+    type: 'insight',
+    duration: 5000
+  },
+  {
     id: 'size-reminder',
-    message: "Don't forget to use our AI Size Finder for the perfect fit! ✨",
+    message: "Pro tip: Use my AI Size Finder for a guaranteed perfect fit ✨",
     type: 'suggestion',
     duration: 4000
   },
   {
     id: 'trending',
-    message: "This style is trending this season! 🔥",
+    message: "This piece is trending among style leaders this season 🔥",
     type: 'tip',
-    duration: 3000
+    duration: 3500
   },
   {
     id: 'achievement',
-    message: "🏆 Style Explorer! You've discovered 10 new looks!",
+    message: "🏆 Achievement Unlocked: Style Explorer! 10 looks discovered!",
     type: 'celebration',
-    duration: 4000
+    duration: 5000
   }
 ];
 
@@ -187,23 +187,35 @@ export function SmartTips({
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           className={`fixed z-50 ${getPositionClasses(currentTip.position)}`}
         >
-          <div className={`${getTypeStyles(currentTip.type)} rounded-2xl shadow-2xl px-4 py-3 sm:px-5 sm:py-4 max-w-xs sm:max-w-sm flex items-start gap-3`}>
-            <div className="flex-shrink-0 mt-0.5">
-              {currentTip.icon || getIcon(currentTip.type)}
+          <div className={`${getTypeStyles(currentTip.type)} rounded-2xl shadow-2xl max-w-xs sm:max-w-sm overflow-hidden`}>
+            {/* Atelier AI Header */}
+            <div className="bg-black/20 px-4 py-2 border-b border-white/20">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-6 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
+                  <Sparkles className="w-3.5 h-3.5 text-white" />
+                </div>
+                <span className="text-xs font-semibold text-white/90 tracking-wide">ATELIER AI</span>
+                <button
+                  onClick={hideTip}
+                  className="ml-auto hover:opacity-80 transition-opacity"
+                  aria-label="Dismiss notification"
+                >
+                  <X className="w-3.5 h-3.5 text-white/80" />
+                </button>
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="text-sm sm:text-base font-medium leading-relaxed">
-                {currentTip.message}
-              </p>
+            
+            {/* Message Content */}
+            <div className="px-4 py-3 sm:px-5 sm:py-4 flex items-start gap-3">
+              <div className="flex-shrink-0 mt-0.5">
+                {currentTip.icon || getIcon(currentTip.type)}
+              </div>
+              <div className="flex-1">
+                <p className="text-sm sm:text-base font-medium leading-relaxed">
+                  {currentTip.message}
+                </p>
+              </div>
             </div>
-            <button
-              onClick={hideTip}
-              className="flex-shrink-0 hover:opacity-80 transition-opacity"
-              aria-label="Dismiss tip"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
           
           {/* Subtle animation indicator */}
           <motion.div
@@ -236,40 +248,49 @@ export function useSmartTips() {
   }): SmartTip | null => {
     const { action, item, userPreferences, timeOfDay } = context;
     
-    // Generate tips based on context
+    // Generate AI-powered contextual tips
     if (action === 'view-product' && item?.price > 500) {
       return {
         id: `premium-${Date.now()}`,
-        message: "This is one of our premium pieces. Financing options available! 💳",
+        message: "I've identified this as an investment piece. Premium quality with timeless appeal 💎",
         type: 'suggestion',
-        duration: 4000
+        duration: 5000
       };
     }
     
     if (action === 'add-to-cart') {
       return {
         id: `cart-${Date.now()}`,
-        message: "Great addition! Complete the look with matching accessories 🎩",
+        message: "Smart choice! I can suggest complementary pieces to complete this look 🎩",
         type: 'suggestion',
-        duration: 3500
+        duration: 4000
       };
     }
     
     if (timeOfDay === 'evening') {
       return {
         id: `evening-${Date.now()}`,
-        message: "Shopping for an evening event? Check our formal collection ✨",
+        message: "Based on the time, I recommend our evening formal collection ✨",
         type: 'tip',
-        duration: 4000
+        duration: 4500
       };
     }
     
     if (userPreferences?.favoriteColor && item?.color === userPreferences.favoriteColor) {
       return {
         id: `color-match-${Date.now()}`,
-        message: `This ${item.color} perfectly matches your style preference! 🎨`,
+        message: `My analysis shows ${item.color} aligns perfectly with your style DNA 🎨`,
         type: 'insight',
-        duration: 3500
+        duration: 4000
+      };
+    }
+    
+    if (action === 'multiple-likes') {
+      return {
+        id: `pattern-${Date.now()}`,
+        message: "I'm noticing a pattern in your preferences. Calibrating recommendations... 🎯",
+        type: 'insight',
+        duration: 4500
       };
     }
     
