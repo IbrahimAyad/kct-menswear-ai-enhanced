@@ -41,8 +41,9 @@ export default function AnimatedHeroSection() {
             <motion.div
               className="w-full h-full"
               animate={{
-                scale: [1, 1.1, 1.05, 1],
-                x: [0, -20, 10, 0],
+                scale: [1, 1.05, 1.02, 1],
+                x: [0, -10, 5, 0],
+                y: [0, -10, 0, 0],
               }}
               transition={{
                 duration: 20,
@@ -55,8 +56,8 @@ export default function AnimatedHeroSection() {
                 alt="KCT Menswear Premium Collection"
                 className="w-full h-full object-cover"
                 style={{
-                  objectPosition: '50% 20%', // Center the model's face on mobile
-                  scale: '1.2' // Slight zoom to focus on model
+                  objectPosition: '50% 30%', // Show more of the model's torso
+                  scale: '1.0' // No zoom to show full model
                 }}
               />
             </motion.div>
@@ -69,11 +70,11 @@ export default function AnimatedHeroSection() {
           )}
           
           {/* Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/70 md:from-black/60 md:via-black/30 md:to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/60 md:from-black/50 md:via-black/20 md:to-black/50" />
           
           {/* Mobile-specific gradient for better text readability */}
           {isMobile && (
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
           )}
         </div>
       </motion.div>
