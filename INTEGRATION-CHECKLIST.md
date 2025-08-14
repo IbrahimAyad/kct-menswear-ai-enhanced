@@ -42,7 +42,10 @@ products {
 product_variants {
   id: UUID
   product_id: UUID           -- Links to products.id
-  size: string              -- S, M, L, XL, 2XL, 3XL, etc.
+  title: string             -- Variant title/name
+  option1: string           -- SIZE IS STORED HERE! (36R, 38R, etc. for suits)
+  option2: string           -- Additional option (color, etc.)
+  option3: string           -- Additional option
   sku: string               -- Unique SKU
   price: integer            -- In cents (override base_price if different)
   stripe_price_id: string   -- Stripe Price ID (100% populated!)
@@ -67,6 +70,12 @@ product_variants {
 | Products with Stripe IDs | 100% | ✅ |
 | Product Images | 280 | ✅ |
 | Active Products | 274 | ✅ |
+
+### 🔴 IMPORTANT: Suit Sizes
+- **Current:** Suits have Regular (R) sizes only: 36R-54R
+- **Size is in `option1` field**, not a separate `size` column
+- **Missing:** Short (S) and Long (L) lengths
+- Each suit has ~10 size variants + 1 "Default Size" variant
 
 ---
 
@@ -107,21 +116,53 @@ SELECT * FROM products
 WHERE handle = 'navy-blue-2-piece-suit' 
   AND status = 'active';
 
--- Get all variants for the product
+-- Get all variants for the product (SIZE IS IN option1!)
 SELECT * FROM product_variants
 WHERE product_id = 'product-uuid-here'
   AND stripe_active = true
   AND inventory_quantity > 0
 ORDER BY
-  CASE size
-    WHEN 'XS' THEN 1
-    WHEN 'S' THEN 2
-    WHEN 'M' THEN 3
-    WHEN 'L' THEN 4
-    WHEN 'XL' THEN 5
-    WHEN '2XL' THEN 6
-    WHEN '3XL' THEN 7
-    ELSE 8
+  CASE option1
+    -- Suit sizes (chest size + length)
+    WHEN '36S' THEN 1
+    WHEN '36R' THEN 2
+    WHEN '36L' THEN 3
+    WHEN '38S' THEN 4
+    WHEN '38R' THEN 5
+    WHEN '38L' THEN 6
+    WHEN '40S' THEN 7
+    WHEN '40R' THEN 8
+    WHEN '40L' THEN 9
+    WHEN '42S' THEN 10
+    WHEN '42R' THEN 11
+    WHEN '42L' THEN 12
+    WHEN '44S' THEN 13
+    WHEN '44R' THEN 14
+    WHEN '44L' THEN 15
+    WHEN '46S' THEN 16
+    WHEN '46R' THEN 17
+    WHEN '46L' THEN 18
+    WHEN '48S' THEN 19
+    WHEN '48R' THEN 20
+    WHEN '48L' THEN 21
+    WHEN '50S' THEN 22
+    WHEN '50R' THEN 23
+    WHEN '50L' THEN 24
+    WHEN '52S' THEN 25
+    WHEN '52R' THEN 26
+    WHEN '52L' THEN 27
+    WHEN '54S' THEN 28
+    WHEN '54R' THEN 29
+    WHEN '54L' THEN 30
+    -- Regular sizes (S, M, L, XL, etc.)
+    WHEN 'XS' THEN 31
+    WHEN 'S' THEN 32
+    WHEN 'M' THEN 33
+    WHEN 'L' THEN 34
+    WHEN 'XL' THEN 35
+    WHEN '2XL' THEN 36
+    WHEN '3XL' THEN 37
+    ELSE 99
   END;
 ```
 
