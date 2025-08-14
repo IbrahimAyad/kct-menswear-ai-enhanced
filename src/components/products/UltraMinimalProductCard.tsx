@@ -96,11 +96,11 @@ export default function UltraMinimalProductCard({
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
         {/* Product Info - Minimal, overlaid on image */}
-        <div className="absolute bottom-0 left-0 right-0 p-3">
-          <h3 className="text-white text-sm font-medium line-clamp-1 mb-0.5">
+        <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
+          <h3 className="text-white text-xs sm:text-sm font-medium line-clamp-1 mb-0.5">
             {product.name || product.title}
           </h3>
-          <p className="text-white text-base font-semibold">
+          <p className="text-white text-sm sm:text-base font-semibold">
             {formatPrice(product.price)}
           </p>
         </div>
@@ -130,10 +130,10 @@ export default function UltraMinimalProductCard({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute bottom-16 right-3"
+                className="absolute bottom-12 sm:bottom-16 right-2 sm:right-3"
               >
                 <motion.div
-                  className="bg-white/30 backdrop-blur-sm rounded-full p-1"
+                  className="bg-white/30 backdrop-blur-sm rounded-full p-0.5 sm:p-1"
                   animate={{
                     scale: [1, 1.2, 1],
                     opacity: [0.5, 1, 0.5]
@@ -144,7 +144,7 @@ export default function UltraMinimalProductCard({
                     repeatDelay: 3
                   }}
                 >
-                  <Plus className="w-3 h-3 text-white" />
+                  <Plus className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
                 </motion.div>
               </motion.div>
             )}
