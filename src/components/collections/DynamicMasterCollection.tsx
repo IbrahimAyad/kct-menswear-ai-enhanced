@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUnifiedShop } from '@/hooks/useUnifiedShop';
 import { DynamicFilterPanel } from './DynamicFilterPanel';
-import { ResponsiveProductGrid } from './ResponsiveProductGrid';
+import MinimalResponsiveProductGrid from './MinimalResponsiveProductGrid';
 import { UnifiedProduct, UnifiedProductFilters } from '@/types/unified-shop';
 import { Button } from '@/components/ui/button';
 import { 
@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-type ViewMode = 'grid-3' | 'grid-4' | 'list';
+type ViewMode = 'grid-2' | 'grid-3' | 'grid-4';
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'newest' | 'name' | 'trending';
 
 interface DynamicMasterCollectionProps {
@@ -407,10 +407,10 @@ export function DynamicMasterCollection({
 
         {/* Product Grid */}
         <main className="flex-1">
-          <ResponsiveProductGrid
+          <MinimalResponsiveProductGrid
             products={products}
             loading={loading}
-            viewMode={viewMode}
+            viewMode={viewMode === 'list' ? 'grid-3' : viewMode}
             onLoadMore={() => updateFilters({ 
               page: (filters.page || 1) + 1 
             })}
@@ -421,6 +421,7 @@ export function DynamicMasterCollection({
               actionText: "Clear Filters",
               onAction: resetFilters
             }}
+            mobileGrid="3x3"
           />
         </main>
       </div>

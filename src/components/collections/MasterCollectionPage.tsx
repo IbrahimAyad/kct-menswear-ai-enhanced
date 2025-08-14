@@ -18,6 +18,8 @@ import {
   Grid3X3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import UltraMinimalProductCard from '@/components/products/UltraMinimalProductCard';
+import ProductQuickView from '@/components/products/ProductQuickView';
 
 interface Category {
   id: string;
@@ -307,7 +309,7 @@ export function MasterCollectionPage({
       </AnimatePresence>
 
       {/* Products Grid - Minimal design matching reference */}
-      <section className="px-1 md:px-6 lg:px-8 py-2 md:py-6">
+      <section className="px-2 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedCategory}
@@ -315,79 +317,25 @@ export function MasterCollectionPage({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-3 md:grid-cols-4 gap-1 md:gap-3"
+            className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4"
           >
             {filteredProducts.slice(0, visibleProducts).map((product, index) => (
               <motion.div
                 key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.02 }}
-                className="group relative"
-                onMouseEnter={() => setHoveredProduct(product.id)}
-                onMouseLeave={() => setHoveredProduct(null)}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.02, duration: 0.3 }}
               >
-                <Link href={`/products/${product.id}`} className="block">
-                  <div className="relative overflow-hidden bg-gray-50 rounded-lg aspect-[3/4]">
-                    {/* Product Image */}
-                    <Image
-                      src={hoveredProduct === product.id && product.hoverImage 
-                        ? product.hoverImage 
-                        : product.image}
-                      alt={product.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 33vw, 25vw"
-                      priority={index < 8}
-                      loading={index < 8 ? 'eager' : 'lazy'}
-                    />
-                    
-                    {/* Product Info Overlay - Bottom left like reference */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 md:p-4">
-                      <h3 className="text-white font-medium text-xs md:text-base line-clamp-1">
-                        {product.name}
-                      </h3>
-                      <div className="flex items-center gap-1 md:gap-2 mt-0.5">
-                        <span className="text-white font-semibold text-xs md:text-lg">
-                          ${product.price}
-                        </span>
-                        {product.originalPrice && (
-                          <span className="text-white/70 line-through text-[10px] md:text-sm">
-                            ${product.originalPrice}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Quick View button - Top right, minimal */}
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setSelectedProduct(product);
-                      }}
-                      className="absolute top-2 right-2 bg-white/90 backdrop-blur text-xs px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-white"
-                      aria-label="Quick view"
-                    >
-                      Quick View
-                    </button>
-
-                    {/* Sale/New Badge - Top left */}
-                    {(product.isSale || product.isNew) && (
-                      <div className="absolute top-2 left-2 flex flex-col gap-1">
-                        {product.isNew && (
-                          <span className="bg-black text-white px-2 py-0.5 text-[10px] md:text-xs font-medium rounded">
-                            NEW
-                          </span>
-                        )}
-                        {product.isSale && (
-                          <span className="bg-red-500 text-white px-2 py-0.5 text-[10px] md:text-xs font-medium rounded">
-                            SALE
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </Link>
+                <UltraMinimalProductCard
+                  product={{
+                    ...product,
+                    imageUrl: product.image,
+                    primary_image: product.image,
+                    images: product.hoverImage ? [{ src: product.hoverImage }] : [],
+                    available: true
+                  }}
+                  onQuickView={(p) => setSelectedProduct(p)}
+                />
               </motion.div>
             ))}
           </motion.div>
@@ -407,90 +355,26 @@ export function MasterCollectionPage({
         )}
       </section>
 
-      {/* Quick View Modal - Minimal design */}
-      <AnimatePresence>
-        {selectedProduct && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => setSelectedProduct(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: 'spring', damping: 25 }}
-              className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="grid md:grid-cols-2">
-                <div className="relative aspect-[3/4] bg-gray-50">
-                  <Image
-                    src={selectedProduct.image}
-                    alt={selectedProduct.name}
-                    fill
-                    className="object-cover"
-                  />
-                  <button
-                    onClick={() => setSelectedProduct(null)}
-                    className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur rounded-full hover:bg-white transition-all"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-                <div className="p-6 md:p-8">
-                  <h2 className="text-2xl font-semibold mb-2">{selectedProduct.name}</h2>
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="text-3xl font-bold">${selectedProduct.price}</span>
-                    {selectedProduct.originalPrice && (
-                      <span className="text-xl text-gray-500 line-through">
-                        ${selectedProduct.originalPrice}
-                      </span>
-                    )}
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-medium mb-2 text-sm text-gray-600">CATEGORY</h3>
-                      <p className="capitalize">{selectedProduct.category}</p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="font-medium mb-2 text-sm text-gray-600">TAGS</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedProduct.tags.map(tag => (
-                          <span key={tag} className="px-3 py-1 bg-gray-100 rounded-full text-sm">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div className="flex gap-3 pt-4">
-                      <Button className="flex-1 bg-black hover:bg-gray-900">
-                        <ShoppingBag className="w-4 h-4 mr-2" />
-                        Add to Cart
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className="border-gray-300"
-                        onClick={() => toggleLike(selectedProduct.id)}
-                      >
-                        <Heart className={cn(
-                          "w-4 h-4",
-                          likedProducts.has(selectedProduct.id) && "fill-red-500 text-red-500"
-                        )} />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Quick View Modal - Using new ProductQuickView component */}
+      <ProductQuickView
+        product={selectedProduct}
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        onNavigate={(direction) => {
+          if (!selectedProduct) return;
+          const currentIndex = filteredProducts.findIndex(p => p.id === selectedProduct.id);
+          let newIndex = currentIndex;
+          
+          if (direction === 'prev') {
+            newIndex = currentIndex > 0 ? currentIndex - 1 : filteredProducts.length - 1;
+          } else {
+            newIndex = currentIndex < filteredProducts.length - 1 ? currentIndex + 1 : 0;
+          }
+          
+          setSelectedProduct(filteredProducts[newIndex]);
+        }}
+        isMobile={isMobile}
+      />
     </div>
   );
 }
