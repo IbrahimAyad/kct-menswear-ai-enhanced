@@ -7,28 +7,28 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-// Product data using temp-images from public folder
+// Product data using R2 CDN images for better performance
 const productRotations = {
   suits: [
-    { color: 'Navy', image: '/placeholder-suit.jpg', fallbackColor: '#1e3a8a' },
-    { color: 'Black', image: '/temp-images/black-suit.png', fallbackColor: '#000000' },
-    { color: 'Light Grey', image: '/temp-images/light-grey-main.jpeg', fallbackColor: '#d1d5db' },
-    { color: 'Sand', image: '/temp-images/sand-suit.jpg', fallbackColor: '#d4b896' },
-    { color: 'Emerald', image: '/temp-images/emerlad-suit.jpg', fallbackColor: '#50c878' },
+    { color: 'Navy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg', fallbackColor: '#1e3a8a' },
+    { color: 'Black', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png', fallbackColor: '#000000' },
+    { color: 'Light Grey', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg', fallbackColor: '#d1d5db' },
+    { color: 'Burgundy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/two-peice-main-bur.jpg', fallbackColor: '#800020' },
+    { color: 'Emerald', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerlad/emerlad-main.jpg', fallbackColor: '#50c878' },
   ],
   shirts: [
-    { color: 'White', image: '/temp-images/shirt1.jpg', fallbackColor: '#ffffff' },
-    { color: 'Light Blue', image: '/temp-images/french-blue-main.webp', fallbackColor: '#93c5fd' },
-    { color: 'Lavender', image: '/temp-images/Lavender-main.jpg', fallbackColor: '#ddd6fe' },
-    { color: 'Rust', image: '/temp-images/rust-main.jpg', fallbackColor: '#b7410e' },
-    { color: 'Classic', image: '/temp-images/shirt2.jpg', fallbackColor: '#f0f0f0' },
+    { color: 'White', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg', fallbackColor: '#ffffff' },
+    { color: 'Light Blue', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light-Blue-Dress-Shirt.jpg', fallbackColor: '#93c5fd' },
+    { color: 'Light Pink', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light%20Pink-Dress-Shirt.jpg', fallbackColor: '#FFB6C1' },
+    { color: 'Burgundy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Burgundy-Dress-Shirt.jpg', fallbackColor: '#800020' },
+    { color: 'Navy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Navy-Dress-Shirt.jpg', fallbackColor: '#000080' },
   ],
   ties: [
-    { color: 'True Red', image: '/temp-images/True-Red-main.webp', fallbackColor: '#c00000' },
-    { color: 'Turquoise', image: '/temp-images/Turquoise-mian.webp', fallbackColor: '#40e0d0' },
-    { color: 'Classic', image: '/placeholder-tie.jpg', fallbackColor: '#4b5563' },
-    { color: 'Pattern', image: '/temp-images/shirt4.jpg', fallbackColor: '#6b7280' },
-    { color: 'Elegant', image: '/temp-images/shirt5.jpg', fallbackColor: '#1f2937' },
+    { color: 'True Red', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/True-Red-main.webp', fallbackColor: '#c00000' },
+    { color: 'Navy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy.jpg', fallbackColor: '#000080' },
+    { color: 'Burgundy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg', fallbackColor: '#800020' },
+    { color: 'Black', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Black.png', fallbackColor: '#000000' },
+    { color: 'Gold', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/gold.jpg', fallbackColor: '#FFD700' },
   ],
 };
 
@@ -243,7 +243,7 @@ export function BuildYourLookShowcase() {
           transition={{ delay: 0.6 }}
           className="text-center"
         >
-          <Link href="/products/suits">
+          <Link href="/custom-suits">
             <Button 
               size="lg" 
               className="bg-burgundy hover:bg-burgundy-700 text-white px-10 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
