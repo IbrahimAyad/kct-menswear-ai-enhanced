@@ -85,7 +85,7 @@ export function BuildYourLookShowcase() {
       products: productRotations.shirts,
       currentIndex: currentIndices.shirts,
       priceRange: '$39 - $129',
-      href: '/collections/shirts',
+      href: '/collections/dress-shirts',
       order: 2,
     },
     {
