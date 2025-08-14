@@ -7,6 +7,7 @@ import { ArrowLeft, Sparkles, Upload, Trophy, Target, Zap, Heart, TrendingUp, Aw
 import Link from 'next/link';
 import { EnhancedSizeBot } from '@/components/sizing/EnhancedSizeBot';
 import { motion } from 'framer-motion';
+import { SmartTips } from '@/components/ai/SmartTips';
 
 const CATEGORIES = [
   { value: 'all', label: 'All Styles' },
@@ -27,6 +28,7 @@ export default function StyleSwiperR2Page() {
   const [completedProfiles, setCompletedProfiles] = useState<any[]>([]);
   const [showSizeBot, setShowSizeBot] = useState(false);
   const [userSize, setUserSize] = useState<any>(null);
+  const [likedImages, setLikedImages] = useState<string[]>([]);
 
   const handleSwipe = (image: StyleSwiperImage, direction: 'left' | 'right', velocity?: number) => {
     // Update swipe data
@@ -41,6 +43,7 @@ export default function StyleSwiperR2Page() {
     // Update style score for engagement gamification
     if (direction === 'right') {
       setStyleScore(prev => prev + 10);
+      setLikedImages(prev => [...prev, image.id]);
       
       // Check for achievements
       const newAchievements = [];
@@ -510,6 +513,15 @@ export default function StyleSwiperR2Page() {
           productType="suit"
         />
       )}
+
+      {/* Atelier AI Smart Tips */}
+      <SmartTips
+        pageContext="style-swiper"
+        swipeCount={swipeData.length}
+        likedItems={likedImages}
+        onTipShown={(tipId) => console.log('Tip shown:', tipId)}
+        onTipDismissed={(tipId) => console.log('Tip dismissed:', tipId)}
+      />
     </div>
   );
 }
