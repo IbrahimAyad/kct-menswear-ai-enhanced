@@ -3,20 +3,14 @@ import { createClient } from '@/lib/supabase/server';
 import { unifiedSearch } from '@/lib/services/unifiedSearchEngine';
 import { urlParamsToFilters } from '@/lib/utils/url-filters';
 import { getFilterPreset } from '@/lib/config/filter-presets';
-import { UnifiedProductFilters, UnifiedSearchResult } from '@/types/unified-shop';
 
 // Cache configuration
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-const cache = new Map<string, { data: UnifiedSearchResult; timestamp: number }>();
+const cache = new Map<string, { data: any; timestamp: number }>();
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    
-    // Log environment check for debugging
-    const hasSupabaseUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const hasSupabaseKey = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    console.log('Supabase env check:', { hasSupabaseUrl, hasSupabaseKey });
     
     // Generate cache key from search params
     const cacheKey = searchParams.toString();
@@ -46,39 +40,34 @@ export async function GET(request: NextRequest) {
         if (!supabase) {
           console.error('Supabase client is null - check environment variables');
         } else {
-          // Build Supabase query - properly join with product_variants for Stripe data
+          // Build Supabase query - properly join with product_variants
           let query = supabase
             .from('products')
             .select(`
               *,
-              primary_image,
-              product_images (
-                image_url,
-                alt_text,
-                position,
-                image_type
-              ),
               product_variants (
                 id,
                 title,
+                option1,
+                option2,
+                option3,
                 price,
                 inventory_quantity,
-                available
+                available,
+                stripe_price_id
               )
             `)
             .eq('visibility', true)
             .eq('status', 'active')
-            .limit(500); // Increased limit to get more products
+            .limit(500);
           
-          // Apply basic filters to reduce data transfer
+          // Apply basic filters
           if (filters.category?.length) {
-            // Convert categories to lowercase for case-insensitive matching
             const lowercaseCategories = filters.category.map(c => c.toLowerCase());
             query = query.in('product_type', lowercaseCategories);
           }
           
           if (filters.color?.length) {
-            // Simplified color filtering - search in name field
             const firstColor = filters.color[0];
             query = query.ilike('name', `%${firstColor}%`);
           }
@@ -91,111 +80,77 @@ export async function GET(request: NextRequest) {
             query = query.lte('base_price', filters.maxPrice * 100);
           }
           
-          // Execute query with timeout
-          const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Supabase timeout')), 5000)
-          );
+          const { data, error } = await query;
           
-          const queryPromise = query;
-          
-          try {
-            const { data, error } = await Promise.race([
-              queryPromise,
-              timeoutPromise
-            ]) as any;
+          if (error) {
+            console.error('Supabase query error:', error);
+          } else if (data) {
+            // Map Supabase products to unified format
+            individualProducts = data.map((product: any) => {
+              // Get primary image
+              const primaryImageUrl = product.primary_image || null;
+              
+              // Get first variant for pricing and availability
+              const firstVariant = product.product_variants?.[0];
+              const hasVariants = product.product_variants && product.product_variants.length > 0;
+              
+              // Calculate price (use variant price or base price)
+              const priceInCents = firstVariant?.price || product.base_price || 0;
+              const displayPrice = priceInCents / 100; // Convert cents to dollars
+              
+              // Get sizes from variants (option1 field)
+              const sizes = hasVariants 
+                ? product.product_variants
+                    .filter((v: any) => v.option1 && v.option1 !== 'Default Size')
+                    .map((v: any) => v.option1)
+                : [];
+              
+              // Calculate total inventory
+              const totalInventory = hasVariants
+                ? product.product_variants.reduce(
+                    (sum: number, v: any) => sum + (v.inventory_quantity || 0), 0
+                  )
+                : product.total_inventory || 0;
+              
+              return {
+                id: product.id,
+                name: product.name,
+                title: product.name,
+                description: product.description,
+                price: displayPrice,
+                category: product.category || 'uncategorized',
+                product_type: product.product_type,
+                primary_image: primaryImageUrl,
+                sku: product.sku,
+                handle: product.handle,
+                tags: Array.isArray(product.tags) ? product.tags.filter(Boolean) : [],
+                available: totalInventory > 0,
+                inventory_quantity: totalInventory,
+                featured_image: primaryImageUrl ? { src: primaryImageUrl } : null,
+                images: primaryImageUrl ? [{ src: primaryImageUrl }] : [],
+                vendor: product.vendor,
+                sizes: sizes,
+                // Stripe data from first variant
+                stripePriceId: firstVariant?.stripe_price_id || null,
+                stripeActive: firstVariant?.available || false,
+                variants: product.product_variants || [],
+                // Additional fields
+                ai_score: 80 + Math.floor(Math.random() * 20)
+              };
+            });
             
-            if (error) {
-              console.error('Supabase query error:', error);
-              console.error('Query details:', { filters, activePreset });
-            } else {
-              // Map raw Supabase products to expected format
-              individualProducts = (data || []).map((product: any) => {
-                // CRITICAL: Primary image is stored directly in products.primary_image field!
-                const primaryImageUrl = product.primary_image || null;
-                
-                // Get additional gallery images from product_images table if available
-                const galleryImages = product.product_images?.sort((a: any, b: any) => 
-                  (a.position || 999) - (b.position || 999)
-                ).map((img: any) => ({ src: img.image_url })) || [];
-                
-                // Combine primary image with gallery images
-                const allImages = primaryImageUrl 
-                  ? [{ src: primaryImageUrl }, ...galleryImages]
-                  : galleryImages;
-                
-                // Get first variant data
-                const firstVariant = product.product_variants?.[0];
-                const stripePriceId = product.stripe_price_id || null; // Use product-level stripe_price_id
-                const stripeActive = firstVariant?.available || false;
-                
-                // Calculate total inventory from all variants
-                const totalInventory = product.product_variants?.reduce(
-                  (sum: number, v: any) => sum + (v.inventory_quantity || 0), 0
-                ) || product.total_inventory || 0;
-                
-                // Use variant price or fallback to base price
-                const variantPrice = firstVariant?.price || product.base_price || 0;
-                const displayPrice = variantPrice > 1000 
-                  ? (variantPrice / 100).toString() 
-                  : variantPrice.toString();
-                
-                return {
-                  id: product.id,
-                  title: product.name, // Map name to title
-                  name: product.name, // Also include name
-                  description: product.description,
-                  price: displayPrice, // Use variant price if available
-                  compare_at_price: null, // Not available in current schema
-                  category: product.product_type || product.category || 'uncategorized', // Use product_type as category
-                  product_type: product.product_type,
-                  primary_image: primaryImageUrl, // Pass primary_image field directly
-                  sku: product.sku,
-                  handle: product.handle,
-                  tags: product.tags || [],
-                  meta_description: product.meta_description,
-                  available: totalInventory > 0,
-                  inventory_quantity: totalInventory,
-                  featured_image: primaryImageUrl ? { src: primaryImageUrl } : null,
-                  images: allImages,
-                  vendor: product.vendor,
-                  sizes: product.additional_info?.sizes_available?.split(', ') || [],
-                  material: product.additional_info?.material,
-                  fit: product.additional_info?.fit_type,
-                  ai_score: 80 + Math.floor(Math.random() * 20), // Generate AI score
-                  // Add Stripe integration data
-                  stripePriceId: stripePriceId,
-                  stripeActive: stripeActive,
-                  variants: product.product_variants || []
-                };
-              });
-              console.log(`Fetched and mapped ${individualProducts.length} products from Supabase`);
-              // Debug: Log sample products
-              if (individualProducts.length > 0) {
-                console.log('Sample Supabase product:', {
-                  id: individualProducts[0].id,
-                  title: individualProducts[0].title,
-                  category: individualProducts[0].category,
-                  product_type: individualProducts[0].product_type,
-                  price: individualProducts[0].price
-                });
-              }
-            }
-          } catch (timeoutError) {
-            console.error('Supabase query timeout - continuing with bundles only');
+            console.log(`Fetched ${individualProducts.length} products from Supabase`);
           }
         }
       } catch (error) {
-        console.error('Error fetching individual products:', error);
-        // Continue with just bundles
+        console.error('Error fetching Supabase products:', error);
       }
     }
     
-    // Perform unified search
-    console.log(`Calling unifiedSearch with ${individualProducts.length} individual products and filters:`, filters);
+    // Perform unified search with products
     const results = await unifiedSearch(filters, individualProducts);
-    console.log(`UnifiedSearch returned ${results.totalCount} total products`);
     
-    // Add preset metadata to results if applicable
+    // Add preset metadata if applicable
     if (presetData) {
       (results as any).presetMetadata = {
         name: presetData.name,
@@ -211,7 +166,7 @@ export async function GET(request: NextRequest) {
       timestamp: Date.now()
     });
     
-    // Clean old cache entries
+    // Clean old cache entries periodically
     if (cache.size > 100) {
       const entries = Array.from(cache.entries());
       const cutoff = Date.now() - CACHE_DURATION;
@@ -227,126 +182,26 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Unified products API error:', error);
     
-    // Return bundles only if Supabase fails (graceful degradation)
-    try {
-      const results = await unifiedSearch(filters, []);
-      return NextResponse.json({
-        ...results,
-        warning: 'Database connection issue - showing bundles only'
-      });
-    } catch (fallbackError) {
-      return NextResponse.json(
-        { 
-          error: 'Failed to fetch products',
-          message: error instanceof Error ? error.message : 'Unknown error',
-          products: [],
-          totalCount: 0,
-          filteredCount: 0,
-          facets: {
-            categories: [],
-            colors: [],
-            occasions: [],
-            priceRanges: [],
-            bundleTiers: []
-          },
-          pagination: {
-            currentPage: 1,
-            totalPages: 0,
-            hasNext: false,
-            hasPrev: false
-          }
-        },
-        { status: 500 }
-      );
-    }
-  }
-}
-
-// Metadata endpoint for filter options
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { type } = body;
-    
-    if (type === 'filter-options') {
-      // Return available filter options for UI
-      const supabase = await createClient();
-      
-      // Fetch distinct values for filters
-      const [categoriesResult, colorsResult, occasionsResult] = await Promise.all([
-        supabase.from('products').select('product_type').limit(1000),
-        supabase.from('products').select('tags').limit(1000),
-        supabase.from('products').select('tags').limit(1000)
-      ]);
-      
-      // Process categories
-      const categories = new Set<string>();
-      categoriesResult.data?.forEach(item => {
-        if (item.product_type) categories.add(item.product_type);
-      });
-      
-      // Process colors from tags
-      const colors = new Set<string>();
-      const colorKeywords = ['black', 'navy', 'grey', 'blue', 'brown', 'burgundy', 'white', 'charcoal'];
-      colorsResult.data?.forEach(item => {
-        if (item.tags && Array.isArray(item.tags)) {
-          item.tags.forEach((tag: string) => {
-            const lowerTag = tag.toLowerCase();
-            colorKeywords.forEach(color => {
-              if (lowerTag.includes(color)) colors.add(color);
-            });
-          });
-        }
-      });
-      
-      // Process occasions from tags
-      const occasions = new Set<string>();
-      const occasionKeywords = ['wedding', 'business', 'formal', 'casual', 'prom', 'cocktail'];
-      occasionsResult.data?.forEach(item => {
-        if (item.tags && Array.isArray(item.tags)) {
-          item.tags.forEach((tag: string) => {
-            const lowerTag = tag.toLowerCase();
-            occasionKeywords.forEach(occasion => {
-              if (lowerTag.includes(occasion)) {
-                occasions.add(occasion.charAt(0).toUpperCase() + occasion.slice(1));
-              }
-            });
-          });
-        }
-      });
-      
-      // Get bundle-specific options
-      const bundleOptions = {
-        tiers: ['starter', 'professional', 'executive', 'premium'],
-        suitColors: ['black', 'navy', 'charcoal', 'grey', 'burgundy'],
-        shirtColors: ['white', 'light-blue', 'pink', 'cream'],
-        tieColors: ['burgundy', 'navy', 'black', 'gold', 'silver']
-      };
-      
-      return NextResponse.json({
-        categories: Array.from(categories),
-        colors: Array.from(colors),
-        occasions: Array.from(occasions),
-        bundleOptions,
-        materials: ['wool', 'cotton', 'linen', 'polyester', 'silk'],
-        fits: ['Classic', 'Slim', 'Modern', 'Athletic'],
-        sizes: ['36', '38', '40', '42', '44', '46', '48', '50', '52'],
-        priceRanges: [
-          { label: 'Under $200', min: 0, max: 200 },
-          { label: '$200-$300', min: 200, max: 300 },
-          { label: '$300-$500', min: 300, max: 500 },
-          { label: 'Over $500', min: 500, max: 10000 }
-        ]
-      });
-    }
-    
-    return NextResponse.json({ error: 'Invalid request type' }, { status: 400 });
-    
-  } catch (error) {
-    console.error('Filter options API error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch filter options' },
-      { status: 500 }
-    );
+    // Return empty results with error info
+    return NextResponse.json({
+      products: [],
+      totalCount: 0,
+      filteredCount: 0,
+      facets: {
+        categories: [],
+        colors: [],
+        occasions: [],
+        priceRanges: [],
+        bundleTiers: []
+      },
+      pagination: {
+        currentPage: 1,
+        totalPages: 0,
+        hasNext: false,
+        hasPrev: false
+      },
+      error: true,
+      message: error instanceof Error ? error.message : 'Failed to fetch products'
+    });
   }
 }
