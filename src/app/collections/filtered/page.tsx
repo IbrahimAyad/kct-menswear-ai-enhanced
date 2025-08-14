@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import DynamicMasterCollection from '@/components/collections/DynamicMasterCollection';
+import { DynamicMasterCollection } from '@/components/collections/DynamicMasterCollection';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
