@@ -216,16 +216,17 @@ export function SmartTips({
                 </p>
               </div>
             </div>
-          
-          {/* Subtle animation indicator */}
-          <motion.div
-            className="absolute -bottom-1 left-1/2 -translate-x-1/2"
-            initial={{ width: '100%' }}
-            animate={{ width: '0%' }}
-            transition={{ duration: (currentTip.duration || 5000) / 1000, ease: 'linear' }}
-          >
-            <div className="h-0.5 bg-white/30 rounded-full" />
-          </motion.div>
+            
+            {/* Subtle animation indicator */}
+            <motion.div
+              className="absolute -bottom-1 left-1/2 -translate-x-1/2"
+              initial={{ width: '100%' }}
+              animate={{ width: '0%' }}
+              transition={{ duration: (currentTip.duration || 5000) / 1000, ease: 'linear' }}
+            >
+              <div className="h-0.5 bg-white/30 rounded-full" />
+            </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
