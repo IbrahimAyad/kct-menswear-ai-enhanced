@@ -16,7 +16,7 @@ import { ServiceJourneyVisualization } from "@/components/home/ServiceJourneyVis
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Enhanced bundle data with all premium properties for dark mode carousel
 const featuredBundles = [
@@ -209,6 +209,25 @@ const styleCategories = [
 
 export default function ModernHomePage() {
   const [activeCategory, setActiveCategory] = useState(0);
+  const [showAIGreeting, setShowAIGreeting] = useState(false);
+
+  // Show Atelier AI greeting after a short delay
+  useEffect(() => {
+    const hasSeenGreeting = sessionStorage.getItem('atelier-ai-greeted');
+    if (!hasSeenGreeting) {
+      const timer = setTimeout(() => {
+        setShowAIGreeting(true);
+        sessionStorage.setItem('atelier-ai-greeted', 'true');
+        
+        // Auto-hide after 4 seconds
+        setTimeout(() => {
+          setShowAIGreeting(false);
+        }, 4000);
+      }, 1500); // Show after 1.5 seconds
+      
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   return (
     <>
@@ -296,6 +315,54 @@ export default function ModernHomePage() {
         </div>
       </section>
 
+      {/* Atelier AI Greeting Notification */}
+      <AnimatePresence>
+        {showAIGreeting && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="fixed bottom-6 right-6 z-50 max-w-sm"
+          >
+            <div className="bg-gradient-to-r from-burgundy to-burgundy-700 rounded-2xl shadow-2xl overflow-hidden">
+              {/* Atelier AI Header */}
+              <div className="bg-black/20 px-4 py-2 border-b border-white/20">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
+                    <Sparkles className="w-3.5 h-3.5 text-white" />
+                  </div>
+                  <span className="text-xs font-semibold text-white/90 tracking-wide">ATELIER AI</span>
+                  <button
+                    onClick={() => setShowAIGreeting(false)}
+                    className="ml-auto hover:opacity-80 transition-opacity"
+                    aria-label="Dismiss"
+                  >
+                    <svg className="w-3.5 h-3.5 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              {/* Message Content */}
+              <div className="px-5 py-4">
+                <p className="text-white font-medium text-sm leading-relaxed">
+                  Welcome to KCT. I'm here to help you discover your perfect style. 
+                  <span className="block mt-2 text-white/90">Let's elevate your wardrobe together ✨</span>
+                </p>
+              </div>
+              
+              {/* Progress bar */}
+              <motion.div
+                className="h-0.5 bg-white/30"
+                initial={{ width: "100%" }}
+                animate={{ width: "0%" }}
+                transition={{ duration: 4, ease: "linear" }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </>
   );
