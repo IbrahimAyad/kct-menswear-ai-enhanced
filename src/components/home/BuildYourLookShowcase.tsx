@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 // import { R2Image } from '@/components/ui/R2Image';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, ShoppingBag, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Product data using R2 CDN images for better performance
@@ -38,6 +38,11 @@ export function BuildYourLookShowcase() {
     shirts: 0,
     ties: 0,
   });
+  const [selectedItems, setSelectedItems] = useState({
+    suits: false,
+    shirts: false,
+    ties: false,
+  });
 
   // Rotate products every 3 seconds with staggered timing
   useEffect(() => {
@@ -70,31 +75,35 @@ export function BuildYourLookShowcase() {
   const productCategories = [
     {
       key: 'suits',
-      title: 'Premium Suits',
-      subtitle: 'Tailored to perfection',
+      title: 'Designer Suits',
+      subtitle: 'Bundle Essential',
+      badge: 'MOST POPULAR',
       products: productRotations.suits,
       currentIndex: currentIndices.suits,
-      priceRange: '$179 - $799',
+      priceRange: 'Bundle from $199',
+      savings: 'Save $100+',
       href: '/products/suits',
       order: 1,
     },
     {
       key: 'shirts',
-      title: 'Dress Shirts',
-      subtitle: 'Crisp & refined',
+      title: 'Perfect Match Shirts',
+      subtitle: 'Completes Your Look',
       products: productRotations.shirts,
       currentIndex: currentIndices.shirts,
-      priceRange: '$39 - $129',
+      priceRange: 'Add to bundle',
+      savings: '+$39',
       href: '/collections/dress-shirts',
       order: 2,
     },
     {
       key: 'ties',
-      title: 'Designer Ties',
-      subtitle: 'The perfect accent',
+      title: 'Signature Ties',
+      subtitle: 'The Finishing Touch',
       products: productRotations.ties,
       currentIndex: currentIndices.ties,
-      priceRange: '$24 - $89',
+      priceRange: 'Complete the look',
+      savings: '+$24',
       href: '/collections/ties',
       order: 3,
     },
@@ -109,12 +118,22 @@ export function BuildYourLookShowcase() {
       </div>
 
       <div className="container-main relative z-10">
-        {/* Section Header */}
+        {/* Section Header with Bundle Savings */}
         <div className="text-center mb-8">
+          {/* Bundle Savings Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-burgundy to-burgundy-700 text-white py-2 px-4 rounded-full inline-flex items-center gap-2 mb-4"
+          >
+            <span className="text-sm font-bold">🎯 BUNDLE DEALS: Save up to 40%</span>
+          </motion.div>
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 text-burgundy mb-6"
+            transition={{ delay: 0.05 }}
+            className="inline-flex items-center gap-2 text-burgundy mb-4"
           >
             <Sparkles className="h-5 w-5" />
             <span className="text-sm font-semibold tracking-widest uppercase">Create Your Look</span>
@@ -125,11 +144,20 @@ export function BuildYourLookShowcase() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-serif mb-6"
+            className="text-4xl md:text-6xl font-serif mb-3"
           >
-            Mix and Match
-            <span className="text-burgundy block">Your Style</span>
+            Complete Your Look
+            <span className="text-burgundy block">For Less</span>
           </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15 }}
+            className="text-gray-600 text-lg"
+          >
+            Join 10,000+ satisfied customers • Bundle & Save
+          </motion.p>
         </div>
 
         {/* Product Grid - Mobile: 3 columns for side-by-side display */}
@@ -142,8 +170,22 @@ export function BuildYourLookShowcase() {
               transition={{ delay: 0.3 + categoryIndex * 0.1 }}
               className="group"
             >
-              <Link href={category.href}>
-                <div className="relative bg-white rounded-lg md:rounded-2xl shadow-md md:shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
+              <Link 
+                href={category.href}
+                onClick={(e) => {
+                  // On mobile, toggle selection instead of navigating immediately
+                  if (window.innerWidth < 768) {
+                    e.preventDefault();
+                    setSelectedItems(prev => ({
+                      ...prev,
+                      [category.key]: !prev[category.key as keyof typeof prev]
+                    }));
+                  }
+                }}
+              >
+                <div className={`relative bg-white rounded-lg md:rounded-2xl shadow-md md:shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
+                  selectedItems[category.key as keyof typeof selectedItems] ? 'ring-2 ring-burgundy' : ''
+                }`}>
                   {/* Image Container */}
                   <div className="relative h-[200px] sm:h-[300px] md:h-[400px] overflow-hidden bg-gray-100">
                     <AnimatePresence mode="wait">
@@ -184,33 +226,46 @@ export function BuildYourLookShowcase() {
                       ))}
                     </div>
 
-                    {/* Hover CTA */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      <div className="bg-white text-black px-6 py-3 rounded-full font-semibold flex items-center gap-2 transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                        Customize Now
+                    {/* Mobile-friendly CTA - always visible on mobile */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 md:transition-opacity md:duration-500 touch:opacity-100">
+                      <div className="bg-white text-black px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold flex items-center gap-2 transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                        <span className="hidden sm:inline">Quick Add to Bundle</span>
+                        <span className="sm:hidden">Add</span>
                         <ArrowRight className="h-4 w-4" />
                       </div>
                     </div>
+                    
+                    {/* Badge for popular items */}
+                    {category.badge && (
+                      <div className="absolute top-4 left-4 bg-gold text-white px-3 py-1 rounded-full text-xs font-bold">
+                        {category.badge}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Product Info - Responsive sizing */}
+                  {/* Product Info with Bundle Focus */}
                   <div className="p-2 sm:p-4 md:p-6">
                     <h3 className="text-sm sm:text-lg md:text-2xl font-serif mb-1 md:mb-2 group-hover:text-burgundy transition-colors">
                       {category.title}
                     </h3>
-                    <p className="text-xs sm:text-sm md:text-base text-gray-600 mb-1 md:mb-3 hidden sm:block">{category.subtitle}</p>
+                    <p className="text-xs sm:text-sm md:text-base text-gray-600 mb-1 md:mb-3">{category.subtitle}</p>
                     
-                    {/* Current color display - Mobile optimized */}
+                    {/* Bundle Pricing Display */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 md:mb-4">
-                      <div className="flex items-center gap-1 sm:gap-2 mb-1 sm:mb-0">
-                        <span className="text-[10px] sm:text-xs md:text-sm text-gray-500 hidden sm:inline">Current:</span>
-                        <span className="text-xs sm:text-sm md:text-base font-medium text-gray-900">
-                          {category.products[category.currentIndex].color}
+                      <div className="flex flex-col">
+                        <span className="text-xs sm:text-sm md:text-lg font-bold text-burgundy">
+                          {category.priceRange}
                         </span>
+                        {category.savings && (
+                          <span className="text-[10px] sm:text-xs text-green-600 font-semibold">
+                            {category.savings}
+                          </span>
+                        )}
                       </div>
-                      <span className="text-[10px] sm:text-xs md:text-sm font-semibold text-burgundy">
-                        {category.priceRange}
-                      </span>
+                      <div className="flex items-center gap-1 mt-1 sm:mt-0">
+                        <span className="text-[10px] sm:text-xs text-yellow-600">⭐⭐⭐⭐⭐</span>
+                        <span className="text-[10px] sm:text-xs text-gray-500">(2.5k)</span>
+                      </div>
                     </div>
 
                     {/* Available colors preview - Mobile responsive */}
@@ -248,14 +303,49 @@ export function BuildYourLookShowcase() {
               size="lg" 
               className="bg-burgundy hover:bg-burgundy-700 text-white px-10 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
             >
-              Start Building Your Look
+              Build Complete Look - Save $89
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
           <p className="mt-4 text-gray-600">
-            Free shipping on orders over $200 • Expert styling advice included
+            ✓ Free Alterations • ✓ 30-Day Perfect Fit Guarantee • ✓ Free Shipping Over $200
           </p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="mt-2 text-sm text-burgundy font-semibold"
+          >
+            ⏰ Limited Time: Bundle prices end in 48 hours
+          </motion.p>
         </motion.div>
+        
+        {/* Mobile Bundle Builder Indicator - Fixed at bottom on mobile */}
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ShoppingBag className="h-5 w-5 text-burgundy" />
+              <span className="font-semibold">Your Bundle:</span>
+              <div className="flex gap-1">
+                {Object.entries(selectedItems).map(([key, selected]) => (
+                  <div
+                    key={key}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                      selected ? 'bg-burgundy text-white' : 'bg-gray-200 text-gray-400'
+                    }`}
+                  >
+                    {selected ? <Check className="h-4 w-4" /> : key[0].toUpperCase()}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <Link href="/custom-suits">
+              <Button size="sm" className="bg-burgundy text-white">
+                View Bundle
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );
