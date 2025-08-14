@@ -195,11 +195,13 @@ export default function StyleSwiperR2Page() {
           <div className="space-y-8">
             {/* AI Size Finder Card */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-burgundy/10 via-white to-gold/10 rounded-3xl shadow-2xl p-8 border border-gold-200 relative overflow-hidden"
+              transition={{ delay: 0.2 }}
+              className="bg-gradient-to-br from-burgundy/20 via-white to-gold/20 rounded-3xl shadow-2xl p-8 border-2 border-burgundy/30 relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-burgundy/20 to-transparent rounded-full blur-3xl"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-burgundy/40 to-transparent rounded-full blur-3xl"></div>
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-gold/30 to-transparent rounded-full blur-3xl"></div>
               <div className="relative z-10">
                 <div className="flex items-start justify-between mb-4">
                   <div>
