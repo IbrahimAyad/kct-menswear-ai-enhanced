@@ -9,11 +9,10 @@ function LoadingState() {
   );
 }
 
-export default function CollectionPage() {
-  const collectionId = 'COLLECTION_ID';
+export default function TiesCollectionPage() {
   return (
     <Suspense fallback={<LoadingState />}>
-      <SmartCollectionPage collectionId={collectionId} />
+      <SmartCollectionPage collectionId="ties" />
     </Suspense>
   );
 }

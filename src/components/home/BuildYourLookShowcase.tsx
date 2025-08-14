@@ -75,6 +75,7 @@ export function BuildYourLookShowcase() {
       products: productRotations.suits,
       currentIndex: currentIndices.suits,
       priceRange: '$179 - $799',
+      href: '/products/suits',
       order: 1,
     },
     {
@@ -84,6 +85,7 @@ export function BuildYourLookShowcase() {
       products: productRotations.shirts,
       currentIndex: currentIndices.shirts,
       priceRange: '$39 - $129',
+      href: '/collections/shirts',
       order: 2,
     },
     {
@@ -93,6 +95,7 @@ export function BuildYourLookShowcase() {
       products: productRotations.ties,
       currentIndex: currentIndices.ties,
       priceRange: '$24 - $89',
+      href: '/collections/ties',
       order: 3,
     },
   ].sort((a, b) => a.order - b.order);
@@ -139,7 +142,7 @@ export function BuildYourLookShowcase() {
               transition={{ delay: 0.3 + categoryIndex * 0.1 }}
               className="group"
             >
-              <Link href="/custom-suits">
+              <Link href={category.href}>
                 <div className="relative bg-white rounded-lg md:rounded-2xl shadow-md md:shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
                   {/* Image Container */}
                   <div className="relative h-[200px] sm:h-[300px] md:h-[400px] overflow-hidden bg-gray-100">
@@ -240,7 +243,7 @@ export function BuildYourLookShowcase() {
           transition={{ delay: 0.6 }}
           className="text-center"
         >
-          <Link href="/custom-suits">
+          <Link href="/products/suits">
             <Button 
               size="lg" 
               className="bg-burgundy hover:bg-burgundy-700 text-white px-10 py-6 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"

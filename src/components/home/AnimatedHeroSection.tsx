@@ -41,12 +41,12 @@ export default function AnimatedHeroSection() {
             <motion.div
               className="w-full h-full"
               animate={{
-                scale: [1, 1.05, 1.02, 1],
-                x: [0, -10, 5, 0],
-                y: [0, -10, 0, 0],
+                scale: [1, 1.03, 1.01, 1],
+                x: [0, -5, 2, 0],
+                y: [0, -5, 2, 0],
               }}
               transition={{
-                duration: 20,
+                duration: 25,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
@@ -56,8 +56,8 @@ export default function AnimatedHeroSection() {
                 alt="KCT Menswear Premium Collection"
                 className="w-full h-full object-cover"
                 style={{
-                  objectPosition: '50% 30%', // Show more of the model's torso
-                  scale: '1.0' // No zoom to show full model
+                  objectPosition: '55% 35%', // Shift slightly right and down to center the model better
+                  transform: 'scale(0.95)' // Slight scale down to show more of the image
                 }}
               />
             </motion.div>
