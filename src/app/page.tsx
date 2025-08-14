@@ -7,6 +7,8 @@ import { ModernBundleCard } from "@/components/home/ModernBundleCard";
 import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
 import HomeCollectionGrid from "@/components/home/HomeCollectionGrid";
 import { EnhancedDarkBundleCarousel } from "@/components/home/EnhancedDarkBundleCarousel";
+import TrustIndicators from "@/components/home/TrustIndicators";
+import TrendingNowSection from "@/components/home/TrendingNowSection";
 import { VelocityGrid } from "@/components/home/VelocityGrid";
 import { InteractiveStyleEnvironments } from "@/components/home/InteractiveStyleEnvironments";
 import { ServiceJourneyVisualization } from "@/components/home/ServiceJourneyVisualization";
@@ -265,16 +267,22 @@ export default function ModernHomePage() {
         </div>
       </section>
 
+      {/* Trust Indicators - Build confidence immediately after hero */}
+      <TrustIndicators />
+
       {/* Shop by Category Grid - Updated Collection Layout */}
       <HomeCollectionGrid />
+
+      {/* Trending Now Section - Replaces Bundle Carousel */}
+      <TrendingNowSection />
 
       {/* Build Your Perfect Ensemble - Moved up after Shop by Style */}
       <section className="py-8 bg-gradient-to-br from-gray-50 to-white">
         <BuildYourLookShowcase />
       </section>
 
-      {/* Featured Bundles Section - Enhanced Dark Bundle Carousel */}
-      <section className="py-16 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+      {/* Featured Bundles Section - Enhanced Dark Bundle Carousel - TEMPORARILY DISABLED */}
+      {/* <section className="py-16 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
         <div className="container-main">
           <div className="text-center mb-12">
             <motion.div
@@ -295,7 +303,6 @@ export default function ModernHomePage() {
             </p>
           </div>
 
-          {/* Enhanced Dark Bundle Carousel */}
           <EnhancedDarkBundleCarousel 
             bundles={featuredBundles} 
             autoPlay={true}
@@ -311,7 +318,7 @@ export default function ModernHomePage() {
             </Link>
           </div>
         </div>
-      </section>
+      </section> */}
 
 
       {/* Style Categories - Interactive Style Environments */}
