@@ -327,7 +327,7 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
                 </div>
               </div>
             )}
-          </div>
+          </motion.div>
 
           {/* Enhanced Product Info */}
           <motion.div
