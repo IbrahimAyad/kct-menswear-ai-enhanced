@@ -156,7 +156,21 @@ function ProductCard({ product, viewMode }: { product: UnifiedProduct; viewMode:
   const [isLiked, setIsLiked] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  const productImage = product.imageUrl || product.images?.[0] || '/placeholder-product.jpg';
+  // Handle different image formats from unified products
+  const getProductImage = () => {
+    if (product.imageUrl) return product.imageUrl;
+    if (product.images?.length > 0) {
+      // Check if it's an object with src property (enhanced products)
+      if (typeof product.images[0] === 'object' && product.images[0].src) {
+        return product.images[0].src;
+      }
+      // Otherwise assume it's a direct URL string
+      return product.images[0];
+    }
+    return '/placeholder-product.jpg';
+  };
+  
+  const productImage = getProductImage();
   const productPrice = typeof product.price === 'string' 
     ? parseFloat(product.price) 
     : product.price;

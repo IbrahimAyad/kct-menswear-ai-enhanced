@@ -78,6 +78,12 @@ const nextConfig: NextConfig = {
         hostname: 'kctmarketplaceapiservice-production.up.railway.app',
         pathname: '/**',
       },
+      // KCT CDN for enhanced product images
+      {
+        protocol: 'https',
+        hostname: 'cdn.kctmenswear.com',
+        pathname: '/**',
+      },
       // Generic Railway domains
       {
         protocol: 'https',
