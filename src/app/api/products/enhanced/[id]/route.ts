@@ -1,6 +1,6 @@
 // Enhanced Product Individual API - CRUD operations for single enhanced product
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 
 interface RouteParams {
   params: {
@@ -11,14 +11,15 @@ interface RouteParams {
 // GET - Get Single Enhanced Product by ID or Slug
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    const supabase = await createClient();
     const { id } = params;
     
     // Determine if ID is a UUID or slug
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
     
-    // Query by appropriate field
+    // Query by appropriate field - use the actual table, not the view
     let query = supabase
-      .from('products_enhanced_with_stats')
+      .from('products_enhanced')
       .select('*');
     
     if (isUUID) {
@@ -120,6 +121,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // PUT - Update Enhanced Product
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const supabase = await createClient();
     const { id } = params;
     const body = await request.json();
     
@@ -181,6 +183,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 // DELETE - Delete Enhanced Product (soft delete by setting status to archived)
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const supabase = await createClient();
     const { id } = params;
     
     // Determine if ID is UUID or slug

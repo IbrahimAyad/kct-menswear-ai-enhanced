@@ -1,11 +1,12 @@
 // Enhanced Products API - CRUD operations for enhanced products system
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import { EnhancedProduct, EnhancedProductQuery } from '@/lib/products/enhanced/types';
 
 // GET - Search/List Enhanced Products
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     
     // Parse query parameters
@@ -27,9 +28,9 @@ export async function GET(request: NextRequest) {
       limit: searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : 20
     };
 
-    // Build Supabase query
+    // Build Supabase query - use the actual table, not the view
     let supabaseQuery = supabase
-      .from('products_enhanced_with_stats')
+      .from('products_enhanced')
       .select('*');
 
     // Apply filters
@@ -136,6 +137,7 @@ export async function GET(request: NextRequest) {
 // POST - Create New Enhanced Product
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient();
     const body = await request.json();
     
     // Validate required fields
