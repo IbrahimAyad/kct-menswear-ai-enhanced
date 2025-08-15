@@ -145,16 +145,34 @@ export async function getUnifiedProduct(idOrSlug: string): Promise<UnifiedProduc
     };
   }
 
-  // Check enhanced products first (they use slug)
+  // Check enhanced products first (they use slug or enhanced_id format)
   const { createClient } = await import('@/lib/supabase/server');
   const supabase = await createClient();
   
   if (supabase) {
-    // Try to find in enhanced products table
+    // Handle both enhanced_[id] format and direct slug
+    let searchValue = idOrSlug;
+    if (idOrSlug.startsWith('enhanced_')) {
+      // Extract the actual ID from enhanced_[id] format
+      const actualId = idOrSlug.replace('enhanced_', '');
+      // First try to find by ID
+      const { data: enhancedById, error: byIdError } = await supabase
+        .from('products_enhanced')
+        .select('*')
+        .eq('id', actualId)
+        .eq('status', 'active')
+        .single();
+      
+      if (enhancedById && !byIdError) {
+        searchValue = enhancedById.slug;
+      }
+    }
+    
+    // Try to find in enhanced products table by slug
     const { data: enhancedProduct, error: enhancedError } = await supabase
       .from('products_enhanced')
       .select('*')
-      .eq('slug', idOrSlug)
+      .eq('slug', searchValue)
       .eq('status', 'active')
       .single();
     

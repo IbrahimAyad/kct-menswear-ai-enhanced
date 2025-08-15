@@ -177,9 +177,9 @@ function ProductCard({ product, viewMode }: { product: UnifiedProduct; viewMode:
   
   // Determine the product link URL
   const getProductUrl = () => {
-    // For enhanced products, use slug
-    if (product.enhanced && product.slug) {
-      return `/products/${product.slug}`;
+    // For enhanced products, use the ID (enhanced_[id] format)
+    if (product.enhanced && product.id.startsWith('enhanced_')) {
+      return `/products/${product.id}`;
     }
     // For other products, use slug if available, otherwise id
     return `/products/${product.slug || product.id}`;
