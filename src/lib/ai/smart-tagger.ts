@@ -467,10 +467,6 @@ export class SmartTagger {
       return;
     }
     
-    console.log(`Processing ${products.length} products for tag updates...`);
-    
-    for (const product of products) {
-      const tags = await this.generateTags(product);
       
       // Convert tags to simple array for storage
       const tagArray = tags.map(t => t.tag);
@@ -489,14 +485,6 @@ export class SmartTagger {
       }
     }
     
-    console.log('Tag update complete!');
-  }
-
-  /**
-   * Get tag suggestions for a product
-   */
-  async suggestTags(productId: string): Promise<string[]> {
-    const supabase = await createClient();
     
     const { data: product, error } = await supabase
       .from('products')

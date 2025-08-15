@@ -6,7 +6,7 @@
 export const KNOWLEDGE_API_CONFIG = {
   // Base configuration
   apiUrl: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_API || 'https://kct-knowledge-api-2-production.up.railway.app',
-  apiKey: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_KEY || 'kct-menswear-api-2024-secret',
+  apiKey: process.env.NEXT_PUBLIC_KNOWLEDGE_BANK_KEY || '',
   
   // Cache configuration (matching enhanced API)
   caching: {

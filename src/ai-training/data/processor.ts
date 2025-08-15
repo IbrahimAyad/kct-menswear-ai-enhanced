@@ -84,9 +84,6 @@ export class DataProcessor {
         }
       }).filter(Boolean) as Product[];
 
-      console.log(`Loaded ${this.products.length} valid products`);
-    } catch (error) {
-      console.error('Error loading product data:', error);
       throw error;
     }
   }
@@ -281,9 +278,6 @@ export class DataProcessor {
         outputPath,
         JSON.stringify(this.processedProducts, null, 2)
       );
-      console.log(`Saved processed data to ${outputPath}`);
-    } catch (error) {
-      console.error('Error saving processed data:', error);
       throw error;
     }
   }

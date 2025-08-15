@@ -41,12 +41,6 @@ export class VectorStore {
       );
 
       if (exists) {
-        console.log(`Collection ${this.collectionName} already exists`);
-        // Optionally delete and recreate for fresh training
-        if (process.env.RECREATE_COLLECTION === 'true') {
-          await this.client.deleteCollection(this.collectionName);
-          console.log(`Deleted existing collection ${this.collectionName}`);
-          await this.createCollection();
         }
       } else {
         await this.createCollection();
@@ -86,9 +80,6 @@ export class VectorStore {
         field_schema: 'keyword',
       });
 
-      console.log(`Created collection ${this.collectionName} with indexes`);
-    } catch (error) {
-      console.error('Error creating collection:', error);
       throw error;
     }
   }
@@ -111,10 +102,6 @@ export class VectorStore {
           points: batch,
         });
 
-        console.log(`Upserted batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(points.length / batchSize)}`);
-      }
-
-      console.log(`Successfully upserted ${vectors.length} vectors`);
     } catch (error) {
       console.error('Error upserting vectors:', error);
       throw error;
@@ -241,9 +228,6 @@ export class VectorStore {
   async deleteCollection(): Promise<void> {
     try {
       await this.client.deleteCollection(this.collectionName);
-      console.log(`Deleted collection ${this.collectionName}`);
-    } catch (error) {
-      console.error('Error deleting collection:', error);
       throw error;
     }
   }

@@ -183,4 +183,3 @@ export function validateStripeIntegration(): {
 }
 
 // Export validation report
-console.log(validateStripeIntegration().report);

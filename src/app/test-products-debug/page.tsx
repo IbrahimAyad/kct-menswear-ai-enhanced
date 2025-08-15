@@ -13,8 +13,6 @@ export default function TestProductsDebug() {
       try {
         const response = await fetch('/api/products/unified?limit=12');
         const data = await response.json();
-        console.log('API Response:', data);
-        setProducts(data.products || []);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch');
       } finally {

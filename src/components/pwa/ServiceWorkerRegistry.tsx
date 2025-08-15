@@ -52,13 +52,7 @@ export const ServiceWorkerRegistry = () => {
       // Listen for messages from the service worker
       navigator.serviceWorker.addEventListener('message', (event) => {
         if (event.data.type === 'CACHE_UPDATED') {
-          // console.log('Cache updated:', event.data.url);
-        }
-      });
 
-      // console.log('Service Worker registered successfully');
-    } catch (error) {
-      console.error('Service Worker registration failed:', error);
     }
   };
 

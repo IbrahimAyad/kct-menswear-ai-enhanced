@@ -4,7 +4,7 @@
 module.exports = {
   // API Configuration - UPDATE THIS WITH YOUR RAILWAY URL
   CHAT_API_URL: process.env.CHAT_API_URL || 'https://your-railway-app.railway.app',
-  CHAT_API_KEY: process.env.CHAT_API_KEY || 'kct-menswear-api-2024-secret',
+  CHAT_API_KEY: process.env.CHAT_API_KEY || '',
   
   // API Endpoints
   endpoints: {

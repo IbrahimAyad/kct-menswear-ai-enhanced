@@ -45,7 +45,7 @@ export class AtelierAIService {
   constructor() {
     // Updated Railway deployment URLs
     this.apiUrl = process.env.NEXT_PUBLIC_KCT_API_URL || 'https://kct-knowledge-api-2-production.up.railway.app';
-    this.apiKey = process.env.NEXT_PUBLIC_KCT_API_KEY || 'kct-menswear-api-2024-secret';
+    this.apiKey = process.env.NEXT_PUBLIC_KCT_API_KEY || '';
     this.chatEnabled = process.env.NEXT_PUBLIC_KCT_CHAT_ENABLED === 'true';
   }
 
@@ -137,12 +137,6 @@ export class AtelierAIService {
       this.ws = new WebSocket(`${wsUrl}/ws`);
       
       this.ws.onopen = () => {
-        // console.log('WebSocket connected');
-        this.ws?.send(JSON.stringify({ 
-          type: 'auth', 
-          apiKey: this.apiKey,
-          sessionId: this.sessionId 
-        }));
       };
 
       this.ws.onmessage = (event) => {
@@ -159,9 +153,6 @@ export class AtelierAIService {
       };
 
       this.ws.onclose = () => {
-        // console.log('WebSocket disconnected');
-        // Attempt reconnect after 5 seconds
-        setTimeout(() => this.connectWebSocket(onMessage), 5000);
       };
 
       return this.ws;

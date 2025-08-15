@@ -253,4 +253,4 @@ export default function MinimalBundleCard({
       </div>
     </div>
   );
-}console.log('MinimalBundleCard loaded and rendering');
+}

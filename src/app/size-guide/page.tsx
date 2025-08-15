@@ -385,12 +385,4 @@ export default function SizeGuidePage() {
         <ModernSizeBot
           onClose={() => setShowSizeBot(false)}
           onSizeSelected={(recommendation) => {
-            // console.log('Size recommendation:', recommendation);
-          }}
-          productType="suit"
-          isModal={true}
-        />
-      )}
-    </div>
-  );
 }

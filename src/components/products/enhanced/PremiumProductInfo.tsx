@@ -13,7 +13,7 @@ import {
   Sparkles,
   Calendar,
   Ruler,
-  Fabric,
+  Shirt,
   Palette,
   Clock
 } from 'lucide-react'
@@ -67,7 +67,7 @@ export function PremiumProductInfo({
 
   // Product details with enhanced information
   const productDetails: ProductDetail[] = [
-    { label: 'Material', value: product.material || 'Premium Wool Blend', icon: Fabric },
+    { label: 'Material', value: product.material || 'Premium Wool Blend', icon: Shirt },
     { label: 'Category', value: product.category || 'Blazers', icon: Package },
     { label: 'Fit', value: 'Modern Tailored', icon: Ruler },
     { label: 'Season', value: 'All Season', icon: Calendar },

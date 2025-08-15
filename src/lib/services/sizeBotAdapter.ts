@@ -7,7 +7,7 @@ import { calculateSizeFromMeasurements } from '../data/sizeBot/sizingMatrices';
 
 // Configuration
 const SIZE_BOT_API = process.env.NEXT_PUBLIC_SIZE_BOT_API || 'https://kct-sizebot-api-production.up.railway.app';
-const SIZE_BOT_KEY = process.env.NEXT_PUBLIC_SIZE_BOT_KEY || 'kct-menswear-api-2024-secret';
+const SIZE_BOT_KEY = process.env.NEXT_PUBLIC_SIZE_BOT_KEY || '';
 
 interface SizeRecommendation {
   size: string;
