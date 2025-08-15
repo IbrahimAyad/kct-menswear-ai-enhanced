@@ -7,6 +7,14 @@ import { EnhancedProduct, EnhancedProductQuery } from '@/lib/products/enhanced/t
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient();
+    
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database connection failed' },
+        { status: 503 }
+      );
+    }
+    
     const { searchParams } = new URL(request.url);
     
     // Parse query parameters
@@ -93,11 +101,24 @@ export async function GET(request: NextRequest) {
     
     supabaseQuery = supabaseQuery.range(offset, offset + limit - 1);
 
-    // Execute query
+    // Execute query with count
     const { data: products, error, count } = await supabaseQuery;
 
     if (error) {
-      console.error('Error fetching enhanced products:', error);
+      console.error('Supabase error fetching enhanced products:', error);
+      
+      // Check for common RLS errors
+      if (error.message?.includes('permission denied')) {
+        return NextResponse.json(
+          { 
+            error: 'Database permission error', 
+            details: 'RLS policies need to be configured for products_enhanced table',
+            hint: 'Run: CREATE POLICY "Allow public read" ON products_enhanced FOR SELECT USING (true);'
+          },
+          { status: 403 }
+        );
+      }
+      
       return NextResponse.json(
         { error: 'Failed to fetch products', details: error.message },
         { status: 500 }
