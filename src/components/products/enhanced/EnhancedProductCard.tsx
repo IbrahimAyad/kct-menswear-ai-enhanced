@@ -20,14 +20,24 @@ export function EnhancedProductCard({
   showPricingTier = false
 }: EnhancedProductCardProps) {
   
-  // Get primary image with fallback
+  // Get primary image with fallback (supports both primary and hero fields)
   const getPrimaryImage = () => {
     const images = product.images;
-    if (typeof images === 'object' && images.primary) {
-      return {
-        url: images.primary.cdn_url || images.primary.url,
-        alt: images.primary.alt_text || product.name
-      };
+    if (typeof images === 'object') {
+      // Check for hero field (admin uses this)
+      if (images.hero) {
+        return {
+          url: images.hero.url || images.hero.cdn_url,
+          alt: images.hero.alt || product.name
+        };
+      }
+      // Check for primary field (original schema)
+      if (images.primary) {
+        return {
+          url: images.primary.cdn_url || images.primary.url,
+          alt: images.primary.alt_text || product.name
+        };
+      }
     }
     return {
       url: '/placeholder-product.jpg',

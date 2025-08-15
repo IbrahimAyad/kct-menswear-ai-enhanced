@@ -307,7 +307,7 @@ export default function TestEnhancedProductsPage() {
                       </p>
                       <p className="text-green-600">
                         <span className="font-medium">CDN:</span> {
-                          product.images?.primary?.cdn_url ? '✓ Using CDN' : '✗ No CDN'
+                          (product.images?.hero?.url || product.images?.primary?.cdn_url) ? '✓ Using CDN' : '✗ No CDN'
                         }
                       </p>
                     </div>
