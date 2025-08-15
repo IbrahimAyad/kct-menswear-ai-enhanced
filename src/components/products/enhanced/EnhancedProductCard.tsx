@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Star, ShoppingCart, Heart, Tag } from 'lucide-react';
 import { EnhancedProduct } from '@/lib/products/enhanced/types';
+import { EnhancedAddToCartButton } from './EnhancedBuyButton';
 
 interface EnhancedProductCardProps {
   product: EnhancedProduct;
@@ -211,16 +212,22 @@ export function EnhancedProductCard({
         </div>
 
         {/* Action Button */}
-        <button
-          className={`w-full mt-3 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-            inStock
-              ? 'bg-black text-white hover:bg-gray-800'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
-          disabled={!inStock}
-        >
-          {inStock ? 'Add to Cart' : 'Out of Stock'}
-        </button>
+        {inStock ? (
+          <EnhancedAddToCartButton
+            productId={product.id}
+            productName={product.name}
+            price={product.base_price}
+            className="w-full mt-3"
+            variant="primary"
+          />
+        ) : (
+          <button
+            className="w-full mt-3 py-2 px-4 rounded-md text-sm font-medium bg-gray-300 text-gray-500 cursor-not-allowed"
+            disabled
+          >
+            Out of Stock
+          </button>
+        )}
       </div>
     </div>
   );
