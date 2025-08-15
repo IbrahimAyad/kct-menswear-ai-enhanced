@@ -19,7 +19,7 @@ class FashionClipService {
 
   constructor() {
     this.apiUrl = process.env.NEXT_PUBLIC_FASHION_CLIP_API || 'https://fashion-clip-kct-production.up.railway.app';
-    this.apiKey = process.env.NEXT_PUBLIC_FASHION_CLIP_KEY || 'kct-menswear-api-2024-secret';
+    this.apiKey = process.env.NEXT_PUBLIC_FASHION_CLIP_KEY || '';
   }
 
   /**

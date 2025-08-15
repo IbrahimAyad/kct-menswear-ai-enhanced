@@ -45,7 +45,7 @@ export class AtelierAIService {
   constructor() {
     // Updated Railway deployment URLs
     this.apiUrl = process.env.NEXT_PUBLIC_KCT_API_URL || 'https://kct-knowledge-api-2-production.up.railway.app';
-    this.apiKey = process.env.NEXT_PUBLIC_KCT_API_KEY || 'kct-menswear-api-2024-secret';
+    this.apiKey = process.env.NEXT_PUBLIC_KCT_API_KEY || '';
     this.chatEnabled = process.env.NEXT_PUBLIC_KCT_CHAT_ENABLED === 'true';
   }
 
