@@ -181,33 +181,58 @@ export async function getUnifiedProduct(idOrSlug: string): Promise<UnifiedProduc
       let imageUrl = '/placeholder-product.jpg';
       let images: string[] = [];
       
-      // Extract images from JSONB structure
-      if (enhancedProduct.images?.hero?.url) {
-        imageUrl = enhancedProduct.images.hero.url;
-        images.push(enhancedProduct.images.hero.url);
-      } else if (enhancedProduct.images?.primary?.url) {
-        imageUrl = enhancedProduct.images.primary.url;
-        images.push(enhancedProduct.images.primary.url);
-      } else if (enhancedProduct.images?.flat?.url) {
-        imageUrl = enhancedProduct.images.flat.url;
-        images.push(enhancedProduct.images.flat.url);
-      }
-      
-      // Add gallery images
-      if (enhancedProduct.images?.gallery?.length > 0) {
-        enhancedProduct.images.gallery.forEach((img: any) => {
-          if (img?.url) images.push(img.url);
-        });
-      }
-      
-      // If no images found yet, use the first available
-      if (images.length === 0 && enhancedProduct.images) {
-        Object.values(enhancedProduct.images).forEach((img: any) => {
-          if (img?.url && images.length === 0) {
-            imageUrl = img.url;
-            images.push(img.url);
+      // Extract ALL images from JSONB structure in order
+      if (enhancedProduct.images) {
+        // Primary/Hero image first
+        if (enhancedProduct.images.hero?.url) {
+          imageUrl = enhancedProduct.images.hero.url;
+          images.push(enhancedProduct.images.hero.url);
+        } else if (enhancedProduct.images.primary?.url) {
+          imageUrl = enhancedProduct.images.primary.url;
+          images.push(enhancedProduct.images.primary.url);
+        }
+        
+        // Add flat image if different from primary
+        if (enhancedProduct.images.flat?.url && 
+            !images.includes(enhancedProduct.images.flat.url)) {
+          if (images.length === 0) {
+            imageUrl = enhancedProduct.images.flat.url;
+          }
+          images.push(enhancedProduct.images.flat.url);
+        }
+        
+        // Add all other named images (side, back, detail, etc.)
+        const namedImages = ['side', 'back', 'detail', 'close', 'model'];
+        namedImages.forEach(imageName => {
+          if (enhancedProduct.images[imageName]?.url && 
+              !images.includes(enhancedProduct.images[imageName].url)) {
+            images.push(enhancedProduct.images[imageName].url);
           }
         });
+        
+        // Add gallery images
+        if (enhancedProduct.images.gallery && Array.isArray(enhancedProduct.images.gallery)) {
+          enhancedProduct.images.gallery.forEach((img: any) => {
+            if (img?.url && !images.includes(img.url)) {
+              images.push(img.url);
+            }
+          });
+        }
+        
+        // If still no images, try to extract any image objects
+        if (images.length === 0) {
+          Object.values(enhancedProduct.images).forEach((img: any) => {
+            if (img?.url && !images.includes(img.url)) {
+              if (images.length === 0) imageUrl = img.url;
+              images.push(img.url);
+            }
+          });
+        }
+      }
+      
+      // Ensure we have at least one image
+      if (images.length === 0) {
+        images = ['/placeholder-product.jpg'];
       }
       
       return {
