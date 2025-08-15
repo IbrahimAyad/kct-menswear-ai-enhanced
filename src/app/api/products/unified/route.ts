@@ -77,10 +77,24 @@ export async function GET(request: NextRequest) {
             if (!enhancedError && enhancedData) {
               // Map enhanced products to unified format
               enhancedProducts = enhancedData.map((product: any) => {
-                // Get image URL
-                const imageUrl = product.images?.hero?.url || 
-                               product.images?.primary?.url || 
-                               '/placeholder-product.jpg';
+                // Get image URL with multiple fallbacks
+                let imageUrl = '/placeholder-product.jpg';
+                
+                // Try different image paths
+                if (product.images?.hero?.url) {
+                  imageUrl = product.images.hero.url;
+                } else if (product.images?.primary?.url) {
+                  imageUrl = product.images.primary.url;
+                } else if (product.images?.flat?.url) {
+                  imageUrl = product.images.flat.url;
+                } else if (product.images?.gallery?.[0]?.url) {
+                  imageUrl = product.images.gallery[0].url;
+                }
+                
+                // Ensure we have a valid URL
+                if (!imageUrl || imageUrl === '') {
+                  imageUrl = '/placeholder-product.jpg';
+                }
                 
                 return {
                   id: `enhanced_${product.id}`,
@@ -88,8 +102,8 @@ export async function GET(request: NextRequest) {
                   type: 'individual',
                   name: product.name,
                   description: product.description || '',
-                  price: String(product.base_price),
-                  compare_at_price: product.compare_at_price ? String(product.compare_at_price) : null,
+                  price: String(product.base_price / 100), // Convert cents to dollars
+                  compare_at_price: product.compare_at_price ? String(product.compare_at_price / 100) : null,
                   currency: 'USD',
                   category: 'blazers',
                   product_type: 'blazers',
