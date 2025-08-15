@@ -131,89 +131,40 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
     }
 
     try {
-      // For enhanced products, use the enhanced checkout
-      if (product.enhanced) {
-        // Extract the numeric ID from enhanced_123 format
-        const productId = product.id.replace('enhanced_', '');
-        
-        console.log('Creating checkout for enhanced product:', {
-          productId,
-          productName: product.name,
+      // Show loading state
+      toast.loading('Creating checkout session...');
+      
+      // Use unified checkout API with express checkout endpoint
+      const response = await fetch('/api/checkout/unified', {
+        method: 'PUT', // PUT method for express checkout
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId: product.id,
+          quantity: quantity,
           size: selectedSize,
-          quantity: quantity
-        });
-        
-        // Show loading state
-        toast.loading('Creating checkout session...');
-        
-        // Redirect to enhanced checkout with product details
-        const checkoutUrl = `/api/checkout/enhanced`;
-        const response = await fetch(checkoutUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            productId: productId,
-            quantity: quantity,
-            size: selectedSize,
-            style: isSuit ? selectedStyle : undefined,
-            successUrl: `${window.location.origin}/checkout/success`,
-            cancelUrl: `${window.location.href}` // Stay on current product page
-          })
-        });
+          enhanced: product.enhanced || false
+        })
+      });
 
-        if (response.ok) {
-          const { url } = await response.json();
-          toast.dismiss(); // Clear loading toast
-          toast.success('Redirecting to checkout...');
-          window.location.href = url;
-        } else {
-          const error = await response.text();
-          console.error('Checkout error:', error);
-          toast.dismiss(); // Clear loading toast
-          toast.error('Failed to create checkout session. Please try again.');
-        }
-        return;
-      }
-
-      // For regular products with Stripe price ID, use standard checkout
-      if (product.stripePriceId) {
-        toast.loading('Creating checkout session...');
-        
-        const response = await fetch('/api/checkout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            items: [{
-              stripePriceId: product.stripePriceId,
-              quantity: quantity
-            }],
-            metadata: {
-              productName: product.name,
-              size: selectedSize || 'N/A',
-              productId: product.id
-            }
-          })
-        });
-
-        if (response.ok) {
-          const { url } = await response.json();
-          toast.dismiss();
-          toast.success('Redirecting to checkout...');
-          window.location.href = url;
-        } else {
-          toast.dismiss();
-          toast.error('Failed to create checkout session');
-        }
+      const data = await response.json();
+      
+      if (response.ok && data.url) {
+        toast.dismiss(); // Clear loading toast
+        toast.success('Redirecting to checkout...');
+        window.location.href = data.url;
       } else {
-        // No Stripe ID, add to cart and navigate to cart page
+        // If express checkout fails, fall back to adding to cart
+        console.error('Express checkout not available:', data.error);
+        toast.dismiss();
+        
+        // For products without express checkout support, add to cart and go to cart page
         handleAddToCart();
         setTimeout(() => {
+          toast.success('Item added to cart. Redirecting...');
           window.location.href = '/cart';
-        }, 500);
+        }, 1000);
       }
     } catch (error) {
       console.error('Buy now error:', error);

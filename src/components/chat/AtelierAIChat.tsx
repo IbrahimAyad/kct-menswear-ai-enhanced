@@ -19,8 +19,11 @@ import {
 import { cn } from '@/lib/utils/cn'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { knowledgeChatService } from '@/services/knowledge-chat-service'
+import { toast } from 'sonner'
+import { knowledgeChatCommerceService } from '@/services/knowledge-chat-commerce-service'
 import { voiceChatService } from '@/services/voice-chat-service'
+import { ChatProductCard } from './ChatProductCard'
+import { UnifiedProduct } from '@/types/unified-shop'
 
 interface Message {
   id: string
@@ -28,6 +31,16 @@ interface Message {
   sender: 'user' | 'assistant'
   timestamp: Date
   layerLevel?: 1 | 2 | 3
+  products?: Array<{
+    product: UnifiedProduct
+    reason: string
+    matchScore: number
+  }>
+  actions?: Array<{
+    type: 'view' | 'add_to_cart' | 'buy_now' | 'size_guide'
+    label: string
+    productId?: string
+  }>
 }
 
 interface AtelierAIChatProps {
@@ -104,21 +117,23 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
     setIsTyping(true)
 
     try {
-      const response = await knowledgeChatService.processMessage(input)
+      const response = await knowledgeChatCommerceService.processEnhancedMessage(input)
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: response.message,
         sender: 'assistant',
         timestamp: new Date(),
-        layerLevel: response.layerLevel || 1
+        layerLevel: response.layerLevel || 1,
+        products: response.products,
+        actions: response.actions
       }
       
       setMessages(prev => [...prev, assistantMessage])
       
-      // Store suggestions for later use if needed
+      // Update quick actions with suggestions
       if (response.suggestions) {
-        // Could store in state or show as quick actions
+        // Could update quick actions dynamically
       }
     } catch (error) {
       console.error('Failed to send message:', error)
@@ -312,6 +327,50 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                       </div>
                     )}
                     <p className="text-sm leading-relaxed">{message.content}</p>
+                    
+                    {/* Product Cards */}
+                    {message.products && message.products.length > 0 && (
+                      <div className="mt-3 space-y-2">
+                        {message.products.map((item, index) => (
+                          <ChatProductCard
+                            key={index}
+                            product={item.product}
+                            reason={item.reason}
+                            matchScore={item.matchScore}
+                            compact={true}
+                            onAction={(action, product) => {
+                              if (action === 'add_to_cart') {
+                                toast.success(`Added ${product.name} to cart`)
+                              } else if (action === 'buy_now') {
+                                // Handle buy now
+                                window.location.href = `/checkout?product=${product.id}`
+                              }
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                    
+                    {/* Action Buttons */}
+                    {message.actions && message.actions.length > 0 && message.products && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {message.actions.slice(0, 3).map((action, index) => (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              if (action.type === 'view') {
+                                // Handle view action
+                                console.log('View products')
+                              }
+                            }}
+                            className="text-xs px-3 py-1 bg-burgundy/10 hover:bg-burgundy/20 text-burgundy rounded-full transition-colors"
+                          >
+                            {action.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    
                     <p className="text-xs opacity-60 mt-1">
                       {message.timestamp.toLocaleTimeString('en-US', { 
                         hour: 'numeric', 

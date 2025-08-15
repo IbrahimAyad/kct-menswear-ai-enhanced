@@ -89,63 +89,65 @@ export default function CartPage() {
     });
 
     try {
-      const supabase = createClient();
-      
-      // Format items for Edge Function based on product type
+      // Format items for unified checkout API
       const formattedItems = items.map(item => {
         const coreProduct = getCoreProductById(item.productId);
+        
+        // Check if it's an enhanced product (ID starts with 'enhanced_')
+        const isEnhanced = item.productId.startsWith('enhanced_');
         
         if (coreProduct && coreProduct.stripe_price_id) {
           // Core product - use Stripe price ID
           return {
-            type: 'stripe',
-            stripe_price_id: coreProduct.stripe_price_id,
+            id: item.productId,
+            name: coreProduct.name,
+            price: coreProduct.price, // Price in cents
             quantity: item.quantity,
-            customization: {
-              size: item.size
-            }
+            selectedSize: item.size,
+            stripePriceId: coreProduct.stripe_price_id,
+            enhanced: false,
+            category: coreProduct.category,
+            image: coreProduct.image_url
           };
         } else {
-          // Catalog product from Supabase
+          // Enhanced or catalog product
           return {
-            type: 'catalog',
-            product_id: item.productId,
-            variant_id: item.productId,
+            id: item.productId,
             name: item.name || 'Product',
-            price: (item.price || 0) / 100, // Convert cents to dollars
+            price: item.price || 0, // Price already in cents
             quantity: item.quantity,
-            sku: item.productId,
-            customization: {
-              size: item.size
-            }
+            selectedSize: item.size,
+            enhanced: isEnhanced,
+            category: item.category || 'general',
+            image: item.image
           };
         }
       });
 
-      // Call Supabase Edge Function
-      const { data, error } = await supabase.functions.invoke('create-checkout-secure', {
-        body: {
+      // Call unified checkout API
+      const response = await fetch('/api/checkout/unified', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           items: formattedItems,
-          customer_email: user?.email || undefined,
-          user_id: user?.id || null,
-          cart_id: localStorage.getItem('guest-cart-id') || undefined,
-          success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${window.location.origin}/cart`,
-          metadata: {
-            source: 'website'
-          }
-        }
+          customerEmail: user?.email || undefined,
+          successUrl: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancelUrl: `${window.location.origin}/cart`
+        })
       });
 
-      if (error) {
-        console.error('Checkout error:', error);
-        throw new Error(error.message || 'Failed to create checkout session');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
       }
 
-      if (data?.url) {
+      if (data.url) {
         // Redirect to Stripe Checkout
         window.location.href = data.url;
-      } else if (data?.sessionId) {
+      } else if (data.sessionId) {
         // Fallback to client-side redirect
         const stripe = await stripePromise;
         if (stripe) {
@@ -157,7 +159,7 @@ export default function CartPage() {
         }
       }
     } catch (error) {
-
+      console.error('Checkout error:', error);
       alert('Something went wrong. Please try again.');
     } finally {
       setIsProcessingCheckout(false);
@@ -169,64 +171,65 @@ export default function CartPage() {
 
     setIsProcessingCheckout(true);
     try {
-      const supabase = createClient();
-      
-      // Format items for Edge Function based on product type
+      // Format items for unified checkout API
       const formattedItems = items.map(item => {
         const coreProduct = getCoreProductById(item.productId);
+        
+        // Check if it's an enhanced product (ID starts with 'enhanced_')
+        const isEnhanced = item.productId.startsWith('enhanced_');
         
         if (coreProduct && coreProduct.stripe_price_id) {
           // Core product - use Stripe price ID
           return {
-            type: 'stripe',
-            stripe_price_id: coreProduct.stripe_price_id,
+            id: item.productId,
+            name: coreProduct.name,
+            price: coreProduct.price, // Price in cents
             quantity: item.quantity,
-            customization: {
-              size: item.size
-            }
+            selectedSize: item.size,
+            stripePriceId: coreProduct.stripe_price_id,
+            enhanced: false,
+            category: coreProduct.category,
+            image: coreProduct.image_url
           };
         } else {
-          // Catalog product from Supabase
+          // Enhanced or catalog product
           return {
-            type: 'catalog',
-            product_id: item.productId,
-            variant_id: item.productId,
+            id: item.productId,
             name: item.name || 'Product',
-            price: (item.price || 0) / 100, // Convert cents to dollars
+            price: item.price || 0, // Price already in cents
             quantity: item.quantity,
-            sku: item.productId,
-            customization: {
-              size: item.size
-            }
+            selectedSize: item.size,
+            enhanced: isEnhanced,
+            category: item.category || 'general',
+            image: item.image
           };
         }
       });
 
-      // Call Supabase Edge Function
-      const { data, error } = await supabase.functions.invoke('create-checkout-secure', {
-        body: {
+      // Call unified checkout API
+      const response = await fetch('/api/checkout/unified', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           items: formattedItems,
-          customer_email: guestEmail,
-          user_id: null,
-          cart_id: localStorage.getItem('guest-cart-id') || undefined,
-          success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${window.location.origin}/cart`,
-          metadata: {
-            source: 'website',
-            guest_checkout: true
-          }
-        }
+          customerEmail: guestEmail,
+          successUrl: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancelUrl: `${window.location.origin}/cart`
+        })
       });
 
-      if (error) {
-        console.error('Checkout error:', error);
-        throw new Error(error.message || 'Failed to create checkout session');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to create checkout session');
       }
 
-      if (data?.url) {
+      if (data.url) {
         // Redirect to Stripe Checkout
         window.location.href = data.url;
-      } else if (data?.sessionId) {
+      } else if (data.sessionId) {
         // Fallback to client-side redirect
         const stripe = await stripePromise;
         if (stripe) {
@@ -238,7 +241,7 @@ export default function CartPage() {
         }
       }
     } catch (error) {
-
+      console.error('Guest checkout error:', error);
       alert('Something went wrong. Please try again.');
     } finally {
       setIsProcessingCheckout(false);

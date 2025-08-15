@@ -47,11 +47,9 @@ export default function CheckoutSuccess({
           Thank you for your purchase. You'll receive an email confirmation shortly with your order details.
         </p>
         
-        {searchParams.session_id && (
-          <p className="text-sm text-gray-500 mb-6">
-            Order ID: {searchParams.session_id.slice(0, 20)}...
-          </p>
-        )}
+        <p className="text-sm text-gray-500 mb-6">
+          Your order has been successfully processed.
+        </p>
         
         <div className="space-y-4">
           <div className="bg-gray-50 rounded-md p-4">
