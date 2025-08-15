@@ -223,6 +223,7 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
 
   // Keep the original bundle handling for Add to Cart
   const handleBundleAddToCart = () => {
+    try {
       // For bundles, add all components
       if (product.isBundle && product.bundleComponents) {
         let allAdded = true;
@@ -250,7 +251,7 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
               <Package className="h-4 w-4" />
               <span>Complete look added to cart!</span>
             </div>
-          )
+          );
         }
       } else {
         // For individual products
@@ -276,14 +277,14 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
         });
         
         if (added) {
-          toast.success(`${product.name} added to cart!`)
+          toast.success(`${product.name} added to cart!`);
         }
       }
     } catch (error) {
       console.error('Add to cart error:', error);
-      toast.error('Failed to add to cart')
+      toast.error('Failed to add to cart');
     }
-  }
+  };
 
   const handleShare = () => {
     if (navigator.share) {
