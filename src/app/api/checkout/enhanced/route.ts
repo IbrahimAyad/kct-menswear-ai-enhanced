@@ -38,6 +38,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { productId, quantity = 1, size, successUrl, cancelUrl } = body;
 
+    console.log('Enhanced checkout request:', { productId, quantity, size });
+
     if (!productId) {
       return NextResponse.json(
         { error: 'Product ID is required' },
@@ -61,12 +63,28 @@ export async function POST(request: NextRequest) {
       .eq('id', productId)
       .single();
 
-    if (error || !product) {
+    if (error) {
+      console.error('Database error fetching product:', error);
       return NextResponse.json(
-        { error: 'Product not found' },
+        { error: `Database error: ${error.message}` },
+        { status: 500 }
+      );
+    }
+
+    if (!product) {
+      console.error('Product not found with ID:', productId);
+      return NextResponse.json(
+        { error: `Product not found with ID: ${productId}` },
         { status: 404 }
       );
     }
+
+    console.log('Found product:', { 
+      id: product.id, 
+      name: product.name, 
+      price: product.base_price,
+      slug: product.slug 
+    });
 
     // Get the primary image URL
     const imageUrl = product.images?.hero?.url || 

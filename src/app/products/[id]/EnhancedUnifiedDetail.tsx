@@ -89,7 +89,7 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
   const availableSizes = getAvailableSizes();
 
   const handleAddToCart = async () => {
-    if (!selectedSize && !product.isBundle) {
+    if (!selectedSize && !product.isBundle && !product.enhanced) {
       toast.error('Please select a size')
       return
     }
@@ -97,8 +97,24 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
     try {
       // For enhanced products, use the enhanced checkout
       if (product.enhanced) {
+        // For blazers, require size selection
+        if (!selectedSize && (isBlazer || isSuit)) {
+          toast.error('Please select a size')
+          return
+        }
+        
         // Extract the numeric ID from enhanced_123 format
         const productId = product.id.replace('enhanced_', '');
+        
+        console.log('Creating checkout for enhanced product:', {
+          productId,
+          productName: product.name,
+          size: selectedSize,
+          quantity: quantity
+        });
+        
+        // Show loading state
+        toast.loading('Creating checkout session...');
         
         // Redirect to enhanced checkout with product details
         const checkoutUrl = `/api/checkout/enhanced`;
@@ -111,15 +127,22 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
             productId: productId,
             quantity: quantity,
             size: selectedSize,
-            style: isSuit ? selectedStyle : undefined
+            style: isSuit ? selectedStyle : undefined,
+            successUrl: `${window.location.origin}/checkout/success`,
+            cancelUrl: `${window.location.href}` // Stay on current product page
           })
         });
 
         if (response.ok) {
           const { url } = await response.json();
+          toast.dismiss(); // Clear loading toast
+          toast.success('Redirecting to checkout...');
           window.location.href = url;
         } else {
-          toast.error('Failed to create checkout session');
+          const error = await response.text();
+          console.error('Checkout error:', error);
+          toast.dismiss(); // Clear loading toast
+          toast.error('Failed to create checkout session. Please try again.');
         }
         return;
       }
