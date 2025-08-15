@@ -88,8 +88,44 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
 
   const availableSizes = getAvailableSizes();
 
+  // Add to Cart function - adds product to cart state
   const handleAddToCart = async () => {
-    if (!selectedSize && !product.isBundle && !product.enhanced) {
+    if (!selectedSize && !product.isBundle) {
+      toast.error('Please select a size')
+      return
+    }
+
+    try {
+      // Add the product to cart
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price * 100, // Convert to cents for cart
+        image: product.imageUrl || product.images?.[0] || '/placeholder.jpg',
+        quantity: quantity,
+        selectedSize: selectedSize || 'M',
+        stripePriceId: product.stripePriceId,
+        category: product.category,
+        enhanced: product.enhanced || false
+      };
+
+      const success = addItem(cartItem);
+      
+      if (success) {
+        toast.success(`Added ${quantity} ${product.name} to cart`);
+        // Optional: Show cart drawer or navigate to cart
+      } else {
+        toast.error('Failed to add to cart');
+      }
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      toast.error('Failed to add to cart');
+    }
+  };
+
+  // Buy Now function - direct checkout
+  const handleBuyNow = async () => {
+    if (!selectedSize && !product.isBundle) {
       toast.error('Please select a size')
       return
     }
@@ -97,12 +133,6 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
     try {
       // For enhanced products, use the enhanced checkout
       if (product.enhanced) {
-        // For blazers, require size selection
-        if (!selectedSize && (isBlazer || isSuit)) {
-          toast.error('Please select a size')
-          return
-        }
-        
         // Extract the numeric ID from enhanced_123 format
         const productId = product.id.replace('enhanced_', '');
         
@@ -147,6 +177,52 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
         return;
       }
 
+      // For regular products with Stripe price ID, use standard checkout
+      if (product.stripePriceId) {
+        toast.loading('Creating checkout session...');
+        
+        const response = await fetch('/api/checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items: [{
+              stripePriceId: product.stripePriceId,
+              quantity: quantity
+            }],
+            metadata: {
+              productName: product.name,
+              size: selectedSize || 'N/A',
+              productId: product.id
+            }
+          })
+        });
+
+        if (response.ok) {
+          const { url } = await response.json();
+          toast.dismiss();
+          toast.success('Redirecting to checkout...');
+          window.location.href = url;
+        } else {
+          toast.dismiss();
+          toast.error('Failed to create checkout session');
+        }
+      } else {
+        // No Stripe ID, add to cart and navigate to cart page
+        handleAddToCart();
+        setTimeout(() => {
+          window.location.href = '/cart';
+        }, 500);
+      }
+    } catch (error) {
+      console.error('Buy now error:', error);
+      toast.error('Failed to process checkout');
+    }
+  };
+
+  // Keep the original bundle handling for Add to Cart
+  const handleBundleAddToCart = () => {
       // For bundles, add all components
       if (product.isBundle && product.bundleComponents) {
         let allAdded = true;
@@ -457,31 +533,29 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
                 </button>
               </div>
 
-              {product.enhanced ? (
-                // For enhanced products, show Buy Now button
-                <Button
-                  onClick={handleAddToCart}
-                  disabled={!product.inStock}
-                  className="flex-1 bg-burgundy-600 hover:bg-burgundy-700 text-white py-6 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:ring-offset-2"
-                  size="lg"
-                  aria-describedby={!selectedSize && !product.isBundle ? "size-required" : undefined}
-                >
-                  <Lock className="h-5 w-5 mr-2" aria-hidden="true" />
-                  Buy Now
-                </Button>
-              ) : (
-                // For regular products, show Add to Cart
-                <Button
-                  onClick={handleAddToCart}
-                  disabled={!product.inStock}
-                  className="flex-1 bg-burgundy-600 hover:bg-burgundy-700 text-white py-6 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:ring-offset-2"
-                  size="lg"
-                  aria-describedby={!selectedSize && !product.isBundle ? "size-required" : undefined}
-                >
-                  <ShoppingCart className="h-5 w-5 mr-2" aria-hidden="true" />
-                  {product.isBundle ? 'Add Bundle to Cart' : 'Add to Cart'}
-                </Button>
-              )}
+              {/* Add to Cart Button */}
+              <Button
+                onClick={handleAddToCart}
+                disabled={!product.inStock}
+                className="flex-1 bg-white hover:bg-gray-50 text-burgundy-600 border-2 border-burgundy-600 py-6 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:ring-offset-2 transition-all"
+                size="lg"
+                aria-describedby={!selectedSize && !product.isBundle ? "size-required" : undefined}
+              >
+                <ShoppingCart className="h-5 w-5 mr-2" aria-hidden="true" />
+                Add to Cart
+              </Button>
+
+              {/* Buy Now Button */}
+              <Button
+                onClick={handleBuyNow}
+                disabled={!product.inStock}
+                className="flex-1 bg-burgundy-600 hover:bg-burgundy-700 text-white py-6 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-burgundy-500 focus:ring-offset-2 transition-all"
+                size="lg"
+                aria-describedby={!selectedSize && !product.isBundle ? "size-required" : undefined}
+              >
+                <Lock className="h-5 w-5 mr-2" aria-hidden="true" />
+                Buy Now
+              </Button>
             </div>
 
             {/* Enhanced Secondary Actions */}
