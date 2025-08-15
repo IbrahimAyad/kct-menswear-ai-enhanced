@@ -6,11 +6,31 @@ import { EnhancedProduct, EnhancedProductQuery } from '@/lib/products/enhanced/t
 // GET - Search/List Enhanced Products
 export async function GET(request: NextRequest) {
   try {
+    // Check environment variables first
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error('Missing Supabase environment variables');
+      return NextResponse.json(
+        { 
+          error: 'Database configuration error',
+          message: 'Supabase environment variables are not configured',
+          hint: 'Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel'
+        },
+        { status: 503 }
+      );
+    }
+
     const supabase = await createClient();
     
     if (!supabase) {
+      console.error('Failed to create Supabase client');
       return NextResponse.json(
-        { error: 'Database connection failed' },
+        { 
+          error: 'Database connection failed',
+          message: 'Could not establish connection to database'
+        },
         { status: 503 }
       );
     }
