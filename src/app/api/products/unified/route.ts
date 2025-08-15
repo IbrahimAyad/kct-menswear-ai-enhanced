@@ -108,7 +108,7 @@ export async function GET(request: NextRequest) {
                   category: 'blazers',
                   product_type: 'blazers',
                   tags: product.tags || [],
-                  slug: product.slug,
+                  slug: product.slug, // Critical for product detail pages
                   url: `/products/${product.slug}`,
                   availability: 'in-stock',
                   images: [{ src: imageUrl }],
@@ -118,7 +118,7 @@ export async function GET(request: NextRequest) {
                   stripeActive: !!product.stripe_product_id,
                   variants: [],
                   ai_score: 95, // Higher score for enhanced products
-                  enhanced: true,
+                  enhanced: true, // Mark as enhanced for proper routing
                   pricing_tier: product.price_tier || null
                 };
               });

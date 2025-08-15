@@ -174,11 +174,21 @@ function ProductCard({ product, viewMode }: { product: UnifiedProduct; viewMode:
   const productPrice = typeof product.price === 'string' 
     ? parseFloat(product.price) 
     : product.price;
+  
+  // Determine the product link URL
+  const getProductUrl = () => {
+    // For enhanced products, use slug
+    if (product.enhanced && product.slug) {
+      return `/products/${product.slug}`;
+    }
+    // For other products, use slug if available, otherwise id
+    return `/products/${product.slug || product.id}`;
+  };
 
   if (viewMode === 'list') {
     return (
       <div className="flex gap-6 p-4 border border-gray-200 rounded-lg hover:shadow-lg transition-shadow">
-        <div className="relative w-48 h-48 flex-shrink-0">
+        <Link href={getProductUrl()} className="relative w-48 h-48 flex-shrink-0">
           <Image
             src={imageError ? '/placeholder-product.jpg' : productImage}
             alt={product.name}
@@ -186,9 +196,11 @@ function ProductCard({ product, viewMode }: { product: UnifiedProduct; viewMode:
             className="object-cover rounded-lg"
             onError={() => setImageError(true)}
           />
-        </div>
+        </Link>
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">{product.name}</h3>
+          <Link href={getProductUrl()}>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:underline">{product.name}</h3>
+          </Link>
           <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
           <p className="text-2xl font-bold text-gray-900 mb-4">${productPrice.toFixed(2)}</p>
           <div className="flex gap-2">
@@ -211,27 +223,32 @@ function ProductCard({ product, viewMode }: { product: UnifiedProduct; viewMode:
 
   return (
     <div className="group relative">
-      <div className="relative aspect-[3/4] mb-4 overflow-hidden rounded-lg bg-gray-100">
-        <Image
-          src={imageError ? '/placeholder-product.jpg' : productImage}
-          alt={product.name}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
-          onError={() => setImageError(true)}
-        />
-        <button
-          onClick={() => setIsLiked(!isLiked)}
-          className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
-        >
-          <Heart className={cn('w-5 h-5', isLiked && 'fill-red-500 text-red-500')} />
-        </button>
-      </div>
-      <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-2">
-        {product.name}
-      </h3>
-      <p className="text-lg font-bold text-gray-900">
-        ${productPrice.toFixed(2)}
-      </p>
+      <Link href={getProductUrl()} className="block">
+        <div className="relative aspect-[3/4] mb-4 overflow-hidden rounded-lg bg-gray-100">
+          <Image
+            src={imageError ? '/placeholder-product.jpg' : productImage}
+            alt={product.name}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={() => setImageError(true)}
+          />
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setIsLiked(!isLiked);
+            }}
+            className="absolute top-4 right-4 p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <Heart className={cn('w-5 h-5', isLiked && 'fill-red-500 text-red-500')} />
+          </button>
+        </div>
+        <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-2">
+          {product.name}
+        </h3>
+        <p className="text-lg font-bold text-gray-900">
+          ${productPrice.toFixed(2)}
+        </p>
+      </Link>
       <Button 
         className="w-full mt-2 opacity-0 group-hover:opacity-100 transition-opacity"
         size="sm"

@@ -80,13 +80,42 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
 
   const availableSizes = getAvailableSizes();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!selectedSize && !product.isBundle) {
       toast.error('Please select a size')
       return
     }
 
     try {
+      // For enhanced products, use the enhanced checkout
+      if (product.enhanced) {
+        // Extract the numeric ID from enhanced_123 format
+        const productId = product.id.replace('enhanced_', '');
+        
+        // Redirect to enhanced checkout with product details
+        const checkoutUrl = `/api/checkout/enhanced`;
+        const response = await fetch(checkoutUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            productId: productId,
+            quantity: quantity,
+            size: selectedSize,
+            style: isSuit ? selectedStyle : undefined
+          })
+        });
+
+        if (response.ok) {
+          const { url } = await response.json();
+          window.location.href = url;
+        } else {
+          toast.error('Failed to create checkout session');
+        }
+        return;
+      }
+
       // For bundles, add all components
       if (product.isBundle && product.bundleComponents) {
         let allAdded = true;
@@ -514,15 +543,29 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
                 </button>
               </div>
 
-              <Button
-                onClick={handleAddToCart}
-                disabled={!product.inStock}
-                className="flex-1 bg-burgundy-600 hover:bg-burgundy-700 text-white py-6 text-lg font-semibold"
-                size="lg"
-              >
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                {product.isBundle ? 'Add Bundle to Cart' : 'Add to Cart'}
-              </Button>
+              {product.enhanced ? (
+                // For enhanced products, show Buy Now button
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={!product.inStock}
+                  className="flex-1 bg-burgundy-600 hover:bg-burgundy-700 text-white py-6 text-lg font-semibold"
+                  size="lg"
+                >
+                  <Lock className="h-5 w-5 mr-2" />
+                  Buy Now
+                </Button>
+              ) : (
+                // For regular products, show Add to Cart
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={!product.inStock}
+                  className="flex-1 bg-burgundy-600 hover:bg-burgundy-700 text-white py-6 text-lg font-semibold"
+                  size="lg"
+                >
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  {product.isBundle ? 'Add Bundle to Cart' : 'Add to Cart'}
+                </Button>
+              )}
             </div>
 
             {/* Secondary Actions */}

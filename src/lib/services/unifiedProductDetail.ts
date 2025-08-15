@@ -145,35 +145,102 @@ export async function getUnifiedProduct(idOrSlug: string): Promise<UnifiedProduc
     };
   }
 
-  // If not a bundle, check Supabase by ID first, then by handle/slug
+  // Check enhanced products first (they use slug)
+  const { createClient } = await import('@/lib/supabase/server');
+  const supabase = await createClient();
+  
+  if (supabase) {
+    // Try to find in enhanced products table
+    const { data: enhancedProduct, error: enhancedError } = await supabase
+      .from('products_enhanced')
+      .select('*')
+      .eq('slug', idOrSlug)
+      .eq('status', 'active')
+      .single();
+    
+    if (enhancedProduct && !enhancedError) {
+      // Convert enhanced product to UnifiedProduct format
+      let imageUrl = '/placeholder-product.jpg';
+      let images: string[] = [];
+      
+      // Extract images from JSONB structure
+      if (enhancedProduct.images?.hero?.url) {
+        imageUrl = enhancedProduct.images.hero.url;
+        images.push(enhancedProduct.images.hero.url);
+      } else if (enhancedProduct.images?.primary?.url) {
+        imageUrl = enhancedProduct.images.primary.url;
+        images.push(enhancedProduct.images.primary.url);
+      } else if (enhancedProduct.images?.flat?.url) {
+        imageUrl = enhancedProduct.images.flat.url;
+        images.push(enhancedProduct.images.flat.url);
+      }
+      
+      // Add gallery images
+      if (enhancedProduct.images?.gallery?.length > 0) {
+        enhancedProduct.images.gallery.forEach((img: any) => {
+          if (img?.url) images.push(img.url);
+        });
+      }
+      
+      // If no images found yet, use the first available
+      if (images.length === 0 && enhancedProduct.images) {
+        Object.values(enhancedProduct.images).forEach((img: any) => {
+          if (img?.url && images.length === 0) {
+            imageUrl = img.url;
+            images.push(img.url);
+          }
+        });
+      }
+      
+      return {
+        id: `enhanced_${enhancedProduct.id}`,
+        sku: enhancedProduct.sku || `SKU-${enhancedProduct.id}`,
+        type: 'individual',
+        name: enhancedProduct.name,
+        description: enhancedProduct.description || '',
+        imageUrl: imageUrl,
+        images: images,
+        price: enhancedProduct.base_price / 100, // Convert cents to dollars
+        originalPrice: enhancedProduct.compare_at_price ? enhancedProduct.compare_at_price / 100 : undefined,
+        category: 'blazers',
+        color: enhancedProduct.color || undefined,
+        material: enhancedProduct.material || undefined,
+        tags: enhancedProduct.tags || [],
+        trending: true, // Enhanced products are featured
+        inStock: true,
+        stripePriceId: enhancedProduct.stripe_price_id || undefined,
+        occasions: ['business', 'formal', 'wedding', 'prom'],
+        slug: enhancedProduct.slug,
+        stockLevel: 100,
+        enhanced: true,
+        pricingTier: enhancedProduct.price_tier || undefined
+      };
+    }
+  }
+  
+  // If not enhanced, check regular products by ID first, then by handle/slug
   let product = await getProduct(idOrSlug);
   
   // If not found by ID, try to find by handle (slug)
-  if (!product) {
-    // Import Supabase client to search by handle
-    const { createClient } = await import('@/lib/supabase/server');
-    const supabase = await createClient();
+  if (!product && supabase) {
+    const { data, error } = await supabase
+      .from('products')
+      .select(`
+        *,
+        product_images (
+          image_url,
+          alt_text,
+          position,
+          image_type
+        )
+      `)
+      .eq('handle', idOrSlug)
+      .single();
     
-    if (supabase) {
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
-          *,
-          product_images (
-            image_url,
-            alt_text,
-            position,
-            image_type
-          )
-        `)
-        .eq('handle', idOrSlug)
-        .single();
-      
-      if (data && !error) {
-        // Convert to the format expected by getProduct
-        const { getProductById } = await import('@/lib/supabase/products');
-        product = await getProductById(data.id);
-      }
+    if (data && !error) {
+      // Convert to the format expected by getProduct
+      const { getProductById } = await import('@/lib/supabase/products');
+      product = await getProductById(data.id);
     }
   }
   
