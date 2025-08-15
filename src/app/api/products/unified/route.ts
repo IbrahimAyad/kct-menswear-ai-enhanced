@@ -33,6 +33,8 @@ export async function GET(request: NextRequest) {
     
     // Fetch individual products from Supabase if needed
     let individualProducts = [];
+    let enhancedProducts = [];
+    
     if (filters.includeIndividual !== false) {
       try {
         const supabase = await createClient();
@@ -40,6 +42,80 @@ export async function GET(request: NextRequest) {
         if (!supabase) {
           console.error('Supabase client is null - check environment variables');
         } else {
+          // First, fetch enhanced products (blazers)
+          try {
+            let enhancedQuery = supabase
+              .from('products_enhanced')
+              .select('*')
+              .eq('status', 'active');
+            
+            // Apply filters for enhanced products
+            if (filters.category?.length) {
+              const categories = filters.category.map(c => c.toLowerCase());
+              // Check if blazers or jackets are in the filter
+              if (categories.includes('blazers') || categories.includes('jackets') || categories.includes('blazer')) {
+                // Get all blazers
+                enhancedQuery = enhancedQuery.eq('category', 'Blazers');
+              } else {
+                // Skip enhanced products if not looking for blazers
+                enhancedQuery = enhancedQuery.eq('category', 'NONE');
+              }
+            } else {
+              // If no category filter, include all blazers
+              enhancedQuery = enhancedQuery.eq('category', 'Blazers');
+            }
+            
+            if (filters.minPrice) {
+              enhancedQuery = enhancedQuery.gte('base_price', filters.minPrice);
+            }
+            if (filters.maxPrice) {
+              enhancedQuery = enhancedQuery.lte('base_price', filters.maxPrice);
+            }
+            
+            const { data: enhancedData, error: enhancedError } = await enhancedQuery;
+            
+            if (!enhancedError && enhancedData) {
+              // Map enhanced products to unified format
+              enhancedProducts = enhancedData.map((product: any) => {
+                // Get image URL
+                const imageUrl = product.images?.hero?.url || 
+                               product.images?.primary?.url || 
+                               '/placeholder-product.jpg';
+                
+                return {
+                  id: `enhanced_${product.id}`,
+                  source: 'enhanced',
+                  type: 'individual',
+                  name: product.name,
+                  description: product.description || '',
+                  price: String(product.base_price),
+                  compare_at_price: product.compare_at_price ? String(product.compare_at_price) : null,
+                  currency: 'USD',
+                  category: 'blazers',
+                  product_type: 'blazers',
+                  tags: product.tags || [],
+                  slug: product.slug,
+                  url: `/products/${product.slug}`,
+                  availability: 'in-stock',
+                  images: [{ src: imageUrl }],
+                  vendor: 'KCT Menswear',
+                  sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'],
+                  stripePriceId: product.stripe_price_id || null,
+                  stripeActive: !!product.stripe_product_id,
+                  variants: [],
+                  ai_score: 95, // Higher score for enhanced products
+                  enhanced: true,
+                  pricing_tier: product.price_tier || null
+                };
+              });
+              
+              console.log(`Fetched ${enhancedProducts.length} enhanced blazers`);
+            }
+          } catch (enhancedErr) {
+            console.error('Error fetching enhanced products:', enhancedErr);
+          }
+          
+          // Then fetch legacy products
           // Build Supabase query - properly join with product_variants
           let query = supabase
             .from('products')
@@ -147,8 +223,11 @@ export async function GET(request: NextRequest) {
       }
     }
     
-    // Perform unified search with products
-    const results = await unifiedSearch(filters, individualProducts);
+    // Combine enhanced products with legacy products
+    const allProducts = [...enhancedProducts, ...individualProducts];
+    
+    // Perform unified search with all products
+    const results = await unifiedSearch(filters, allProducts);
     
     // Add preset metadata if applicable
     if (presetData) {
