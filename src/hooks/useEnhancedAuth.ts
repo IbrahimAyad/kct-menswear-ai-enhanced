@@ -162,14 +162,6 @@ export function useEnhancedAuth() {
 
   const handleUntrustedDevice = async (deviceId: string) => {
     // This would typically trigger additional verification
-    // console.log('Untrusted device detected:', deviceId);
-  };
-
-  const showSessionTimeoutWarning = () => {
-    // Show modal or notification about session timeout
-    const extendSession = confirm(
-      'Your session will expire in 5 minutes due to inactivity. Would you like to extend it?'
-    );
     
     if (extendSession) {
       extendCurrentSession();

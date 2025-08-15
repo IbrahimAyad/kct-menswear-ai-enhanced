@@ -372,24 +372,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 async function startServer() {
   try {
     // Initialize components
-    console.log('Initializing AI components...');
-    await dataProcessor.loadProductData();
     await dataProcessor.processProducts();
-    console.log('✅ Data processor initialized');
-
-    // Start listening
-    app.listen(PORT, () => {
-      console.log(`\n🚀 KCT AI Training API running on http://localhost:${PORT}`);
-      console.log(`📚 API documentation available at http://localhost:${PORT}/api/docs`);
-      console.log('\nEndpoints:');
-      console.log(`  POST   /api/chat`);
-      console.log(`  POST   /api/search`);
-      console.log(`  GET    /api/recommendations/:productId`);
-      console.log(`  POST   /api/outfit`);
-      console.log(`  GET    /api/products/category/:category`);
-      console.log(`  GET    /api/products/price`);
-      console.log(`  DELETE /api/session/:sessionId`);
-    });
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
@@ -398,13 +381,9 @@ async function startServer() {
 
 // Handle graceful shutdown
 process.on('SIGINT', () => {
-  console.log('\n\nShutting down gracefully...');
-  process.exit(0);
 });
 
 process.on('SIGTERM', () => {
-  console.log('\n\nShutting down gracefully...');
-  process.exit(0);
 });
 
 // Start the server

@@ -58,8 +58,6 @@ export default function StyleSwiperR2Page() {
   };
 
   const handleComplete = (likedImages: StyleSwiperImage[], analytics: SwipeAnalytics) => {
-    // console.log('Completed with liked images:', likedImages);
-    // console.log('Analytics:', analytics);
     setCompletedProfiles(prev => [...prev, { 
       likedImages, 
       analytics, 
@@ -69,13 +67,6 @@ export default function StyleSwiperR2Page() {
   };
 
   const handleProductClick = (productId: string) => {
-    // console.log('Product clicked:', productId);
-    // In a real app, navigate to product page or open quick view
-    // window.location.href = `/products/${productId}`;
-  };
-
-  const resetDemo = () => {
-    setSwipeData([]);
     setCompletedProfiles([]);
     window.location.reload();
   };
@@ -519,9 +510,4 @@ export default function StyleSwiperR2Page() {
         pageContext="style-swiper"
         swipeCount={swipeData.length}
         likedItems={likedImages}
-        onTipShown={(tipId) => console.log('Tip shown:', tipId)}
-        onTipDismissed={(tipId) => console.log('Tip dismissed:', tipId)}
-      />
-    </div>
-  );
 }

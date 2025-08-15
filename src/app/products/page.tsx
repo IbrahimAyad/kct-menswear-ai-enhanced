@@ -381,44 +381,6 @@ function UnifiedProductsContent() {
           loading={loading}
           onQuickView={(product) => {
             // Handle quick view
-            console.log('Quick view:', product);
-          }}
-          showLayoutToggle={false}
-          defaultLayout={layoutMode}
-        />
-        
-        {/* Pagination */}
-        {pagination.totalPages > 1 && (
-          <div className="mt-12 flex justify-center">
-            <div className="flex items-center gap-2">
-              <Button
-                onClick={() => setPage(pagination.currentPage - 1)}
-                disabled={!pagination.hasPrev}
-                variant="outline"
-                className="border-burgundy-200 hover:bg-burgundy-50"
-              >
-                Previous
-              </Button>
-              
-              <div className="flex items-center gap-1">
-                {[...Array(Math.min(5, pagination.totalPages))].map((_, i) => {
-                  const pageNum = i + 1;
-                  return (
-                    <Button
-                      key={pageNum}
-                      onClick={() => setPage(pageNum)}
-                      variant={pagination.currentPage === pageNum ? 'default' : 'outline'}
-                      size="sm"
-                      className={cn(
-                        "w-10 h-10",
-                        pagination.currentPage === pageNum
-                          ? "bg-burgundy-600 hover:bg-burgundy-700 text-white"
-                          : "border-burgundy-200 hover:bg-burgundy-50 text-burgundy-700"
-                      )}
-                    >
-                      {pageNum}
-                    </Button>
-                  );
                 })}
                 {pagination.totalPages > 5 && (
                   <>

@@ -65,8 +65,6 @@ export default function TestEnhancedProductsPage() {
     try {
       const response = await fetch('/api/products/search?include_enhanced=true&include_legacy=false');
       const data = await response.json();
-      console.log('Hybrid search results:', data);
-      alert(`Found ${data.results_info.enhanced_count} enhanced products`);
     } catch (err) {
       console.error('Error testing hybrid search:', err);
     }

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { OptimizedBanner } from '@/components/ui/OptimizedBanner';
 
 export default function AnimatedHeroSection() {
   const [isMobile, setIsMobile] = useState(false);
@@ -51,22 +52,20 @@ export default function AnimatedHeroSection() {
                 ease: "easeInOut"
               }}
             >
-              <img 
-                src="/KCT-Home-Banner-Update.jpg"
+              <OptimizedBanner 
                 alt="KCT Menswear Premium Collection"
-                className="w-full h-full object-cover"
-                style={{
-                  objectPosition: '55% 35%', // Shift slightly right and down to center the model better
-                  transform: 'scale(0.95)' // Slight scale down to show more of the image
-                }}
+                className="w-full h-full"
+                priority={true}
               />
             </motion.div>
           ) : (
-            <img 
-              src="/KCT-Home-Banner-Update.jpg"
-              alt="KCT Menswear Premium Collection"
-              className="w-full h-full object-cover object-center scale-105 transition-transform duration-700 hover:scale-100"
-            />
+            <div className="w-full h-full scale-105 transition-transform duration-700 hover:scale-100">
+              <OptimizedBanner 
+                alt="KCT Menswear Premium Collection"
+                className="w-full h-full"
+                priority={true}
+              />
+            </div>
           )}
           
           {/* Gradient Overlays */}

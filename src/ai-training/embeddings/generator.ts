@@ -61,11 +61,6 @@ export class EmbeddingsGenerator {
     }
 
     if (productsToEmbed.length === 0) {
-      console.log('No product changes detected. Skipping embedding generation.');
-      return [];
-    }
-
-    console.log(`Generating embeddings for ${productsToEmbed.length} changed products (of ${products.length} total)...`);
 
     for (let i = 0; i < productsToEmbed.length; i += batchSize) {
       const batch = productsToEmbed.slice(i, i + batchSize);
@@ -95,18 +90,12 @@ export class EmbeddingsGenerator {
           this.productHashCache[product.id] = hash;
         }
 
-        console.log(`Processed batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(productsToEmbed.length / batchSize)}`);
-        
-        // Rate limiting
-        await this.delay(1000);
       } catch (error) {
         console.error(`Error processing batch starting at index ${i}:`, error);
         // Continue with next batch
       }
     }
 
-    console.log(`Generated ${vectors.length} embeddings`);
-    await this.saveHashCache();
     return vectors;
   }
 
@@ -222,9 +211,6 @@ export class EmbeddingsGenerator {
     try {
       await vectorStore.initialize();
       await vectorStore.upsertVectors(vectors);
-      console.log(`Stored ${vectors.length} embeddings in vector database`);
-    } catch (error) {
-      console.error('Error storing embeddings:', error);
       throw error;
     }
   }
@@ -235,25 +221,6 @@ export class EmbeddingsGenerator {
 
   clearCache(): void {
     this.embeddingCache.clear();
-    console.log('Cleared embedding cache');
-  }
-
-  private computeProductHash(product: ProcessedProduct): string {
-    const toHash = JSON.stringify({
-      id: product.id,
-      title: product.title,
-      description: product.description,
-      searchableText: product.searchableText,
-      features: product.features,
-      priceHints: product.variants?.map(v => v.price) || [],
-      tags: product.tags || [],
-      color: product.color,
-      material: product.material,
-      fit: product.fit,
-      occasion: product.occasion,
-      season: product.season,
-      style: product.style,
-    });
     return crypto.createHash('sha256').update(toHash).digest('hex');
   }
 

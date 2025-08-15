@@ -706,6 +706,3 @@ export class ResponseEvolutionEngine {
   
   private storeEvolvedPatterns(key: string, patterns: string[]) {
     // Store patterns for future use
-    console.log(`Evolved patterns for ${key}:`, patterns)
-  }
-}

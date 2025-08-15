@@ -188,17 +188,6 @@ export class AIEvaluator {
   }
 
   async runEvaluation(): Promise<void> {
-    console.log('='.repeat(50));
-    console.log('AI System Evaluation');
-    console.log('='.repeat(50));
-
-    this.metrics.totalTests = this.testCases.length;
-    const responseTimes: number[] = [];
-    const confidenceScores: number[] = [];
-    let intentMatches = 0;
-
-    for (const testCase of this.testCases) {
-      console.log(`\nRunning test: ${testCase.id} (${testCase.category})`);
       
       const startTime = Date.now();
       
@@ -217,24 +206,6 @@ export class AIEvaluator {
         
         if (evaluation.passed) {
           this.metrics.passed++;
-          console.log(`✅ Test ${testCase.id} passed`);
-        } else {
-          this.metrics.failed++;
-          this.metrics.failedTests.push({
-            testId: testCase.id,
-            reason: evaluation.reason || 'Unknown',
-          });
-          console.log(`❌ Test ${testCase.id} failed: ${evaluation.reason}`);
-        }
-
-        // Track intent accuracy
-        if (response.metadata?.intent === testCase.expectedIntent) {
-          intentMatches++;
-        }
-
-        // Track confidence
-        if (response.metadata?.confidence) {
-          confidenceScores.push(response.metadata.confidence);
         }
 
         // Update category metrics
@@ -327,41 +298,18 @@ export class AIEvaluator {
   }
 
   private async evaluateVectorSearch(): Promise<void> {
-    console.log('\n' + '='.repeat(30));
-    console.log('Vector Search Evaluation');
-    console.log('='.repeat(30));
-
-    const testQueries = [
-      'black tuxedo for wedding',
-      'navy blue business suit',
-      'casual summer shirt',
-      'formal dress shoes',
-      'burgundy tie',
-    ];
-
-    let totalRelevance = 0;
-    
-    for (const query of testQueries) {
-      console.log(`\nTesting: "${query}"`);
       
       try {
         const embedding = await embeddingsGenerator.generateQueryEmbedding(query);
         const results = await vectorStore.search(embedding, 3);
         
         if (results.length > 0) {
-          console.log(`Found ${results.length} results:`);
-          results.forEach((result, i) => {
-            console.log(`  ${i + 1}. ${result.payload?.title} (score: ${result.score?.toFixed(3)})`);
           });
           
           // Calculate relevance based on score
           const avgScore = results.reduce((sum, r) => sum + (r.score || 0), 0) / results.length;
           totalRelevance += avgScore;
         } else {
-          console.log('  No results found');
-        }
-      } catch (error) {
-        console.error(`  Error: ${error}`);
       }
     }
 
@@ -369,52 +317,11 @@ export class AIEvaluator {
   }
 
   private displayResults(): void {
-    console.log('\n' + '='.repeat(50));
-    console.log('Evaluation Results');
-    console.log('='.repeat(50));
-    
-    console.log('\n📊 Overall Metrics:');
-    console.log(`  Total Tests: ${this.metrics.totalTests}`);
-    console.log(`  Passed: ${this.metrics.passed}`);
-    console.log(`  Failed: ${this.metrics.failed}`);
-    console.log(`  Accuracy: ${this.metrics.accuracy.toFixed(2)}%`);
-    console.log(`  Intent Accuracy: ${this.metrics.intentAccuracy.toFixed(2)}%`);
-    console.log(`  Product Relevance: ${this.metrics.productRelevance.toFixed(2)}%`);
-    console.log(`  Avg Response Time: ${this.metrics.averageResponseTime.toFixed(0)}ms`);
-    console.log(`  Avg Confidence: ${this.metrics.averageConfidence.toFixed(3)}`);
 
-    console.log('\n📈 Category Performance:');
-    for (const [category, metrics] of Object.entries(this.metrics.categoryMetrics)) {
-      console.log(`  ${category}:`);
-      console.log(`    - Tests: ${metrics.total}`);
-      console.log(`    - Passed: ${metrics.passed}`);
-      console.log(`    - Accuracy: ${metrics.accuracy.toFixed(2)}%`);
-    }
-
-    if (this.metrics.failedTests.length > 0) {
-      console.log('\n❌ Failed Tests:');
       this.metrics.failedTests.forEach(test => {
-        console.log(`  ${test.testId}: ${test.reason}`);
-      });
     }
 
     const grade = this.calculateGrade(this.metrics.accuracy);
-    console.log(`\n🎯 Overall Grade: ${grade}`);
-  }
-
-  private calculateGrade(accuracy: number): string {
-    if (accuracy >= 90) return 'A (Excellent)';
-    if (accuracy >= 80) return 'B (Good)';
-    if (accuracy >= 70) return 'C (Satisfactory)';
-    if (accuracy >= 60) return 'D (Needs Improvement)';
-    return 'F (Poor)';
-  }
-
-  private async saveResults(): Promise<void> {
-    const resultsPath = path.join(
-      process.cwd(),
-      'src/ai-training/evaluation/results.json'
-    );
 
     await fs.writeFile(
       resultsPath,
@@ -425,13 +332,6 @@ export class AIEvaluator {
       }, null, 2)
     );
 
-    console.log(`\n💾 Results saved to ${resultsPath}`);
-  }
-}
-
-// Run evaluation if executed directly
-if (require.main === module) {
-  const evaluator = new AIEvaluator();
   evaluator.runEvaluation().catch(console.error);
 }
 

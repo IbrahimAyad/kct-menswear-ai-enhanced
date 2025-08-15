@@ -94,13 +94,6 @@ export class HybridProductService {
           };
         }
       } catch (error) {
-        console.log('Enhanced product not found:', id);
-      }
-    }
-
-    // Try legacy products
-    if (preferredSource !== 'enhanced') {
-      const legacyProduct = await this.getLegacyProductById(id);
       if (legacyProduct) {
         return {
           source: 'legacy',
@@ -133,30 +126,6 @@ export class HybridProductService {
         };
       }
     } catch (error) {
-      console.log('Enhanced product not found by slug:', slug);
-    }
-
-    return null;
-  }
-
-  /**
-   * Get products by category from both systems
-   */
-  static async getProductsByCategory(
-    category: string, 
-    options: Omit<HybridProductQuery, 'category'> = {}
-  ): Promise<HybridProductResult[]> {
-    return (await this.searchProducts({
-      ...options,
-      category
-    })).results;
-  }
-
-  /**
-   * Search legacy products using existing system
-   */
-  private static async searchLegacyProducts(query: HybridProductQuery): Promise<UnifiedProduct[]> {
-    let products = getAllProducts();
 
     // Apply filters
     if (query.category) {

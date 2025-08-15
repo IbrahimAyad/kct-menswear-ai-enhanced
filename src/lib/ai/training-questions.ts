@@ -550,6 +550,3 @@ export function findBestMatch(message: string, patterns: Record<string, Conversa
 // Analytics helper to track which questions are asked most
 export function trackQuestionUsage(questionKey: string) {
   // This could be connected to analytics or database
-  console.log(`Question used: ${questionKey}`)
-  // TODO: Implement actual tracking
-}

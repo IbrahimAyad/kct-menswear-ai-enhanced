@@ -364,15 +364,3 @@ export function testConversation() {
     "girlfriend wearing red dress what should I wear"
   ]
   
-  console.log('Testing Conversation Engine:')
-  console.log('----------------------------')
-  
-  testMessages.forEach(async (msg) => {
-    const result = await engine.processMessage(msg, 'test-session')
-    console.log(`User: ${msg}`)
-    console.log(`${result.agent}: ${result.response}`)
-    console.log(`Quick Replies: ${result.quickReplies.join(' | ')}`)
-    console.log(`Confidence: ${(result.confidence * 100).toFixed(0)}%`)
-    console.log('---')
-  })
-}

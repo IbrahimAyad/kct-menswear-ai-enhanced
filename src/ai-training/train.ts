@@ -29,66 +29,23 @@ class TrainingPipeline {
     const startTime = Date.now();
     
     try {
-      console.log('='.repeat(50));
-      console.log('KCT AI Training Pipeline');
-      console.log('='.repeat(50));
-
-      // Step 1: Load and process product data
-      console.log('\n📊 Step 1: Loading product data...');
       await dataProcessor.loadProductData();
       const products = dataProcessor.getProducts();
       this.stats.totalProducts = products.length;
-      console.log(`✅ Loaded ${products.length} products`);
-
-      // Step 2: Process products for AI training
-      console.log('\n🔧 Step 2: Processing products...');
       const processedProducts = await dataProcessor.processProducts();
       this.stats.processedProducts = processedProducts.length;
-      console.log(`✅ Processed ${processedProducts.length} products`);
-
-      // Save processed data for reference
-      const processedDataPath = path.join(
-        process.cwd(),
-        'src/ai-training/data/processed_products.json'
-      );
       await dataProcessor.saveProcessedData(processedDataPath);
 
       // Step 3: Generate embeddings (delta-aware)
-      console.log('\n🧮 Step 3: Generating embeddings (delta-aware)...');
-      const vectors = await embeddingsGenerator.generateProductEmbeddings(processedProducts);
       this.stats.embeddingsGenerated = vectors.length;
-      console.log(`✅ Generated ${vectors.length} new/updated embeddings`);
-
-      // Step 4: Initialize vector database
-      console.log('\n💾 Step 4: Initializing vector database...');
       await vectorStore.initialize();
-      console.log('✅ Vector database initialized');
-
-      // Step 5: Store embeddings in vector database (skip if none)
-      console.log('\n📦 Step 5: Storing embeddings...');
       if (vectors.length > 0) {
         await vectorStore.upsertVectors(vectors);
         this.stats.vectorsStored = vectors.length;
-        console.log(`✅ Stored ${vectors.length} vectors`);
-      } else {
-        console.log('ℹ️ No vectors to store (no changes detected)');
       }
 
       // Step 6: Generate training knowledge base
-      console.log('\n📚 Step 6: Generating knowledge base...');
-      await this.generateKnowledgeBase(processedProducts);
-      console.log('✅ Knowledge base generated');
-
-      // Step 7: Create training prompts
-      console.log('\n💬 Step 7: Creating training prompts...');
       await this.createTrainingPrompts();
-      console.log('✅ Training prompts created');
-
-      // Calculate training time
-      this.stats.trainingTime = (Date.now() - startTime) / 1000;
-
-      // Display training summary
-      this.displaySummary();
 
       // Save training stats
       await this.saveStats();
@@ -326,28 +283,10 @@ class TrainingPipeline {
   }
 
   private displaySummary(): void {
-    console.log('\n' + '='.repeat(50));
-    console.log('Training Summary');
-    console.log('='.repeat(50));
-    console.log(`Total Products: ${this.stats.totalProducts}`);
-    console.log(`Processed Products: ${this.stats.processedProducts}`);
-    console.log(`Embeddings Generated: ${this.stats.embeddingsGenerated}`);
-    console.log(`Vectors Stored: ${this.stats.vectorsStored}`);
-    console.log(`Training Time: ${this.stats.trainingTime.toFixed(2)} seconds`);
     
     if (this.stats.errors.length > 0) {
-      console.log(`\n⚠️ Errors encountered: ${this.stats.errors.length}`);
-      this.stats.errors.forEach(error => console.log(`  - ${error}`));
     }
     
-    console.log('\n✅ Training pipeline completed successfully!');
-  }
-
-  private async saveStats(): Promise<void> {
-    const statsPath = path.join(
-      process.cwd(),
-      'src/ai-training/training_stats.json'
-    );
 
     await fs.writeFile(
       statsPath,

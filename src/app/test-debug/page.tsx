@@ -9,10 +9,6 @@ export default function TestDebugPage() {
 
   useEffect(() => {
     async function test() {
-      // console.log('Starting debug test...');
-      const testResult = await testDirectConnection();
-      // console.log('Debug test result:', testResult);
-      setResult(testResult);
       setLoading(false);
     }
     test();
