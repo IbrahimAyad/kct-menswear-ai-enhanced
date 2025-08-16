@@ -364,3 +364,20 @@ export function testConversation() {
     "girlfriend wearing red dress what should I wear"
   ]
   
+  // Test each message
+  testMessages.forEach(async (message, index) => {
+    const sessionId = `test_session_${index}`
+    try {
+      const response = await engine.processMessage(message, sessionId)
+      console.log(`Test ${index + 1}:`, {
+        input: message,
+        agent: response.agent,
+        response: response.response,
+        confidence: response.confidence,
+        quickReplies: response.quickReplies
+      })
+    } catch (error) {
+      console.error(`Test ${index + 1} failed:`, error)
+    }
+  })
+}

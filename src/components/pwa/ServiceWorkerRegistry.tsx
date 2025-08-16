@@ -52,9 +52,9 @@ export const ServiceWorkerRegistry = () => {
       // Listen for messages from the service worker
       navigator.serviceWorker.addEventListener('message', (event) => {
         if (event.data.type === 'CACHE_UPDATED') {
-
-    }
-  };
+          setShowUpdate(true);
+        }
+      });
 
   const handleUpdate = async () => {
     if (registration && registration.waiting) {
