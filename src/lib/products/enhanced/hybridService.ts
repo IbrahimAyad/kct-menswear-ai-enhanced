@@ -127,6 +127,17 @@ export class HybridProductService {
         };
       }
     } catch (error) {
+      console.error('Error fetching product by slug:', error);
+    }
+
+    return null;
+  }
+
+  /**
+   * Search legacy products using local data
+   */
+  private static async searchLegacyProducts(query: HybridProductQuery): Promise<UnifiedProduct[]> {
+    let products = getAllProducts();
 
     // Apply filters
     if (query.category) {

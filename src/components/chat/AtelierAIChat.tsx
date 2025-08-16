@@ -373,13 +373,12 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                       </div>
                     )}
                   </div>
-                </div>
                 </motion.div>
               ))}
             </div>
           </div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
