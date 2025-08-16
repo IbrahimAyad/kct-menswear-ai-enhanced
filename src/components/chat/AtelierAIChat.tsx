@@ -376,7 +376,29 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                 </motion.div>
               ))}
             </div>
-          </div>
+
+            {/* Input Area */}
+            <div className="p-4 border-t border-gray-200">
+              <div className="flex gap-2">
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Ask about styling, sizing, or recommendations..."
+                  className="flex-1 resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none"
+                  rows={1}
+                />
+                <Button
+                  onClick={handleSend}
+                  disabled={!input.trim() || isTyping}
+                  className="bg-red-900 hover:bg-red-800"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </>
         )}
       </motion.div>
     </AnimatePresence>
