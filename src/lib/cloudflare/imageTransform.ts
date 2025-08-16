@@ -120,38 +120,49 @@ export function getCloudflareOptimizedUrl(
   originalUrl: string,
   preset: keyof typeof imagePresets | ImageTransformOptions
 ): string {
-  // Check if Cloudflare Image Resizing is available
+  // Always enable in production (you have Cloudflare Pro)
   const isProduction = process.env.NODE_ENV === 'production';
-  const hasImageResizing = process.env.NEXT_PUBLIC_CLOUDFLARE_IMAGE_RESIZING === 'true';
   
-  // If no image resizing available, return original URL
-  if (!isProduction || !hasImageResizing) {
+  // In development, return original URL
+  if (!isProduction) {
     return originalUrl;
   }
   
-  // Check if URL is from R2 or external
-  const isR2Url = originalUrl.includes('r2.dev') || originalUrl.includes('pub-46371bda6faf4910b74631159fc2dfd4');
+  // Parse the URL to check if it's absolute or relative
+  const isAbsoluteUrl = originalUrl.startsWith('http://') || originalUrl.startsWith('https://');
   
-  if (!isR2Url) {
-    // For non-R2 URLs, return as-is
-    return originalUrl;
-  }
+  // For relative URLs, make them absolute
+  const absoluteUrl = isAbsoluteUrl 
+    ? originalUrl 
+    : `https://kctmenswear.com${originalUrl.startsWith('/') ? '' : '/'}${originalUrl}`;
   
-  const optimizer = new CloudflareImageOptimizer('');
   const options = typeof preset === 'string' ? imagePresets[preset] : preset;
   
-  // For Cloudflare Image Resizing, use the /cdn-cgi/image/ path
-  const params = new URLSearchParams();
+  // Build Cloudflare Image Resizing parameters
+  const cfParams: string[] = [];
   
-  if (options.width) params.append('width', options.width.toString());
-  if (options.height) params.append('height', options.height.toString());
-  if (options.quality) params.append('quality', (options.quality || 85).toString());
-  if (options.format) params.append('format', options.format);
-  if (options.fit) params.append('fit', options.fit);
+  // Format (auto will choose WebP or AVIF based on browser support)
+  cfParams.push(`format=${options.format || 'auto'}`);
   
-  // Use the Cloudflare Image Resizing endpoint
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://kctmenswear.com';
-  return `${baseUrl}/cdn-cgi/image?${params.toString()}&url=${encodeURIComponent(originalUrl)}`;
+  // Dimensions
+  if (options.width) cfParams.push(`width=${options.width}`);
+  if (options.height) cfParams.push(`height=${options.height}`);
+  
+  // Quality (default 85 for good balance)
+  cfParams.push(`quality=${options.quality || 85}`);
+  
+  // Fit mode
+  if (options.fit) cfParams.push(`fit=${options.fit}`);
+  
+  // Sharpen for better clarity on resize
+  if (options.sharpen) cfParams.push(`sharpen=${options.sharpen}`);
+  
+  // DPR for retina displays
+  if (options.dpr) cfParams.push(`dpr=${options.dpr}`);
+  
+  // Cloudflare Image Resizing URL format
+  // This works with your Cloudflare Pro plan
+  return `/cdn-cgi/image/${cfParams.join(',')}/${absoluteUrl}`;
 }
 
 // Batch preload images for gallery
