@@ -10,106 +10,22 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // ===== PERFORMANCE OPTIMIZATIONS =====
-  
-  // Enable SWC minification (faster than Terser)
-  swcMinify: true,
-  
-  // Optimize fonts
-  optimizeFonts: true,
-  
-  // Compress build output
+  // Basic performance optimizations
   compress: true,
-  
-  // Production optimizations
   productionBrowserSourceMaps: false,
   
-  // Webpack optimizations
-  webpack: (config, { isServer }) => {
-    // Optimize bundle size
-    config.optimization = {
-      ...config.optimization,
-      moduleIds: 'deterministic',
-      splitChunks: {
-        chunks: 'all',
-        cacheGroups: {
-          default: false,
-          vendors: false,
-          // Split vendor chunks
-          vendor: {
-            name: 'vendor',
-            chunks: 'all',
-            test: /node_modules/,
-            priority: 20,
-          },
-          // Split common components
-          common: {
-            name: 'common',
-            minChunks: 2,
-            chunks: 'all',
-            priority: 10,
-            reuseExistingChunk: true,
-            enforce: true,
-          },
-          // Split Three.js separately (heavy library)
-          three: {
-            test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
-            name: 'three',
-            chunks: 'all',
-            priority: 30,
-          },
-          // Split AWS SDK separately
-          aws: {
-            test: /[\\/]node_modules[\\/]@aws-sdk[\\/]/,
-            name: 'aws',
-            chunks: 'all',
-            priority: 30,
-          },
-        },
-      },
-    };
-    
-    // Use filesystem cache with max age
-    config.cache = {
-      type: 'filesystem',
-      buildDependencies: {
-        config: [__filename],
-      },
-      // Set max age to 1 week
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    };
-    
-    // Tree shake unused exports
-    config.optimization.usedExports = true;
-    config.optimization.sideEffects = false;
-    
-    return config;
-  },
-  
-  // Experimental features for better performance
+  // Experimental features
   experimental: {
     serverActions: {
       bodySizeLimit: '2mb',
     },
-    // Enable optimized package imports
-    optimizePackageImports: [
-      'lucide-react',
-      '@heroicons/react',
-      'framer-motion',
-      'recharts',
-    ],
-    // Optimize CSS
-    optimizeCss: true,
-    // Enable parallel routes
-    parallelRoutes: true,
-    // Use new app directory features
     typedRoutes: true,
   },
   
   // Server external packages
   serverExternalPackages: [],
   
-  // Security headers (deduplicated)
+  // Security and cache headers
   async headers() {
     return [
       {
@@ -135,21 +51,6 @@ const nextConfig: NextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()',
           },
-          // Add cache headers for static assets
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-      // Specific cache headers for images
-      {
-        source: '/_next/image(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
         ],
       },
       // Cache headers for static files
@@ -162,20 +63,24 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Cache headers for images
+      {
+        source: '/_next/image(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
     ];
   },
   
   images: {
-    // Set device sizes for responsive images
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    
-    // Use webp format by default
     formats: ['image/avif', 'image/webp'],
-    
-    // Minimize images
-    minimumCacheTTL: 31536000, // 1 year
-    
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: 'https',
