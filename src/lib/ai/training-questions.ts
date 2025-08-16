@@ -550,3 +550,11 @@ export function findBestMatch(message: string, patterns: Record<string, Conversa
 // Analytics helper to track which questions are asked most
 export function trackQuestionUsage(questionKey: string) {
   // This could be connected to analytics or database
+  try {
+    const usage = JSON.parse(localStorage.getItem('question_usage') || '{}');
+    usage[questionKey] = (usage[questionKey] || 0) + 1;
+    localStorage.setItem('question_usage', JSON.stringify(usage));
+  } catch (error) {
+    console.warn('Could not track question usage:', error);
+  }
+}
