@@ -76,12 +76,13 @@ export default function UniversalLargeCard({
           e.preventDefault();
           setIsFavorited(!isFavorited);
         }}
-        className="absolute top-6 right-6 z-10 p-2 bg-white/90 backdrop-blur-sm rounded-full hover:scale-110 transition-transform"
+        className="absolute top-6 right-6 z-10 p-2.5 bg-white/90 backdrop-blur-sm rounded-full hover:scale-110 transition-all duration-200 hover:bg-white focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:ring-offset-2"
+        aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
       >
         <Heart 
           className={cn(
-            "w-5 h-5 transition-all",
-            isFavorited ? "fill-red-500 text-red-500 animate-pulse" : "text-gray-600"
+            "w-5 h-5 transition-all duration-200",
+            isFavorited ? "fill-red-500 text-red-500" : "text-gray-600 hover:text-red-500"
           )}
         />
       </button>
@@ -318,11 +319,12 @@ export default function UniversalLargeCard({
           <button
             onClick={handleQuickAddToCart}
             className={cn(
-              "flex-1 py-3 px-4 font-medium transition-all flex items-center justify-center gap-2",
+              "flex-1 py-3 px-4 font-medium transition-all duration-200 flex items-center justify-center gap-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2",
               addedToCart 
-                ? "bg-green-600 text-white" 
-                : "bg-black text-white hover:bg-gray-800"
+                ? "bg-green-600 text-white hover:bg-green-700 focus:ring-green-300" 
+                : "bg-burgundy text-white hover:bg-burgundy-700 hover:shadow-md focus:ring-burgundy-300"
             )}
+            disabled={addedToCart}
           >
             {addedToCart ? (
               <>
@@ -339,7 +341,7 @@ export default function UniversalLargeCard({
           
           <Link 
             href={productLink}
-            className="px-4 py-3 border border-black text-black hover:bg-black hover:text-white transition-all flex items-center gap-2"
+            className="px-4 py-3 border-2 border-burgundy-300 text-burgundy-700 hover:bg-burgundy-50 hover:border-burgundy-400 transition-all duration-200 flex items-center gap-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:ring-offset-2"
           >
             Details
             <ArrowRight className="w-4 h-4" />

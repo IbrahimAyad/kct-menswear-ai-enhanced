@@ -6,12 +6,12 @@ declare global {
   }
 }
 
-// Facebook App Configuration
-const FB_APP_ID = '600272069409397';
-const FB_PIXEL_ID = '1409898642574301'; // This is typically different from Ad Account ID
-const FB_API_VERSION = 'v22.0'; // Updated to match your app settings
-const FB_CLIENT_TOKEN = 'f296cad6d16fbf985116e940d41ea51d'; // Client token for advanced features
-const FB_DATASET_ID = '283546658844002'; // Dataset ID for Analytics
+// Facebook App Configuration - Use environment variables for security
+const FB_APP_ID = process.env.NEXT_PUBLIC_FB_APP_ID || '';
+const FB_PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID || '';
+const FB_API_VERSION = process.env.NEXT_PUBLIC_FB_API_VERSION || 'v22.0';
+const FB_CLIENT_TOKEN = process.env.NEXT_PUBLIC_FB_CLIENT_TOKEN || '';
+const FB_DATASET_ID = process.env.NEXT_PUBLIC_FB_DATASET_ID || '';
 
 // Initialize Facebook SDK
 export const initializeFacebookSDK = () => {

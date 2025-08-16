@@ -90,15 +90,15 @@ export function Navigation() {
           </div>
 
           {/* Right Side Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-3">
             <button
-              className="p-2 hover:bg-gray-100 rounded-sm transition-colors group relative"
+              className="p-2.5 hover:bg-gray-100 rounded-lg transition-all duration-200 group relative focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:ring-offset-2"
               onClick={() => setIsSearchOpen(true)}
               aria-label="Search products (⌘K)"
             >
-              <Search className="h-5 w-5 group-hover:text-burgundy transition-colors" />
-              <div className="absolute -bottom-1 -right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="px-1 py-0.5 text-xs text-gray-500 bg-gray-100 rounded border text-xs">
+              <Search className="h-5 w-5 group-hover:text-burgundy transition-colors duration-200" />
+              <div className="absolute -bottom-2 -right-2 opacity-0 group-hover:opacity-100 transition-all duration-200 transform scale-95 group-hover:scale-100">
+                <div className="px-2 py-1 text-xs text-gray-600 bg-white rounded-md shadow-lg border border-gray-200">
                   ⌘K
                 </div>
               </div>
@@ -107,14 +107,14 @@ export function Navigation() {
             <Button 
               variant="ghost" 
               size="icon"
-              className="relative hover:text-burgundy transition-colors"
+              className="relative hover:text-burgundy hover:bg-burgundy-50 transition-all duration-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:ring-offset-2"
               onClick={() => setIsCartOpen(true)}
               aria-label={`Shopping cart with ${cartSummary.itemCount} items`}
             >
               <ShoppingBag className="h-5 w-5" />
               {cartSummary.itemCount > 0 && (
                 <span 
-                  className="absolute -top-1 -right-1 h-5 w-5 text-white text-xs font-bold rounded-full flex items-center justify-center animate-scale-in shadow-sm"
+                  className="absolute -top-1 -right-1 h-5 w-5 text-white text-xs font-bold rounded-full flex items-center justify-center animate-scale-in shadow-md ring-2 ring-white"
                   style={{ backgroundColor: 'var(--burgundy)' }}
                 >
                   {cartSummary.itemCount}
@@ -122,7 +122,7 @@ export function Navigation() {
               )}
             </Button>
             <Button 
-              className="btn-burgundy px-6 shadow-md hover:scale-105"
+              className="btn-burgundy px-6 py-2.5 shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:ring-offset-2"
               aria-label="Book an appointment for custom fitting"
             >
               Book Appointment
@@ -133,7 +133,7 @@ export function Navigation() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="md:hidden hover:bg-burgundy-50 hover:text-burgundy transition-all duration-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:ring-offset-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isMenuOpen}

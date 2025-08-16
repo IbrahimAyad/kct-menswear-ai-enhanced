@@ -484,21 +484,6 @@ export class SmartTagger {
         console.error(`Error updating tags for product ${product.id}:`, updateError);
       }
     }
-    
-    
-    const { data: product, error } = await supabase
-      .from('products')
-      .select('*')
-      .eq('id', productId)
-      .single();
-    
-    if (error || !product) {
-      console.error('Error fetching product:', error);
-      return [];
-    }
-    
-    const tags = await this.generateTags(product);
-    return tags.map(t => t.tag);
   }
 }
 

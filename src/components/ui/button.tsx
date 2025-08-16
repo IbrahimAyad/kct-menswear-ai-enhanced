@@ -5,25 +5,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils/cn";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-sm text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-burgundy-300 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed active:scale-95",
   {
     variants: {
       variant: {
-        default: "bg-gold text-black hover:bg-gold/90",
+        default: "bg-gold text-black hover:bg-gold/90 hover:shadow-md hover:scale-105 shadow-sm",
         destructive:
-          "bg-red-500 text-white hover:bg-red-500/90",
+          "bg-red-500 text-white hover:bg-red-500/90 hover:shadow-md shadow-sm",
         outline:
-          "border-2 border-black bg-transparent hover:bg-black hover:text-white",
+          "border-2 border-burgundy-300 bg-transparent text-burgundy-700 hover:bg-burgundy-50 hover:border-burgundy-400 shadow-sm hover:shadow-md",
         secondary:
-          "bg-black text-white hover:bg-gray-800",
-        ghost: "hover:bg-gold/10 hover:text-gold",
-        link: "text-black underline-offset-4 hover:underline",
+          "bg-burgundy text-white hover:bg-burgundy-700 hover:shadow-md shadow-sm",
+        ghost: "hover:bg-burgundy-50 hover:text-burgundy-700 text-burgundy-600",
+        link: "text-burgundy-700 underline-offset-4 hover:underline hover:text-burgundy-800",
       },
       size: {
         default: "h-10 px-6 py-2",
-        sm: "h-9 rounded-sm px-3",
-        lg: "h-11 rounded-sm px-8",
-        icon: "h-10 w-10",
+        sm: "h-9 rounded-lg px-3 text-sm",
+        lg: "h-12 rounded-lg px-8 text-base font-semibold",
+        icon: "h-10 w-10 rounded-lg",
       },
     },
     defaultVariants: {

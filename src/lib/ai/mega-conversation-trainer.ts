@@ -257,3 +257,23 @@ export class MegaConversationTrainer {
   
   // Run training on all scenarios
   async runMegaTraining(limit?: number): Promise<TrainingReport> {
+    const reports: TrainingReport[] = [];
+    const scenarios = this.scenarios.slice(0, limit);
+    
+    for (const scenario of scenarios) {
+      const report = await this.runScenario(scenario);
+      reports.push(report);
+    }
+    
+    return {
+      scenario: 'mega-training',
+      totalQuestions: reports.reduce((sum, r) => sum + r.totalQuestions, 0),
+      passedQuestions: reports.reduce((sum, r) => sum + r.passedQuestions, 0),
+      averageResponseTime: reports.reduce((sum, r) => sum + r.averageResponseTime, 0) / reports.length,
+      score: reports.reduce((sum, r) => sum + r.score, 0) / reports.length,
+      results: reports.flatMap(r => r.results),
+      totalResponseTime: reports.reduce((sum, r) => sum + r.totalResponseTime, 0),
+      exchangeCount: reports.reduce((sum, r) => sum + r.exchangeCount, 0)
+    };
+  }
+}

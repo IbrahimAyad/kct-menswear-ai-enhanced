@@ -41,10 +41,10 @@ export default function LoginForm() {
 
   return (
     <div className="w-full max-w-md">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
+          <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
+            Email Address
           </label>
           <input
             id="email"
@@ -52,13 +52,13 @@ export default function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-            placeholder="Enter your email"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:border-burgundy-400 transition-all duration-200 hover:border-gray-300"
+            placeholder="Enter your email address"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-2">
             Password
           </label>
           <input
@@ -67,32 +67,34 @@ export default function LoginForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:border-burgundy-400 transition-all duration-200 hover:border-gray-300"
             placeholder="Enter your password"
           />
         </div>
 
         {error && (
-          <div className="text-sm text-red-600">
-            {error}
+          <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+            <div className="text-sm text-red-700 font-medium">
+              {error}
+            </div>
           </div>
         )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full bg-burgundy text-white py-3 px-4 rounded-lg hover:bg-burgundy-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium hover:shadow-md focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:ring-offset-2"
         >
           {loading ? 'Signing in...' : 'Sign In'}
         </button>
 
-        <div className="text-center space-y-2">
-          <Link href="/auth/forgot-password" className="text-sm text-gray-600 hover:underline">
+        <div className="text-center space-y-3">
+          <Link href="/auth/forgot-password" className="text-sm text-gray-600 hover:text-burgundy-600 transition-colors duration-200 focus:outline-none focus:text-burgundy-600">
             Forgot your password?
           </Link>
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
-            <Link href="/auth/signup" className="text-black hover:underline">
+            <Link href="/auth/signup" className="text-burgundy-700 hover:text-burgundy-900 font-medium transition-colors duration-200 focus:outline-none focus:underline">
               Sign up
             </Link>
           </p>

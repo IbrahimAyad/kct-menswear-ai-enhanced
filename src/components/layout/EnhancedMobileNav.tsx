@@ -264,7 +264,7 @@ export default function EnhancedMobileNav({ isOpen, onClose }: EnhancedMobileNav
             <div className="bg-gradient-to-b from-white to-gray-50 p-4 pb-2">
               {/* Close button and logo */}
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">
+                <h2 className="text-xl font-serif font-bold">
                   <span className="text-black">KCT</span>
                   <span className="text-burgundy-600 ml-1">Menswear</span>
                 </h2>

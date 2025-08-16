@@ -159,3 +159,10 @@ const productImageMappings: Record<string, { model: string; product: string }> =
 }
 
 async function updateProductsWithInventoryAndImages() {
+  console.log('Script placeholder - implementation needed');
+}
+
+// Execute if run directly
+if (require.main === module) {
+  updateProductsWithInventoryAndImages();
+}

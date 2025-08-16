@@ -167,3 +167,10 @@ const vestProducts = [
 ]
 
 async function updateVestProducts() {
+  console.log('Script placeholder - implementation needed');
+}
+
+// Execute if run directly
+if (require.main === module) {
+  updateVestProducts();
+}

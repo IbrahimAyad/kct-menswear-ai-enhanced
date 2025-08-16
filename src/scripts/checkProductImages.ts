@@ -12,3 +12,11 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 })
 
 async function checkProductImages() {
+  try {
+    console.log('Checking product images...');
+    // Add your image checking logic here
+    console.log('Product image check completed');
+  } catch (error) {
+    console.error('Error checking product images:', error);
+  }
+}

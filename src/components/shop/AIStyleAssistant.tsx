@@ -176,3 +176,91 @@ export function AIStyleAssistant({
           className="justify-start gap-2"
           onClick={() => {
             // Trigger camera for outfit matching
+            console.log('Camera outfit matching triggered');
+          }}
+        >
+          <Camera className="h-4 w-4" />
+          Match Outfit
+        </Button>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          className="justify-start gap-2"
+          onClick={() => {
+            // Color palette suggestions
+            onSuggestionApply({ color: 'trending' });
+          }}
+        >
+          <Palette className="h-4 w-4" />
+          Color Me
+        </Button>
+      </div>
+
+      {/* AI Suggestions */}
+      <AnimatePresence>
+        {activeSuggestions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="space-y-3"
+          >
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+              <Sparkles className="h-4 w-4 text-gold" />
+              Smart Suggestions
+            </div>
+            
+            <div className="space-y-2">
+              {activeSuggestions.slice(0, 3).map((suggestion) => (
+                <Card 
+                  key={suggestion.id}
+                  className="p-3 cursor-pointer hover:shadow-md transition-shadow bg-white border border-gray-200 hover:border-gold/30"
+                  onClick={() => handleSuggestionClick(suggestion)}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={cn(
+                      "p-1.5 rounded-full flex-shrink-0",
+                      suggestion.priority === 'high' ? 'bg-red-100 text-red-600' :
+                      suggestion.priority === 'medium' ? 'bg-yellow-100 text-yellow-600' :
+                      'bg-gray-100 text-gray-600'
+                    )}>
+                      <suggestion.icon className="h-3 w-3" />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-medium text-sm text-gray-900 truncate">
+                          {suggestion.title}
+                        </h4>
+                        {suggestion.priority === 'high' && (
+                          <Badge variant="destructive" className="text-xs">
+                            Hot
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600 line-clamp-2 mb-2">
+                        {suggestion.description}
+                      </p>
+                      <div className="flex gap-1 flex-wrap">
+                        {suggestion.tags.slice(0, 2).map((tag) => (
+                          <Badge 
+                            key={tag} 
+                            variant="secondary" 
+                            className="text-xs bg-gray-100 text-gray-600"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}

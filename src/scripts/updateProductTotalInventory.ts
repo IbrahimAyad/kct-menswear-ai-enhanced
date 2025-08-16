@@ -13,3 +13,10 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 })
 
 async function updateProductTotalInventory() {
+  console.log('Script placeholder - implementation needed');
+}
+
+// Execute if run directly
+if (require.main === module) {
+  updateProductTotalInventory();
+}

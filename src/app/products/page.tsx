@@ -72,6 +72,9 @@ function UnifiedProductsContent() {
     key !== 'sortBy'
   ).length;
 
+  // Show pagination when there are products and multiple pages
+  const showAllProducts = products.length > 0 && pagination.totalPages > 1;
+
   // Handle unified visual filter toggle
   const handleVisualFilterToggle = (filterId: string) => {
     const newFilters = selectedVisualFilters.includes(filterId)

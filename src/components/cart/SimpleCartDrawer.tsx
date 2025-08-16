@@ -61,7 +61,7 @@ export function SimpleCartDrawer() {
             setIsCartOpen(true);
             triggerHaptic();
           }}
-          className="fixed top-4 right-4 bg-black text-white p-3 rounded-full shadow-lg z-40 md:hidden"
+          className="fixed top-20 right-4 bg-burgundy text-white p-3 rounded-full shadow-xl z-40 md:hidden hover:bg-burgundy-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:ring-offset-2"
           aria-label={`Open shopping cart with ${items.length} items`}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
@@ -119,16 +119,16 @@ export function SimpleCartDrawer() {
               onDragEnd={handleDragEnd}
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b bg-gray-50">
-                <h2 className="text-lg font-semibold">Cart ({items.length})</h2>
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between p-6 border-b bg-gradient-to-r from-gray-50 to-white">
+                <h2 className="text-xl font-serif text-gray-900">Shopping Cart ({items.length})</h2>
+                <div className="flex items-center gap-3">
                   <span className="text-xs text-gray-500 hidden sm:block">Swipe right to close</span>
                   <button 
                     onClick={() => {
                       setIsCartOpen(false);
                       triggerHaptic();
                     }}
-                    className="p-2 hover:bg-gray-200 rounded-full transition-colors"
+                    className="p-2 hover:bg-gray-200 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-burgundy-300"
                     aria-label="Close cart drawer"
                   >
                     <X size={20} aria-hidden="true" />
@@ -146,7 +146,7 @@ export function SimpleCartDrawer() {
                       <p className="mt-1 text-sm text-gray-500">Start adding items to your cart.</p>
                       <button
                         onClick={() => setIsCartOpen(false)}
-                        className="mt-4 px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors"
+                        className="mt-4 px-6 py-3 bg-burgundy text-white rounded-lg hover:bg-burgundy-700 transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-burgundy-300 focus:ring-offset-2"
                       >
                         Continue Shopping
                       </button>
@@ -160,7 +160,7 @@ export function SimpleCartDrawer() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, x: -100 }}
-                        className="bg-white border rounded-lg p-4 shadow-sm"
+                        className="bg-white border-2 border-gray-100 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200"
                       >
                         <div className="flex items-start gap-3">
                           {/* Product Image Placeholder */}
@@ -185,7 +185,7 @@ export function SimpleCartDrawer() {
                                   }
                                   triggerHaptic();
                                 }}
-                                className="p-1 hover:bg-gray-100 rounded-full disabled:opacity-50"
+                                className="p-1.5 hover:bg-burgundy-50 hover:text-burgundy-700 rounded-lg disabled:opacity-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-burgundy-300"
                                 disabled={item.quantity <= 1}
                                 aria-label="Decrease quantity"
                               >
@@ -197,7 +197,7 @@ export function SimpleCartDrawer() {
                                   updateQuantity?.(item.productId, item.size, item.quantity + 1);
                                   triggerHaptic();
                                 }}
-                                className="p-1 hover:bg-gray-100 rounded-full"
+                                className="p-1.5 hover:bg-burgundy-50 hover:text-burgundy-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-burgundy-300"
                                 aria-label="Increase quantity"
                               >
                                 <Plus size={14} />
