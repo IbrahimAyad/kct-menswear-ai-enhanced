@@ -52,7 +52,7 @@ const allCategories = [
   {
     id: 'accessories',
     name: 'Accessories',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/5-tie-bundle.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/3000-MM%20(Burgundy)/mm-burgundy-bowtie.jpg',
     count: 0,
     description: 'Ties, belts, and more'
   },

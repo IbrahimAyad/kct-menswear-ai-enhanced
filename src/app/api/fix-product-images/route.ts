@@ -1,156 +1,212 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase/client'
 
-// Complete product image mappings for all products
+// Complete product image mappings for all products - Updated to correct CDN domain structure
 const productImageMappings: Record<string, { model: string; product: string }> = {
-  // Vest & Tie Sets
+  // Vest & Tie Sets - Using correct CDN structure
   'Turquoise Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/Turquoise-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/Turquoise-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/turquoise-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/turquoise-vest/main.webp'
   },
   'Blush Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/blush-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/blush-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/blush-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/blush-vest/main.webp'
   },
   'Burnt Orange Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/burnt-orange-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/burnt-orange-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/burnt-orange-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/burnt-orange-vest/main.webp'
   },
   'Canary Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/canary-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/canary-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/canary-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/canary-vest/main.webp'
   },
   'Carolina Blue Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/carolina-blue-men-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/carolina-blue-men-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/carolina-blue-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/carolina-blue-vest/main.webp'
   },
   'Chocolate Brown Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/chocolate-brown-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/chocolate-brown-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/chocolate-brown-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/chocolate-brown-vest/main.webp'
   },
   'Coral Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/coral-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/coral-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/coral-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/coral-vest/main.webp'
   },
   'Dark Burgundy Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dark-burgundy-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dar-burgundy-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dark-burgundy-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dark-burgundy-vest/main.webp'
   },
   'Dusty Rose Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-rose-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-rose-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dusty-rose-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dusty-rose-vest/main.webp'
   },
   'Dusty Sage Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-vest.png'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dusty-sage-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dusty-sage-vest/main.webp'
   },
   'Emerald Green Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/emerald-green=model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/emerald-green-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/emerald-green-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/emerald-green-vest/main.webp'
   },
   'Fuchsia Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/fuchsia-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/fuchsia-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/fuchsia-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/fuchsia-vest/main.webp'
   },
   'Gold Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/gold-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/gold-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/gold-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/gold-vest/main.webp'
   },
   'Grey Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/grey-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/grey-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/grey-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/grey-vest/main.webp'
   },
   'Hunter Green Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/hunter-green-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/hunter-green-model.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/hunter-green-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/hunter-green-vest/main.webp'
   },
   'Lilac Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/lilac-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/lilac-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/lilac-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/lilac-vest/main.webp'
   },
   'Mint Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/mint-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/mint-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/mint-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/mint-vest/main.webp'
   },
   'Peach Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/peach-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/peach-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/peach-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/peach-vest/main.webp'
   },
   'Pink Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/pink-vest-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/pink-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/pink-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/pink-vest/main.webp'
   },
   'Plum Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/plum-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/plum-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/plum-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/plum-vest/main.webp'
   },
   'Powder Blue Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/powder-blue-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/powder-blue-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/powder-blue-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/powder-blue-vest/main.webp'
   },
   'Red Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/red-vest-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/red-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/red-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/red-vest/main.webp'
   },
   'Rose Gold Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/rose-gold-vest.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/rose-gold-vest.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/rose-gold-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/rose-gold-vest/main.webp'
   },
   'Royal Blue Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/royal-blue-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/royal-blue-model.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/royal-blue-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/royal-blue-vest/main.webp'
   },
   'Wine Vest & Tie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/wine-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/wine-veset.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/wine-vest/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/wine-vest/main.webp'
   },
-  // Suspender & Bowtie Sets
+  
+  // Suspender & Bowtie Sets - Using correct CDN structure
   'Powder Blue Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/powder-blue-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/powder-blue-suspender-bowtie-set/main.webp'
   },
   'Orange Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/orange-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/orange-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/orange-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/orange-suspender-bowtie-set/main.webp'
   },
   'Medium Red Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/medium-red-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/medium-red-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/medium-red-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/medium-red-suspender-bowtie-set/main.webp'
   },
   'Hunter Green Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/hunter-green-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/hunter-green-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/hunter-green-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/hunter-green-suspender-bowtie-set/main.webp'
   },
   'Gold Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/gold-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/gold-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/gold-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/gold-suspender-bowtie-set/main.webp'
   },
   'Fuchsia Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/fuchsia-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/fuchsia-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/fuchsia-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/fuchsia-suspender-bowtie-set/main.webp'
   },
   'Dusty Rose Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/dusty-rose-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/dusty-rose-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/dusty-rose-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/dusty-rose-suspender-bowtie-set/main.webp'
   },
   'Burnt Orange Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/burnt-orange-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/burnt-orange-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/burnt-orange-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/burnt-orange-suspender-bowtie-set/main.webp'
   },
   'Brown Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/brown-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/brown-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/brown-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/brown-suspender-bowtie-set/main.webp'
   },
   'Black Suspender & Bowtie Set': {
-    model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/black-suspender-model.png',
-    product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/black-suspender-set.jpg'
+    model: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/black-suspender-bowtie-set/model.webp',
+    product: 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/black-suspender-bowtie-set/main.webp'
   }
 }
 
 // Default images for products without specific mappings
 const defaultImages = {
-  model: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/placeholder-model.jpg',
-  product: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/placeholder-product.jpg'
+  model: 'https://cdn.kctmenswear.com/placeholder/model.webp',
+  product: 'https://cdn.kctmenswear.com/placeholder/main.webp'
+}
+
+// Function to fix product images in Supabase
+async function fixProductImages() {
+  const fixedIds: string[] = []
+  
+  try {
+    // Get all products that need image fixes
+    const { data: products, error } = await supabaseAdmin
+      .from('products')
+      .select('id, name')
+      .eq('status', 'active')
+      .eq('visibility', true)
+    
+    if (error) {
+      console.error('Error fetching products:', error)
+      throw error
+    }
+    
+    if (!products || products.length === 0) {
+      console.log('No products found')
+      return fixedIds
+    }
+    
+    // Process each product
+    for (const product of products) {
+      const mapping = productImageMappings[product.name]
+      
+      if (mapping) {
+        // Update product with correct image URLs
+        const { error: updateError } = await supabaseAdmin
+          .from('products')
+          .update({
+            image_url: mapping.model,
+            additional_images: [mapping.product],
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', product.id)
+        
+        if (updateError) {
+          console.error(`Error updating product ${product.name}:`, updateError)
+        } else {
+          console.log(`Fixed images for: ${product.name}`)
+          fixedIds.push(product.id)
+        }
+      } else {
+        console.log(`No mapping found for: ${product.name}`)
+      }
+    }
+    
+    return fixedIds
+  } catch (error) {
+    console.error('Error in fixProductImages:', error)
+    throw error
+  }
 }
 
 export async function POST(request: NextRequest) {

@@ -64,7 +64,7 @@ const homeCollections = [
   {
     id: 'accessories',
     name: 'Accessories',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/bowtie.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/3000-MM%20(Burgundy)/mm-burgundy-bowtie.jpg',
     href: '/collections?tags=tie,bowtie,pocket-square,cufflinks,belt',
     count: 0,
     gradient: 'from-gray-100 to-gray-200'
@@ -150,7 +150,7 @@ const homeCollections = [
   {
     id: 'suspenders-bowtie',
     name: 'Suspender & Bowtie',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/5-tie-bundle.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/3000-MM%20(Burgundy)/mm-burgundy-bowtie.jpg',
     href: '/collections?tags=suspenders,bowtie',
     count: 0,
     gradient: 'from-sky-50 to-sky-100'

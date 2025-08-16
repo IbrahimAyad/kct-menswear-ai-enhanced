@@ -120,11 +120,12 @@ export function getCloudflareOptimizedUrl(
   originalUrl: string,
   preset: keyof typeof imagePresets | ImageTransformOptions
 ): string {
-  // Always enable in production (you have Cloudflare Pro)
-  const isProduction = process.env.NODE_ENV === 'production';
+  // Temporarily disable Cloudflare image optimization due to 404/400 errors
+  // TODO: Re-enable once Cloudflare Image Resizing is properly configured
+  const isCloudflareOptimizationEnabled = false;
   
-  // In development, return original URL
-  if (!isProduction) {
+  // Return original URL until optimization is fixed
+  if (!isCloudflareOptimizationEnabled) {
     return originalUrl;
   }
   

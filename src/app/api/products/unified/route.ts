@@ -4,6 +4,37 @@ import { unifiedSearch } from '@/lib/services/unifiedSearchEngine';
 import { urlParamsToFilters } from '@/lib/utils/url-filters';
 import { getFilterPreset } from '@/lib/config/filter-presets';
 
+// Function to fix legacy image URLs
+function fixImageUrl(url: string | null): string | null {
+  if (!url) return null;
+  
+  // Replace legacy R2 domain with correct CDN domain
+  if (url.includes('pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev')) {
+    // Convert legacy URLs to new CDN structure
+    if (url.includes('main-suspender-bowtie-set')) {
+      // Extract color/name from legacy URL
+      const matches = url.match(/main-suspender-bowtie-set\/([^\/]+)-(model|sus|bowtie|set)/);
+      if (matches && matches[1]) {
+        const color = matches[1];
+        const isModel = url.includes('-model.png') || url.includes('model.png');
+        const fileType = isModel ? 'model.webp' : 'main.webp';
+        return `https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/${color}-suspender-bowtie-set/${fileType}`;
+      }
+    } else if (url.includes('main-solid-vest-tie')) {
+      // Extract color/name from legacy URL
+      const matches = url.match(/main-solid-vest-tie\/([^\/]+)-(model|vest)/);
+      if (matches && matches[1]) {
+        const color = matches[1];
+        const isModel = url.includes('-model.png') || url.includes('model.png');
+        const fileType = isModel ? 'model.webp' : 'main.webp';
+        return `https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/${color}-vest/${fileType}`;
+      }
+    }
+  }
+  
+  return url;
+}
+
 // Cache configuration
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 const cache = new Map<string, { data: any; timestamp: number }>();
@@ -91,9 +122,11 @@ export async function GET(request: NextRequest) {
                   imageUrl = product.images.gallery[0].url;
                 }
                 
-                // Ensure we have a valid URL
+                // Ensure we have a valid URL and fix legacy URLs
                 if (!imageUrl || imageUrl === '') {
                   imageUrl = '/placeholder-product.jpg';
+                } else {
+                  imageUrl = fixImageUrl(imageUrl) || '/placeholder-product.jpg';
                 }
                 
                 return {
@@ -176,8 +209,8 @@ export async function GET(request: NextRequest) {
           } else if (data) {
             // Map Supabase products to unified format
             individualProducts = data.map((product: any) => {
-              // Get primary image
-              const primaryImageUrl = product.primary_image || null;
+              // Get primary image and fix legacy URLs
+              const primaryImageUrl = fixImageUrl(product.primary_image);
               
               // Get first variant for pricing and availability
               const firstVariant = product.product_variants?.[0];

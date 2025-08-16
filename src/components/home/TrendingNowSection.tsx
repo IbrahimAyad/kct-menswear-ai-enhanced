@@ -74,7 +74,7 @@ const demoTrendingProducts = [
     id: '8',
     name: 'Navy Suspenders Set',
     price: 59,
-    primary_image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/bowtie.jpg',
+    primary_image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/3000-MM%20(Burgundy)/mm-burgundy-bowtie.jpg',
     views: 112,
     hotness: 71
   }

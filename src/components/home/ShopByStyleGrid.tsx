@@ -147,7 +147,7 @@ const collectionsConfig = [
   {
     name: 'Suspender Bowtie',
     link: '/collections/accessories?filter=suspender-sets',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/5-tie-bundle.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/3000-MM%20(Burgundy)/mm-burgundy-bowtie.jpg',
     bgColor: 'bg-gradient-to-br from-pink-50 to-pink-100',
     dbTags: ['suspenders', 'bowtie', 'suspender-set'],
     masterId: 'accessories'

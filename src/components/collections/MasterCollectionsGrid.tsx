@@ -76,7 +76,7 @@ const masterCollections: CollectionCard[] = [
     id: 'accessories',
     name: 'Accessories',
     slug: 'accessories',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/bowtie.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/3000-MM%20(Burgundy)/mm-burgundy-bowtie.jpg',
     count: 0,
     filterParams: { tags: ['tie', 'bowtie', 'pocket-square', 'cufflinks', 'belt'] }
   },
@@ -161,7 +161,7 @@ const masterCollections: CollectionCard[] = [
     id: 'suspender-bowtie',
     name: 'Suspender Bowtie',
     slug: 'suspender-sets',
-    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/5-tie-bundle.jpg',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/3000-MM%20(Burgundy)/mm-burgundy-bowtie.jpg',
     count: 0,
     filterParams: { tags: ['suspender', 'bowtie'] }
   },

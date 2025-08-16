@@ -37,6 +37,7 @@ export async function getProducts(params: ProductSearchParams = {}) {
         )
       `)
       .eq('status', 'active')
+      .eq('visibility', true)
 
     // Apply filters
     if (filters.category) {
@@ -149,6 +150,7 @@ export async function getFeaturedProducts(limit = 8) {
         )
       `)
       .eq('status', 'active')
+      .eq('visibility', true)
       .eq('featured', true)
       .order('created_at', { ascending: false })
       .limit(limit)
@@ -193,6 +195,7 @@ export async function getProductRecommendations(productId: string, limit = 4) {
         )
       `)
       .eq('status', 'active')
+      .eq('visibility', true)
       .eq('product_type', currentProduct.productType)
       .neq('id', productId)
       .order('created_at', { ascending: false })
@@ -233,6 +236,7 @@ export async function getProductCategories() {
       .from('products')
       .select('product_type')
       .eq('status', 'active')
+      .eq('visibility', true)
       .not('product_type', 'is', null)
 
     if (error) {
@@ -269,6 +273,7 @@ export async function getProductVendors() {
       .from('products')
       .select('vendor')
       .eq('status', 'active')
+      .eq('visibility', true)
       .not('vendor', 'is', null)
 
     if (error) {
@@ -326,6 +331,7 @@ export async function getProductPriceRange() {
       .from('products')
       .select('price')
       .eq('status', 'active')
+      .eq('visibility', true)
       .not('price', 'is', null)
 
     if (error) {
