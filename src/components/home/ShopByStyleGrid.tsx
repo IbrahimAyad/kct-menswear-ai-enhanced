@@ -19,7 +19,7 @@ const collectionsConfig = [
   {
     name: 'Shirts',
     link: '/collections/shirts',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/classic-fit-collection.jpg',
     bgColor: 'bg-gradient-to-br from-gray-50 to-gray-100',
     dbCategory: ['Dress Shirts', 'Casual Shirts', 'Formal Shirts'],
     masterId: 'shirts'
@@ -75,7 +75,7 @@ const collectionsConfig = [
   {
     name: 'Velvet Blazers',
     link: '/collections/suits?filter=velvet',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
+    image: 'https://cdn.kctmenswear.com/blazers/velvet/mens-emerald-velvet-dinner-jacket/front.webp',
     bgColor: 'bg-gradient-to-br from-emerald-50 to-emerald-100',
     dbTags: ['velvet', 'luxury'],
     masterId: 'suits'
@@ -85,7 +85,7 @@ const collectionsConfig = [
   {
     name: 'Vest & Tie',
     link: '/collections/accessories?filter=vest-tie-sets',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/dusty-sage-vest-tie.png',
     bgColor: 'bg-gradient-to-br from-sage-50 to-sage-100',
     dbTags: ['vest-set', 'vest-tie-set'],
     masterId: 'accessories'
@@ -129,7 +129,7 @@ const collectionsConfig = [
   {
     name: 'Prom 2025',
     link: '/collections/prom',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp',
+    image: 'https://cdn.kctmenswear.com/blazers/prom/mens-red-floral-pattern-prom-blazer/front.webp',
     bgColor: 'bg-gradient-to-br from-purple-100 to-blue-200',
     dbTags: ['prom', 'prom-2025'],
     masterId: 'prom',
@@ -147,7 +147,7 @@ const collectionsConfig = [
   {
     name: 'Suspender Bowtie',
     link: '/collections/accessories?filter=suspender-sets',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/5-tie-bundle.jpg',
     bgColor: 'bg-gradient-to-br from-pink-50 to-pink-100',
     dbTags: ['suspenders', 'bowtie', 'suspender-set'],
     masterId: 'accessories'

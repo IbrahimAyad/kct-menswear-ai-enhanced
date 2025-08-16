@@ -14,7 +14,7 @@ const homeCollections = [
   {
     id: 'suits',
     name: 'Suits',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg',
     href: '/collections?category=suits',
     count: 0,
     gradient: 'from-gray-100 to-gray-200'
@@ -22,7 +22,7 @@ const homeCollections = [
   {
     id: 'shirts',
     name: 'Shirts',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/classic-fit-collection.jpg',
     href: '/collections?category=shirts',
     count: 0,
     gradient: 'from-blue-50 to-blue-100'
@@ -30,7 +30,7 @@ const homeCollections = [
   {
     id: 'vests',
     name: 'Vest',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/burgundy-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Fall%20Wedding%20Bundles/brown-vest-tie.png',
     href: '/collections?category=vests',
     count: 0,
     gradient: 'from-burgundy-50 to-burgundy-100'
@@ -38,7 +38,7 @@ const homeCollections = [
   {
     id: 'jackets',
     name: 'Jackets',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_gold_prom_blazer_2025_1006.webp',
+    image: 'https://cdn.kctmenswear.com/blazers/prom/mens-gold-sequin-pattern-prom-blazer/front.webp',
     href: '/collections?category=jackets',
     count: 0,
     gradient: 'from-amber-50 to-amber-100'
@@ -64,7 +64,7 @@ const homeCollections = [
   {
     id: 'accessories',
     name: 'Accessories',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/burgundy-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/bowtie.jpg',
     href: '/collections?tags=tie,bowtie,pocket-square,cufflinks,belt',
     count: 0,
     gradient: 'from-gray-100 to-gray-200'
@@ -80,7 +80,7 @@ const homeCollections = [
   {
     id: 'velvet-blazers',
     name: 'Velvet Blazers',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
+    image: 'https://cdn.kctmenswear.com/blazers/velvet/mens-emerald-velvet-dinner-jacket/front.webp',
     href: '/collections?tags=velvet,blazer',
     count: 0,
     gradient: 'from-emerald-50 to-emerald-100'
@@ -88,7 +88,7 @@ const homeCollections = [
   {
     id: 'vest-tie',
     name: 'Vest & Tie',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/dusty-sage-vest-tie.png',
     href: '/collections?tags=vest-set,tie-set',
     count: 0,
     gradient: 'from-sage-50 to-sage-100'
@@ -133,7 +133,7 @@ const homeCollections = [
   {
     id: 'prom-2025',
     name: 'Prom 2025',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/sparkle-blazer/mens_burgundy_glitter_finish_sparkle_model_1046.webp',
+    image: 'https://cdn.kctmenswear.com/blazers/prom/mens-burgundy-sparkle-pattern-prom-blazer/front.webp',
     href: '/collections?occasions=prom',
     count: 0,
     gradient: 'from-pink-100 to-purple-100',
@@ -150,7 +150,7 @@ const homeCollections = [
   {
     id: 'suspenders-bowtie',
     name: 'Suspender & Bowtie',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/5-tie-bundle.jpg',
     href: '/collections?tags=suspenders,bowtie',
     count: 0,
     gradient: 'from-sky-50 to-sky-100'

@@ -28,7 +28,7 @@ const masterCollections: CollectionCard[] = [
     id: 'suits',
     name: 'Suits',
     slug: 'suits',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg',
     count: 0,
     filterParams: { category: 'suits' }
   },
@@ -36,7 +36,7 @@ const masterCollections: CollectionCard[] = [
     id: 'shirts',
     name: 'Shirts',
     slug: 'shirts',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/classic-fit-collection.jpg',
     count: 0,
     filterParams: { category: 'shirts' }
   },
@@ -44,7 +44,7 @@ const masterCollections: CollectionCard[] = [
     id: 'vests',
     name: 'Vest',
     slug: 'vests',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/burgundy-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Fall%20Wedding%20Bundles/brown-vest-tie.png',
     count: 0,
     filterParams: { category: 'vests' }
   },
@@ -52,7 +52,7 @@ const masterCollections: CollectionCard[] = [
     id: 'jackets',
     name: 'Jackets',
     slug: 'jackets',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_gold_prom_blazer_2025_1006.webp',
+    image: 'https://cdn.kctmenswear.com/blazers/prom/mens-gold-sequin-pattern-prom-blazer/front.webp',
     count: 0,
     filterParams: { category: 'jackets', tags: ['blazer', 'jacket'] }
   },
@@ -76,7 +76,7 @@ const masterCollections: CollectionCard[] = [
     id: 'accessories',
     name: 'Accessories',
     slug: 'accessories',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/burgundy-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/bowtie.jpg',
     count: 0,
     filterParams: { tags: ['tie', 'bowtie', 'pocket-square', 'cufflinks', 'belt'] }
   },
@@ -92,7 +92,7 @@ const masterCollections: CollectionCard[] = [
     id: 'velvet-blazers',
     name: 'Velvet Blazers',
     slug: 'velvet-blazers',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
+    image: 'https://cdn.kctmenswear.com/blazers/velvet/mens-emerald-velvet-dinner-jacket/front.webp',
     count: 0,
     filterParams: { tags: ['velvet', 'blazer'] }
   },
@@ -100,7 +100,7 @@ const masterCollections: CollectionCard[] = [
     id: 'vest-tie',
     name: 'Vest & Tie',
     slug: 'vest-tie-sets',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/dusty-sage-vest-tie.png',
     count: 0,
     filterParams: { tags: ['vest-set', 'tie-set'] }
   },
@@ -143,7 +143,7 @@ const masterCollections: CollectionCard[] = [
     id: 'prom-2025',
     name: 'Prom 2025',
     slug: 'prom',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/sparkle-blazer/mens_burgundy_glitter_finish_sparkle_model_1046.webp',
+    image: 'https://cdn.kctmenswear.com/blazers/prom/mens-burgundy-sparkle-pattern-prom-blazer/front.webp',
     count: 0,
     filterParams: { occasions: ['prom'] },
     description: 'Formal'
@@ -161,7 +161,7 @@ const masterCollections: CollectionCard[] = [
     id: 'suspender-bowtie',
     name: 'Suspender Bowtie',
     slug: 'suspender-sets',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/5-tie-bundle.jpg',
     count: 0,
     filterParams: { tags: ['suspender', 'bowtie'] }
   },

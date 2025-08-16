@@ -10,28 +10,28 @@ const allCategories = [
   {
     id: 'suits',
     name: 'Suits',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg',
     count: 0, // Will be updated dynamically
     description: 'Complete suit collections'
   },
   {
     id: 'shirts',
     name: 'Shirts',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/classic-fit-collection.jpg',
     count: 0,
     description: 'Dress shirts and casual shirts'
   },
   {
     id: 'vest',
     name: 'Vests',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/dusty-sage-vest-tie.png',
     count: 0,
     description: 'Formal and casual vests'
   },
   {
     id: 'jackets',
     name: 'Jackets',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp',
+    image: 'https://cdn.kctmenswear.com/blazers/prom/mens-red-floral-pattern-prom-blazer/front.webp',
     count: 0,
     description: 'Blazers and sport coats'
   },
@@ -52,7 +52,7 @@ const allCategories = [
   {
     id: 'accessories',
     name: 'Accessories',
-    image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/5-tie-bundle.jpg',
     count: 0,
     description: 'Ties, belts, and more'
   },
@@ -166,7 +166,7 @@ function CollectionsContent() {
       description="Precision-tailored pieces in timeless colors enhance every part of a man's wardrobe"
       categories={categoriesWithCounts}
       products={transformedProducts}
-      heroImage="https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/Category-Images/hero-collection.webp"
+      heroImage="https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-3-main.jpg"
     />
   );
 }

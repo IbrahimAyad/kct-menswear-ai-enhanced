@@ -13,7 +13,7 @@ const demoTrendingProducts = [
     id: '1',
     name: 'Navy Double Breasted',
     price: 299,
-    primary_image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
+    primary_image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg',
     views: 247,
     trending: true,
     hotness: 95
@@ -22,7 +22,7 @@ const demoTrendingProducts = [
     id: '2',
     name: 'Burgundy Velvet Blazer',
     price: 249,
-    primary_image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/velvet-blazer/mens_green_paisley_pattern_velvet_model_1089.webp',
+    primary_image: 'https://cdn.kctmenswear.com/blazers/velvet/mens-burgundy-velvet-dinner-jacket/front.webp',
     views: 189,
     trending: true,
     hotness: 88
@@ -31,7 +31,7 @@ const demoTrendingProducts = [
     id: '3',
     name: 'White Dress Shirt',
     price: 69,
-    primary_image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp',
+    primary_image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg',
     views: 156,
     hotness: 82
   },
@@ -48,7 +48,7 @@ const demoTrendingProducts = [
     id: '5',
     name: 'Sage Vest & Tie',
     price: 89,
-    primary_image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
+    primary_image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/dusty-sage-vest-tie.png',
     views: 134,
     hotness: 76
   },
@@ -56,7 +56,7 @@ const demoTrendingProducts = [
     id: '6',
     name: 'Sparkle Prom Blazer',
     price: 279,
-    primary_image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/sparkle-blazer/mens_burgundy_glitter_finish_sparkle_model_1046.webp',
+    primary_image: 'https://cdn.kctmenswear.com/blazers/prom/mens-burgundy-sparkle-pattern-prom-blazer/front.webp',
     views: 298,
     trending: true,
     hotness: 94,
@@ -74,7 +74,7 @@ const demoTrendingProducts = [
     id: '8',
     name: 'Navy Suspenders Set',
     price: 59,
-    primary_image: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png',
+    primary_image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/bowtie.jpg',
     views: 112,
     hotness: 71
   }
