@@ -71,6 +71,17 @@ export default function StyleSwiperR2Page() {
     window.location.reload();
   };
 
+  const resetDemo = () => {
+    setCompletedProfiles([]);
+    setSwipeData([]);
+    setLikedImages([]);
+    setCurrentIndex(0);
+    // Clear any saved data
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('style_swiper_data');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-black-50 via-white to-gold-50">
       {/* Header */}
