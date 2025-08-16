@@ -24,11 +24,11 @@ const productRotations = {
     { color: 'Navy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Navy-Dress-Shirt.jpg', fallbackColor: '#000080' },
   ],
   ties: [
-    { color: 'True Red', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/True-Red-main.webp', fallbackColor: '#c00000' },
-    { color: 'Navy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy.jpg', fallbackColor: '#000080' },
-    { color: 'Burgundy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg', fallbackColor: '#800020' },
-    { color: 'Black', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/Black.png', fallbackColor: '#000000' },
-    { color: 'Gold', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/gold.jpg', fallbackColor: '#FFD700' },
+    { color: 'True Red', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/red-tie.jpg', fallbackColor: '#c00000' },
+    { color: 'Navy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/navy-tie.jpg', fallbackColor: '#000080' },
+    { color: 'Burgundy', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/burgundy-tie.jpg', fallbackColor: '#800020' },
+    { color: 'Black', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/black-tie.jpg', fallbackColor: '#000000' },
+    { color: 'Gold', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/gold-tie.jpg', fallbackColor: '#FFD700' },
   ],
 };
 

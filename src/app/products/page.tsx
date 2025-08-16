@@ -16,6 +16,8 @@ import {
   Filter, 
   X, 
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Sparkles,
   TrendingUp,
   Package,
