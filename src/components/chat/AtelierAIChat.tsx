@@ -360,3 +360,25 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                             onClick={() => {
                               if (action.type === 'view') {
                                 // Handle view action
+                                window.open(action.url, '_blank');
+                              } else if (action.type === 'add') {
+                                // Handle add to cart action
+                              }
+                            }}
+                            className="px-3 py-1.5 bg-burgundy-600 text-white text-sm rounded-lg hover:bg-burgundy-700 transition-colors"
+                          >
+                            {action.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

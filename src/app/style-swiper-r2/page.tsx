@@ -510,4 +510,7 @@ export default function StyleSwiperR2Page() {
         pageContext="style-swiper"
         swipeCount={swipeData.length}
         likedItems={likedImages}
+      />
+    </div>
+  );
 }

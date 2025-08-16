@@ -381,31 +381,57 @@ function UnifiedProductsContent() {
           loading={loading}
           onQuickView={(product) => {
             // Handle quick view
-                })}
-                {pagination.totalPages > 5 && (
-                  <>
-                    <span className="px-2 text-gray-500">...</span>
-                    <Button
-                      onClick={() => setPage(pagination.totalPages)}
-                      variant="outline"
-                      size="sm"
-                      className="w-10 h-10 border-burgundy-200 hover:bg-burgundy-50 text-burgundy-700"
-                    >
-                      {pagination.totalPages}
-                    </Button>
-                  </>
-                )}
-              </div>
-              
-              <Button
-                onClick={() => setPage(pagination.currentPage + 1)}
-                disabled={!pagination.hasNext}
-                variant="outline"
-                className="border-burgundy-200 hover:bg-burgundy-50"
-              >
-                Next
-              </Button>
-            </div>
+          }}
+        />
+        
+        {/* Pagination */}
+        {showAllProducts && (
+          <div className="flex justify-center items-center space-x-2 mt-8">
+            <Button
+              onClick={() => setPage(Math.max(1, pagination.currentPage - 1))}
+              disabled={pagination.currentPage === 1}
+              variant="outline"
+              size="sm"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            
+            {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+              const pageNum = i + 1;
+              return (
+                <Button
+                  key={pageNum}
+                  onClick={() => setPage(pageNum)}
+                  variant={pagination.currentPage === pageNum ? "default" : "outline"}
+                  size="sm"
+                >
+                  {pageNum}
+                </Button>
+              );
+            })}
+            
+            {pagination.totalPages > 5 && (
+              <>
+                <span className="px-2 text-gray-500">...</span>
+                <Button
+                  onClick={() => setPage(pagination.totalPages)}
+                  variant="outline"
+                  size="sm"
+                  className="w-10 h-10 border-burgundy-200 hover:bg-burgundy-50 text-burgundy-700"
+                >
+                  {pagination.totalPages}
+                </Button>
+              </>
+            )}
+            
+            <Button
+              onClick={() => setPage(pagination.currentPage + 1)}
+              disabled={!pagination.hasNext}
+              variant="outline"
+              size="sm"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
         )}
       </div>

@@ -385,4 +385,11 @@ export default function SizeGuidePage() {
         <ModernSizeBot
           onClose={() => setShowSizeBot(false)}
           onSizeSelected={(recommendation) => {
+            setShowSizeBot(false);
+            // Handle size recommendation
+          }}
+        />
+      )}
+    </div>
+  );
 }
