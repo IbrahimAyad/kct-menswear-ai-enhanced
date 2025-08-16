@@ -706,3 +706,14 @@ export class ResponseEvolutionEngine {
   
   private storeEvolvedPatterns(key: string, patterns: string[]) {
     // Store patterns for future use
+    try {
+      const storageKey = `evolved_patterns_${key}`;
+      localStorage.setItem(storageKey, JSON.stringify({
+        patterns,
+        timestamp: Date.now()
+      }));
+    } catch (error) {
+      console.warn('Could not store evolved patterns:', error);
+    }
+  }
+}

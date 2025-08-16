@@ -94,14 +94,15 @@ export class HybridProductService {
           };
         }
       } catch (error) {
-      if (legacyProduct) {
-        return {
-          source: 'legacy',
-          legacy_product: legacyProduct,
-          enhanced_product: undefined
-        };
+        console.error('Error fetching product:', error);
+        if (legacyProduct) {
+          return {
+            source: 'legacy',
+            legacy_product: legacyProduct,
+            enhanced_product: undefined
+          };
+        }
       }
-    }
 
     return null;
   }

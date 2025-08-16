@@ -577,11 +577,11 @@ export default function EnhancedMobileNav({ isOpen, onClose }: EnhancedMobileNav
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">Need Help?</h3>
                 <div className="space-y-2">
                   <button
-                    onClick={() => window.open('tel:+13135252424')}
+                    onClick={() => window.open('tel:+12693421234')}
                     className="flex items-center gap-3 w-full p-2 hover:bg-white rounded-lg transition-colors"
                   >
                     <Phone className="h-4 w-4 text-gray-500" />
-                    <span className="text-sm text-gray-700">(313) 525-2424</span>
+                    <span className="text-sm text-gray-700">(269) 342-1234</span>
                   </button>
                   <button
                     onClick={() => handleNavigation('/locations')}

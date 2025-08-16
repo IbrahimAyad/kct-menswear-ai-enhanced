@@ -95,8 +95,8 @@ const MobileBottomNav = () => {
 
   // Quick action buttons for long press
   const quickActions = [
-    { icon: Phone, label: 'Call Store', action: () => window.open('tel:+13135252424') },
-    { icon: MapPin, label: 'Directions', action: () => window.open('https://maps.google.com/?q=KCT+Menswear+Detroit') },
+    { icon: Phone, label: 'Call Store', action: () => window.open('tel:+12693421234') },
+    { icon: MapPin, label: 'Directions', action: () => window.open('https://maps.google.com/?q=213+S+Kalamazoo+Mall+Kalamazoo+MI') },
     { icon: Star, label: 'Reviews', action: () => window.open('https://g.page/r/reviews') }
   ];
 

@@ -55,6 +55,10 @@ export const ServiceWorkerRegistry = () => {
           setShowUpdate(true);
         }
       });
+    } catch (error) {
+      console.error('Service worker registration failed:', error);
+    }
+  };
 
   const handleUpdate = async () => {
     if (registration && registration.waiting) {

@@ -283,7 +283,7 @@ export default function LocationsPage() {
               onClick={() => window.location.href = '/contact'}
             >
               <Phone className="h-4 w-4 mr-2" />
-              Call Now: (269) 532-4852
+              Call Now: (269) 342-1234
             </Button>
             <Button 
               variant="outline"

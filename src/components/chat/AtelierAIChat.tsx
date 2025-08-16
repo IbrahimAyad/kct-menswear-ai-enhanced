@@ -374,7 +374,7 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
                     )}
                   </div>
                 </div>
-              </motion.div>
+                </motion.div>
               ))}
             </div>
           </div>
