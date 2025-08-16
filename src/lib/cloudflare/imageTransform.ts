@@ -131,6 +131,41 @@ export function getCloudflareOptimizedUrl(
   // Parse the URL to check if it's absolute or relative
   const isAbsoluteUrl = originalUrl.startsWith('http://') || originalUrl.startsWith('https://');
   
+  // Check if it's an R2 URL
+  const isR2Url = originalUrl.includes('.r2.dev') || originalUrl.includes('pub-');
+  
+  // For R2 URLs, we need to handle them specially
+  if (isR2Url) {
+    // R2 public URLs work directly with Cloudflare Image Resizing
+    // when served through your domain with Transform Rules
+    const options = typeof preset === 'string' ? imagePresets[preset] : preset;
+    
+    // Build Cloudflare Image Resizing parameters
+    const cfParams: string[] = [];
+    
+    // Format (auto will choose WebP or AVIF based on browser support)
+    cfParams.push(`format=${options.format || 'auto'}`);
+    
+    // Dimensions
+    if (options.width) cfParams.push(`width=${options.width}`);
+    if (options.height) cfParams.push(`height=${options.height}`);
+    
+    // Quality (default 85 for good balance)
+    cfParams.push(`quality=${options.quality || 85}`);
+    
+    // Fit mode
+    if (options.fit) cfParams.push(`fit=${options.fit}`);
+    
+    // Sharpen for better clarity on resize
+    if (options.sharpen) cfParams.push(`sharpen=${options.sharpen}`);
+    
+    // DPR for retina displays
+    if (options.dpr) cfParams.push(`dpr=${options.dpr}`);
+    
+    // For R2 URLs, use the cdn-cgi/image endpoint
+    return `/cdn-cgi/image/${cfParams.join(',')}/${originalUrl}`;
+  }
+  
   // For relative URLs, make them absolute
   const absoluteUrl = isAbsoluteUrl 
     ? originalUrl 
