@@ -34,7 +34,8 @@ import {
   Check,
   Info,
   Sparkles,
-  Lock
+  Lock,
+  Scissors
 } from 'lucide-react'
 
 interface EnhancedUnifiedDetailProps {
@@ -392,7 +393,7 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-8"
           >
-            {/* Premium Product Information */}
+            {/* Premium Product Information - without expandable sections */}
             <PremiumProductInfo
               product={{
                 name: product.name,
@@ -402,11 +403,15 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
                 category: product.category,
                 occasions: product.occasions,
                 isBundle: product.isBundle,
-                enhanced: product.enhanced
+                enhanced: product.enhanced,
+                material: product.material,
+                careInstructions: ['Dry clean only for best results', 'Steam to remove wrinkles', 'Store on padded hangers', 'Professional pressing recommended'],
+                features: ['Half-canvas construction', 'Natural shoulder line', 'Functional button holes', 'Peak lapels', 'Two-button closure']
               }}
               selectedStyle={selectedStyle}
               rating={4.8}
               reviewCount={127}
+              showExpandableSections={false}
             />
 
             {/* Style Selection (for suits) */}
@@ -575,6 +580,117 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
                 </div>
               </div>
             )}
+          </motion.div>
+        </div>
+
+        {/* Product Details Section - Moved below main product area */}
+        <div className="mt-16 border-t pt-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+            className="max-w-4xl mx-auto"
+          >
+            <h2 className="text-2xl font-semibold text-gray-900 mb-8">Product Information</h2>
+            
+            {/* Expandable Sections Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Product Details */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-white rounded-lg">
+                    <Info className="h-5 w-5 text-gray-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900">Product Details</h3>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between py-2 border-b border-gray-200">
+                    <span className="text-sm font-medium text-gray-600">Material</span>
+                    <span className="text-sm text-gray-900">{product.material || 'Premium Wool Blend'}</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 border-b border-gray-200">
+                    <span className="text-sm font-medium text-gray-600">Category</span>
+                    <span className="text-sm text-gray-900 capitalize">{product.category || 'Suits'}</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 border-b border-gray-200">
+                    <span className="text-sm font-medium text-gray-600">Fit</span>
+                    <span className="text-sm text-gray-900">Modern Tailored</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 border-b border-gray-200">
+                    <span className="text-sm font-medium text-gray-600">Season</span>
+                    <span className="text-sm text-gray-900">All Season</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2">
+                    <span className="text-sm font-medium text-gray-600">Care</span>
+                    <span className="text-sm text-gray-900">Dry Clean Only</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Care Instructions */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-white rounded-lg">
+                    <Scissors className="h-5 w-5 text-gray-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900">Care Instructions</h3>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-burgundy-600 rounded-full mt-2 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Dry clean only for best results</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-burgundy-600 rounded-full mt-2 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Steam to remove wrinkles</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-burgundy-600 rounded-full mt-2 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Store on padded hangers</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-burgundy-600 rounded-full mt-2 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Professional pressing recommended</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <div className="w-1.5 h-1.5 bg-burgundy-600 rounded-full mt-2 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Avoid direct sunlight storage</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Key Features */}
+              <div className="bg-gray-50 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-white rounded-lg">
+                    <Award className="h-5 w-5 text-gray-600" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900">Key Features</h3>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-gold-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Half-canvas construction</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-gold-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Natural shoulder line</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-gold-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Functional button holes</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-gold-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Peak lapels</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-gold-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-sm text-gray-700">Two-button closure</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>

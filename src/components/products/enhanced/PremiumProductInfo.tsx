@@ -44,6 +44,7 @@ interface PremiumProductInfoProps {
   rating?: number
   reviewCount?: number
   className?: string
+  showExpandableSections?: boolean
 }
 
 export function PremiumProductInfo({
@@ -51,7 +52,8 @@ export function PremiumProductInfo({
   selectedStyle,
   rating = 4.8,
   reviewCount = 127,
-  className
+  className,
+  showExpandableSections = true
 }: PremiumProductInfoProps) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null)
   const [showFullDescription, setShowFullDescription] = useState(false)
@@ -318,56 +320,58 @@ export function PremiumProductInfo({
         </motion.div>
       )}
 
-      {/* Expandable Sections */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="space-y-3"
-      >
-        {expandableSections.map((section, index) => (
-          <div
-            key={section.id}
-            className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
-          >
-            <motion.button
-              onClick={() => toggleSection(section.id)}
-              className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.99 }}
+      {/* Expandable Sections - Conditionally rendered */}
+      {showExpandableSections && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="space-y-3"
+        >
+          {expandableSections.map((section, index) => (
+            <div
+              key={section.id}
+              className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-gray-100 rounded-lg">
-                  <section.icon className="h-4 w-4 text-gray-600" />
-                </div>
-                <span className="font-semibold text-gray-900">{section.title}</span>
-              </div>
-              <motion.div
-                animate={{ rotate: expandedSection === section.id ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
+              <motion.button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
               >
-                <ChevronDown className="h-5 w-5 text-gray-500" />
-              </motion.div>
-            </motion.button>
-            
-            <AnimatePresence>
-              {expandedSection === section.id && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="overflow-hidden"
-                >
-                  <div className="p-4 pt-0 border-t border-gray-100">
-                    {section.content}
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-gray-100 rounded-lg">
+                    <section.icon className="h-4 w-4 text-gray-600" />
                   </div>
+                  <span className="font-semibold text-gray-900">{section.title}</span>
+                </div>
+                <motion.div
+                  animate={{ rotate: expandedSection === section.id ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown className="h-5 w-5 text-gray-500" />
                 </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
-      </motion.div>
+              </motion.button>
+              
+              <AnimatePresence>
+                {expandedSection === section.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="overflow-hidden"
+                  >
+                    <div className="p-4 pt-0 border-t border-gray-100">
+                      {section.content}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </motion.div>
+      )}
     </div>
   )
 }

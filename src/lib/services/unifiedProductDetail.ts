@@ -92,7 +92,7 @@ export async function getUnifiedProduct(idOrSlug: string): Promise<UnifiedProduc
       name: coreProduct.name,
       description: coreProduct.description || `Premium ${coreProduct.name} from our core collection`,
       imageUrl: coreProduct.image || '/placeholder-product.svg',
-      images: coreProduct.image ? [coreProduct.image] : ['/placeholder-product.svg'],
+      images: coreProduct.images || (coreProduct.image ? [coreProduct.image] : ['/placeholder-product.svg']),
       price: coreProduct.price / 100, // Convert cents to dollars
       category: coreProduct.category,
       stripePriceId: coreProduct.stripe_price_id,

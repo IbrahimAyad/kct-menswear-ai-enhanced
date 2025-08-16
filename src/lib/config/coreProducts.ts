@@ -14,6 +14,7 @@ export interface CoreProduct {
   category: string;
   product_type: 'core';
   image?: string;
+  images?: string[];
   description?: string;
   customFields?: {
     size?: boolean;
@@ -26,60 +27,394 @@ export interface CoreProduct {
 // SUITS - 14 colors × 2 styles = 28 products
 export const CORE_SUITS: CoreProduct[] = [
   // Navy Suit
-  { id: 'suit-navy-2p', name: 'Navy Suit - 2 Piece', stripe_price_id: 'price_1Rpv2tCHc12x7sCzVvLRto3m', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg' },
-  { id: 'suit-navy-3p', name: 'Navy Suit - 3 Piece', stripe_price_id: 'price_1Rpv31CHc12x7sCzlFtlUflr', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-3-main.jpg' },
+  { 
+    id: 'suit-navy-2p', 
+    name: 'Navy Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv2tCHc12x7sCzVvLRto3m', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/main.png',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-back.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-detail.jpg'
+    ]
+  },
+  { 
+    id: 'suit-navy-3p', 
+    name: 'Navy Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv31CHc12x7sCzlFtlUflr', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-3-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-3-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/main.png',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-vest.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-detail.jpg'
+    ]
+  },
   
   // Beige Suit
-  { id: 'suit-beige-2p', name: 'Beige Suit - 2 Piece', stripe_price_id: 'price_1Rpv3FCHc12x7sCzg9nHaXkM', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main.jpg' },
-  { id: 'suit-beige-3p', name: 'Beige Suit - 3 Piece', stripe_price_id: 'price_1Rpv3QCHc12x7sCzMVTfaqEE', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main-2.jpg' },
+  { 
+    id: 'suit-beige-2p', 
+    name: 'Beige Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv3FCHc12x7sCzg9nHaXkM', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main-2.jpg'
+    ]
+  },
+  { 
+    id: 'suit-beige-3p', 
+    name: 'Beige Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv3QCHc12x7sCzMVTfaqEE', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main-2.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main-2.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/beige/beige-main.jpg'
+    ]
+  },
   
   // Black Suit
-  { id: 'suit-black-2p', name: 'Black Suit - 2 Piece', stripe_price_id: 'price_1Rpv3cCHc12x7sCzLtiatn73', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png' },
-  { id: 'suit-black-3p', name: 'Black Suit - 3 Piece', stripe_price_id: 'price_1Rpv3iCHc12x7sCzJYg14SL8', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/blacksuit3p.jpeg' },
+  { 
+    id: 'suit-black-2p', 
+    name: 'Black Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv3cCHc12x7sCzLtiatn73', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/blacksuit3p.jpeg'
+    ]
+  },
+  { 
+    id: 'suit-black-3p', 
+    name: 'Black Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv3iCHc12x7sCzJYg14SL8', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/blacksuit3p.jpeg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/blacksuit3p.jpeg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png'
+    ]
+  },
   
   // Brown Suit
-  { id: 'suit-brown-2p', name: 'Brown Suit - 2 Piece', stripe_price_id: 'price_1Rpv3zCHc12x7sCzKMSpA4hP', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-main.jpg' },
-  { id: 'suit-brown-3p', name: 'Brown Suit - 3 Piece', stripe_price_id: 'price_1Rpv4ECHc12x7sCzhUuL9uCE', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-.jpg' },
+  { 
+    id: 'suit-brown-2p', 
+    name: 'Brown Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv3zCHc12x7sCzKMSpA4hP', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-.jpg'
+    ]
+  },
+  { 
+    id: 'suit-brown-3p', 
+    name: 'Brown Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv4ECHc12x7sCzhUuL9uCE', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/brown/brown-suit-main.jpg'
+    ]
+  },
   
   // Burgundy Suit
-  { id: 'suit-burgundy-2p', name: 'Burgundy Suit - 2 Piece', stripe_price_id: 'price_1Rpv4XCHc12x7sCzSC3Mbtey', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/two-peice-main-bur.jpg' },
-  { id: 'suit-burgundy-3p', name: 'Burgundy Suit - 3 Piece', stripe_price_id: 'price_1Rpv4eCHc12x7sCzwbuknObE', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/three-peice-burgundy-main.jpg' },
+  { 
+    id: 'suit-burgundy-2p', 
+    name: 'Burgundy Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv4XCHc12x7sCzSC3Mbtey', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/two-peice-main-bur.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/two-peice-main-bur.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/three-peice-burgundy-main.jpg'
+    ]
+  },
+  { 
+    id: 'suit-burgundy-3p', 
+    name: 'Burgundy Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv4eCHc12x7sCzwbuknObE', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/three-peice-burgundy-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/three-peice-burgundy-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/burgundy/two-peice-main-bur.jpg'
+    ]
+  },
   
   // Charcoal Grey Suit
-  { id: 'suit-charcoal-2p', name: 'Charcoal Grey Suit - 2 Piece', stripe_price_id: 'price_1Rpv4sCHc12x7sCzgMUu7hLq', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg' },
-  { id: 'suit-charcoal-3p', name: 'Charcoal Grey Suit - 3 Piece', stripe_price_id: 'price_1Rpv4zCHc12x7sCzerWp2R07', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/vest-tie-dark-grey.jpg' },
+  { 
+    id: 'suit-charcoal-2p', 
+    name: 'Charcoal Grey Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv4sCHc12x7sCzgMUu7hLq', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/vest-tie-dark-grey.jpg'
+    ]
+  },
+  { 
+    id: 'suit-charcoal-3p', 
+    name: 'Charcoal Grey Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv4zCHc12x7sCzerWp2R07', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/vest-tie-dark-grey.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/vest-tie-dark-grey.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/char%20grey/dark-grey-two-main.jpg'
+    ]
+  },
   
   // Dark Brown Suit
-  { id: 'suit-darkbrown-2p', name: 'Dark Brown Suit - 2 Piece', stripe_price_id: 'price_1Rpv5DCHc12x7sCzdWjcaCY4', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/dark-brown/brown-main.jpg' },
-  { id: 'suit-darkbrown-3p', name: 'Dark Brown Suit - 3 Piece', stripe_price_id: 'price_1Rpv5JCHc12x7sCzPd619lQ8', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/dark-brown/brown-main.jpg' },
+  { 
+    id: 'suit-darkbrown-2p', 
+    name: 'Dark Brown Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv5DCHc12x7sCzdWjcaCY4', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/dark-brown/brown-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/dark-brown/brown-main.jpg'
+    ]
+  },
+  { 
+    id: 'suit-darkbrown-3p', 
+    name: 'Dark Brown Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv5JCHc12x7sCzPd619lQ8', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/dark-brown/brown-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/dark-brown/brown-main.jpg'
+    ]
+  },
   
   // Emerald Suit
-  { id: 'suit-emerald-2p', name: 'Emerald Suit - 2 Piece', stripe_price_id: 'price_1Rpv5XCHc12x7sCzzP57OQvP', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerlad/emerlad-main.jpg' },
-  { id: 'suit-emerald-3p', name: 'Emerald Suit - 3 Piece', stripe_price_id: 'price_1Rpv5eCHc12x7sCzIAVMbB7m', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerlad/emerland-main-2.jpg' },
+  { 
+    id: 'suit-emerald-2p', 
+    name: 'Emerald Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv5XCHc12x7sCzzP57OQvP', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerlad/emerlad-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerlad/emerlad-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerlad/emerland-main-2.jpg'
+    ]
+  },
+  { 
+    id: 'suit-emerald-3p', 
+    name: 'Emerald Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv5eCHc12x7sCzIAVMbB7m', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerlad/emerland-main-2.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerlad/emerland-main-2.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/emerlad/emerlad-main.jpg'
+    ]
+  },
   
   // Hunter Green Suit
-  { id: 'suit-hunter-2p', name: 'Hunter Green Suit - 2 Piece', stripe_price_id: 'price_1Rpv5vCHc12x7sCzAlFuGQNL', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/hunter-green/hunter-main.jpg' },
-  { id: 'suit-hunter-3p', name: 'Hunter Green Suit - 3 Piece', stripe_price_id: 'price_1Rpv61CHc12x7sCzIboI1eC8', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/hunter-green/hunter-2-main.jpg' },
+  { 
+    id: 'suit-hunter-2p', 
+    name: 'Hunter Green Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv5vCHc12x7sCzAlFuGQNL', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/hunter-green/hunter-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/hunter-green/hunter-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/hunter-green/hunter-2-main.jpg'
+    ]
+  },
+  { 
+    id: 'suit-hunter-3p', 
+    name: 'Hunter Green Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv61CHc12x7sCzIboI1eC8', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/hunter-green/hunter-2-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/hunter-green/hunter-2-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/hunter-green/hunter-main.jpg'
+    ]
+  },
   
   // Indigo Suit
-  { id: 'suit-indigo-2p', name: 'Indigo Suit - 2 Piece', stripe_price_id: 'price_1Rpv6ECHc12x7sCz7JjWOP0p', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/indigo/indigo-main.jpg' },
-  { id: 'suit-indigo-3p', name: 'Indigo Suit - 3 Piece', stripe_price_id: 'price_1Rpv6KCHc12x7sCzzaFWFxef', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/indigo/indigo-main-2.jpg' },
+  { 
+    id: 'suit-indigo-2p', 
+    name: 'Indigo Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv6ECHc12x7sCz7JjWOP0p', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/indigo/indigo-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/indigo/indigo-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/indigo/indigo-main-2.jpg'
+    ]
+  },
+  { 
+    id: 'suit-indigo-3p', 
+    name: 'Indigo Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv6KCHc12x7sCzzaFWFxef', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/indigo/indigo-main-2.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/indigo/indigo-main-2.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/indigo/indigo-main.jpg'
+    ]
+  },
   
   // Light Grey Suit
-  { id: 'suit-lightgrey-2p', name: 'Light Grey Suit - 2 Piece', stripe_price_id: 'price_1Rpv6WCHc12x7sCzDJI7Ypav', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg' },
-  { id: 'suit-lightgrey-3p', name: 'Light Grey Suit - 3 Piece', stripe_price_id: 'price_1Rpv6dCHc12x7sCz3JOmrvuA', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/vest-shirt-tie-main.jpg' },
+  { 
+    id: 'suit-lightgrey-2p', 
+    name: 'Light Grey Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv6WCHc12x7sCzDJI7Ypav', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/vest-shirt-tie-main.jpg'
+    ]
+  },
+  { 
+    id: 'suit-lightgrey-3p', 
+    name: 'Light Grey Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv6dCHc12x7sCz3JOmrvuA', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/vest-shirt-tie-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/vest-shirt-tie-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/light-grey/light-grey-two-p-main.jpg'
+    ]
+  },
   
   // Midnight Blue Suit
-  { id: 'suit-midnight-2p', name: 'Midnight Blue Suit - 2 Piece', stripe_price_id: 'price_1Rpv6sCHc12x7sCz6OZIkTR2', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blue-main.jpg' },
-  { id: 'suit-midnight-3p', name: 'Midnight Blue Suit - 3 Piece', stripe_price_id: 'price_1Rpv6yCHc12x7sCz1LFaN5gS', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blue-two-main.jpg' },
+  { 
+    id: 'suit-midnight-2p', 
+    name: 'Midnight Blue Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv6sCHc12x7sCz6OZIkTR2', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blue-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blue-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blue-two-main.jpg'
+    ]
+  },
+  { 
+    id: 'suit-midnight-3p', 
+    name: 'Midnight Blue Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv6yCHc12x7sCz1LFaN5gS', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blue-two-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blue-two-main.jpg',
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/midnight-blue/midnight-blue-main.jpg'
+    ]
+  },
   
   // Sand Suit
-  { id: 'suit-sand-2p', name: 'Sand Suit - 2 Piece', stripe_price_id: 'price_1Rpv7GCHc12x7sCzV9qUCc7I', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/sand/sand-main.jpg' },
-  { id: 'suit-sand-3p', name: 'Sand Suit - 3 Piece', stripe_price_id: 'price_1Rpv7PCHc12x7sCzbXQ9a1MG', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/sand/sand-main.jpg' },
+  { 
+    id: 'suit-sand-2p', 
+    name: 'Sand Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv7GCHc12x7sCzV9qUCc7I', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/sand/sand-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/sand/sand-main.jpg'
+    ]
+  },
+  { 
+    id: 'suit-sand-3p', 
+    name: 'Sand Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv7PCHc12x7sCzbXQ9a1MG', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/sand/sand-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/sand/sand-main.jpg'
+    ]
+  },
   
   // Tan Suit
-  { id: 'suit-tan-2p', name: 'Tan Suit - 2 Piece', stripe_price_id: 'price_1Rpv7dCHc12x7sCzoWrXk2Ot', price: 29999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-main.jpg' },
-  { id: 'suit-tan-3p', name: 'Tan Suit - 3 Piece', stripe_price_id: 'price_1Rpv7mCHc12x7sCzixeUm5ep', price: 34999, category: 'suits', product_type: 'core', image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-main.jpg' },
+  { 
+    id: 'suit-tan-2p', 
+    name: 'Tan Suit - 2 Piece', 
+    stripe_price_id: 'price_1Rpv7dCHc12x7sCzoWrXk2Ot', 
+    price: 29999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-main.jpg'
+    ]
+  },
+  { 
+    id: 'suit-tan-3p', 
+    name: 'Tan Suit - 3 Piece', 
+    stripe_price_id: 'price_1Rpv7mCHc12x7sCzixeUm5ep', 
+    price: 34999, 
+    category: 'suits', 
+    product_type: 'core', 
+    image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-main.jpg',
+    images: [
+      'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/tan/tan-main.jpg'
+    ]
+  },
 ];
 
 // TIES - Dynamic color selection, 4 widths
