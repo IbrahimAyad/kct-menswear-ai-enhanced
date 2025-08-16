@@ -120,10 +120,38 @@ export function getCloudflareOptimizedUrl(
   originalUrl: string,
   preset: keyof typeof imagePresets | ImageTransformOptions
 ): string {
+  // Check if Cloudflare Image Resizing is available
+  const isProduction = process.env.NODE_ENV === 'production';
+  const hasImageResizing = process.env.NEXT_PUBLIC_CLOUDFLARE_IMAGE_RESIZING === 'true';
+  
+  // If no image resizing available, return original URL
+  if (!isProduction || !hasImageResizing) {
+    return originalUrl;
+  }
+  
+  // Check if URL is from R2 or external
+  const isR2Url = originalUrl.includes('r2.dev') || originalUrl.includes('pub-46371bda6faf4910b74631159fc2dfd4');
+  
+  if (!isR2Url) {
+    // For non-R2 URLs, return as-is
+    return originalUrl;
+  }
+  
   const optimizer = new CloudflareImageOptimizer('');
   const options = typeof preset === 'string' ? imagePresets[preset] : preset;
   
-  return optimizer.getOptimizedUrl(originalUrl, options);
+  // For Cloudflare Image Resizing, use the /cdn-cgi/image/ path
+  const params = new URLSearchParams();
+  
+  if (options.width) params.append('width', options.width.toString());
+  if (options.height) params.append('height', options.height.toString());
+  if (options.quality) params.append('quality', (options.quality || 85).toString());
+  if (options.format) params.append('format', options.format);
+  if (options.fit) params.append('fit', options.fit);
+  
+  // Use the Cloudflare Image Resizing endpoint
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://kctmenswear.com';
+  return `${baseUrl}/cdn-cgi/image?${params.toString()}&url=${encodeURIComponent(originalUrl)}`;
 }
 
 // Batch preload images for gallery
