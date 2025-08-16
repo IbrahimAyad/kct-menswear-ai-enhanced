@@ -147,11 +147,7 @@ export class AtelierAICore {
     try {
       // Store feedback for machine learning improvements
       // This could integrate with analytics services or a feedback database
-      console.info('Recording recommendation feedback:', {
-        recommendationId,
-        feedback,
-        timestamp: new Date().toISOString()
-      });
+      // Feedback recording logic removed for production
     } catch (error) {
       console.error('Error recording feedback:', error);
     }

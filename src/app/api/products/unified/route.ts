@@ -123,7 +123,6 @@ export async function GET(request: NextRequest) {
                 };
               });
               
-              console.log(`Fetched ${enhancedProducts.length} enhanced blazers`);
             }
           } catch (enhancedErr) {
             console.error('Error fetching enhanced products:', enhancedErr);
@@ -229,7 +228,6 @@ export async function GET(request: NextRequest) {
               };
             });
             
-            console.log(`Fetched ${individualProducts.length} products from Supabase`);
           }
         }
       } catch (error) {

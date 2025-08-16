@@ -93,7 +93,6 @@ export function useMobileNavigation() {
     } else if (startTimeRef.current) {
       const timeSpent = Date.now() - startTimeRef.current;
       // You can send this to analytics
-      console.debug('Mobile nav time spent:', timeSpent);
       startTimeRef.current = undefined;
     }
   }, [state.isOpen]);
@@ -217,7 +216,6 @@ export function useMobileNavigation() {
       timeoutRef.current = setTimeout(() => {
         // Trigger search analytics here if needed
         if (query.trim()) {
-          console.debug('Mobile nav search:', query);
         }
       }, 500);
     }, []),
@@ -251,7 +249,6 @@ export function useMobileNavigation() {
 
     // Track navigation
     if (trackingEvent) {
-      console.debug('Mobile nav tracking:', trackingEvent, href);
       // Send to analytics service
     }
 

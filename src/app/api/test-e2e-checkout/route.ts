@@ -8,14 +8,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function GET(request: NextRequest) {
   try {
-    console.log('Starting E2E checkout test...');
     const results: any = {
       timestamp: new Date().toISOString(),
       tests: []
     };
     
     // Test 1: Fetch products from unified API
-    console.log('Test 1: Fetching products from unified API...');
     const productsResponse = await fetch(`${request.nextUrl.origin}/api/products/unified?limit=5`);
     const productsData = await productsResponse.json();
     
@@ -34,7 +32,6 @@ export async function GET(request: NextRequest) {
     });
     
     // Test 2: Simulate adding to cart
-    console.log('Test 2: Simulating cart addition...');
     const testProduct = productsData.products?.[0];
     if (testProduct) {
       const cartItem = {
@@ -53,7 +50,6 @@ export async function GET(request: NextRequest) {
       
       // Test 3: Create Stripe checkout session
       if (cartItem.stripePriceId) {
-        console.log('Test 3: Creating Stripe checkout session...');
         try {
           const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -96,7 +92,6 @@ export async function GET(request: NextRequest) {
     }
     
     // Test 4: Check database coverage
-    console.log('Test 4: Checking database coverage...');
     const supabase = await createClient();
     
     const { data: variantStats } = await supabase
@@ -120,7 +115,6 @@ export async function GET(request: NextRequest) {
     });
     
     // Test 5: Verify Stripe prices exist
-    console.log('Test 5: Verifying Stripe prices...');
     if (testProduct?.stripePriceId) {
       try {
         const price = await stripe.prices.retrieve(testProduct.stripePriceId);

@@ -16,7 +16,6 @@ export async function GET(request: NextRequest) {
     // Log environment check for debugging
     const hasSupabaseUrl = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
     const hasSupabaseKey = !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    console.log('Supabase env check:', { hasSupabaseUrl, hasSupabaseKey });
     
     // Generate cache key from search params
     const cacheKey = searchParams.toString();
@@ -168,17 +167,7 @@ export async function GET(request: NextRequest) {
                   variants: product.product_variants || []
                 };
               });
-              console.log(`Fetched and mapped ${individualProducts.length} products from Supabase`);
-              // Debug: Log sample products
-              if (individualProducts.length > 0) {
-                console.log('Sample Supabase product:', {
-                  id: individualProducts[0].id,
-                  title: individualProducts[0].title,
-                  category: individualProducts[0].category,
-                  product_type: individualProducts[0].product_type,
-                  price: individualProducts[0].price
-                });
-              }
+              // Debug: Log sample products removed for production
             }
           } catch (timeoutError) {
             console.error('Supabase query timeout - continuing with bundles only');
@@ -191,9 +180,7 @@ export async function GET(request: NextRequest) {
     }
     
     // Perform unified search
-    console.log(`Calling unifiedSearch with ${individualProducts.length} individual products and filters:`, filters);
     const results = await unifiedSearch(filters, individualProducts);
-    console.log(`UnifiedSearch returned ${results.totalCount} total products`);
     
     // Add preset metadata to results if applicable
     if (presetData) {

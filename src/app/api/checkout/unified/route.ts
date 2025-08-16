@@ -30,13 +30,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Unified checkout for items:', items.map((i: CartItem) => ({
-      id: i.id,
-      name: i.name,
-      enhanced: i.enhanced,
-      stripePriceId: i.stripePriceId
-    })));
-
     // Separate legacy and enhanced products
     const legacyItems = items.filter((item: CartItem) => !item.enhanced && item.stripePriceId);
     const enhancedItems = items.filter((item: CartItem) => item.enhanced || !item.stripePriceId);
@@ -203,7 +196,6 @@ export async function POST(request: NextRequest) {
       billing_address_collection: 'required',
     });
 
-    console.log('Created unified checkout session:', session.id);
 
     // Return the checkout session URL
     return NextResponse.json({
@@ -348,7 +340,6 @@ export async function PUT(request: NextRequest) {
       billing_address_collection: 'required',
     });
 
-    console.log('Created express checkout session:', session.id);
 
     return NextResponse.json({
       url: session.url,

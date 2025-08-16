@@ -38,7 +38,6 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { productId, quantity = 1, size, successUrl, cancelUrl } = body;
 
-    console.log('Enhanced checkout request:', { productId, quantity, size });
 
     if (!productId) {
       return NextResponse.json(
@@ -78,13 +77,6 @@ export async function POST(request: NextRequest) {
         { status: 404 }
       );
     }
-
-    console.log('Found product:', { 
-      id: product.id, 
-      name: product.name, 
-      price: product.base_price,
-      slug: product.slug 
-    });
 
     // Get the primary image URL
     const imageUrl = product.images?.hero?.url || 

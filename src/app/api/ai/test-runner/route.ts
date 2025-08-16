@@ -8,7 +8,6 @@ import { EXTENDED_TRAINING_SCENARIOS } from '@/lib/ai/training-extended'
 import { ADVANCED_SCENARIOS } from '@/lib/ai/advanced-training'
 
 export async function GET() {
-  console.log('Running AI system tests...')
   
   // Run tests and collect metrics
   const testResults = await runComprehensiveTests()

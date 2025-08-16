@@ -91,7 +91,6 @@ export default function AIDashboard() {
   // Export data
   const handleExport = () => {
     // Export logic here
-    console.log('Exporting data...');
   };
 
   return (

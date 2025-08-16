@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const limit = parseInt(searchParams.get('limit') || '5');
 
-    console.log('🧪 Testing checkout flow integration...');
 
     // 1. Fetch products from Supabase
     const result = await fetchProductsWithImages({ limit, status: 'active' });
@@ -20,14 +19,12 @@ export async function GET(request: NextRequest) {
     }
 
     const products = result.data;
-    console.log(`📦 Fetched ${products.length} products from Supabase`);
 
     // 2. Test cart item creation and Stripe price ID resolution
     const testCartItems = [];
     const issues = [];
 
     for (const product of products) {
-      console.log(`\n🔍 Testing product: ${product.name} (${product.id})`);
 
       // Test different sizes for suits
       const testSizes = product.category?.toLowerCase().includes('suit') 
@@ -66,7 +63,6 @@ export async function GET(request: NextRequest) {
           });
         }
 
-        console.log(`  Size ${size}: ${stripePriceId ? '✅' : '❌'} Stripe Price ID: ${stripePriceId || 'MISSING'}`);
       }
     }
 
