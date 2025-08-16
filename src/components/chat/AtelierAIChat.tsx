@@ -404,3 +404,21 @@ export function AtelierAIChat({ onClose, isOpen = true, className }: AtelierAICh
     </AnimatePresence>
   );
 }
+
+// Export the chat button component for use in layout
+export function AtelierAIChatButton() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-red-900 to-red-800 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-shadow"
+        aria-label="Open AI Chat"
+      >
+        <MessageCircle className="h-6 w-6" />
+      </button>
+      {isOpen && <AtelierAIChat isOpen={isOpen} onClose={() => setIsOpen(false)} />}
+    </>
+  );
+}

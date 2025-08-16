@@ -60,3 +60,6 @@ export const supabaseAdmin = (() => {
     return null as any
   }
 })()
+
+// Export the default client instance as 'supabase' for compatibility
+export const supabase = getSupabaseClient()
