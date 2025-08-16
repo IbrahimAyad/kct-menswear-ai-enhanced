@@ -81,7 +81,12 @@ export function EnhancedUnifiedDetail({ product }: EnhancedUnifiedDetailProps) {
       return BLAZER_SIZES;
     }
     if (isSuit || product.isBundle) {
-      return SUIT_SIZES;
+      // For suits, combine all size categories into a single array
+      return [
+        ...SUIT_SIZES.SHORT,
+        ...SUIT_SIZES.REGULAR,
+        ...SUIT_SIZES.LONG
+      ];
     }
     return product.size || ['S', 'M', 'L', 'XL', 'XXL'];
   };
