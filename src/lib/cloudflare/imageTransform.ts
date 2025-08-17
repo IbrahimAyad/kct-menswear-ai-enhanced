@@ -120,9 +120,8 @@ export function getCloudflareOptimizedUrl(
   originalUrl: string,
   preset: keyof typeof imagePresets | ImageTransformOptions
 ): string {
-  // Temporarily disable Cloudflare image optimization due to 404/400 errors
-  // TODO: Re-enable once Cloudflare Image Resizing is properly configured
-  const isCloudflareOptimizationEnabled = false;
+  // Re-enable Cloudflare image optimization
+  const isCloudflareOptimizationEnabled = true;
   
   // Return original URL until optimization is fixed
   if (!isCloudflareOptimizationEnabled) {
