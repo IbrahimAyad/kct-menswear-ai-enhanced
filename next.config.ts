@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   
+  // Compiler optimizations - automatically remove console.log in production
+  compiler: {
+    // Remove all console logs in production except errors and warnings
+    removeConsole: process.env.NODE_ENV === "production" ? {
+      exclude: ["error", "warn"],
+    } : false,
+  },
+  
   // Basic performance optimizations
   compress: true,
   productionBrowserSourceMaps: false,
