@@ -550,24 +550,31 @@ export async function GET(request: NextRequest) {
                   source: 'enhanced',
                   type: 'individual',
                   name: product.name,
+                  title: product.name,
                   description: product.description || '',
-                  price: String(product.base_price / 100), // Convert cents to dollars
-                  compare_at_price: product.compare_at_price ? String(product.compare_at_price / 100) : null,
+                  price: product.base_price / 100, // Convert cents to dollars (as number)
+                  compare_at_price: product.compare_at_price ? product.compare_at_price / 100 : null,
                   currency: 'USD',
-                  category: 'blazers',
-                  product_type: 'blazers',
+                  category: product.category || 'blazers',
+                  product_type: product.category || 'blazers',
                   tags: product.tags || [],
-                  slug: product.slug, // Critical for product detail pages
+                  slug: product.slug,
+                  handle: product.slug,
                   url: `/products/${product.slug}`,
                   availability: 'in-stock',
+                  available: true,
+                  inventory_quantity: 100,
+                  primary_image: imageUrl,
+                  image: imageUrl, // Add for compatibility
+                  featured_image: { src: imageUrl },
                   images: [{ src: imageUrl }],
                   vendor: 'KCT Menswear',
                   sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'],
                   stripePriceId: product.stripe_price_id || null,
                   stripeActive: !!product.stripe_product_id,
                   variants: [],
-                  ai_score: 95, // Higher score for enhanced products
-                  enhanced: true, // Mark as enhanced for proper routing
+                  ai_score: 95,
+                  enhanced: true,
                   pricing_tier: product.price_tier || null
                 };
               });
@@ -664,9 +671,10 @@ export async function GET(request: NextRequest) {
                 title: product.name,
                 description: product.description,
                 price: displayPrice,
-                category: product.category || 'uncategorized',
+                category: product.category || product.product_type || 'uncategorized',
                 product_type: product.product_type,
                 primary_image: primaryImageUrl,
+                image: primaryImageUrl, // Add for compatibility
                 sku: product.sku,
                 handle: product.handle,
                 tags: Array.isArray(product.tags) ? product.tags.filter(Boolean) : [],
@@ -674,14 +682,16 @@ export async function GET(request: NextRequest) {
                 inventory_quantity: totalInventory,
                 featured_image: primaryImageUrl ? { src: primaryImageUrl } : null,
                 images: primaryImageUrl ? [{ src: primaryImageUrl }] : [],
-                vendor: product.vendor,
+                vendor: product.vendor || 'KCT Menswear',
                 sizes: sizes,
                 // Stripe data from first variant
                 stripePriceId: firstVariant?.stripe_price_id || null,
                 stripeActive: firstVariant?.available || false,
                 variants: product.product_variants || [],
-                // Additional fields
-                ai_score: 80 + Math.floor(Math.random() * 20)
+                // Additional fields for unified format
+                ai_score: 80 + Math.floor(Math.random() * 20),
+                source: 'supabase',
+                type: 'individual'
               };
             });
             
@@ -695,8 +705,17 @@ export async function GET(request: NextRequest) {
     // Combine enhanced products with legacy products
     const allProducts = [...enhancedProducts, ...individualProducts];
     
+    // Debug logging
+    console.log('API: Enhanced products count:', enhancedProducts.length);
+    console.log('API: Individual products count:', individualProducts.length);
+    console.log('API: Total products before search:', allProducts.length);
+    if (allProducts.length > 0) {
+      console.log('API: Sample product:', JSON.stringify(allProducts[0], null, 2));
+    }
+    
     // Perform unified search with all products
     const results = await unifiedSearch(filters, allProducts);
+    console.log('API: Products after search:', results.products.length);
     
     // Add preset metadata if applicable
     if (presetData) {
