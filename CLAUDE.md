@@ -101,10 +101,9 @@ All suits available in 2-piece ($299.99) and 3-piece ($349.99):
 - Temporarily excluded from collections page
 - Will be re-enabled after core issues resolved
 
-#### 4. ~~Legacy Products~~ - REMOVED (2025-08-17)
-- **NO LONGER USED** - Were duplicates of enhanced products
-- Previously in `products` table with separate `product_images` table
-- Completely removed from system to prevent confusion
+#### ~~Legacy Products~~ - PERMANENTLY REMOVED (2025-08-17)
+- **DELETED** - Were duplicates of enhanced products
+- No longer in codebase or database queries
 - All functionality replaced by enhanced products
 
 ### Image Storage Strategy:
