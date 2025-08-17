@@ -468,11 +468,15 @@ export async function GET(request: NextRequest) {
       presetData = getFilterPreset(presetId);
     }
     
-    // TEMPORARILY: Only fetch Supabase products (no bundles for now)
-    let individualProducts = [];
+    // Product fetching strategy:
+    // - Enhanced products from products_enhanced table (172 items)
+    // - Core products hardcoded with Stripe IDs (28 items)
+    // - NO legacy products (deprecated duplicates)
+    // - NO bundles (temporarily disabled)
+    let individualProducts = []; // Will remain empty - legacy products removed
     let enhancedProducts = [];
     
-    // Skip bundles for now - focus on Supabase products
+    // Temporarily disable bundles
     filters.includeBundles = false;
     
     if (filters.includeIndividual !== false) {
@@ -545,6 +549,11 @@ export async function GET(request: NextRequest) {
                   }
                 }
                 
+                // Final fallback to avoid broken images
+                if (!imageUrl || imageUrl.includes('undefined') || imageUrl === '/placeholder-product.jpg') {
+                  imageUrl = '/placeholder-product.svg';
+                }
+                
                 return {
                   id: `enhanced_${product.id}`,
                   source: 'enhanced',
@@ -584,8 +593,10 @@ export async function GET(request: NextRequest) {
             console.error('Error fetching enhanced products:', enhancedErr);
           }
           
-          // Then fetch legacy products
-          // Build Supabase query - properly join with product_variants
+          // SKIP LEGACY PRODUCTS - They've been replaced by enhanced products
+          // Legacy products from 'products' table are duplicates of enhanced products
+          // Only use enhanced products from 'products_enhanced' table
+          /*
           let query = supabase
             .from('products')
             .select(`
@@ -625,13 +636,14 @@ export async function GET(request: NextRequest) {
             query = query.lte('base_price', filters.maxPrice * 100);
           }
           
-          const { data, error } = await query;
+          // Comment out legacy product fetching
+          const { data, error } = { data: null, error: null }; // await query;
           
           if (error) {
             console.error('Supabase query error:', error);
           } else if (data) {
             // Map Supabase products to unified format
-            individualProducts = data.map((product: any) => {
+            individualProducts = data?.map((product: any) => {
               // Get primary image and fix legacy URLs - pass product name for better mapping
               let primaryImageUrl = fixImageUrl(product.primary_image, product.name);
               
@@ -693,9 +705,10 @@ export async function GET(request: NextRequest) {
                 source: 'supabase',
                 type: 'individual'
               };
-            });
+            }) || [];
             
           }
+          */
         }
       } catch (error) {
         console.error('Error fetching Supabase products:', error);
@@ -707,7 +720,7 @@ export async function GET(request: NextRequest) {
     
     // Debug logging
     console.log('API: Enhanced products count:', enhancedProducts.length);
-    console.log('API: Individual products count:', individualProducts.length);
+    console.log('API: Legacy products (skipped):', 0); // No longer fetching legacy
     console.log('API: Total products before search:', allProducts.length);
     if (allProducts.length > 0) {
       console.log('API: Sample product:', JSON.stringify(allProducts[0], null, 2));
