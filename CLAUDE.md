@@ -78,6 +78,48 @@ All suits available in 2-piece ($299.99) and 3-piece ($349.99):
 - **Bundle Customization**: Customers specify selections in text fields
 - **Already Processing Payments**: These products work NOW with Stripe checkout
 
+## 🔴 CRITICAL: Product System Architecture (Updated 2025-08-17)
+
+### Current Product Types:
+
+#### 1. **Core Products (28)** - Hardcoded with Stripe IDs
+- Basic suits, shirts, ties in solid colors
+- Stored in `/lib/config/coreProducts.ts`
+- Have Stripe price IDs ready for checkout
+- Examples: Navy 2-piece suit, White dress shirt
+
+#### 2. **Enhanced Products (172)** - Primary Product System
+- Premium products: blazers, tuxedos, vests, suspenders
+- Stored in `products_enhanced` table in Supabase
+- Images stored as JSONB within same table (no separate image table)
+- Features: 20-tier pricing, CDN integration
+- Examples: Prom blazers, designer tuxedos
+
+#### 3. **Bundles (66)** - Currently Disabled
+- Suit + Shirt + Tie combinations
+- Hardcoded in `/lib/products/bundleProducts.ts`
+- Temporarily excluded from collections page
+- Will be re-enabled after core issues resolved
+
+#### 4. ~~Legacy Products~~ - REMOVED (2025-08-17)
+- **NO LONGER USED** - Were duplicates of enhanced products
+- Previously in `products` table with separate `product_images` table
+- Completely removed from system to prevent confusion
+- All functionality replaced by enhanced products
+
+### Image Storage Strategy:
+- **Enhanced Products**: Images stored as JSONB in `products_enhanced.images` field
+- **Core Products**: Direct CDN URLs in code
+- **NO separate image tables** - Simplified architecture
+- CDN: `cdn.kctmenswear.com` for all product images
+
+### API Data Flow:
+- `/api/products/unified` fetches:
+  - ✅ Enhanced products from `products_enhanced` 
+  - ✅ Core products from hardcoded list
+  - ❌ Legacy products (removed)
+  - ❌ Bundles (temporarily disabled)
+
 ## 🎯 Successfully Implemented Features (2025-08-11)
 
 ### Master Collection Page - Final Version
