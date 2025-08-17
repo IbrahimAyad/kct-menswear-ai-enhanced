@@ -48,7 +48,10 @@ export default function TestStripeCheckout() {
             name: product.name,
             price: Math.round(product.price * 100), // Convert to cents
             quantity: 1,
-            image: product.imageUrl || product.images?.primary?.url,
+            image: product.imageUrl?.replace(
+              'pub-46371bda6faf4910b74631159fc2dfd4.r2.dev',
+              'cdn.kctmenswear.com'
+            ) || product.images?.primary?.url || 'https://cdn.kctmenswear.com/placeholder.jpg',
             stripePriceId: product.stripePriceId,
             enhanced: product.stripePriceId ? false : true, // If no Stripe ID, it's enhanced
             category: product.category
@@ -113,7 +116,21 @@ export default function TestStripeCheckout() {
             {products.slice(0, 9).map((product) => (
               <div key={product.id} className="border rounded-lg p-4">
                 <img 
-                  src={product.imageUrl || '/placeholder-product.jpg'} 
+                  src={(() => {
+                    // Use working CDN images as placeholders for bundles
+                    if (product.name?.includes('Tuxedo')) {
+                      return 'https://cdn.kctmenswear.com/tuxedos/black-gold-design-tuxedo/mens_tuxedos_suit_2005_0.webp';
+                    }
+                    if (product.name?.includes('Executive') || product.name?.includes('Navy')) {
+                      return 'https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/black-suspender-bowtie-set/model.webp';
+                    }
+                    // Try to fix R2 URLs to CDN
+                    const fixedUrl = product.imageUrl?.replace(
+                      'pub-46371bda6faf4910b74631159fc2dfd4.r2.dev',
+                      'cdn.kctmenswear.com'
+                    );
+                    return fixedUrl || product.images?.primary?.url || '/placeholder-product.jpg';
+                  })()} 
                   alt={product.name}
                   className="w-full h-48 object-cover rounded-lg mb-4"
                   onError={(e) => {
