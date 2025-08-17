@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { unifiedSearch } from '@/lib/services/unifiedSearchEngine';
 import { urlParamsToFilters } from '@/lib/utils/url-filters';
 import { getFilterPreset } from '@/lib/config/filter-presets';
+import { generateCDNUrls, fixLegacyUrl } from '@/lib/utils/cdn-url-generator';
 
 // Complete mapping for enhanced products based on COMPLETE_MASTER_CDN_URLS
 const enhancedProductImages: Record<string, { model: string; product?: string }> = {
@@ -422,38 +423,22 @@ const enhancedProductImages: Record<string, { model: string; product?: string }>
 
 // Function to fix legacy image URLs or get correct CDN URL
 function fixImageUrl(url: string | null, productName?: string): string | null {
-  // First check if we have a direct mapping for this product
-  if (productName && enhancedProductImages[productName]) {
-    return enhancedProductImages[productName].model;
-  }
-  
-  if (!url) return null;
-  
-  // Replace legacy R2 domain with correct CDN domain
-  if (url.includes('pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev')) {
-    // Convert legacy URLs to new CDN structure
-    if (url.includes('main-suspender-bowtie-set')) {
-      // Extract color/name from legacy URL
-      const matches = url.match(/main-suspender-bowtie-set\/([^\/\-]+)/);
-      if (matches && matches[1]) {
-        const color = matches[1].replace(/-/g, ' ');
-        const isModel = url.includes('-model.png') || url.includes('model.png');
-        const fileType = isModel ? 'model.webp' : 'product.jpg';
-        return `https://cdn.kctmenswear.com/menswear-accessories/suspender-bowtie-set/${matches[1]}-suspender-bowtie-set/${fileType}`;
-      }
-    } else if (url.includes('main-solid-vest-tie')) {
-      // Extract color/name from legacy URL
-      const matches = url.match(/main-solid-vest-tie\/([^\/\-]+)/);
-      if (matches && matches[1]) {
-        const color = matches[1].replace(/-/g, ' ');
-        const isModel = url.includes('-model.png') || url.includes('model.png');
-        const fileType = isModel ? 'model.webp' : 'vest.jpg';
-        return `https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/${matches[1]}-vest/${fileType}`;
-      }
+  // First try smart generation based on product name
+  if (productName) {
+    // Check if we have a hardcoded mapping first (for backwards compatibility)
+    if (enhancedProductImages[productName]) {
+      return enhancedProductImages[productName].model;
+    }
+    
+    // Try smart generation
+    const generated = generateCDNUrls(productName);
+    if (generated.model !== '/placeholder-product.jpg') {
+      return generated.model;
     }
   }
   
-  return url;
+  // Fall back to fixing legacy URLs
+  return fixLegacyUrl(url, productName);
 }
 
 // Cache configuration
