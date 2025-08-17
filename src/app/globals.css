@@ -25,12 +25,12 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #8B0000, #D4AF37);
+  background: var(--burgundy);
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #730000, #B8922C);
+  background: var(--burgundy-dark);
 }
 
 /* Modern Size Bot Styles */
@@ -167,20 +167,7 @@
   --burgundy-800: #8B2635;
   --burgundy-900: #752331;
   
-  /* Secondary Colors */
-  --gold: #D4AF37;
-  --gold-light: #E6C659;
-  --gold-dark: #B8941F;
-  --gold-50: #FEFDF4;
-  --gold-100: #FEFAEC;
-  --gold-200: #FDF4D3;
-  --gold-300: #FBEBAB;
-  --gold-400: #F7DD7F;
-  --gold-500: #F0CC4F;
-  --gold-600: #D4AF37;
-  --gold-700: #B8941F;
-  --gold-800: #957420;
-  --gold-900: #7C6122;
+  /* Secondary Colors - Removed Gold Palette */
   
   /* Base Colors */
   --black: #1A1A1A;
@@ -199,9 +186,9 @@
   /* Semantic Colors */
   --primary: var(--burgundy);
   --primary-hover: var(--burgundy-dark);
-  --secondary: var(--gold);
-  --secondary-hover: var(--gold-dark);
-  --accent: var(--gold-light);
+  --secondary: var(--gray-700);
+  --secondary-hover: var(--gray-800);
+  --accent: var(--burgundy-light);
   
   /* Interactive Elements */
   --hover-overlay: rgba(139, 38, 53, 0.1);
@@ -224,37 +211,48 @@
   }
   
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold leading-tight;
+    @apply text-5xl md:text-7xl lg:text-8xl font-light leading-tight tracking-tight;
+    letter-spacing: -0.02em;
   }
   
   h2 {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold;
+    @apply text-4xl md:text-5xl lg:text-6xl font-light leading-tight tracking-tight;
+    letter-spacing: -0.01em;
   }
   
   h3 {
-    @apply text-2xl md:text-3xl lg:text-4xl font-semibold;
+    @apply text-3xl md:text-4xl lg:text-5xl font-light leading-tight;
   }
   
   h4 {
-    @apply text-xl md:text-2xl lg:text-3xl font-semibold;
+    @apply text-2xl md:text-3xl lg:text-4xl font-light;
   }
   
   h5 {
-    @apply text-lg md:text-xl lg:text-2xl font-medium;
+    @apply text-xl md:text-2xl lg:text-3xl font-normal;
   }
   
   h6 {
-    @apply text-base md:text-lg lg:text-xl font-medium;
+    @apply text-lg md:text-xl lg:text-2xl font-normal;
+  }
+  
+  /* Body text improvements */
+  p {
+    @apply leading-relaxed;
+  }
+  
+  .text-large {
+    @apply text-xl md:text-2xl font-light leading-relaxed;
   }
 }
 
 @layer components {
   /* Accessibility Skip Links - Luxury Brand Styling */
   .skip-link {
-    @apply fixed top-4 left-4 z-[200] px-4 py-2 font-medium text-sm rounded-sm shadow-lg transition-all duration-300 transform;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-    color: var(--black);
-    border: 2px solid var(--black);
+    @apply fixed top-4 left-4 z-[200] px-4 py-2 font-medium text-sm shadow-lg transition-all duration-300 transform;
+    background: var(--burgundy);
+    color: var(--white);
+    border: 2px solid var(--burgundy);
     /* Initially positioned off-screen */
     transform: translateY(-100vh);
   }
@@ -262,13 +260,13 @@
   .skip-link:focus {
     /* Slide into view when focused */
     transform: translateY(0);
-    outline: 3px solid var(--burgundy);
+    outline: 3px solid var(--burgundy-light);
     outline-offset: 2px;
-    box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3), 0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(139, 38, 53, 0.3), 0 4px 16px rgba(0, 0, 0, 0.1);
   }
   
   .skip-link:hover:focus {
-    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+    background: var(--burgundy-dark);
     transform: translateY(0) scale(1.05);
   }
 
@@ -315,7 +313,7 @@
     left: 0;
     width: 0;
     height: 2px;
-    background: linear-gradient(90deg, var(--burgundy), var(--gold));
+    background: var(--burgundy);
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
@@ -339,7 +337,7 @@
     background: rgba(255, 255, 255, 0.97);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+    border-bottom: 1px solid rgba(139, 38, 53, 0.08);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.03), 0 1px 4px rgba(0, 0, 0, 0.02);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -357,14 +355,14 @@
   /* Enhanced header interactions */
   .luxury-header:hover {
     background: rgba(255, 255, 255, 0.98);
-    border-bottom-color: rgba(212, 175, 55, 0.12);
+    border-bottom-color: rgba(139, 38, 53, 0.12);
     box-shadow: 0 4px 28px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.03);
   }
   
   /* Scrolled header state */
   .luxury-header.scrolled {
     background: rgba(255, 255, 255, 0.98);
-    border-bottom-color: rgba(212, 175, 55, 0.15);
+    border-bottom-color: rgba(139, 38, 53, 0.15);
     box-shadow: 0 6px 32px rgba(0, 0, 0, 0.06), 0 2px 12px rgba(0, 0, 0, 0.04);
   }
   
@@ -384,7 +382,7 @@
   }
 
   .btn-primary {
-    @apply bg-gold hover:bg-gold/90 text-black px-6 py-3 rounded-sm font-semibold transition-colors;
+    @apply bg-burgundy hover:bg-burgundy-dark text-white px-6 py-3 font-semibold transition-colors;
   }
   
   .btn-secondary {
@@ -536,10 +534,10 @@
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    background: #D4AF37;
+    background: var(--burgundy);
     cursor: pointer;
     border: 2px solid #fff;
-    box-shadow: 0 2px 6px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 2px 6px rgba(139, 38, 53, 0.3);
   }
   
   .slider-thumb::-webkit-slider-thumb {
@@ -548,20 +546,20 @@
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    background: #D4AF37;
+    background: var(--burgundy);
     cursor: pointer;
     border: 2px solid #fff;
-    box-shadow: 0 2px 6px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 2px 6px rgba(139, 38, 53, 0.3);
   }
   
   .slider-thumb::-moz-range-thumb {
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    background: #D4AF37;
+    background: var(--burgundy);
     cursor: pointer;
     border: 2px solid #fff;
-    box-shadow: 0 2px 6px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 2px 6px rgba(139, 38, 53, 0.3);
   }
   
   /* Line clamp utilities */

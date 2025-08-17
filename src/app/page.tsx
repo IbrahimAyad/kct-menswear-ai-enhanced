@@ -1,217 +1,180 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Calendar, ShoppingBag, Sparkles, TrendingUp, Package, Zap, Brain, Check } from "lucide-react";
-import Link from "next/link";
-import { ModernBundleCard } from "@/components/home/ModernBundleCard";
-import { BuildYourLookShowcase } from "@/components/home/BuildYourLookShowcase";
-import HomeCollectionGrid from "@/components/home/HomeCollectionGrid";
-import { EnhancedDarkBundleCarousel } from "@/components/home/EnhancedDarkBundleCarousel";
-import TrustIndicators from "@/components/home/TrustIndicators";
-import TrendingNowSection from "@/components/home/TrendingNowSection";
-import AnimatedHeroSection from "@/components/home/AnimatedHeroSection";
-import { VelocityGrid } from "@/components/home/VelocityGrid";
-import { InteractiveStyleEnvironments } from "@/components/home/InteractiveStyleEnvironments";
-import { ServiceJourneyVisualization } from "@/components/home/ServiceJourneyVisualization";
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles } from "lucide-react";
+import { ModernHero } from "@/components/home/ModernHero";
+import { BuildYourLookModern } from "@/components/home/BuildYourLookModern";
+import { EditorialCollections } from "@/components/home/EditorialCollections";
+import { ModernProductShowcase } from "@/components/home/ModernProductShowcase";
+import { MinimalFooterSection } from "@/components/home/MinimalFooterSection";
 
-// Enhanced bundle data with all premium properties for dark mode carousel
-const featuredBundles = [
+// Premium outfit combinations for Build Your Look
+const outfitCombinations = [
   {
-    id: 'bundle-1',
-    name: 'Executive Power Bundle',
-    description: 'Navy suit, white shirt, burgundy tie - perfect for boardroom dominance and client meetings',
-    totalPrice: 229.99,
-    originalPrice: 269.99,
+    id: "executive",
+    name: "Executive Power",
+    suit: {
+      id: "navy-suit",
+      name: "Navy Tailored Suit",
+      price: 189,
+      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg"
+    },
+    shirt: {
+      id: "white-shirt",
+      name: "Crisp White Shirt",
+      price: 49,
+      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/white/white-shirt-1.jpg"
+    },
+    tie: {
+      id: "burgundy-tie",
+      name: "Burgundy Silk Tie",
+      price: 29,
+      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/burgundy/burgundy-tie-1.jpg"
+    },
+    totalPrice: 267,
+    bundlePrice: 229,
+    savings: 38,
+    description: "Commanding presence for the modern executive"
+  },
+  {
+    id: "wedding",
+    name: "Wedding Classic",
+    suit: {
+      id: "charcoal-suit",
+      name: "Charcoal Three-Piece",
+      price: 229,
+      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/charcoal/charcoal-main-1.jpg"
+    },
+    shirt: {
+      id: "light-blue-shirt",
+      name: "Light Blue Shirt",
+      price: 55,
+      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/blue/light-blue-shirt-1.jpg"
+    },
+    tie: {
+      id: "silver-tie",
+      name: "Silver Tie",
+      price: 35,
+      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/silver/silver-tie-1.jpg"
+    },
+    totalPrice: 319,
+    bundlePrice: 279,
     savings: 40,
-    suit: {
-      name: 'Navy Suit',
-      image: 'https://cdn.kctmenswear.com/products/suits/navy/main.png'
-    },
-    shirt: {
-      name: 'White Shirt',
-      image: 'https://cdn.kctmenswear.com/products/shirts/white/main.png'
-    },
-    tie: {
-      name: 'Burgundy Tie',
-      image: 'https://cdn.kctmenswear.com/products/ties/burgundy/main.png'
-    },
-    modelImage: 'https://cdn.kctmenswear.com/products/bundles/executive-power/model.png',
-    slug: 'executive-power',
-    featured: true,
-    popularity: 95,
-    rating: 4.9,
-    trending: true,
-    aiScore: 98
+    description: "Timeless elegance for your special day"
   },
   {
-    id: 'bundle-2',
-    name: 'Wedding Classic Bundle',
-    description: 'Charcoal suit, light blue shirt, silver tie - timeless wedding elegance',
-    totalPrice: 249.99,
-    originalPrice: 299.99,
-    savings: 50,
+    id: "black-tie",
+    name: "Black Tie Elite",
     suit: {
-      name: 'Charcoal Suit',
-      image: 'https://cdn.kctmenswear.com/products/suits/charcoal/main.png'
+      id: "black-tuxedo",
+      name: "Black Tuxedo",
+      price: 279,
+      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-tux-main-1.jpg"
     },
     shirt: {
-      name: 'Light Blue Shirt',
-      image: 'https://cdn.kctmenswear.com/products/shirts/light-blue/main.png'
+      id: "formal-white",
+      name: "Formal White Shirt",
+      price: 65,
+      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/white/wing-collar-1.jpg"
     },
     tie: {
-      name: 'Silver Tie',
-      image: 'https://cdn.kctmenswear.com/products/ties/silver/main.png'
+      id: "black-bowtie",
+      name: "Black Bow Tie",
+      price: 25,
+      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/black/black-bowtie-1.jpg"
     },
-    modelImage: 'https://cdn.kctmenswear.com/products/bundles/wedding-classic/model.png',
-    slug: 'wedding-classic',
-    popularity: 88,
-    rating: 4.8,
-    limitedStock: true
-  },
-  {
-    id: 'bundle-3',
-    name: 'Power Player Premium',
-    description: 'Navy 3-piece suit, white shirt, red tie - command the room with executive presence',
-    totalPrice: 249.99,
-    originalPrice: 299.99,
-    savings: 50,
-    suit: {
-      name: 'Navy 3-Piece Suit',
-      image: 'https://cdn.kctmenswear.com/products/suits/navy-3piece/main.png'
-    },
-    shirt: {
-      name: 'White Shirt',
-      image: 'https://cdn.kctmenswear.com/products/shirts/white/main.png'
-    },
-    tie: {
-      name: 'Red Tie',
-      image: 'https://cdn.kctmenswear.com/products/ties/red/main.png'
-    },
-    modelImage: 'https://cdn.kctmenswear.com/products/bundles/power-player/model.png',
-    slug: 'power-player',
-    popularity: 92,
-    rating: 4.7,
-    trending: true,
-    aiScore: 94
-  },
-  {
-    id: 'bundle-4',
-    name: 'Triple Black Signature',
-    description: 'Black suit, black shirt, black tie - bold fashion statement for evening events',
-    totalPrice: 229.99,
-    originalPrice: 269.99,
+    totalPrice: 369,
+    bundlePrice: 329,
     savings: 40,
-    suit: {
-      name: 'Black Suit',
-      image: 'https://cdn.kctmenswear.com/products/suits/black/main.png'
-    },
-    shirt: {
-      name: 'Black Shirt',
-      image: 'https://cdn.kctmenswear.com/products/shirts/black/main.png'
-    },
-    tie: {
-      name: 'Black Tie',
-      image: 'https://cdn.kctmenswear.com/products/ties/black/main.png'
-    },
-    modelImage: 'https://cdn.kctmenswear.com/products/bundles/triple-black/model.png',
-    slug: 'triple-black',
-    popularity: 90,
-    rating: 4.6,
-    aiScore: 95
-  },
-  {
-    id: 'bundle-5',
-    name: 'Rose Gold Elegance',
-    description: 'Light grey suit, pink shirt, navy tie - modern sophistication meets classic style',
-    totalPrice: 219.99,
-    originalPrice: 259.99,
-    savings: 40,
-    suit: {
-      name: 'Light Grey Suit',
-      image: 'https://cdn.kctmenswear.com/products/suits/light-grey/main.png'
-    },
-    shirt: {
-      name: 'Pink Shirt',
-      image: 'https://cdn.kctmenswear.com/products/shirts/pink/main.png'
-    },
-    tie: {
-      name: 'Navy Tie',
-      image: 'https://cdn.kctmenswear.com/products/ties/navy/main.png'
-    },
-    modelImage: 'https://cdn.kctmenswear.com/products/bundles/rose-gold/model.png',
-    slug: 'rose-gold-elegance',
-    popularity: 85,
-    rating: 4.8,
-    trending: true,
-    limitedStock: true
+    description: "Sophisticated luxury for formal events"
   }
 ];
 
-// Trending products with actual KCT product images - enhanced with metrics
-const trendingProducts = [
-  { id: 1, name: 'Navy 2-Piece Suit', category: 'Suits', price: 189, image: 'https://cdn.kctmenswear.com/products/suits/navy/main.png', trending: 'up' as const, hotness: 92, recentlyViewed: 47 },
-  { id: 2, name: 'White Dress Shirt', category: 'Shirts', price: 49, image: 'https://cdn.kctmenswear.com/products/shirts/white/main.png', trending: 'up' as const, hotness: 88, recentlyViewed: 35 },
-  { id: 3, name: 'Burgundy Silk Tie', category: 'Ties', price: 29, image: 'https://cdn.kctmenswear.com/products/ties/burgundy/main.png', hotness: 75, recentlyViewed: 22 },
-  { id: 4, name: 'Charcoal 3-Piece', category: 'Suits', price: 229, image: 'https://cdn.kctmenswear.com/products/suits/charcoal-3piece/main.png', trending: 'up' as const, hotness: 85, recentlyViewed: 31 },
-  { id: 5, name: 'Light Blue Shirt', category: 'Shirts', price: 55, image: 'https://cdn.kctmenswear.com/products/shirts/light-blue/main.png', hotness: 70, recentlyViewed: 18 },
-  { id: 6, name: 'Silver Tie', category: 'Ties', price: 35, image: 'https://cdn.kctmenswear.com/products/ties/silver/main.png', hotness: 65, recentlyViewed: 15 },
-  { id: 7, name: 'Black Tuxedo', category: 'Suits', price: 279, image: 'https://cdn.kctmenswear.com/products/tuxedos/black/main.png', trending: 'up' as const, hotness: 90, recentlyViewed: 42 },
-  { id: 8, name: 'Pink Dress Shirt', category: 'Shirts', price: 59, image: 'https://cdn.kctmenswear.com/products/shirts/pink/main.png', hotness: 72, recentlyViewed: 20 },
-  { id: 9, name: 'Navy Knit Tie', category: 'Ties', price: 39, image: 'https://cdn.kctmenswear.com/products/ties/navy-knit/main.png', hotness: 68, recentlyViewed: 16 },
-  { id: 10, name: 'Light Grey Suit', category: 'Suits', price: 199, image: 'https://cdn.kctmenswear.com/products/suits/light-grey/main.png', trending: 'up' as const, hotness: 82, recentlyViewed: 28 },
-  { id: 11, name: 'Lavender Shirt', category: 'Shirts', price: 52, image: 'https://cdn.kctmenswear.com/products/shirts/lavender/main.png', hotness: 66, recentlyViewed: 14 },
-  { id: 12, name: 'Black Bow Tie', category: 'Ties', price: 25, image: 'https://cdn.kctmenswear.com/products/bowties/black/main.png', trending: 'up' as const, hotness: 78, recentlyViewed: 24 }
+// Collections data for editorial grid
+const editorialCollections = [
+  {
+    id: "business",
+    name: "Business Collection",
+    subtitle: "Power Dressing",
+    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/business-meeting.jpg",
+    href: "/collections/business",
+    size: "large" as const
+  },
+  {
+    id: "wedding",
+    name: "Wedding",
+    subtitle: "Timeless Romance",
+    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/wedding-party.jpg",
+    href: "/collections/wedding",
+    size: "medium" as const
+  },
+  {
+    id: "formal",
+    name: "Black Tie",
+    subtitle: "Evening Elegance",
+    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/black-tie-event.jpg",
+    href: "/collections/formal",
+    size: "medium" as const
+  },
+  {
+    id: "casual",
+    name: "Smart Casual",
+    subtitle: "Modern Comfort",
+    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/casual-style.jpg",
+    href: "/collections/casual",
+    size: "small" as const
+  },
+  {
+    id: "prom",
+    name: "Prom Night",
+    subtitle: "Stand Out Style",
+    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/prom-celebration.jpg",
+    href: "/collections/prom",
+    size: "large" as const
+  }
 ];
 
-// Style categories with enhanced interactive properties
-const styleCategories = [
+// Featured products for showcase
+const featuredProducts = [
   {
-    name: 'Business Professional',
-    slug: 'business',
-    description: 'Sharp suits for the modern executive',
-    backgroundImage: 'https://cdn.kctmenswear.com/collections/business/hero.png',
-    particleType: 'fabric' as const,
-    borderColor: '#1e3a8a',
-    styleDNA: ['Power', 'Confidence', 'Success']
+    id: 1,
+    name: "Navy Tailored Suit",
+    price: 189,
+    originalPrice: 229,
+    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg",
+    href: "/products/navy-tailored-suit"
   },
   {
-    name: 'Wedding Collection',
-    slug: 'wedding',
-    description: 'Elegant attire for your special day',
-    backgroundImage: 'https://cdn.kctmenswear.com/collections/wedding/hero.png',
-    particleType: 'sparkle' as const,
-    borderColor: '#D4AF37',
-    styleDNA: ['Elegant', 'Timeless', 'Romantic']
+    id: 2,
+    name: "Charcoal Three-Piece",
+    price: 229,
+    originalPrice: 279,
+    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/charcoal/charcoal-main-1.jpg",
+    href: "/products/charcoal-three-piece"
   },
   {
-    name: 'Black Tie Events',
-    slug: 'formal',
-    description: 'Tuxedos and formal wear for galas',
-    backgroundImage: 'https://cdn.kctmenswear.com/collections/formal/hero.png',
-    particleType: 'sparkle' as const,
-    borderColor: '#000000',
-    styleDNA: ['Luxury', 'Sophisticated', 'Elite']
+    id: 3,
+    name: "Black Evening Tuxedo",
+    price: 279,
+    originalPrice: 329,
+    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-tux-main-1.jpg",
+    href: "/products/black-evening-tuxedo"
   },
   {
-    name: 'Prom Night',
-    slug: 'prom',
-    description: 'Stand out styles for your big night',
-    backgroundImage: 'https://cdn.kctmenswear.com/collections/prom/hero.png',
-    particleType: 'sparkle' as const,
-    borderColor: '#ec4899',
-    styleDNA: ['Bold', 'Trendy', 'Memorable']
+    id: 4,
+    name: "Light Grey Suit",
+    price: 199,
+    originalPrice: 249,
+    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/light-grey-main-1.jpg",
+    href: "/products/light-grey-suit"
   }
 ];
 
 export default function ModernHomePage() {
-  const [activeCategory, setActiveCategory] = useState(0);
   const [showAIGreeting, setShowAIGreeting] = useState(false);
 
-  // Show Atelier AI greeting after a short delay
+  // Show Atelier AI greeting after a short delay (preserved from original)
   useEffect(() => {
     const hasSeenGreeting = sessionStorage.getItem('atelier-ai-greeted');
     if (!hasSeenGreeting) {
@@ -223,7 +186,7 @@ export default function ModernHomePage() {
         setTimeout(() => {
           setShowAIGreeting(false);
         }, 4000);
-      }, 1500); // Show after 1.5 seconds
+      }, 1500);
       
       return () => clearTimeout(timer);
     }
@@ -231,132 +194,28 @@ export default function ModernHomePage() {
 
   return (
     <>
-      {/* Animated Hero Section with Mobile Optimization */}
-      <AnimatedHeroSection />
+      {/* Editorial Hero Section */}
+      <ModernHero />
 
-      {/* Trust Indicators - Build confidence immediately after hero */}
-      <TrustIndicators />
-
-      {/* Shop by Category Grid - Updated Collection Layout */}
-      <HomeCollectionGrid />
-
-      {/* Trending Now Section - Replaces Bundle Carousel */}
-      <TrendingNowSection />
-
-      {/* Build Your Perfect Ensemble - Moved up after Shop by Style */}
-      <section className="py-8 bg-gradient-to-br from-gray-50 to-white">
-        <BuildYourLookShowcase />
+      {/* Build Your Look Interactive Section */}
+      <section className="py-32 bg-white">
+        <BuildYourLookModern outfits={outfitCombinations} />
       </section>
 
-      {/* Featured Bundles Section - Enhanced Dark Bundle Carousel - TEMPORARILY DISABLED */}
-      {/* <section className="py-16 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
-        <div className="container-main">
-          <div className="text-center mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 text-gold mb-4"
-            >
-              <Sparkles className="h-5 w-5" />
-              <span className="text-sm font-semibold tracking-widest uppercase">Premium Collections</span>
-              <Sparkles className="h-5 w-5" />
-            </motion.div>
-            
-            <h2 className="text-3xl md:text-4xl font-serif mb-3 text-white">
-              Luxury Bundles, Exclusive Savings
-            </h2>
-            <p className="text-gray-300 max-w-2xl mx-auto">
-              Experience our premium dark mode carousel with 3D effects and interactive features
-            </p>
-          </div>
-
-          <EnhancedDarkBundleCarousel 
-            bundles={featuredBundles} 
-            autoPlay={true}
-            showParticles={true}
-          />
-
-          <div className="text-center mt-12">
-            <Link href="/bundles">
-              <Button size="lg" className="bg-gold hover:bg-gold/90 text-black font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                Explore All Bundles
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section> */}
-
-
-      {/* Style Categories - Interactive Style Environments */}
-      <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container-main">
-          <div className="text-center mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 text-burgundy mb-4"
-            >
-              <Sparkles className="h-5 w-5" />
-              <span className="text-sm font-semibold tracking-widest uppercase">Style Experiences</span>
-              <Sparkles className="h-5 w-5" />
-            </motion.div>
-            
-            <h2 className="text-3xl md:text-4xl font-serif mb-3">
-              Find Your Perfect Occasion
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Interactive style environments that adapt to your needs • Hover to explore
-            </p>
-          </div>
-
-          {/* Interactive Style Environments Component */}
-          <InteractiveStyleEnvironments categories={styleCategories} />
-          
-          {/* CTA Section - Shop All Products */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="mt-16 text-center"
-          >
-            <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-8 md:p-10">
-              <h3 className="text-2xl md:text-3xl font-serif mb-4">
-                Can't Decide? Explore Everything
-              </h3>
-              <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                Browse our complete collection of suits, shirts, ties, and accessories. 
-                Find exactly what you're looking for with advanced filters and sorting.
-              </p>
-              <Link href="/products">
-                <Button 
-                  size="lg" 
-                  className="bg-burgundy hover:bg-burgundy-700 text-white px-8 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-                >
-                  Shop All Products
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <div className="flex items-center justify-center gap-6 mt-6 text-sm text-gray-600">
-                <span className="flex items-center gap-1">
-                  <Check className="h-4 w-4 text-green-600" />
-                  39+ Products
-                </span>
-                <span className="flex items-center gap-1">
-                  <Check className="h-4 w-4 text-green-600" />
-                  Advanced Filters
-                </span>
-                <span className="flex items-center gap-1">
-                  <Check className="h-4 w-4 text-green-600" />
-                  Bundle Deals
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+      {/* Editorial Collections Grid */}
+      <section className="py-32 bg-gray-50">
+        <EditorialCollections collections={editorialCollections} />
       </section>
 
-      {/* Atelier AI Greeting Notification */}
+      {/* Product Showcase */}
+      <section className="py-32 bg-white">
+        <ModernProductShowcase products={featuredProducts} />
+      </section>
+
+      {/* Minimal Footer Section */}
+      <MinimalFooterSection />
+
+      {/* Atelier AI Greeting Notification (Preserved) */}
       <AnimatePresence>
         {showAIGreeting && (
           <motion.div
@@ -404,7 +263,6 @@ export default function ModernHomePage() {
           </motion.div>
         )}
       </AnimatePresence>
-
     </>
   );
 }
