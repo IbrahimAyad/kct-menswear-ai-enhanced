@@ -29,17 +29,17 @@ const featuredBundles = [
     savings: 40,
     suit: {
       name: 'Navy Suit',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png'
+      image: 'https://cdn.kctmenswear.com/products/suits/navy/main.png'
     },
     shirt: {
       name: 'White Shirt',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg'
+      image: 'https://cdn.kctmenswear.com/products/shirts/white/main.png'
     },
     tie: {
       name: 'Burgundy Tie',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg'
+      image: 'https://cdn.kctmenswear.com/products/ties/burgundy/main.png'
     },
-    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png',
+    modelImage: 'https://cdn.kctmenswear.com/products/bundles/executive-power/model.png',
     slug: 'executive-power',
     featured: true,
     popularity: 95,
@@ -56,17 +56,17 @@ const featuredBundles = [
     savings: 50,
     suit: {
       name: 'Charcoal Suit',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png'
+      image: 'https://cdn.kctmenswear.com/products/suits/charcoal/main.png'
     },
     shirt: {
       name: 'Light Blue Shirt',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light-Blue-Dress-Shirt.jpg'
+      image: 'https://cdn.kctmenswear.com/products/shirts/light-blue/main.png'
     },
     tie: {
       name: 'Silver Tie',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/silver.jpg'
+      image: 'https://cdn.kctmenswear.com/products/ties/silver/main.png'
     },
-    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png',
+    modelImage: 'https://cdn.kctmenswear.com/products/bundles/wedding-classic/model.png',
     slug: 'wedding-classic',
     popularity: 88,
     rating: 4.8,
@@ -81,17 +81,17 @@ const featuredBundles = [
     savings: 50,
     suit: {
       name: 'Navy 3-Piece Suit',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-3p-white-red.png'
+      image: 'https://cdn.kctmenswear.com/products/suits/navy-3piece/main.png'
     },
     shirt: {
       name: 'White Shirt',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg'
+      image: 'https://cdn.kctmenswear.com/products/shirts/white/main.png'
     },
     tie: {
       name: 'Red Tie',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/red.jpg'
+      image: 'https://cdn.kctmenswear.com/products/ties/red/main.png'
     },
-    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-3p-white-red.png',
+    modelImage: 'https://cdn.kctmenswear.com/products/bundles/power-player/model.png',
     slug: 'power-player',
     popularity: 92,
     rating: 4.7,
@@ -107,17 +107,17 @@ const featuredBundles = [
     savings: 40,
     suit: {
       name: 'Black Suit',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png'
+      image: 'https://cdn.kctmenswear.com/products/suits/black/main.png'
     },
     shirt: {
       name: 'Black Shirt',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Black-Dress-Shirt.jpg'
+      image: 'https://cdn.kctmenswear.com/products/shirts/black/main.png'
     },
     tie: {
       name: 'Black Tie',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg'
+      image: 'https://cdn.kctmenswear.com/products/ties/black/main.png'
     },
-    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png',
+    modelImage: 'https://cdn.kctmenswear.com/products/bundles/triple-black/model.png',
     slug: 'triple-black',
     popularity: 90,
     rating: 4.6,
@@ -132,17 +132,17 @@ const featuredBundles = [
     savings: 40,
     suit: {
       name: 'Light Grey Suit',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/grey-pink-navy.png'
+      image: 'https://cdn.kctmenswear.com/products/suits/light-grey/main.png'
     },
     shirt: {
       name: 'Pink Shirt',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light%20Pink-Dress-Shirt.jpg'
+      image: 'https://cdn.kctmenswear.com/products/shirts/pink/main.png'
     },
     tie: {
       name: 'Navy Tie',
-      image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy.jpg'
+      image: 'https://cdn.kctmenswear.com/products/ties/navy/main.png'
     },
-    modelImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/grey-pink-navy.png',
+    modelImage: 'https://cdn.kctmenswear.com/products/bundles/rose-gold/model.png',
     slug: 'rose-gold-elegance',
     popularity: 85,
     rating: 4.8,
@@ -153,18 +153,18 @@ const featuredBundles = [
 
 // Trending products with actual KCT product images - enhanced with metrics
 const trendingProducts = [
-  { id: 1, name: 'Navy 2-Piece Suit', category: 'Suits', price: 189, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png', trending: 'up' as const, hotness: 92, recentlyViewed: 47 },
-  { id: 2, name: 'White Dress Shirt', category: 'Shirts', price: 49, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/White-Dress-Shirt.jpg', trending: 'up' as const, hotness: 88, recentlyViewed: 35 },
-  { id: 3, name: 'Burgundy Silk Tie', category: 'Ties', price: 29, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/burgundy.jpg', hotness: 75, recentlyViewed: 22 },
-  { id: 4, name: 'Charcoal 3-Piece', category: 'Suits', price: 229, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png', trending: 'up' as const, hotness: 85, recentlyViewed: 31 },
-  { id: 5, name: 'Light Blue Shirt', category: 'Shirts', price: 55, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light-Blue-Dress-Shirt.jpg', hotness: 70, recentlyViewed: 18 },
-  { id: 6, name: 'Silver Tie', category: 'Ties', price: 35, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/silver.jpg', hotness: 65, recentlyViewed: 15 },
-  { id: 7, name: 'Black Tuxedo', category: 'Suits', price: 279, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png', trending: 'up' as const, hotness: 90, recentlyViewed: 42 },
-  { id: 8, name: 'Pink Dress Shirt', category: 'Shirts', price: 59, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Light%20Pink-Dress-Shirt.jpg', hotness: 72, recentlyViewed: 20 },
-  { id: 9, name: 'Navy Knit Tie', category: 'Ties', price: 39, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/navy.jpg', hotness: 68, recentlyViewed: 16 },
-  { id: 10, name: 'Light Grey Suit', category: 'Suits', price: 199, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/grey-pink-navy.png', trending: 'up' as const, hotness: 82, recentlyViewed: 28 },
-  { id: 11, name: 'Lavender Shirt', category: 'Shirts', price: 52, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Dress%20Shirts/Lilac-Dress-Shirt.jpg', hotness: 66, recentlyViewed: 14 },
-  { id: 12, name: 'Black Bow Tie', category: 'Ties', price: 25, image: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bow%3ATie/black.jpg', trending: 'up' as const, hotness: 78, recentlyViewed: 24 }
+  { id: 1, name: 'Navy 2-Piece Suit', category: 'Suits', price: 189, image: 'https://cdn.kctmenswear.com/products/suits/navy/main.png', trending: 'up' as const, hotness: 92, recentlyViewed: 47 },
+  { id: 2, name: 'White Dress Shirt', category: 'Shirts', price: 49, image: 'https://cdn.kctmenswear.com/products/shirts/white/main.png', trending: 'up' as const, hotness: 88, recentlyViewed: 35 },
+  { id: 3, name: 'Burgundy Silk Tie', category: 'Ties', price: 29, image: 'https://cdn.kctmenswear.com/products/ties/burgundy/main.png', hotness: 75, recentlyViewed: 22 },
+  { id: 4, name: 'Charcoal 3-Piece', category: 'Suits', price: 229, image: 'https://cdn.kctmenswear.com/products/suits/charcoal-3piece/main.png', trending: 'up' as const, hotness: 85, recentlyViewed: 31 },
+  { id: 5, name: 'Light Blue Shirt', category: 'Shirts', price: 55, image: 'https://cdn.kctmenswear.com/products/shirts/light-blue/main.png', hotness: 70, recentlyViewed: 18 },
+  { id: 6, name: 'Silver Tie', category: 'Ties', price: 35, image: 'https://cdn.kctmenswear.com/products/ties/silver/main.png', hotness: 65, recentlyViewed: 15 },
+  { id: 7, name: 'Black Tuxedo', category: 'Suits', price: 279, image: 'https://cdn.kctmenswear.com/products/tuxedos/black/main.png', trending: 'up' as const, hotness: 90, recentlyViewed: 42 },
+  { id: 8, name: 'Pink Dress Shirt', category: 'Shirts', price: 59, image: 'https://cdn.kctmenswear.com/products/shirts/pink/main.png', hotness: 72, recentlyViewed: 20 },
+  { id: 9, name: 'Navy Knit Tie', category: 'Ties', price: 39, image: 'https://cdn.kctmenswear.com/products/ties/navy-knit/main.png', hotness: 68, recentlyViewed: 16 },
+  { id: 10, name: 'Light Grey Suit', category: 'Suits', price: 199, image: 'https://cdn.kctmenswear.com/products/suits/light-grey/main.png', trending: 'up' as const, hotness: 82, recentlyViewed: 28 },
+  { id: 11, name: 'Lavender Shirt', category: 'Shirts', price: 52, image: 'https://cdn.kctmenswear.com/products/shirts/lavender/main.png', hotness: 66, recentlyViewed: 14 },
+  { id: 12, name: 'Black Bow Tie', category: 'Ties', price: 25, image: 'https://cdn.kctmenswear.com/products/bowties/black/main.png', trending: 'up' as const, hotness: 78, recentlyViewed: 24 }
 ];
 
 // Style categories with enhanced interactive properties
@@ -173,7 +173,7 @@ const styleCategories = [
     name: 'Business Professional',
     slug: 'business',
     description: 'Sharp suits for the modern executive',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/navy-suit-white-burgunndy.png',
+    backgroundImage: 'https://cdn.kctmenswear.com/collections/business/hero.png',
     particleType: 'fabric' as const,
     borderColor: '#1e3a8a',
     styleDNA: ['Power', 'Confidence', 'Success']
@@ -182,7 +182,7 @@ const styleCategories = [
     name: 'Wedding Collection',
     slug: 'wedding',
     description: 'Elegant attire for your special day',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/charcoal-blue-silver.png',
+    backgroundImage: 'https://cdn.kctmenswear.com/collections/wedding/hero.png',
     particleType: 'sparkle' as const,
     borderColor: '#D4AF37',
     styleDNA: ['Elegant', 'Timeless', 'Romantic']
@@ -191,7 +191,7 @@ const styleCategories = [
     name: 'Black Tie Events',
     slug: 'formal',
     description: 'Tuxedos and formal wear for galas',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-suit-black-shirt-black.png',
+    backgroundImage: 'https://cdn.kctmenswear.com/collections/formal/hero.png',
     particleType: 'sparkle' as const,
     borderColor: '#000000',
     styleDNA: ['Luxury', 'Sophisticated', 'Elite']
@@ -200,7 +200,7 @@ const styleCategories = [
     name: 'Prom Night',
     slug: 'prom',
     description: 'Stand out styles for your big night',
-    backgroundImage: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Bundles-Augest-2025/Bundles-01/black-pink-pink.png',
+    backgroundImage: 'https://cdn.kctmenswear.com/collections/prom/hero.png',
     particleType: 'sparkle' as const,
     borderColor: '#ec4899',
     styleDNA: ['Bold', 'Trendy', 'Memorable']

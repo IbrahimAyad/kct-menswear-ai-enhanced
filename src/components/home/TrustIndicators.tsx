@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Truck, Shield, Star, Phone, Clock, Award } from 'lucide-react';
+import { Truck, Shield, Star, Phone, Bot, Sparkles } from 'lucide-react';
 
 const trustItems = [
   {
@@ -29,15 +29,15 @@ const trustItems = [
     color: 'text-purple-600'
   },
   {
-    icon: Clock,
-    title: 'Same Day Pickup',
-    description: '3 Locations',
+    icon: Bot,
+    title: 'AI Size Bot',
+    description: 'Perfect Fit Guaranteed',
     color: 'text-orange-600'
   },
   {
-    icon: Award,
-    title: 'Premium Quality',
-    description: 'Since 1985',
+    icon: Sparkles,
+    title: 'Atelier AI',
+    description: 'Style Assistant',
     color: 'text-burgundy-600'
   }
 ];
