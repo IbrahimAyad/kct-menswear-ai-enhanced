@@ -3,6 +3,7 @@ import { Bundle } from '@/lib/products/bundleProducts';
 import { bundleProductsWithImages } from '@/lib/products/bundleProductsWithImages';
 import { EnhancedProduct } from '@/lib/supabase/types';
 import { getAllCoreProducts } from '@/lib/config/coreProducts';
+import { generateCDNUrls, fixLegacyUrl } from '@/lib/utils/cdn-url-generator';
 
 /**
  * Convert a bundle to UnifiedProduct format
@@ -80,19 +81,30 @@ export function bundleToUnifiedProduct(bundle: any): UnifiedProduct {
  * Convert Supabase product to UnifiedProduct format
  */
 export function supabaseProductToUnified(product: any): UnifiedProduct {
-  // Extract image URL from various possible formats
+  // Extract image URL from various possible formats with smart CDN generation
   let imageUrl = '';
-  // CRITICAL: Check for primary_image field first (Supabase products)
-  if (product.primary_image) {
-    imageUrl = product.primary_image;
-  } else if (product.featured_image?.src) {
-    imageUrl = product.featured_image.src;
-  } else if (product.images?.[0]?.src) {
-    imageUrl = product.images[0].src;
-  } else if (product.images?.[0] && typeof product.images[0] === 'string') {
-    imageUrl = product.images[0];
-  } else {
-    imageUrl = '/placeholder-product.jpg';
+  
+  // Try to get any available image URL
+  const possibleImageUrl = product.primary_image || 
+                          product.image ||
+                          product.featured_image?.src || 
+                          product.images?.[0]?.src || 
+                          (product.images?.[0] && typeof product.images[0] === 'string' ? product.images[0] : null);
+  
+  if (possibleImageUrl) {
+    // Fix legacy URLs
+    imageUrl = fixLegacyUrl(possibleImageUrl, product.name || product.title) || possibleImageUrl;
+  }
+  
+  // If still no valid image, try smart generation based on product name
+  if (!imageUrl || imageUrl === '/placeholder-product.jpg' || imageUrl.includes('undefined')) {
+    const productName = product.name || product.title || '';
+    const generated = generateCDNUrls(productName);
+    if (generated.model !== '/placeholder-product.jpg') {
+      imageUrl = generated.model;
+    } else {
+      imageUrl = '/placeholder-product.jpg';
+    }
   }
   
   // Extract all images
@@ -236,20 +248,16 @@ export async function unifiedSearch(
   
   
   // Combine based on filter preferences
-  // Default behavior: include both bundles and individual products
-  if (filters.includeBundles === undefined && filters.includeIndividual === undefined) {
-    // Include all types by default
-    results = [...unifiedBundles, ...unifiedIndividual, ...unifiedCoreProducts];
+  // Check explicit filter settings
+  if (filters.includeBundles === false) {
+    // Explicitly exclude bundles - only include individual products
+    results = [...unifiedIndividual, ...unifiedCoreProducts];
+  } else if (filters.includeIndividual === false) {
+    // Explicitly exclude individual - only include bundles
+    results = [...unifiedBundles];
   } else {
-    // Respect explicit filter preferences
-    if (filters.includeBundles !== false) {
-      results.push(...unifiedBundles);
-    }
-    
-    if (filters.includeIndividual !== false) {
-      results.push(...unifiedIndividual);
-      results.push(...unifiedCoreProducts);
-    }
+    // Default: include everything
+    results = [...unifiedBundles, ...unifiedIndividual, ...unifiedCoreProducts];
   }
   
   
