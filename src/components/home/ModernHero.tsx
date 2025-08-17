@@ -31,12 +31,13 @@ export function ModernHero() {
       >
         <div className="w-full h-[110vh] relative">
           <Image
-            src="/KCT-Home-Banner-Update.jpg"
+            src="https://cdn.kctmenswear.com/hero/main-banner.jpg"
             alt="KCT Menswear - Tailored Excellence"
             fill
             className="object-cover object-center"
             priority
             quality={95}
+            unoptimized
           />
           
           {/* Subtle gradient overlay */}

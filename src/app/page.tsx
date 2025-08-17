@@ -18,19 +18,19 @@ const outfitCombinations = [
       id: "navy-suit",
       name: "Navy Tailored Suit",
       price: 189,
-      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg"
+      image: "https://cdn.kctmenswear.com/products/suits/navy/main.png"
     },
     shirt: {
       id: "white-shirt",
       name: "Crisp White Shirt",
       price: 49,
-      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/white/white-shirt-1.jpg"
+      image: "https://cdn.kctmenswear.com/products/shirts/white/main.png"
     },
     tie: {
       id: "burgundy-tie",
       name: "Burgundy Silk Tie",
       price: 29,
-      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/burgundy/burgundy-tie-1.jpg"
+      image: "https://cdn.kctmenswear.com/products/ties/burgundy/main.png"
     },
     totalPrice: 267,
     bundlePrice: 229,
@@ -44,19 +44,19 @@ const outfitCombinations = [
       id: "charcoal-suit",
       name: "Charcoal Three-Piece",
       price: 229,
-      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/charcoal/charcoal-main-1.jpg"
+      image: "https://cdn.kctmenswear.com/products/suits/charcoal/main.png"
     },
     shirt: {
       id: "light-blue-shirt",
       name: "Light Blue Shirt",
       price: 55,
-      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/blue/light-blue-shirt-1.jpg"
+      image: "https://cdn.kctmenswear.com/products/shirts/light-blue/main.png"
     },
     tie: {
       id: "silver-tie",
       name: "Silver Tie",
       price: 35,
-      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/silver/silver-tie-1.jpg"
+      image: "https://cdn.kctmenswear.com/products/ties/silver/main.png"
     },
     totalPrice: 319,
     bundlePrice: 279,
@@ -70,19 +70,19 @@ const outfitCombinations = [
       id: "black-tuxedo",
       name: "Black Tuxedo",
       price: 279,
-      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-tux-main-1.jpg"
+      image: "https://cdn.kctmenswear.com/products/tuxedos/black/main.png"
     },
     shirt: {
       id: "formal-white",
       name: "Formal White Shirt",
       price: 65,
-      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/white/wing-collar-1.jpg"
+      image: "https://cdn.kctmenswear.com/products/shirts/white/formal.png"
     },
     tie: {
       id: "black-bowtie",
       name: "Black Bow Tie",
       price: 25,
-      image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/ties/black/black-bowtie-1.jpg"
+      image: "https://cdn.kctmenswear.com/products/bowties/black/main.png"
     },
     totalPrice: 369,
     bundlePrice: 329,
@@ -97,7 +97,7 @@ const editorialCollections = [
     id: "business",
     name: "Business Collection",
     subtitle: "Power Dressing",
-    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/business-meeting.jpg",
+    image: "https://cdn.kctmenswear.com/collections/business/hero.png",
     href: "/collections/business",
     size: "large" as const
   },
@@ -105,7 +105,7 @@ const editorialCollections = [
     id: "wedding",
     name: "Wedding",
     subtitle: "Timeless Romance",
-    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/wedding-party.jpg",
+    image: "https://cdn.kctmenswear.com/collections/wedding/hero.png",
     href: "/collections/wedding",
     size: "medium" as const
   },
@@ -113,7 +113,7 @@ const editorialCollections = [
     id: "formal",
     name: "Black Tie",
     subtitle: "Evening Elegance",
-    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/black-tie-event.jpg",
+    image: "https://cdn.kctmenswear.com/collections/formal/hero.png",
     href: "/collections/formal",
     size: "medium" as const
   },
@@ -121,7 +121,7 @@ const editorialCollections = [
     id: "casual",
     name: "Smart Casual",
     subtitle: "Modern Comfort",
-    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/casual-style.jpg",
+    image: "https://cdn.kctmenswear.com/collections/casual/hero.png",
     href: "/collections/casual",
     size: "small" as const
   },
@@ -129,7 +129,7 @@ const editorialCollections = [
     id: "prom",
     name: "Prom Night",
     subtitle: "Stand Out Style",
-    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/lifestyle/prom-celebration.jpg",
+    image: "https://cdn.kctmenswear.com/collections/prom/hero.png",
     href: "/collections/prom",
     size: "large" as const
   }
@@ -142,7 +142,7 @@ const featuredProducts = [
     name: "Navy Tailored Suit",
     price: 189,
     originalPrice: 229,
-    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg",
+    image: "https://cdn.kctmenswear.com/products/suits/navy/main.png",
     href: "/products/navy-tailored-suit"
   },
   {
@@ -150,7 +150,7 @@ const featuredProducts = [
     name: "Charcoal Three-Piece",
     price: 229,
     originalPrice: 279,
-    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/charcoal/charcoal-main-1.jpg",
+    image: "https://cdn.kctmenswear.com/products/suits/charcoal-3piece/main.png",
     href: "/products/charcoal-three-piece"
   },
   {
@@ -158,7 +158,7 @@ const featuredProducts = [
     name: "Black Evening Tuxedo",
     price: 279,
     originalPrice: 329,
-    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/black-tux-main-1.jpg",
+    image: "https://cdn.kctmenswear.com/products/tuxedos/black/main.png",
     href: "/products/black-evening-tuxedo"
   },
   {
@@ -166,7 +166,7 @@ const featuredProducts = [
     name: "Light Grey Suit",
     price: 199,
     originalPrice: 249,
-    image: "https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/grey/light-grey-main-1.jpg",
+    image: "https://cdn.kctmenswear.com/products/suits/light-grey/main.png",
     href: "/products/light-grey-suit"
   }
 ];
