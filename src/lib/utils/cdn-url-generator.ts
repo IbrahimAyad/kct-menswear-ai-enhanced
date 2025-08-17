@@ -1,7 +1,9 @@
 /**
  * Smart CDN URL Generator for KCT Menswear Products
- * Automatically generates correct CDN URLs based on product naming patterns
+ * Uses DEFINITIVE CDN URL patterns from verified scan
  */
+
+import { getDefinitiveCDNUrl, fixToCDNUrl } from './definitive-cdn-urls';
 
 // Product category patterns and their CDN paths
 const CATEGORY_PATTERNS = {
@@ -163,25 +165,23 @@ export function generateCDNUrls(productName: string): { model: string; product?:
 export function fixLegacyUrl(url: string | null, productName?: string): string | null {
   if (!url) return null;
   
-  // If we have a product name, try to generate the correct URL
+  // Use the definitive CDN URL functions
   if (productName) {
+    // First try the definitive URL generator
+    const definitiveUrl = getDefinitiveCDNUrl(productName);
+    if (definitiveUrl && !definitiveUrl.includes('placeholder')) {
+      return definitiveUrl;
+    }
+    
+    // Fallback to original generator
     const generated = generateCDNUrls(productName);
     if (generated.model !== '/placeholder-product.jpg') {
       return generated.model;
     }
   }
   
-  // Replace legacy R2 domain with CDN
-  if (url.includes('pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev')) {
-    return url.replace('pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev', 'cdn.kctmenswear.com');
-  }
-  
-  // Other legacy domain replacements
-  if (url.includes('pub-46371bda6faf4910b74631159fc2dfd4.r2.dev')) {
-    return url.replace('pub-46371bda6faf4910b74631159fc2dfd4.r2.dev', 'cdn.kctmenswear.com');
-  }
-  
-  return url;
+  // Fix the URL using definitive patterns
+  return fixToCDNUrl(url, productName);
 }
 
 /**

@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card', 'link', 'apple_pay', 'google_pay'],
+      payment_method_types: ['card', 'link'],
       line_items: lineItems,
       mode: 'payment',
       success_url: successUrl || `${request.nextUrl.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
@@ -293,7 +293,7 @@ export async function PUT(request: NextRequest) {
 
     // Create express checkout session
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card', 'link', 'apple_pay', 'google_pay'],
+      payment_method_types: ['card', 'link'],
       line_items: [lineItem],
       mode: 'payment',
       success_url: `${request.nextUrl.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}&express=true`,
