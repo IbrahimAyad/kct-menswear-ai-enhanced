@@ -31,7 +31,7 @@ export function ModernHero() {
       >
         <div className="w-full h-[110vh] relative">
           <Image
-            src="https://cdn.kctmenswear.com/hero/main-banner.jpg"
+            src="https://images.unsplash.com/photo-1617365976015-e1aec0c5385d?w=1920&q=80"
             alt="KCT Menswear - Tailored Excellence"
             fill
             className="object-cover object-center"

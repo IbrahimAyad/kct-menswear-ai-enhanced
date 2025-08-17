@@ -18,19 +18,19 @@ const outfitCombinations = [
       id: "navy-suit",
       name: "Navy Tailored Suit",
       price: 189,
-      image: "https://cdn.kctmenswear.com/products/suits/navy/main.png"
+      image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80"
     },
     shirt: {
       id: "white-shirt",
       name: "Crisp White Shirt",
       price: 49,
-      image: "https://cdn.kctmenswear.com/products/shirts/white/main.png"
+      image: "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=800&q=80"
     },
     tie: {
       id: "burgundy-tie",
       name: "Burgundy Silk Tie",
       price: 29,
-      image: "https://cdn.kctmenswear.com/products/ties/burgundy/main.png"
+      image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80"
     },
     totalPrice: 267,
     bundlePrice: 229,
@@ -44,19 +44,19 @@ const outfitCombinations = [
       id: "charcoal-suit",
       name: "Charcoal Three-Piece",
       price: 229,
-      image: "https://cdn.kctmenswear.com/products/suits/charcoal/main.png"
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
     },
     shirt: {
       id: "light-blue-shirt",
       name: "Light Blue Shirt",
       price: 55,
-      image: "https://cdn.kctmenswear.com/products/shirts/light-blue/main.png"
+      image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&q=80"
     },
     tie: {
       id: "silver-tie",
       name: "Silver Tie",
       price: 35,
-      image: "https://cdn.kctmenswear.com/products/ties/silver/main.png"
+      image: "https://images.unsplash.com/photo-1592878849122-facb97520f9e?w=800&q=80"
     },
     totalPrice: 319,
     bundlePrice: 279,
@@ -70,19 +70,19 @@ const outfitCombinations = [
       id: "black-tuxedo",
       name: "Black Tuxedo",
       price: 279,
-      image: "https://cdn.kctmenswear.com/products/tuxedos/black/main.png"
+      image: "https://images.unsplash.com/photo-1491336477066-31156b5e4f35?w=800&q=80"
     },
     shirt: {
       id: "formal-white",
       name: "Formal White Shirt",
       price: 65,
-      image: "https://cdn.kctmenswear.com/products/shirts/white/formal.png"
+      image: "https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=800&q=80"
     },
     tie: {
       id: "black-bowtie",
       name: "Black Bow Tie",
       price: 25,
-      image: "https://cdn.kctmenswear.com/products/bowties/black/main.png"
+      image: "https://images.unsplash.com/photo-1558040351-6f8e75792509?w=800&q=80"
     },
     totalPrice: 369,
     bundlePrice: 329,
@@ -97,7 +97,7 @@ const editorialCollections = [
     id: "business",
     name: "Business Collection",
     subtitle: "Power Dressing",
-    image: "https://cdn.kctmenswear.com/collections/business/hero.png",
+    image: "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=800&q=80",
     href: "/collections/business",
     size: "large" as const
   },
@@ -105,7 +105,7 @@ const editorialCollections = [
     id: "wedding",
     name: "Wedding",
     subtitle: "Timeless Romance",
-    image: "https://cdn.kctmenswear.com/collections/wedding/hero.png",
+    image: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80",
     href: "/collections/wedding",
     size: "medium" as const
   },
@@ -113,7 +113,7 @@ const editorialCollections = [
     id: "formal",
     name: "Black Tie",
     subtitle: "Evening Elegance",
-    image: "https://cdn.kctmenswear.com/collections/formal/hero.png",
+    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80",
     href: "/collections/formal",
     size: "medium" as const
   },
@@ -121,7 +121,7 @@ const editorialCollections = [
     id: "casual",
     name: "Smart Casual",
     subtitle: "Modern Comfort",
-    image: "https://cdn.kctmenswear.com/collections/casual/hero.png",
+    image: "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&q=80",
     href: "/collections/casual",
     size: "small" as const
   },
@@ -129,7 +129,7 @@ const editorialCollections = [
     id: "prom",
     name: "Prom Night",
     subtitle: "Stand Out Style",
-    image: "https://cdn.kctmenswear.com/collections/prom/hero.png",
+    image: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=80",
     href: "/collections/prom",
     size: "large" as const
   }
@@ -142,7 +142,7 @@ const featuredProducts = [
     name: "Navy Tailored Suit",
     price: 189,
     originalPrice: 229,
-    image: "https://cdn.kctmenswear.com/products/suits/navy/main.png",
+    image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80",
     href: "/products/navy-tailored-suit"
   },
   {
@@ -150,7 +150,7 @@ const featuredProducts = [
     name: "Charcoal Three-Piece",
     price: 229,
     originalPrice: 279,
-    image: "https://cdn.kctmenswear.com/products/suits/charcoal-3piece/main.png",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
     href: "/products/charcoal-three-piece"
   },
   {
@@ -158,7 +158,7 @@ const featuredProducts = [
     name: "Black Evening Tuxedo",
     price: 279,
     originalPrice: 329,
-    image: "https://cdn.kctmenswear.com/products/tuxedos/black/main.png",
+    image: "https://images.unsplash.com/photo-1491336477066-31156b5e4f35?w=800&q=80",
     href: "/products/black-evening-tuxedo"
   },
   {
@@ -166,7 +166,7 @@ const featuredProducts = [
     name: "Light Grey Suit",
     price: 199,
     originalPrice: 249,
-    image: "https://cdn.kctmenswear.com/products/suits/light-grey/main.png",
+    image: "https://images.unsplash.com/photo-1493666438817-866a91353ca9?w=800&q=80",
     href: "/products/light-grey-suit"
   }
 ];
