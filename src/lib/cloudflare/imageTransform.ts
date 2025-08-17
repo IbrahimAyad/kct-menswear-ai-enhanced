@@ -120,8 +120,9 @@ export function getCloudflareOptimizedUrl(
   originalUrl: string,
   preset: keyof typeof imagePresets | ImageTransformOptions
 ): string {
-  // Re-enable Cloudflare image optimization
-  const isCloudflareOptimizationEnabled = true;
+  // Disable Cloudflare image optimization until properly configured
+  // Cloudflare Image Resizing requires Pro plan and specific configuration
+  const isCloudflareOptimizationEnabled = false;
   
   // Return original URL until optimization is fixed
   if (!isCloudflareOptimizationEnabled) {
