@@ -13,6 +13,7 @@ import { MegaMenu } from "./MegaMenu";
 import UserMenu from "./UserMenu";
 import MobileNavigation from "./MobileNavigation";
 import EnhancedMobileNav from "./EnhancedMobileNav";
+import ConversionOptimizedMobileNav from "../mobile/ConversionOptimizedMobileNav";
 import { useStoreInfo } from "@/contexts/SettingsContext";
 import { navigationConfig } from "@/lib/config/navigation-presets";
 import { useUIStore } from "@/store/uiStore";
@@ -144,12 +145,16 @@ export function Navigation() {
         </div>
       </div>
 
-      {/* Enhanced Mobile Navigation - New Version */}
-      <EnhancedMobileNav 
+      {/* Conversion-Optimized Mobile Navigation - Latest Version */}
+      <ConversionOptimizedMobileNav 
         isOpen={isMenuOpen} 
         onClose={() => setIsMenuOpen(false)} 
       />
-      {/* Original Mobile Navigation - Commented for A/B testing */}
+      {/* Previous versions for A/B testing */}
+      {/* <EnhancedMobileNav 
+        isOpen={isMenuOpen} 
+        onClose={() => setIsMenuOpen(false)} 
+      /> */}
       {/* <MobileNavigation 
         isOpen={isMenuOpen} 
         onClose={() => setIsMenuOpen(false)} 

@@ -11,6 +11,9 @@
 /* Enhanced Bundle Carousel Styles */
 @import '../styles/enhanced-bundle-carousel.css';
 
+/* Conversion-Optimized Mobile Navigation Styles */
+@import '../styles/conversion-mobile-nav.css';
+
 /* Custom Scrollbar Styles for Style Swiper */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
