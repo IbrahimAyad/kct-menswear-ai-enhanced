@@ -130,10 +130,11 @@ function CollectionsContent() {
     return products.map((product: UnifiedProduct) => ({
       id: product.id,
       name: product.name,
-      price: product.price,
-      originalPrice: product.price > 100 ? product.price * 1.2 : undefined,
-      image: product.image,
-      hoverImage: product.additionalImages?.[0],
+      price: typeof product.price === 'string' ? parseFloat(product.price) : product.price,
+      originalPrice: product.compare_at_price ? parseFloat(product.compare_at_price) : 
+                     (product.price > 100 ? product.price * 1.2 : undefined),
+      image: product.images?.[0]?.src || product.featured_image?.src || product.primary_image || product.image || '/placeholder-product.jpg',
+      hoverImage: product.images?.[1]?.src || product.additionalImages?.[0],
       category: product.category?.toLowerCase().includes('suit') ? 'suits' :
                 product.category?.toLowerCase().includes('shirt') ? 'shirts' :
                 product.category?.toLowerCase().includes('vest') ? 'vest' :

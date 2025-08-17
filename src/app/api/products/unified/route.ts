@@ -468,9 +468,12 @@ export async function GET(request: NextRequest) {
       presetData = getFilterPreset(presetId);
     }
     
-    // Fetch individual products from Supabase if needed
+    // TEMPORARILY: Only fetch Supabase products (no bundles for now)
     let individualProducts = [];
     let enhancedProducts = [];
+    
+    // Skip bundles for now - focus on Supabase products
+    filters.includeBundles = false;
     
     if (filters.includeIndividual !== false) {
       try {
@@ -517,7 +520,7 @@ export async function GET(request: NextRequest) {
                 // Get image URL with multiple fallbacks
                 let imageUrl = '/placeholder-product.jpg';
                 
-                // Try different image paths
+                // Try different image paths from Supabase
                 if (product.images?.hero?.url) {
                   imageUrl = product.images.hero.url;
                 } else if (product.images?.primary?.url) {
@@ -526,13 +529,20 @@ export async function GET(request: NextRequest) {
                   imageUrl = product.images.flat.url;
                 } else if (product.images?.gallery?.[0]?.url) {
                   imageUrl = product.images.gallery[0].url;
+                } else if (product.image_url) {
+                  // Fallback to direct image_url field
+                  imageUrl = product.image_url;
                 }
                 
-                // Ensure we have a valid URL and fix legacy URLs
-                if (!imageUrl || imageUrl === '') {
-                  imageUrl = '/placeholder-product.jpg';
-                } else {
-                  imageUrl = fixImageUrl(imageUrl) || '/placeholder-product.jpg';
+                // Fix legacy URLs and ensure CDN domain
+                imageUrl = fixImageUrl(imageUrl, product.name) || '/placeholder-product.jpg';
+                
+                // If still placeholder, try smart generation
+                if (imageUrl === '/placeholder-product.jpg') {
+                  const generated = generateCDNUrls(product.name);
+                  if (generated.model !== '/placeholder-product.jpg') {
+                    imageUrl = generated.model;
+                  }
                 }
                 
                 return {
@@ -616,7 +626,15 @@ export async function GET(request: NextRequest) {
             // Map Supabase products to unified format
             individualProducts = data.map((product: any) => {
               // Get primary image and fix legacy URLs - pass product name for better mapping
-              const primaryImageUrl = fixImageUrl(product.primary_image, product.name);
+              let primaryImageUrl = fixImageUrl(product.primary_image, product.name);
+              
+              // If still no valid image, try to generate from product name
+              if (!primaryImageUrl || primaryImageUrl === '/placeholder-product.jpg') {
+                const generated = generateCDNUrls(product.name);
+                if (generated.model !== '/placeholder-product.jpg') {
+                  primaryImageUrl = generated.model;
+                }
+              }
               
               // Get first variant for pricing and availability
               const firstVariant = product.product_variants?.[0];
