@@ -476,8 +476,11 @@ export async function GET(request: NextRequest) {
     let individualProducts = []; // Will remain empty - legacy products removed
     let enhancedProducts = [];
     
-    // Temporarily disable bundles
-    filters.includeBundles = false;
+    // Only disable bundles on collections page, keep them on other pages
+    const isCollectionsPage = request.nextUrl.pathname.includes('/collections');
+    if (isCollectionsPage) {
+      filters.includeBundles = false;
+    }
     
     if (filters.includeIndividual !== false) {
       try {
