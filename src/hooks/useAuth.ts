@@ -41,11 +41,43 @@ export function useAuth() {
   const handleSignIn = async (userId: string, email: string) => {
     try {
       // Fetch user profile from database
-      const { data: profileData } = await supabase
+      const { data: profileData, error } = await supabase
         .from('customer_profiles')
         .select('*')
         .eq('user_id', userId)
         .single()
+
+      // If table doesn't exist or error, create a temporary profile
+      if (error) {
+        console.warn('Customer profiles table not available, using temporary profile')
+        const tempProfile: CustomerProfile = {
+          id: userId,
+          email,
+          preferences: {
+            favoriteColors: [],
+            preferredFit: 'regular',
+            stylePersonality: 'classic',
+            occasionFrequency: {
+              business: 0,
+              formal: 0,
+              casual: 0,
+              special: 0
+            },
+            brands: []
+          },
+          measurements: [],
+          addresses: [],
+          paymentMethods: [],
+          orderHistory: [],
+          wishlist: [],
+          loyaltyPoints: 0,
+          tier: getLoyaltyTier(0),
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+        login(tempProfile)
+        return
+      }
 
       if (profileData) {
         // Load existing profile
@@ -65,6 +97,33 @@ export function useAuth() {
       }
     } catch (error) {
       console.error('Error loading profile:', error)
+      // Create temporary profile on any error
+      const tempProfile: CustomerProfile = {
+        id: userId,
+        email,
+        preferences: {
+          favoriteColors: [],
+          preferredFit: 'regular',
+          stylePersonality: 'classic',
+          occasionFrequency: {
+            business: 0,
+            formal: 0,
+            casual: 0,
+            special: 0
+          },
+          brands: []
+        },
+        measurements: [],
+        addresses: [],
+        paymentMethods: [],
+        orderHistory: [],
+        wishlist: [],
+        loyaltyPoints: 0,
+        tier: getLoyaltyTier(0),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+      login(tempProfile)
     }
   }
 

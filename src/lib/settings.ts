@@ -62,6 +62,19 @@ export class SettingsService {
       return cached.data;
     }
 
+    // For now, skip Edge Function and use defaults until it's deployed
+    // This prevents 404 errors from crashing the site
+    const settings = this.getDefaultSettings();
+    
+    // Cache the default settings
+    this.cache.set(cacheKey, {
+      data: settings,
+      timestamp: Date.now()
+    });
+    
+    return settings;
+    
+    /* Edge Function code - restore after deployment
     try {
       // Call Edge Function
       const { data, error } = await supabase.functions.invoke('get-public-settings');
@@ -83,6 +96,7 @@ export class SettingsService {
       // Return defaults if fetch fails
       return this.getDefaultSettings();
     }
+    */
   }
 
   // Subscribe to real-time settings changes

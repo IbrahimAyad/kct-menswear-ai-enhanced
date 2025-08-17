@@ -765,7 +765,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Unified products API error:', error);
     
-    // Return empty results with error info
+    // Return empty results with error info (always return 200 to prevent client crashes)
     return NextResponse.json({
       products: [],
       totalCount: 0,
@@ -785,6 +785,6 @@ export async function GET(request: NextRequest) {
       },
       error: true,
       message: error instanceof Error ? error.message : 'Failed to fetch products'
-    });
+    }, { status: 200 }); // Always return 200 to prevent client-side errors
   }
 }
