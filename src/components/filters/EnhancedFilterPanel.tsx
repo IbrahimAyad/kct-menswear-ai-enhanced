@@ -221,6 +221,11 @@ export default function EnhancedFilterPanel({
             <div className="flex items-center gap-3">
               <Package className="w-4 h-4 text-gray-600" />
               <span className="font-medium">Product Type</span>
+              {facets?.categories && (
+                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                  {facets.categories.reduce((sum: number, cat: any) => sum + cat.count, 0)}
+                </span>
+              )}
             </div>
             {expandedSections.has('type') ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
@@ -241,7 +246,9 @@ export default function EnhancedFilterPanel({
                       className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
                     />
                     <span className="text-sm">Complete Looks</span>
-                    <span className="ml-auto text-xs text-gray-500">({facets.bundleTiers?.length || 0})</span>
+                    <span className="ml-auto text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                      {facets?.bundleTiers?.reduce((sum: number, tier: any) => sum + tier.count, 0) || 0}
+                    </span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-gray-50">
                     <input
@@ -251,7 +258,29 @@ export default function EnhancedFilterPanel({
                       className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
                     />
                     <span className="text-sm">Individual Items</span>
+                    <span className="ml-auto text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                      {facets?.categories ? facets.categories.filter((cat: any) => !['Bundle'].includes(cat.name)).reduce((sum: number, cat: any) => sum + cat.count, 0) : 0}
+                    </span>
                   </label>
+                  
+                  {/* Category breakdown */}
+                  {facets?.categories && facets.categories.length > 0 && (
+                    <div className="ml-4 mt-2 space-y-1">
+                      <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Categories</div>
+                      {facets.categories.map((category: any) => (
+                        <label key={category.name} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={isFilterActive('category', category.name)}
+                            onChange={() => toggleFilter('category', category.name)}
+                            className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
+                          />
+                          <span className="text-sm capitalize">{category.name}</span>
+                          <span className="ml-auto text-xs text-gray-500">({category.count})</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -423,6 +452,11 @@ export default function EnhancedFilterPanel({
               <Ruler className="w-4 h-4 text-gray-600" />
               <span className="font-medium">Sizes</span>
               {filters.sizes && <Badge className="ml-2">{filters.sizes.length}</Badge>}
+              {facets?.sizes && (
+                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                  {facets.sizes.length} available
+                </span>
+              )}
             </div>
             {expandedSections.has('size') ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
@@ -440,20 +474,28 @@ export default function EnhancedFilterPanel({
                     <div key={group} className="mb-3">
                       <h5 className="text-xs font-medium text-gray-600 mb-2">{group}</h5>
                       <div className="grid grid-cols-3 gap-2">
-                        {sizes.map(size => (
-                          <button
-                            key={size}
-                            onClick={() => toggleFilter('sizes', size)}
-                            className={cn(
-                              "py-2 px-3 text-sm border rounded-lg transition-all",
-                              isFilterActive('sizes', size)
-                                ? "bg-burgundy-600 text-white border-burgundy-600"
-                                : "bg-white hover:border-burgundy-300"
-                            )}
-                          >
-                            {size}
-                          </button>
-                        ))}
+                        {sizes.map(size => {
+                          const sizeData = facets?.sizes?.find((s: any) => s.size === size);
+                          return (
+                            <button
+                              key={size}
+                              onClick={() => toggleFilter('sizes', size)}
+                              className={cn(
+                                "py-2 px-3 text-sm border rounded-lg transition-all relative",
+                                isFilterActive('sizes', size)
+                                  ? "bg-burgundy-600 text-white border-burgundy-600"
+                                  : "bg-white hover:border-burgundy-300"
+                              )}
+                            >
+                              {size}
+                              {sizeData && (
+                                <span className="absolute -top-1 -right-1 text-xs bg-gray-100 text-gray-600 px-1 rounded-full">
+                                  {sizeData.count}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
                   ))}
@@ -524,17 +566,32 @@ export default function EnhancedFilterPanel({
                 className="overflow-hidden"
               >
                 <div className="px-6 pb-4 space-y-2">
-                  {['Wool', 'Cotton', 'Polyester', 'Silk', 'Linen', 'Velvet'].map(material => (
-                    <label key={material} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-gray-50">
-                      <input
-                        type="checkbox"
-                        checked={isFilterActive('material', material)}
-                        onChange={() => toggleFilter('material', material)}
-                        className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
-                      />
-                      <span className="text-sm">{material}</span>
-                    </label>
-                  ))}
+                  {facets?.materials ? (
+                    facets.materials.map((material: any) => (
+                      <label key={material.name} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-gray-50">
+                        <input
+                          type="checkbox"
+                          checked={isFilterActive('material', material.name)}
+                          onChange={() => toggleFilter('material', material.name)}
+                          className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
+                        />
+                        <span className="text-sm">{material.name}</span>
+                        <span className="ml-auto text-xs text-gray-500">({material.count})</span>
+                      </label>
+                    ))
+                  ) : (
+                    ['Wool', 'Cotton', 'Polyester', 'Silk', 'Linen', 'Velvet'].map(material => (
+                      <label key={material} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-gray-50">
+                        <input
+                          type="checkbox"
+                          checked={isFilterActive('material', material)}
+                          onChange={() => toggleFilter('material', material)}
+                          className="rounded border-gray-300 text-burgundy-600 focus:ring-burgundy-500"
+                        />
+                        <span className="text-sm">{material}</span>
+                      </label>
+                    ))
+                  )}
                 </div>
               </motion.div>
             )}

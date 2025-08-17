@@ -57,6 +57,36 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
     setError(null);
 
     try {
+      // Use the enhanced search service for visual search
+      const { enhancedSearchService } = await import('@/lib/services/enhancedSearch');
+      const visualResults = await enhancedSearchService.visualSearch(file, query);
+      
+      // If we got results from the enhanced service, use them
+      if (visualResults && visualResults.length > 0) {
+        const searchResults: SearchResult[] = visualResults.map(result => ({
+          product: {
+            id: result.product.id,
+            sku: result.product.sku || result.product.id,
+            name: result.product.name,
+            price: Math.round(result.product.price * 100), // Convert to cents
+            images: result.product.images || [result.product.imageUrl],
+            category: result.product.category || 'suits',
+            stock: { '40R': 5 }, // Default stock
+            variants: [],
+          },
+          similarity: result.similarity,
+          confidence: result.confidence
+        }));
+        
+        setSearchResults(searchResults);
+        onResults?.(searchResults.map(r => r.product));
+        
+        // Track visual search usage
+        facebookTracking.trackVisualSearchUsed(searchResults.length);
+        return;
+      }
+      
+      // Fallback: Try direct Fashion CLIP API
       const formData = new FormData();
       formData.append('file', file);
       if (query) {
@@ -68,57 +98,47 @@ export function VisualSearch({ onResults, onClose }: VisualSearchProps) {
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error(`Fashion CLIP API error: ${response.status}`);
+      let clipResult: any = null;
+      if (response.ok) {
+        clipResult = await response.json();
+        console.log('Fashion CLIP response:', clipResult);
       }
 
-      const result = await response.json();
-
-      // Process Fashion CLIP results and match to our products
-      const mockResults: SearchResult[] = [
-        {
-          product: {
-            id: 'search-1',
-            sku: 'CLIP-001',
-            name: 'Navy Three-Piece Suit',
-            price: 79900,
-            images: ['https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/9b127676-6911-450b-0bbb-b5eb670de800/public'],
-            category: 'suits',
-            stock: { '40R': 5 },
-            variants: [],
-          },
-          similarity: 0.94,
-          confidence: 0.89
+      // Extract search terms from Fashion CLIP results
+      const searchTerms: string[] = [];
+      if (clipResult) {
+        if (clipResult.category) searchTerms.push(clipResult.category);
+        if (clipResult.color) searchTerms.push(clipResult.color);
+        if (clipResult.style) searchTerms.push(clipResult.style);
+        if (clipResult.pattern) searchTerms.push(clipResult.pattern);
+        if (clipResult.garment_type) searchTerms.push(clipResult.garment_type);
+      }
+      
+      // Search our products based on Fashion CLIP analysis
+      const searchQuery = searchTerms.length > 0 ? searchTerms.join(' ') : 'suit';
+      const productsResponse = await fetch(`/api/products/unified?search=${encodeURIComponent(searchQuery)}&limit=10`);
+      
+      if (!productsResponse.ok) {
+        throw new Error('Failed to fetch products');
+      }
+      
+      const productsData = await productsResponse.json();
+      
+      // Convert to search results format
+      const mockResults: SearchResult[] = productsData.products.slice(0, 3).map((product: any, index: number) => ({
+        product: {
+          id: product.id,
+          sku: product.sku || product.id,
+          name: product.name,
+          price: Math.round(product.price * 100), // Convert to cents
+          images: product.images || [product.imageUrl],
+          category: product.category || 'suits',
+          stock: { '40R': 5 }, // Default stock
+          variants: [],
         },
-        {
-          product: {
-            id: 'search-2',
-            sku: 'CLIP-002',
-            name: 'Charcoal Modern Fit',
-            price: 69900,
-            images: ['https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/5aa4d62a-c0dc-476d-09e7-c4c1da0b9700/public'],
-            category: 'suits',
-            stock: { '42R': 3 },
-            variants: [],
-          },
-          similarity: 0.87,
-          confidence: 0.82
-        },
-        {
-          product: {
-            id: 'search-3',
-            sku: 'CLIP-003',
-            name: 'Wedding Tuxedo',
-            price: 119900,
-            images: ['https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/3859e360-f63d-40d5-35ec-223ffc67f000/public'],
-            category: 'suits',
-            stock: { '40R': 2 },
-            variants: [],
-          },
-          similarity: 0.81,
-          confidence: 0.76
-        }
-      ];
+        similarity: 0.95 - (index * 0.05), // Simulated similarity scores
+        confidence: 0.9 - (index * 0.05)
+      }));
 
       setSearchResults(mockResults);
       onResults?.(mockResults.map(r => r.product));

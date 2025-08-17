@@ -30,30 +30,40 @@ export function SmartSearchBar({ onSearch, placeholder = "Search products, uploa
   
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Smart suggestions based on Fashion CLIP understanding
-  const getSmartSuggestions = (input: string): SearchSuggestion[] => {
+  // Get dynamic suggestions from enhanced search service
+  const getSmartSuggestions = async (input: string): Promise<SearchSuggestion[]> => {
+    if (input.length < 2) return [];
+    
+    try {
+      const { enhancedSearchService } = await import('@/lib/services/enhancedSearch');
+      const suggestions = await enhancedSearchService.getDynamicSuggestions(input);
+      return suggestions;
+    } catch (error) {
+      console.error('Error getting suggestions:', error);
+      // Fallback to basic suggestions
+      return getBasicSuggestions(input);
+    }
+  };
+  
+  const getBasicSuggestions = (input: string): SearchSuggestion[] => {
     const lower = input.toLowerCase();
     const suggestions: SearchSuggestion[] = [];
 
-    // Occasion-based suggestions
+    // Basic fallback suggestions
     if (lower.includes('wedding')) {
       suggestions.push(
         { id: '1', text: 'Wedding tuxedos', type: 'category', icon: '🤵' },
-        { id: '2', text: 'Groomsmen suits', type: 'category', icon: '👔' },
-        { id: '3', text: 'Wedding accessories', type: 'category', icon: '👔' },
-        { id: '4', text: 'Black tie formal', type: 'style', icon: '✨' }
+        { id: '2', text: 'Groomsmen suits', type: 'category', icon: '👔' }
       );
     } else if (lower.includes('prom')) {
       suggestions.push(
-        { id: '5', text: 'Prom tuxedos', type: 'category', icon: '🎩' },
-        { id: '6', text: 'Colorful bow ties', type: 'product', icon: '🎀' },
-        { id: '7', text: 'Prom accessories', type: 'category', icon: '💫' }
+        { id: '3', text: 'Prom tuxedos', type: 'category', icon: '🎩' },
+        { id: '4', text: 'Prom accessories', type: 'category', icon: '💫' }
       );
-    } else if (lower.includes('business') || lower.includes('work') || lower.includes('interview')) {
+    } else if (lower.includes('business')) {
       suggestions.push(
-        { id: '8', text: 'Business suits', type: 'category', icon: '💼' },
-        { id: '9', text: 'Professional shirts', type: 'category', icon: '👔' },
-        { id: '10', text: 'Conservative ties', type: 'product', icon: '👔' }
+        { id: '5', text: 'Business suits', type: 'category', icon: '💼' },
+        { id: '6', text: 'Professional shirts', type: 'category', icon: '👔' }
       );
     }
 
@@ -86,12 +96,12 @@ export function SmartSearchBar({ onSearch, placeholder = "Search products, uploa
     return suggestions.slice(0, 6); // Limit to 6 suggestions
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
     
     if (value.length > 2) {
-      const newSuggestions = getSmartSuggestions(value);
+      const newSuggestions = await getSmartSuggestions(value);
       setSuggestions(newSuggestions);
       setShowSuggestions(true);
     } else {

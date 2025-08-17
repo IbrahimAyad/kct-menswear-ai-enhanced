@@ -178,6 +178,8 @@ export interface UnifiedSearchResult {
     categories: Array<{ name: string; count: number }>;
     colors: Array<{ name: string; count: number; hex?: string }>;
     occasions: Array<{ name: string; count: number }>;
+    sizes: Array<{ size: string; count: number }>;
+    materials: Array<{ name: string; count: number }>;
     priceRanges: Array<{ label: string; min: number; max: number; count: number }>;
     bundleTiers: Array<{ tier: BundleTier; count: number; price: number }>;
   };

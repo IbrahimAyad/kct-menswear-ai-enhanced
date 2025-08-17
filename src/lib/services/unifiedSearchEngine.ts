@@ -260,7 +260,11 @@ export async function unifiedSearch(
     results = [...unifiedBundles, ...unifiedIndividual, ...unifiedCoreProducts];
   }
   
+  // Apply filters to products
+  results = applyFilters(results, filters);
   
+  // Apply sorting
+  results = applySorting(results, filters.sortBy);
   
   // Generate facets from filtered results
   const facets = generateFacets(results);
@@ -288,11 +292,57 @@ export async function unifiedSearch(
 }
 
 /**
+ * Calculate search relevance score
+ */
+function calculateSearchRelevance(product: UnifiedProduct, searchTerm: string): number {
+  if (!searchTerm) return 1;
+  
+  const term = searchTerm.toLowerCase();
+  let score = 0;
+  
+  // Exact name match (highest priority)
+  if (product.name.toLowerCase() === term) score += 10;
+  // Name contains term
+  else if (product.name.toLowerCase().includes(term)) score += 5;
+  
+  // Category match
+  if (product.category?.toLowerCase().includes(term)) score += 3;
+  
+  // Color match
+  const colors = [
+    product.color,
+    product.bundleComponents?.suit?.color,
+    product.bundleComponents?.shirt?.color,
+    product.bundleComponents?.tie?.color
+  ].filter(Boolean).map(c => c?.toLowerCase());
+  
+  if (colors.some(color => color === term)) score += 4;
+  else if (colors.some(color => color?.includes(term))) score += 2;
+  
+  // Description match
+  if (product.description?.toLowerCase().includes(term)) score += 1;
+  
+  // Tag match
+  if (product.tags?.some(tag => tag.toLowerCase().includes(term))) score += 2;
+  
+  // Occasion match
+  if (product.occasions?.some(occ => occ.toLowerCase().includes(term))) score += 2;
+  
+  // Boost trending items slightly
+  if (product.trending) score += 0.5;
+  
+  // Boost items with high AI scores
+  if (product.aiScore) score += product.aiScore * 0.1;
+  
+  return score;
+}
+
+/**
  * Apply filters to products
  */
 function applyFilters(products: UnifiedProduct[], filters: UnifiedProductFilters): UnifiedProduct[] {
-  return products.filter(product => {
-    // Search filter
+  let filtered = products.filter(product => {
+    // Search filter with relevance scoring
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
       const searchableText = `
@@ -304,11 +354,14 @@ function applyFilters(products: UnifiedProduct[], filters: UnifiedProductFilters
         ${product.bundleComponents?.shirt?.color || ''}
         ${product.bundleComponents?.tie?.color || ''}
         ${product.bundleComponents?.pocketSquare?.color || ''}
-        ${product.occasions.join(' ')}
-        ${product.tags.join(' ')}
+        ${product.occasions?.join(' ') || ''}
+        ${product.tags?.join(' ') || ''}
       `.toLowerCase();
       
       if (!searchableText.includes(searchTerm)) return false;
+      
+      // Add relevance score to product (temporarily)
+      (product as any)._searchRelevance = calculateSearchRelevance(product, searchTerm);
     }
     
     // Type filter
@@ -391,8 +444,34 @@ function applyFilters(products: UnifiedProduct[], filters: UnifiedProductFilters
     // AI score filter
     if (filters.minAiScore && (!product.aiScore || product.aiScore < filters.minAiScore)) return false;
     
+    // Size filter
+    if (filters.sizes && filters.sizes.length > 0) {
+      if (!product.size) return false;
+      if (Array.isArray(product.size)) {
+        if (!filters.sizes.some(s => product.size.includes(s))) return false;
+      } else {
+        if (!filters.sizes.includes(product.size)) return false;
+      }
+    }
+    
     return true;
   });
+  
+  // Sort by search relevance if search term provided
+  if (filters.search) {
+    filtered = filtered.sort((a, b) => {
+      const scoreA = (a as any)._searchRelevance || 0;
+      const scoreB = (b as any)._searchRelevance || 0;
+      return scoreB - scoreA; // Higher scores first
+    });
+    
+    // Clean up temporary relevance scores
+    filtered.forEach(product => {
+      delete (product as any)._searchRelevance;
+    });
+  }
+  
+  return filtered;
 }
 
 /**
@@ -443,6 +522,8 @@ function generateFacets(products: UnifiedProduct[]): UnifiedSearchResult['facets
   const colors = new Map<string, number>();
   const occasions = new Map<string, number>();
   const bundleTiers = new Map<string, { count: number; price: number }>();
+  const sizes = new Map<string, number>();
+  const materials = new Map<string, number>();
   
   products.forEach(product => {
     // Categories
@@ -464,9 +545,27 @@ function generateFacets(products: UnifiedProduct[]): UnifiedSearchResult['facets
     });
     
     // Occasions
-    product.occasions.forEach(occasion => {
-      occasions.set(occasion, (occasions.get(occasion) || 0) + 1);
-    });
+    if (product.occasions && Array.isArray(product.occasions)) {
+      product.occasions.forEach(occasion => {
+        occasions.set(occasion, (occasions.get(occasion) || 0) + 1);
+      });
+    }
+    
+    // Sizes
+    if (product.size) {
+      if (Array.isArray(product.size)) {
+        product.size.forEach(size => {
+          sizes.set(size, (sizes.get(size) || 0) + 1);
+        });
+      } else if (typeof product.size === 'string') {
+        sizes.set(product.size, (sizes.get(product.size) || 0) + 1);
+      }
+    }
+    
+    // Materials
+    if (product.material) {
+      materials.set(product.material, (materials.get(product.material) || 0) + 1);
+    }
     
     // Bundle tiers
     if (product.bundleTier) {
@@ -491,6 +590,8 @@ function generateFacets(products: UnifiedProduct[]): UnifiedSearchResult['facets
     categories: Array.from(categories.entries()).map(([name, count]) => ({ name, count })),
     colors: Array.from(colors.entries()).map(([name, count]) => ({ name, count })),
     occasions: Array.from(occasions.entries()).map(([name, count]) => ({ name, count })),
+    sizes: Array.from(sizes.entries()).map(([size, count]) => ({ size, count })),
+    materials: Array.from(materials.entries()).map(([name, count]) => ({ name, count })),
     priceRanges,
     bundleTiers: Array.from(bundleTiers.entries()).map(([tier, data]) => ({
       tier: tier as any,
@@ -509,20 +610,94 @@ function generateSuggestions(
 ): UnifiedSearchResult['suggestions'] {
   const suggestions: UnifiedSearchResult['suggestions'] = {};
   
-  // If no results, suggest alternative searches
-  if (results.length === 0 && filters.search) {
-    suggestions.didYouMean = filters.search.replace(/s$/, ''); // Simple pluralization fix
-    suggestions.relatedSearches = [
-      'navy suit',
-      'wedding guest',
-      'black tie'
-    ];
+  // If no results, provide smart suggestions
+  if (results.length === 0) {
+    if (filters.search) {
+      // Spelling variations
+      const searchTerm = filters.search.toLowerCase();
+      
+      // Common misspellings and corrections
+      const corrections: Record<string, string> = {
+        'suite': 'suit',
+        'suites': 'suits',
+        'tuxido': 'tuxedo',
+        'blaizer': 'blazer',
+        'blaser': 'blazer',
+        'suspender': 'suspenders',
+        'bowtie': 'bow tie',
+        'cumberbund': 'cummerbund',
+        'grey': 'gray',
+        'necktie': 'tie'
+      };
+      
+      // Check for misspellings
+      for (const [wrong, right] of Object.entries(corrections)) {
+        if (searchTerm.includes(wrong)) {
+          suggestions.didYouMean = filters.search.replace(new RegExp(wrong, 'gi'), right);
+          break;
+        }
+      }
+      
+      // If no spelling correction, try removing plurals or adding them
+      if (!suggestions.didYouMean) {
+        if (searchTerm.endsWith('s')) {
+          suggestions.didYouMean = filters.search.slice(0, -1);
+        } else {
+          suggestions.didYouMean = filters.search + 's';
+        }
+      }
+      
+      // Smart related searches based on the failed search
+      if (searchTerm.includes('wedding')) {
+        suggestions.relatedSearches = [
+          'tuxedo',
+          'formal suit',
+          'groomsmen',
+          'black tie'
+        ];
+      } else if (searchTerm.includes('prom')) {
+        suggestions.relatedSearches = [
+          'tuxedo',
+          'dinner jacket',
+          'bow tie',
+          'formal wear'
+        ];
+      } else if (searchTerm.includes('business') || searchTerm.includes('work')) {
+        suggestions.relatedSearches = [
+          'professional suit',
+          'dress shirt',
+          'tie',
+          'two-piece suit'
+        ];
+      } else {
+        // Generic suggestions
+        suggestions.relatedSearches = [
+          'suits',
+          'blazers',
+          'dress shirts',
+          'accessories'
+        ];
+      }
+    } else if (filters.category || filters.color || filters.occasions) {
+      // No results with filters - suggest removing filters
+      suggestions.recommendedFilters = {
+        category: undefined,
+        color: undefined,
+        occasions: undefined
+      };
+      suggestions.relatedSearches = [
+        'all products',
+        'new arrivals',
+        'best sellers'
+      ];
+    }
   }
   
   // Recommend filters based on results
-  if (results.length > 10) {
+  if (results.length > 20) {
     const hasExpensiveItems = results.some(p => p.price > 400);
     const hasBundles = results.some(p => p.isBundle);
+    const hasMultipleColors = new Set(results.map(p => p.color).filter(Boolean)).size > 5;
     
     suggestions.recommendedFilters = {};
     
@@ -530,8 +705,21 @@ function generateSuggestions(
       suggestions.recommendedFilters.maxPrice = 300;
     }
     
-    if (hasBundles && !filters.includeBundles) {
+    if (hasBundles && filters.includeBundles !== false) {
       suggestions.recommendedFilters.includeBundles = true;
+    }
+    
+    if (hasMultipleColors && !filters.color) {
+      // Suggest popular colors
+      const colorCounts = new Map<string, number>();
+      results.forEach(p => {
+        if (p.color) colorCounts.set(p.color, (colorCounts.get(p.color) || 0) + 1);
+      });
+      const topColor = Array.from(colorCounts.entries())
+        .sort((a, b) => b[1] - a[1])[0]?.[0];
+      if (topColor) {
+        suggestions.recommendedFilters.color = [topColor];
+      }
     }
   }
   
