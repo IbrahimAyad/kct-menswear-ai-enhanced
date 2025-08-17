@@ -6,6 +6,7 @@ import { Providers } from "@/components/providers/Providers";
 import { AtelierAIChatButton } from "@/components/chat/AtelierAIChat";
 import { ChatWidget } from "@/components/ai/ChatWidget";
 import { SimpleCartDrawer } from "@/components/cart/SimpleCartDrawer";
+import { StyleConsultantButton } from "@/components/style-consultant/VirtualStyleConsultant";
 import { GoogleAnalytics, GoogleAnalyticsScript } from "@/components/analytics/GoogleAnalytics";
 import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
 import { FacebookPixel, FacebookPixelScript } from "@/components/analytics/FacebookPixel";
@@ -97,6 +98,7 @@ export default function RootLayout({
             </main>
             <Footer />
             <AtelierAIChatButton />
+            <StyleConsultantButton />
             <SimpleCartDrawer />
             <MobileBottomNav />
             <ServiceWorkerRegistry />
