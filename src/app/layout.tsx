@@ -9,6 +9,7 @@ import { SimpleCartDrawer } from "@/components/cart/SimpleCartDrawer";
 import { GoogleAnalytics, GoogleAnalyticsScript } from "@/components/analytics/GoogleAnalytics";
 import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
 import { FacebookPixel, FacebookPixelScript } from "@/components/analytics/FacebookPixel";
+import { PostHogProvider, PostHogPageview } from "@/components/analytics/PostHogProvider";
 // import { FacebookMessenger } from "@/components/chat/FacebookMessenger";
 import { Suspense } from "react";
 import { socialMediaSchema } from "./layout/social-schema";
@@ -88,23 +89,26 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <SkipLinks />
-        <Providers>
-          <Navigation />
-          <main id="main-content" className="pt-16 min-h-screen" role="main" aria-label="Main content">
-            {children}
-          </main>
-          <Footer />
-          <AtelierAIChatButton />
-          <SimpleCartDrawer />
-          <MobileBottomNav />
-          <ServiceWorkerRegistry />
-          <Suspense fallback={null}>
-            <GoogleAnalytics />
-            <FacebookPixel />
-          </Suspense>
-          {/* <FacebookMessenger /> */}
-          {process.env.NODE_ENV === 'development' && <AnalyticsDashboard />}
-        </Providers>
+        <PostHogProvider>
+          <Providers>
+            <Navigation />
+            <main id="main-content" className="pt-16 min-h-screen" role="main" aria-label="Main content">
+              {children}
+            </main>
+            <Footer />
+            <AtelierAIChatButton />
+            <SimpleCartDrawer />
+            <MobileBottomNav />
+            <ServiceWorkerRegistry />
+            <Suspense fallback={null}>
+              <PostHogPageview />
+              <GoogleAnalytics />
+              <FacebookPixel />
+            </Suspense>
+            {/* <FacebookMessenger /> */}
+            {process.env.NODE_ENV === 'development' && <AnalyticsDashboard />}
+          </Providers>
+        </PostHogProvider>
       </body>
     </html>
   );
