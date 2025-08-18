@@ -122,7 +122,7 @@ export function SmartTrendingNow() {
   };
 
   const handleNext = () => {
-    const currentProducts = products[activeTab];
+    const currentProducts = products[activeTab] || [];
     const maxIndex = Math.max(0, currentProducts.length - 3);
     setCurrentIndex(Math.min(maxIndex, currentIndex + 1));
   };
@@ -189,6 +189,9 @@ export function SmartTrendingNow() {
 
   const currentProducts = products[activeTab] || [];
   const isOutfitTab = activeTab === 'outfits';
+  
+  // Ensure currentProducts is always an array
+  const safeProducts = Array.isArray(currentProducts) ? currentProducts : [];
 
   return (
     <section className="py-20 bg-gradient-to-b from-white to-gray-50">
@@ -244,7 +247,7 @@ export function SmartTrendingNow() {
             </button>
           )}
           
-          {currentIndex < Math.max(0, currentProducts.length - 3) && (
+          {currentIndex < Math.max(0, safeProducts.length - 3) && (
             <button
               onClick={handleNext}
               className="absolute -right-12 top-1/2 -translate-y-1/2 z-10 bg-black text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-800 transition-all shadow-lg"
@@ -259,7 +262,7 @@ export function SmartTrendingNow() {
             {isOutfitTab ? (
               // Special layout for outfit recommendations
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {currentProducts.slice(currentIndex, currentIndex + 3).map((outfit: any, idx: number) => (
+                {safeProducts.slice(currentIndex, currentIndex + 3).map((outfit: any, idx: number) => (
                   <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all">
                     <div className="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-50 p-4">
                       <div className="grid grid-cols-2 gap-2 h-full">
@@ -306,8 +309,8 @@ export function SmartTrendingNow() {
                 className="flex transition-transform duration-500 ease-out"
                 style={{ transform: `translateX(-${currentIndex * (100 / 3)}%)` }}
               >
-                {currentProducts.length > 0 ? (
-                  currentProducts.map((product: Product) => (
+                {safeProducts.length > 0 ? (
+                  safeProducts.map((product: Product) => (
                     <Link
                       key={product.id}
                       href={getProductUrl(product)}

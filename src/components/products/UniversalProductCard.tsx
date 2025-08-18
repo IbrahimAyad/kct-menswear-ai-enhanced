@@ -190,13 +190,20 @@ export function UniversalProductGrid({
   products: any[]; 
   className?: string;
 }) {
+  // Ensure products is always an array
+  const safeProducts = Array.isArray(products) ? products : [];
+  
+  if (safeProducts.length === 0) {
+    return null;
+  }
+  
   return (
     <div className={`
       grid gap-x-3 gap-y-8
       grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4
       ${className}
     `}>
-      {products.map((product, index) => (
+      {safeProducts.map((product, index) => (
         <UniversalProductCard
           key={product.id || index}
           product={product}

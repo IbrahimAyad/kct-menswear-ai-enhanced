@@ -1,5 +1,9 @@
 import { MetadataRoute } from 'next';
 
+// Force dynamic rendering to avoid static generation issues
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // Revalidate every hour
+
 // Define the base URL
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://kctmenswear.com';
 
