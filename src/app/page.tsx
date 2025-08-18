@@ -195,7 +195,7 @@ export default function HomePage() {
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-12">
               {featuredProducts.map((product, index) => (
-                <ProductCard key={product.id || index} product={product} />
+                <EnhancedProductCard key={product.id || index} product={product} showQuickActions={true} />
               ))}
             </div>
           )}
