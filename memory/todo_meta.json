@@ -3,64 +3,71 @@
     "Coordinator": {
       "1": {
         "id": "1",
-        "content": "Repository Setup & Environment Configuration",
-        "details": "1. Clone and extract the repository files from the zip archives\n2. Set up all environment variables from the provided configuration\n3. Install dependencies and verify all integrations (Supabase, Stripe, Railway APIs)\n4. Test the enhanced products API endpoint and database connectivity",
+        "content": "Complete Platform Setup & Repository Access",
+        "details": "1. Extract and set up the KCT Menswear repository from zip files\n2. Configure all environment variables (Supabase, Stripe, Railway APIs)\n3. Install dependencies and verify all integrations work\n4. Test enhanced products API and database connectivity\n5. Clean up deprecated R2 bucket references (kct-base-products, kct-new-website-products)",
         "status": "pending",
         "priority": "high"
       },
       "2": {
         "id": "2",
-        "content": "Asset Cleanup & CDN Optimization",
-        "details": "1. Remove all references to deprecated R2 buckets: kct-base-products, kct-new-website-products\n2. Audit all image references to use the correct CDN: https://cdn.kctmenswear.com/\n3. Verify all 172+ products are accessible through the enhanced API\n4. Clean up any old asset URLs throughout the codebase",
+        "content": "Luxury Homepage Design & Development",
+        "details": "1. Hugo Boss-inspired minimal 'Trending Now' carousel (center item larger, swipeable)\n2. Clean hero section with premium aesthetic\n3. Elegant integration of 12 TikTok videos (high-end presentation)\n4. Additional homepage sections: Featured Collections, New Arrivals, Brand Story\n5. Minimal navigation menu and footer design\n6. Mobile-first responsive design throughout",
         "status": "pending",
         "priority": "high"
       },
       "3": {
         "id": "3",
-        "content": "Minimal Trending Carousel - Hugo Boss Inspired",
-        "details": "1. Create clean, minimal 'Trending Now' carousel matching Hugo Boss design\n2. Center product card slightly larger than side cards for focal point\n3. Implement smooth swipe left/right navigation (no arrows, gesture-based)\n4. Remove all brand logos and visual clutter\n5. Use clean typography and lots of white space\n6. Ensure mobile-first responsive design with touch gestures",
+        "content": "Shop & Collections Pages Design",
+        "details": "1. Luxury grid layouts for product browsing\n2. Sophisticated filtering (product type, color, price, size)\n3. Clean category navigation (Suits, Shirts, Ties, Bundles)\n4. Advanced search functionality with visual search integration\n5. Elegant pagination and infinite scroll options\n6. Consistent luxury aesthetic across all shop pages",
         "status": "pending",
         "priority": "high"
       },
       "4": {
         "id": "4",
-        "content": "Product Display Consistency & Enhanced Components",
-        "details": "1. Standardize all pages to use EnhancedProductCard component\n2. Ensure consistent product data sourcing from /api/products/enhanced\n3. Update SmartTrendingNow component to use enhanced products\n4. Fix collections pages to use enhanced products API\n5. Implement luxury product card design matching high-end brands",
+        "content": "Product Detail Pages & Enhanced Experience",
+        "details": "1. Premium product detail layout with large image galleries\n2. 360-degree product views where applicable\n3. Size guide integration with Size Bot API\n4. Add to cart and wishlist functionality\n5. Related products and styling suggestions\n6. Customer reviews and ratings display\n7. Zoom functionality for fabric details",
         "status": "pending",
         "priority": "high"
       },
       "5": {
         "id": "5",
-        "content": "Search & Collections Pages Enhancement",
-        "details": "1. Update search functionality to query enhanced products exclusively\n2. Redesign collections pages with luxury grid layouts\n3. Implement filtering by product type, color, and price\n4. Add sophisticated hover effects and interactions\n5. Ensure proper loading states and error handling",
+        "content": "Bundle Experience & Custom Builder",
+        "details": "1. Luxury bundle showcase pages with hover effects\n2. Interactive custom bundle builder ($199, $229, $249 price points)\n3. Visual bundle composition (suit + shirt + tie combinations)\n4. Real-time pricing calculator\n5. Bundle comparison feature\n6. Save and share bundle functionality",
         "status": "pending",
-        "priority": "medium"
+        "priority": "high"
       },
       "6": {
         "id": "6",
-        "content": "Product Detail Pages & Bundle Experience",
-        "details": "1. Fix product detail pages to use enhanced products API\n2. Implement luxury bundle showcase with hover functionality\n3. Create custom bundle builder for $199, $229, $249 price points\n4. Integrate with Stripe test mode for bundle pricing\n5. Add visual differentiation between pre-built and custom bundles",
+        "content": "Wedding & Prom Specialized Pages",
+        "details": "1. Dedicated Wedding Products page (avoiding guide pages)\n2. Dedicated Prom Products page\n3. Season-specific collections (Spring, Summer, Fall weddings)\n4. Groomsmen group ordering functionality\n5. Wedding theme color matching\n6. Consultation booking integration",
         "status": "pending",
         "priority": "medium"
       },
       "7": {
         "id": "7",
-        "content": "Wedding & Prom Product Pages",
-        "details": "1. Create dedicated wedding product page (avoiding guide pages for V2)\n2. Create dedicated prom product page \n3. Implement wedding-specific product categories and themes\n4. Use luxury design consistent with main site\n5. Integrate with enhanced products API for consistency",
+        "content": "E-commerce Cart & Checkout Flow",
+        "details": "1. Elegant shopping cart with quantity management\n2. Stripe test mode integration for payments\n3. Guest checkout and account creation options\n4. Order summary and confirmation pages\n5. Shipping and billing address management\n6. Order tracking and history",
         "status": "pending",
         "priority": "medium"
       },
       "8": {
         "id": "8",
-        "content": "Performance Optimization & Code Quality",
-        "details": "1. Remove all 241+ console.logs for production performance\n2. Implement proper loading states and skeleton screens\n3. Optimize image loading strategies with CDN\n4. Ensure all components use defensive programming patterns\n5. Test SSR/SSG compatibility across all pages",
+        "content": "AI-Powered Features Integration",
+        "details": "1. Atelier AI chat integration for style advice\n2. Fashion CLIP visual search functionality\n3. Size Bot recommendations\n4. Personalized product recommendations\n5. Style quiz and profile building\n6. AI-powered outfit suggestions",
         "status": "pending",
-        "priority": "low"
+        "priority": "medium"
       },
       "9": {
         "id": "9",
-        "content": "Final Testing & Quality Assurance",
-        "details": "1. Cross-page consistency testing for luxury brand experience\n2. Verify all pages handle empty/null data gracefully\n3. Test Stripe integration with provided test cards\n4. Validate bundle pricing and checkout flow\n5. Ensure mobile responsiveness matches desktop luxury experience",
+        "content": "User Account & Profile System",
+        "details": "1. User registration and authentication\n2. Personal style profile and preferences\n3. Order history and tracking\n4. Wishlist and favorites management\n5. Size preferences and measurements\n6. Wedding/event profile for specialized needs",
+        "status": "pending",
+        "priority": "medium"
+      },
+      "10": {
+        "id": "10",
+        "content": "Performance Optimization & Production Ready",
+        "details": "1. Remove all 241+ console.logs for production\n2. Image optimization and lazy loading\n3. CDN integration for fast asset delivery\n4. SEO optimization for all pages\n5. Analytics integration (PostHog)\n6. Error handling and loading states\n7. Mobile performance optimization",
         "status": "pending",
         "priority": "low"
       }
