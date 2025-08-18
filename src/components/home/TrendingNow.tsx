@@ -1,164 +1,138 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-interface TrendingProduct {
+interface Product {
   id: string;
-  brand: string;
   name: string;
-  originalPrice?: number;
-  salePrice?: number;
-  currentPrice: number;
-  image: string;
-  href: string;
-  isNew?: boolean;
-  discount?: string;
+  category: string;
+  subcategory?: string;
+  price: number;
+  sale_price?: number;
+  images: string[];
+  slug: string;
+  is_featured?: boolean;
+  is_trending?: boolean;
 }
 
-const trendingProducts: Record<string, TrendingProduct[]> = {
-  suits: [
-    {
-      id: "suit-1",
-      brand: "KCT MENSWEAR",
-      name: "GOLD SEQUIN PATTERN PROM BLAZER",
-      originalPrice: 549.00,
-      salePrice: 429.00,
-      currentPrice: 429.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/blazers/prom/mens-gold-sequin-pattern-prom-blazer/front.webp",
-      href: "/collections/prom/prom-blazers/gold-sequin",
-      discount: "-22%"
-    },
-    {
-      id: "suit-2",
-      brand: "KCT MENSWEAR",
-      name: "EMERALD VELVET DINNER JACKET",
-      currentPrice: 649.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/blazers/velvet/mens-emerald-velvet-dinner-jacket/front.webp",
-      href: "/collections/suits/tuxedos/emerald-velvet",
-      isNew: true
-    },
-    {
-      id: "suit-3",
-      brand: "KCT MENSWEAR",
-      name: "DOUBLE BREASTED CLASSIC SUIT",
-      originalPrice: 599.00,
-      salePrice: 449.00,
-      currentPrice: 449.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp",
-      href: "/collections/suits/double-breasted/classic",
-      discount: "-25%"
-    },
-    {
-      id: "suit-4",
-      brand: "KCT MENSWEAR",
-      name: "RED FLORAL PATTERN PROM BLAZER",
-      originalPrice: 529.00,
-      salePrice: 399.00,
-      currentPrice: 399.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp",
-      href: "/collections/prom/prom-blazers/red-floral",
-      discount: "-25%"
-    }
-  ],
-  shirts: [
-    {
-      id: "shirt-1",
-      brand: "KCT MENSWEAR",
-      name: "STRETCH COLLAR DRESS SHIRT",
-      originalPrice: 89.00,
-      salePrice: 69.00,
-      currentPrice: 69.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp",
-      href: "/collections/accessories/dress-shirts/stretch-collar",
-      discount: "-22%"
-    }
-  ],
-  accessories: [
-    {
-      id: "acc-1",
-      brand: "KCT MENSWEAR",
-      name: "DUSTY SAGE VEST & TIE SET",
-      originalPrice: 89.00,
-      salePrice: 67.00,
-      currentPrice: 67.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/main-solid-vest-tie/dusty-sage-model.png",
-      href: "/collections/accessories/vest-and-tie/dusty-sage",
-      discount: "-25%"
-    },
-    {
-      id: "acc-2",
-      brand: "KCT MENSWEAR",
-      name: "POWDER BLUE VEST & TIE SET",
-      currentPrice: 79.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/main-solid-vest-tie/powder-blue-model.png",
-      href: "/collections/accessories/vest-and-tie/powder-blue",
-      isNew: true
-    },
-    {
-      id: "acc-3",
-      brand: "KCT MENSWEAR",
-      name: "POWDER BLUE SUSPENDER & BOWTIE SET",
-      originalPrice: 59.00,
-      salePrice: 44.00,
-      currentPrice: 44.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/main-suspender-bowtie-set/powder-blue-model.png",
-      href: "/collections/accessories/suspender-bowtie/powder-blue",
-      discount: "-25%"
-    }
-  ],
-  bundles: [
-    {
-      id: "bundle-1",
-      brand: "KCT MENSWEAR",
-      name: "COMPLETE PROM PACKAGE - BLAZER, SHIRT, ACCESSORIES",
-      originalPrice: 699.00,
-      salePrice: 499.00,
-      currentPrice: 499.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/blazers/prom/mens-gold-sequin-pattern-prom-blazer/front.webp",
-      href: "/collections/prom/complete-packages/classic-prom",
-      discount: "-29%"
-    },
-    {
-      id: "bundle-2",
-      brand: "KCT MENSWEAR",
-      name: "FORMAL DINNER JACKET COMPLETE SET",
-      currentPrice: 799.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/blazers/velvet/mens-emerald-velvet-dinner-jacket/front.webp",
-      href: "/collections/bundles/formal-complete",
-      isNew: true
-    },
-    {
-      id: "bundle-3",
-      brand: "KCT MENSWEAR",
-      name: "VEST & ACCESSORIES COMBO PACK",
-      originalPrice: 149.00,
-      salePrice: 119.00,
-      currentPrice: 119.00,
-      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/main-solid-vest-tie/dusty-sage-model.png",
-      href: "/collections/bundles/vest-accessories",
-      discount: "-20%"
-    }
-  ]
-};
-
 export function TrendingNow() {
-  const [activeTab, setActiveTab] = useState<"suits" | "shirts" | "accessories" | "bundles">("suits");
+  const [activeTab, setActiveTab] = useState<string>("all");
+  const [products, setProducts] = useState<Record<string, Product[]>>({
+    all: [],
+    suits: [],
+    tuxedos: [],
+    blazers: [],
+    shirts: [],
+    accessories: []
+  });
+  const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
-  
-  const products = trendingProducts[activeTab];
-  const itemsPerPage = 3;
-  const maxIndex = Math.max(0, products.length - itemsPerPage);
+
+  // Fetch products from the API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        // Fetch different categories matching Supabase structure
+        const categories = [
+          { key: 'all', params: 'limit=12' }, // All trending products
+          { key: 'suits', params: 'category=suits,double-breasted,stretch&limit=8' },
+          { key: 'tuxedos', params: 'category=tuxedos&limit=8' },
+          { key: 'blazers', params: 'category=blazers&limit=8' },
+          { key: 'shirts', params: 'category=mens-shirts&limit=8' },
+          { key: 'accessories', params: 'category=accessories&limit=8' }
+        ];
+
+        const productsByCategory: Record<string, Product[]> = {
+          all: [],
+          suits: [],
+          tuxedos: [],
+          blazers: [],
+          shirts: [],
+          accessories: []
+        };
+
+        // Fetch all categories in parallel
+        const promises = categories.map(async ({ key, params }) => {
+          const response = await fetch(`/api/products/unified?${params}`);
+          if (response.ok) {
+            const data = await response.json();
+            return { key, products: data.products || [] };
+          }
+          return { key, products: [] };
+        });
+
+        const results = await Promise.all(promises);
+        
+        // Organize results by category
+        results.forEach(({ key, products }) => {
+          productsByCategory[key] = products.slice(0, 8); // Limit to 8 products per category
+        });
+
+        setProducts(productsByCategory);
+      } catch (error) {
+        console.error('Error fetching trending products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handlePrev = () => {
     setCurrentIndex(Math.max(0, currentIndex - 1));
   };
 
   const handleNext = () => {
+    const currentProducts = products[activeTab];
+    const maxIndex = Math.max(0, currentProducts.length - 3);
     setCurrentIndex(Math.min(maxIndex, currentIndex + 1));
   };
+
+  const calculateDiscount = (price: number, salePrice?: number) => {
+    if (!salePrice || salePrice >= price) return null;
+    const discount = Math.round(((price - salePrice) / price) * 100);
+    return `-${discount}%`;
+  };
+
+  const getProductUrl = (product: Product) => {
+    // If product has a slug, use it
+    if (product.slug) {
+      return `/products/${product.slug}`;
+    }
+    // Otherwise construct from category and ID
+    return `/products/${product.category}/${product.id}`;
+  };
+
+  const tabLabels: Record<string, string> = {
+    all: "ALL",
+    suits: "SUITS",
+    tuxedos: "TUXEDOS",
+    blazers: "BLAZERS",
+    shirts: "SHIRTS",
+    accessories: "ACCESSORIES"
+  };
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold tracking-tight mb-6">TRENDING NOW</h2>
+          </div>
+          <div className="flex justify-center items-center h-96">
+            <div className="animate-pulse text-gray-400">Loading products...</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const currentProducts = products[activeTab];
 
   return (
     <section className="py-20 bg-white">
@@ -169,58 +143,22 @@ export function TrendingNow() {
           
           {/* Tab Navigation */}
           <div className="flex justify-center gap-12">
-            <button
-              onClick={() => {
-                setActiveTab("suits");
-                setCurrentIndex(0);
-              }}
-              className={`text-sm font-semibold tracking-wider transition-all pb-2 ${
-                activeTab === "suits" 
-                  ? "text-black border-b-2 border-black" 
-                  : "text-gray-500 hover:text-black"
-              }`}
-            >
-              SUITS
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab("shirts");
-                setCurrentIndex(0);
-              }}
-              className={`text-sm font-semibold tracking-wider transition-all pb-2 ${
-                activeTab === "shirts" 
-                  ? "text-black border-b-2 border-black" 
-                  : "text-gray-500 hover:text-black"
-              }`}
-            >
-              SHIRTS
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab("accessories");
-                setCurrentIndex(0);
-              }}
-              className={`text-sm font-semibold tracking-wider transition-all pb-2 ${
-                activeTab === "accessories" 
-                  ? "text-black border-b-2 border-black" 
-                  : "text-gray-500 hover:text-black"
-              }`}
-            >
-              ACCESSORIES
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab("bundles");
-                setCurrentIndex(0);
-              }}
-              className={`text-sm font-semibold tracking-wider transition-all pb-2 ${
-                activeTab === "bundles" 
-                  ? "text-black border-b-2 border-black" 
-                  : "text-gray-500 hover:text-black"
-              }`}
-            >
-              BUNDLES
-            </button>
+            {Object.keys(tabLabels).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => {
+                  setActiveTab(tab);
+                  setCurrentIndex(0);
+                }}
+                className={`text-sm font-semibold tracking-wider transition-all pb-2 ${
+                  activeTab === tab 
+                    ? "text-black border-b-2 border-black" 
+                    : "text-gray-500 hover:text-black"
+                }`}
+              >
+                {tabLabels[tab]}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -237,7 +175,7 @@ export function TrendingNow() {
             </button>
           )}
           
-          {currentIndex < maxIndex && (
+          {currentIndex < Math.max(0, currentProducts.length - 3) && (
             <button
               onClick={handleNext}
               className="absolute -right-12 top-1/2 -translate-y-1/2 z-10 bg-black text-white w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
@@ -251,63 +189,73 @@ export function TrendingNow() {
           <div className="overflow-hidden">
             <div 
               className="flex transition-transform duration-500 ease-out"
-              style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
+              style={{ transform: `translateX(-${currentIndex * (100 / 3)}%)` }}
             >
-              {products.map((product) => (
-                <Link
-                  key={product.id}
-                  href={product.href}
-                  className="min-w-[33.33%] px-4 group"
-                >
-                  <div className="relative bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
-                    {/* Discount Badge */}
-                    {product.discount && (
-                      <span className="absolute top-6 left-6 z-10 bg-red-600 text-white text-sm font-bold px-4 py-2 rounded">
-                        {product.discount}
-                      </span>
-                    )}
-                    
-                    {/* New Badge */}
-                    {product.isNew && (
-                      <span className="absolute top-6 left-6 z-10 bg-black text-white text-sm font-bold px-4 py-2 rounded">
-                        NEW
-                      </span>
-                    )}
+              {currentProducts.length > 0 ? (
+                currentProducts.map((product) => (
+                  <Link
+                    key={product.id}
+                    href={getProductUrl(product)}
+                    className="min-w-[33.333%] px-4 group"
+                  >
+                    <div className="relative">
+                      {/* Discount Badge */}
+                      {product.sale_price && (
+                        <span className="absolute top-4 left-4 z-10 bg-red-600 text-white text-sm font-bold px-3 py-1.5">
+                          {calculateDiscount(product.price, product.sale_price)}
+                        </span>
+                      )}
+                      
+                      {/* Featured/Trending Badge */}
+                      {(product.is_featured || product.is_trending) && !product.sale_price && (
+                        <span className="absolute top-4 left-4 z-10 bg-black text-white text-sm font-bold px-3 py-1.5">
+                          {product.is_trending ? "TRENDING" : "FEATURED"}
+                        </span>
+                      )}
 
-                    {/* Product Image - LARGE IMPRESSIVE SIZE */}
-                    <div className="aspect-[4/5] bg-gray-100 mb-8 overflow-hidden rounded-t-lg" style={{ minHeight: '600px' }}>
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                    </div>
+                      {/* Product Image */}
+                      <div className="aspect-[4/5] bg-gray-100 mb-6 overflow-hidden rounded-lg" style={{ minHeight: '600px' }}>
+                        <img
+                          src={product.images?.[0] || '/placeholder.jpg'}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                      </div>
 
-                    <div className="p-6">
                       {/* Brand */}
-                      <p className="text-red-600 font-bold text-sm mb-4 tracking-wide">{product.brand}</p>
+                      <p className="text-burgundy font-bold text-sm mb-2">KCT MENSWEAR</p>
 
                       {/* Product Name */}
-                      <h3 className="text-base font-semibold mb-6 line-clamp-3 min-h-[4.5rem] uppercase tracking-wide leading-relaxed">
+                      <h3 className="text-sm font-medium mb-4 line-clamp-2 min-h-[3rem] uppercase tracking-wide">
                         {product.name}
                       </h3>
 
                       {/* Price */}
-                      <div className="flex items-center gap-4">
-                        {product.originalPrice && (
-                          <span className="text-gray-500 line-through text-xl">
-                            ${product.originalPrice.toFixed(2)}
+                      <div className="flex items-center gap-3">
+                        {product.sale_price ? (
+                          <>
+                            <span className="text-gray-400 line-through text-base">
+                              ${product.price.toFixed(2)}
+                            </span>
+                            <span className="text-red-600 text-lg font-bold">
+                              ${product.sale_price.toFixed(2)}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-black text-lg font-bold">
+                            ${product.price.toFixed(2)}
                           </span>
                         )}
-                        <span className={`text-xl font-bold ${product.salePrice ? 'text-red-600' : 'text-black'}`}>
-                          ${product.currentPrice.toFixed(2)}
-                        </span>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))
+              ) : (
+                <div className="w-full text-center py-20 text-gray-500">
+                  No products available in this category
+                </div>
+              )}
             </div>
           </div>
         </div>
