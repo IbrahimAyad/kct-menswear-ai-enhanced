@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { ModernHero } from "@/components/home/ModernHero";
-import { BuildYourLookModern } from "@/components/home/BuildYourLookModern";
+import { TrendingNow } from "@/components/home/TrendingNow";
 import { EditorialCollections } from "@/components/home/EditorialCollections";
 import { ModernProductShowcase } from "@/components/home/ModernProductShowcase";
 import { MinimalFooterSection } from "@/components/home/MinimalFooterSection";
+// Build Your Look component removed from imports as it doesn't fit the new vision
 
 // Premium outfit combinations for Build Your Look
 const outfitCombinations = [
@@ -197,10 +198,8 @@ export default function ModernHomePage() {
       {/* Editorial Hero Section */}
       <ModernHero />
 
-      {/* Build Your Look Interactive Section */}
-      <section className="py-32 bg-white">
-        <BuildYourLookModern outfits={outfitCombinations} />
-      </section>
+      {/* Trending Now Section - First thing after hero as per new vision */}
+      <TrendingNow />
 
       {/* Editorial Collections Grid */}
       <section className="py-32 bg-gray-50">
@@ -214,6 +213,8 @@ export default function ModernHomePage() {
 
       {/* Minimal Footer Section */}
       <MinimalFooterSection />
+      
+      {/* Build Your Look moved to separate page - doesn't fit new vision */}
 
       {/* Atelier AI Greeting Notification (Preserved) */}
       <AnimatePresence>
