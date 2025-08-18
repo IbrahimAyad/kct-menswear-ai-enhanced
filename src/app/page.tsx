@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { ModernHero } from "@/components/home/ModernHero";
-import { TrendingNow } from "@/components/home/TrendingNow";
+import { SmartTrendingNow } from "@/components/home/SmartTrendingNow";
 import { EditorialCollections } from "@/components/home/EditorialCollections";
 import { ModernProductShowcase } from "@/components/home/ModernProductShowcase";
 import { MinimalFooterSection } from "@/components/home/MinimalFooterSection";
-// Build Your Look component removed from imports as it doesn't fit the new vision
+// Using Smart AI-powered recommendations instead of basic trending
 
 // Premium outfit combinations for Build Your Look
 const outfitCombinations = [
@@ -198,8 +198,8 @@ export default function ModernHomePage() {
       {/* Editorial Hero Section */}
       <ModernHero />
 
-      {/* Trending Now Section - First thing after hero as per new vision */}
-      <TrendingNow />
+      {/* Smart AI-Powered Recommendations - Using our AI features! */}
+      <SmartTrendingNow />
 
       {/* Editorial Collections Grid */}
       <section className="py-32 bg-gray-50">

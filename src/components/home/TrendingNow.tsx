@@ -24,9 +24,9 @@ export function TrendingNow() {
     all: [],
     suits: [],
     tuxedos: [],
-    blazers: [],
+    'double-breasted': [],
     shirts: [],
-    accessories: []
+    stretch: []
   });
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -36,23 +36,24 @@ export function TrendingNow() {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        // Fetch different categories matching Supabase structure
+        // Fetch different categories matching actual Supabase data
+        // Using exact category names from products_enhanced table
         const categories = [
-          { key: 'all', params: 'limit=12' }, // All trending products
-          { key: 'suits', params: 'category=suits,double-breasted,stretch&limit=8' },
-          { key: 'tuxedos', params: 'category=tuxedos&limit=8' },
-          { key: 'blazers', params: 'category=blazers&limit=8' },
-          { key: 'shirts', params: 'category=mens-shirts&limit=8' },
-          { key: 'accessories', params: 'category=accessories&limit=8' }
+          { key: 'all', params: 'trending=true&limit=12' }, // All trending products
+          { key: 'suits', params: 'category=Suits&limit=8' },
+          { key: 'tuxedos', params: 'category=Tuxedos&limit=8' },
+          { key: 'double-breasted', params: 'category=Double-Breasted Suits&limit=8' },
+          { key: 'shirts', params: 'category=Mens Shirts&limit=8' },
+          { key: 'stretch', params: 'category=Stretch Suits&limit=8' }
         ];
 
         const productsByCategory: Record<string, Product[]> = {
           all: [],
           suits: [],
           tuxedos: [],
-          blazers: [],
+          'double-breasted': [],
           shirts: [],
-          accessories: []
+          stretch: []
         };
 
         // Fetch all categories in parallel
@@ -109,12 +110,12 @@ export function TrendingNow() {
   };
 
   const tabLabels: Record<string, string> = {
-    all: "ALL",
+    all: "TRENDING",
     suits: "SUITS",
     tuxedos: "TUXEDOS",
-    blazers: "BLAZERS",
+    'double-breasted': "DOUBLE BREASTED",
     shirts: "SHIRTS",
-    accessories: "ACCESSORIES"
+    stretch: "STRETCH SUITS"
   };
 
   if (loading) {
