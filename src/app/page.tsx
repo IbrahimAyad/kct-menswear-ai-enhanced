@@ -10,7 +10,7 @@ import { EditorialCollections } from "@/components/home/EditorialCollections";
 import { ModernProductShowcase } from "@/components/home/ModernProductShowcase";
 import { MinimalFooterSection } from "@/components/home/MinimalFooterSection";
 import { UniversalProductCard, UniversalProductGrid } from "@/components/products/UniversalProductCard";
-import { cachedKnowledgeAnalyzer } from "@/lib/ai/knowledge-product-analyzer-cached";
+import { EnhancedProductCard, EnhancedProductGrid } from "@/components/products/enhanced/EnhancedProductCard";
 
 // Editorial collections data
 const editorialCollections = [
@@ -138,13 +138,30 @@ export default function HomePage() {
   const loadAIProducts = async () => {
     try {
       setLoadingAI(true);
-      const organized = await cachedKnowledgeAnalyzer.analyzeAndOrganizeProducts();
+      // Use the same working API as test-enhanced-products page
+      const response = await fetch('/api/products/enhanced?status=active&limit=20');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch products');
+      }
+      
+      const data = await response.json();
+      const products = data.products || [];
+      
+      // Split products into trending and new arrivals
+      // For now, we'll just split them evenly
+      const halfIndex = Math.floor(products.length / 2);
       setAiProducts({
-        trending: organized.trending.slice(0, 4),
-        newArrivals: organized.newArrivals.slice(0, 4)
+        trending: products.slice(0, 8),
+        newArrivals: products.slice(8, 16)
       });
     } catch (error) {
-      console.error('Error loading AI products:', error);
+      console.error('Error loading enhanced products:', error);
+      // Set empty arrays on error
+      setAiProducts({
+        trending: [],
+        newArrivals: []
+      });
     } finally {
       setLoadingAI(false);
     }
@@ -195,7 +212,12 @@ export default function HomePage() {
                 View All →
               </a>
             </div>
-            <UniversalProductGrid products={aiProducts.trending} />
+            <EnhancedProductGrid 
+              products={aiProducts.trending}
+              showPricingTier={false}
+              showQuickActions={true}
+              columns={{ mobile: 2, tablet: 3, desktop: 4 }}
+            />
           </div>
         </section>
       )}
@@ -221,7 +243,12 @@ export default function HomePage() {
                 View All →
               </a>
             </div>
-            <UniversalProductGrid products={aiProducts.newArrivals} />
+            <EnhancedProductGrid 
+              products={aiProducts.newArrivals}
+              showPricingTier={false}
+              showQuickActions={true}
+              columns={{ mobile: 2, tablet: 3, desktop: 4 }}
+            />
           </div>
         </section>
       )}
