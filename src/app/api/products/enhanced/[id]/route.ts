@@ -2,17 +2,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
 // GET - Get Single Enhanced Product by ID or Slug
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const supabase = await createClient();
-    const { id } = params;
+    const { id } = await params;
     
     // Determine if ID is a UUID or slug
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
@@ -119,10 +116,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 // PUT - Update Enhanced Product
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const supabase = await createClient();
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     
     // Remove read-only fields
@@ -181,10 +181,13 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 }
 
 // DELETE - Delete Enhanced Product (soft delete by setting status to archived)
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const supabase = await createClient();
-    const { id } = params;
+    const { id } = await params;
     
     // Determine if ID is UUID or slug
     const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
