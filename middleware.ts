@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   // Create response
   const response = NextResponse.next()
 
-  // Security headers
+  // Security headers (CSP removed - was blocking third-party services)
   const headers = {
     // Prevent clickjacking attacks
     'X-Frame-Options': 'DENY',
@@ -13,23 +13,6 @@ export function middleware(request: NextRequest) {
     'X-XSS-Protection': '1; mode=block',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
-    
-    // Content Security Policy
-    'Content-Security-Policy': [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://*.supabase.co https://checkout.stripe.com https://js.stripe.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "font-src 'self' https://fonts.gstatic.com data:",
-      "img-src 'self' data: https: blob:",
-      "media-src 'self' https: blob:",
-      "connect-src 'self' https://*.supabase.co https://api.sendgrid.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://graph.facebook.com https://*.doubleclick.net wss://*.supabase.co https://checkout.stripe.com https://api.stripe.com",
-      "frame-src 'self' https://checkout.stripe.com https://js.stripe.com https://hooks.stripe.com",
-      "object-src 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "frame-ancestors 'none'",
-      "upgrade-insecure-requests"
-    ].join('; '),
     
     // HSTS - Enforce HTTPS
     'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',

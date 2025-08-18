@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 
 export const ServiceWorkerRegistry = () => {
-  const [isOnline, setIsOnline] = useState(true);
+  // Fix hydration mismatch: Initialize with undefined, set in useEffect
+  const [isOnline, setIsOnline] = useState<boolean | undefined>(undefined);
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
 
@@ -75,7 +76,7 @@ export const ServiceWorkerRegistry = () => {
   };
 
   // Online/Offline Status Bar
-  if (!isOnline) {
+  if (isOnline === false) {
     return (
       <div className="fixed top-0 left-0 right-0 bg-red-500 text-white text-center py-2 px-4 z-50">
         <div className="flex items-center justify-center gap-2">

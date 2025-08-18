@@ -90,7 +90,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <SkipLinks />
-        <PostHogProvider>
+        {/* <PostHogProvider> */}
           <Providers>
             <Navigation />
             <main id="main-content" className="pt-16 min-h-screen" role="main" aria-label="Main content">
@@ -103,14 +103,14 @@ export default function RootLayout({
             <MobileBottomNav />
             <ServiceWorkerRegistry />
             <Suspense fallback={null}>
-              <PostHogPageview />
+              {/* <PostHogPageview /> */}
               <GoogleAnalytics />
               <FacebookPixel />
             </Suspense>
             {/* <FacebookMessenger /> */}
             {process.env.NODE_ENV === 'development' && <AnalyticsDashboard />}
           </Providers>
-        </PostHogProvider>
+        {/* </PostHogProvider> */}
       </body>
     </html>
   );
