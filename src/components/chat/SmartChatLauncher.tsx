@@ -11,6 +11,7 @@ import {
   Zap,
   Bell
 } from "lucide-react";
+import { SizeAssistantChat } from "./SizeAssistantChat";
 
 interface ChatOption {
   id: string;
@@ -34,6 +35,7 @@ export function SmartChatLauncher() {
   const [hoveredChat, setHoveredChat] = useState<string | null>(null);
   const [notification, setNotification] = useState<Notification | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [showSizeAssistant, setShowSizeAssistant] = useState(false);
 
   const chatOptions: ChatOption[] = [
     {
@@ -63,19 +65,19 @@ export function SmartChatLauncher() {
     setActiveChat(chatId);
     setIsExpanded(false);
     
-    // Here you would open the specific chat interface
-    console.log(`Opening ${chatId} chat`);
-    
-    // You can integrate with existing chat components
+    // Open the specific chat interface
     switch(chatId) {
       case 'support':
-        // Open customer support chat
+        // Open customer support chat (to be implemented)
+        console.log('Opening customer support chat');
         break;
       case 'stylist':
-        // Open AI stylist chat
+        // Open AI stylist chat (to be implemented)
+        console.log('Opening Atelier Stylist chat');
         break;
       case 'sizing':
         // Open size assistant
+        setShowSizeAssistant(true);
         break;
     }
   };
@@ -309,6 +311,7 @@ export function SmartChatLauncher() {
                 {notification.type === 'reminder' && (
                   <button
                     onClick={() => {
+                      setShowSizeAssistant(true);
                       setActiveChat('sizing');
                       setNotification(null);
                     }}
@@ -346,9 +349,21 @@ export function SmartChatLauncher() {
         )}
       </AnimatePresence>
 
-      {/* Active Chat Window - This would be your actual chat implementation */}
+      {/* Size Assistant Chat */}
       <AnimatePresence>
-        {activeChat && (
+        {showSizeAssistant && (
+          <SizeAssistantChat
+            onClose={() => {
+              setShowSizeAssistant(false);
+              setActiveChat(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Other Chat Windows - Placeholder for future implementation */}
+      <AnimatePresence>
+        {activeChat && activeChat !== 'sizing' && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -376,7 +391,7 @@ export function SmartChatLauncher() {
             <div className="flex-1 p-4 bg-gray-50">
               <div className="text-center text-gray-500 mt-20">
                 <p className="text-sm">Chat interface for {activeChat}</p>
-                <p className="text-xs mt-2">Connect your chat implementation here</p>
+                <p className="text-xs mt-2">Coming soon!</p>
               </div>
             </div>
 
