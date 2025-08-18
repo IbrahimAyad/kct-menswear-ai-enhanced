@@ -467,6 +467,10 @@ export class SmartTagger {
       return;
     }
     
+    // Process each product
+    for (const product of products) {
+      // Generate tags for the product
+      const tags = await this.generateTags(product);
       
       // Convert tags to simple array for storage
       const tagArray = tags.map(t => t.tag);

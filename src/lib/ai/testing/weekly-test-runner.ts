@@ -42,3 +42,6 @@ export class WeeklyTestRunner {
   
   // Main test orchestrator
   async runWeeklyTestSuite(): Promise<WeeklyTestReport> {
+    return {} as WeeklyTestReport;
+  }
+}
