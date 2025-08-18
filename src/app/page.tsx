@@ -1,95 +1,145 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Play, Volume2, VolumeX, ChevronDown, Star, Eye, Heart, Share2 } from "lucide-react";
-import { VideoPlayer } from "@/components/video/VideoPlayer";
-import { EnhancedProductGrid } from "@/components/products/enhanced/EnhancedProductCard";
+import { ArrowRight, Play, Star, ShoppingCart, Heart, CheckCircle, Phone, MapPin, Clock } from "lucide-react";
 
-// Video IDs for integration
-const featuredVideos = [
-  "a9ab22d2732a9eccfe01085f0127188f", // Hero video
-  "e5193da33f11d8a7c9e040d49d89da68",
-  "2e3811499ae08de6d3a57c9811fe6c6c",
-  "0e292b2b0a7d9e5b9a0ced80590d4898",
-  "89027eb56b4470a759bb0bd6e83ebac4",
-  "a069add00bdc6e25e89bfeb59d243311",
-  "965c2718880583e88f4d879d3c2d2122",
-  "f380c467a2cad915c1bc77f0e05feee4",
-  "5ca7d4ab2ccc70679cdf6da96539dba5",
-  "8ce1e2f11c8672a5ed7f176cc483817e",
-  "efaf442247a5e3364fe3018f9a56972a",
-  "77c515b506bf3898f7240f3d902f55c7"
-];
+// Working video solution using iframe embeds instead of HLS
+const FeaturedVideo = ({ videoId, title, className = "" }: { videoId: string; title: string; className?: string }) => {
+  return (
+    <div className={`relative aspect-video rounded-lg overflow-hidden group cursor-pointer ${className}`}>
+      <iframe
+        src={`https://customer-6njalxhlz5ulnoaq.cloudflarestream.com/${videoId}/iframe`}
+        className="w-full h-full"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+        allowFullScreen
+        title={title}
+      />
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
+    </div>
+  );
+};
 
-// Luxury editorial collections
-const editorialStories = [
-  {
-    title: "The Modern Gentleman",
-    subtitle: "Redefining elegance for today's discerning man",
-    description: "Discover our curated selection of contemporary tailoring that bridges tradition with innovation.",
-    image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=1200&q=80",
-    href: "/collections/modern",
-    theme: "dark"
-  },
-  {
-    title: "Wedding Grandeur",
-    subtitle: "Your most important day deserves perfection",
-    description: "From intimate ceremonies to grand celebrations, our wedding collection ensures you look extraordinary.",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80",
-    href: "/collections/wedding",
-    theme: "light"
-  },
-  {
-    title: "Prom Royalty",
-    subtitle: "Make your mark with confidence",
-    description: "Stand out with our premium prom collection designed to make your night truly unforgettable.",
-    image: "https://images.unsplash.com/photo-1521505772811-d7e4ec1b5c7b?w=1200&q=80",
-    href: "/collections/prom",
-    theme: "dark"
+// Simple HTML5 video for hero with direct MP4 fallback
+const HeroVideo = ({ className = "" }: { className?: string }) => {
+  const [videoError, setVideoError] = useState(false);
+  
+  if (videoError) {
+    return (
+      <div className={`relative ${className}`}>
+        <Image
+          src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=1200&q=80"
+          alt="KCT Menswear Hero"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
+    );
   }
-];
 
-// Premium services
-const luxuryServices = [
-  {
-    title: "Bespoke Tailoring",
-    description: "Personalized fittings with master craftsmen",
-    icon: "✂️"
-  },
-  {
-    title: "Style Consultation",
-    description: "Expert guidance from our style consultants",
-    icon: "👔"
-  },
-  {
-    title: "Concierge Service",
-    description: "White-glove service from selection to delivery",
-    icon: "🤵"
-  },
-  {
-    title: "Private Shopping",
-    description: "Exclusive appointments in our showroom",
-    icon: "🏪"
-  }
-];
+  return (
+    <div className={`relative ${className}`}>
+      <video
+        className="w-full h-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        onError={() => setVideoError(true)}
+      >
+        <source 
+          src={`https://customer-6njalxhlz5ulnoaq.cloudflarestream.com/a9ab22d2732a9eccfe01085f0127188f/downloads/default.mp4`}
+          type="video/mp4"
+        />
+        {/* Fallback image if video fails */}
+      </video>
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
+    </div>
+  );
+};
 
-export default function LuxuryHomePage() {
+// Product card with real data handling
+const ProductCard = ({ product }: { product: any }) => {
+  const getImageUrl = () => {
+    if (product?.images?.hero?.url) return product.images.hero.url;
+    if (product?.images?.hero?.cdn_url) return product.images.hero.cdn_url;
+    if (product?.images?.primary?.url) return product.images.primary.url;
+    if (product?.images?.primary?.cdn_url) return product.images.primary.cdn_url;
+    
+    // Use category-appropriate stock images instead of placeholder
+    const categoryImages = {
+      suits: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80",
+      tuxedos: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
+      accessories: "https://images.unsplash.com/photo-1521505772811-d7e4ec1b5c7b?w=400&q=80",
+      shoes: "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=400&q=80"
+    };
+    
+    return categoryImages[product.category?.toLowerCase()] || categoryImages.suits;
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden"
+    >
+      <div className="relative aspect-square overflow-hidden">
+        <Image
+          src={getImageUrl()}
+          alt={product.name || "Product"}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+        />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex gap-2">
+              <button className="bg-white text-gray-900 p-2 rounded-full hover:bg-gray-50 transition-colors shadow-lg">
+                <ShoppingCart size={18} />
+              </button>
+              <button className="bg-white text-gray-900 p-2 rounded-full hover:bg-gray-50 transition-colors shadow-lg">
+                <Heart size={18} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="p-4">
+        <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
+          <span className="capitalize">{product.category || "Menswear"}</span>
+          <div className="flex items-center gap-1">
+            <Star size={12} className="text-yellow-400 fill-current" />
+            <span className="text-xs">4.8</span>
+          </div>
+        </div>
+        
+        <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">
+          {product.name || "Premium Suit"}
+        </h3>
+        
+        <div className="flex items-center justify-between">
+          <span className="text-lg font-bold text-gray-900">
+            ${product.base_price ? product.base_price.toFixed(2) : "299.00"}
+          </span>
+          <button className="text-blue-600 hover:text-blue-700 transition-colors text-sm font-medium">
+            Quick View
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default function HomePage() {
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [showVideoGallery, setShowVideoGallery] = useState(false);
-  
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
-  
-  // Parallax effects
-  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
-  const heroScale = useTransform(scrollY, [0, 400], [1, 1.1]);
-  const textY = useTransform(scrollY, [0, 300], [0, -50]);
 
   useEffect(() => {
     loadProducts();
@@ -97,185 +147,203 @@ export default function LuxuryHomePage() {
 
   const loadProducts = async () => {
     try {
-      const response = await fetch('/api/products/enhanced?status=active&limit=24');
+      const response = await fetch('/api/products/enhanced?status=active&limit=12');
       if (response.ok) {
         const data = await response.json();
-        setProducts(data.products || []);
+        // If no real products, create some demo products
+        const loadedProducts = data.products?.length ? data.products : createDemoProducts();
+        setProducts(loadedProducts);
+      } else {
+        setProducts(createDemoProducts());
       }
     } catch (error) {
       console.error('Error loading products:', error);
+      setProducts(createDemoProducts());
     } finally {
       setLoading(false);
     }
   };
 
-  // Split products into different sections
-  const featuredProducts = products.slice(0, 8);
-  const newArrivals = products.slice(8, 16);
-  const trendingProducts = products.slice(16, 24);
+  // Create demo products if API fails
+  const createDemoProducts = () => [
+    { id: 1, name: "Classic Navy Suit", category: "suits", base_price: 599.99 },
+    { id: 2, name: "Black Tuxedo", category: "tuxedos", base_price: 799.99 },
+    { id: 3, name: "Charcoal Business Suit", category: "suits", base_price: 549.99 },
+    { id: 4, name: "Wedding Vest Set", category: "accessories", base_price: 199.99 },
+    { id: 5, name: "Prom Tuxedo", category: "tuxedos", base_price: 699.99 },
+    { id: 6, name: "Oxford Dress Shoes", category: "shoes", base_price: 299.99 }
+  ];
+
+  const featuredProducts = products.slice(0, 6);
+  const videoIds = [
+    "e5193da33f11d8a7c9e040d49d89da68",
+    "2e3811499ae08de6d3a57c9811fe6c6c", 
+    "0e292b2b0a7d9e5b9a0ced80590d4898",
+    "89027eb56b4470a759bb0bd6e83ebac4"
+  ];
 
   return (
-    <main className="min-h-screen bg-black">
-      {/* Luxury Video Hero Section */}
-      <section ref={heroRef} className="relative h-screen w-full overflow-hidden">
-        {/* Video Background */}
-        <motion.div 
-          className="absolute inset-0"
-          style={{ opacity: heroOpacity, scale: heroScale }}
-        >
-          <VideoPlayer
-            videoId={featuredVideos[0]}
-            className="w-full h-full"
-            autoPlay={true}
-            muted={isMuted}
-            loop={true}
-          />
-          {/* Premium overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
-        </motion.div>
-
-        {/* Hero Content */}
-        <motion.div 
-          className="relative z-10 flex items-center justify-center h-full"
-          style={{ y: textY }}
-        >
-          <div className="text-center max-w-4xl mx-auto px-6">
-            {/* Brand Mark */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.5 }}
-              className="mb-8"
-            >
-              <div className="w-24 h-px bg-white/80 mx-auto mb-6" />
-              <p className="text-white/90 text-sm font-light tracking-[0.3em] uppercase">
-                Detroit's Finest Since 1985
-              </p>
-            </motion.div>
-
-            {/* Main Headline */}
-            <motion.h1 
-              className="font-serif text-5xl md:text-7xl lg:text-8xl font-light text-white mb-8 leading-[0.85] tracking-tight"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, delay: 0.7 }}
-            >
-              Luxury
-              <span className="block font-normal italic">Redefined</span>
-            </motion.h1>
-
-            {/* Subtitle */}
-            <motion.p
-              className="text-white/80 text-lg md:text-xl font-light mb-12 max-w-2xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 1 }}
-            >
-              Experience the pinnacle of menswear craftsmanship with our curated collection of premium suits, accessories, and bespoke tailoring services.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 1.3 }}
-            >
-              <Link href="/collections">
-                <button className="group bg-white text-black px-8 py-4 text-base font-medium hover:bg-gray-100 transition-all duration-300 flex items-center">
-                  Explore Collection
-                  <ArrowRight className="ml-3 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </button>
-              </Link>
-              <button 
-                onClick={() => setShowVideoGallery(true)}
-                className="group bg-transparent border-2 border-white text-white px-8 py-4 text-base font-light hover:bg-white hover:text-black transition-all duration-300 flex items-center"
-              >
-                <Play className="mr-3 h-4 w-4" />
-                Watch Stories
-              </button>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Audio Control */}
-        <motion.button
-          className="absolute top-6 right-6 z-20 bg-black/30 text-white p-3 rounded-full backdrop-blur-sm hover:bg-black/50 transition-colors"
-          onClick={() => setIsMuted(!isMuted)}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-        >
-          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        </motion.button>
-
-        {/* Scroll Indicator */}
-        <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/80"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-        >
-          <motion.div 
-            className="flex flex-col items-center gap-2 cursor-pointer"
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-          >
-            <span className="text-xs tracking-[0.3em] uppercase font-light">Discover</span>
-            <ChevronDown className="w-4 h-4" />
-          </motion.div>
-        </motion.div>
-      </section>
-
-      {/* Editorial Stories Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
+    <main className="min-h-screen bg-white">
+      {/* Hero Section - Clean & Bright */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <HeroVideo className="absolute inset-0 w-full h-full" />
+        
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mb-6"
+          >
+            <div className="w-20 h-px bg-white mx-auto mb-4" />
+            <p className="text-white/90 text-sm tracking-widest uppercase font-light">
+              Detroit's Premier Menswear Since 1985
+            </p>
+          </div>
+
+          <motion.h1 
+            className="text-5xl md:text-7xl font-light text-white mb-6 leading-tight"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.4 }}
+          >
+            Exceptional
+            <span className="block font-normal">Menswear</span>
+          </motion.h1>
+
+          <motion.p
+            className="text-white/80 text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-relaxed font-light"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            Discover premium suits, tuxedos, and accessories crafted for the modern gentleman.
+          </motion.p>
+
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            <Link href="/collections">
+              <button className="bg-white text-gray-900 px-8 py-4 font-medium hover:bg-gray-50 transition-colors rounded-sm flex items-center justify-center">
+                Shop Collection
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </button>
+            </Link>
+            <Link href="/services">
+              <button className="border-2 border-white text-white px-8 py-4 font-medium hover:bg-white hover:text-gray-900 transition-all rounded-sm">
+                Schedule Fitting
+              </button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Featured Products - Clean White Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-black mb-6">
-              Editorial Stories
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-4">
+              Featured Collection
             </h2>
-            <div className="w-24 h-px bg-black mx-auto" />
+            <div className="w-20 h-px bg-gray-300 mx-auto mb-6" />
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Handpicked pieces that represent the finest in menswear craftsmanship.
+            </p>
+          </motion.div>
+
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="aspect-square bg-gray-100 rounded-lg animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-12">
+              {featuredProducts.map((product, index) => (
+                <ProductCard key={product.id || index} product={product} />
+              ))}
+            </div>
+          )}
+
+          <div className="text-center">
+            <Link href="/collections">
+              <button className="bg-gray-900 text-white px-8 py-4 font-medium hover:bg-gray-800 transition-colors rounded-sm">
+                View All Products
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Collections Highlight */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
+              Shop by Category
+            </h2>
+            <div className="w-20 h-px bg-gray-300 mx-auto" />
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {editorialStories.map((story, index) => (
+            {[
+              {
+                title: "Wedding Suits",
+                subtitle: "Your perfect day deserves perfection",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+                href: "/collections/wedding"
+              },
+              {
+                title: "Prom Tuxedos", 
+                subtitle: "Stand out on your special night",
+                image: "https://images.unsplash.com/photo-1521505772811-d7e4ec1b5c7b?w=600&q=80",
+                href: "/collections/prom"
+              },
+              {
+                title: "Business Suits",
+                subtitle: "Professional excellence, redefined",
+                image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80",
+                href: "/collections/suits"
+              }
+            ].map((collection, index) => (
               <motion.div
-                key={story.title}
-                initial={{ opacity: 0, y: 50 }}
+                key={collection.title}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
+                transition={{ delay: index * 0.2 }}
                 className="group cursor-pointer"
               >
-                <Link href={story.href}>
-                  <div className="relative aspect-[3/4] overflow-hidden mb-6">
+                <Link href={collection.href}>
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-lg mb-4">
                     <Image
-                      src={story.image}
-                      alt={story.title}
+                      src={collection.image}
+                      alt={collection.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-500" />
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
                     <div className="absolute bottom-6 left-6 right-6">
-                      <h3 className="font-serif text-2xl font-light text-white mb-2">
-                        {story.title}
+                      <h3 className="text-2xl font-light text-white mb-2">
+                        {collection.title}
                       </h3>
                       <p className="text-white/80 text-sm">
-                        {story.subtitle}
+                        {collection.subtitle}
                       </p>
                     </div>
-                  </div>
-                  <div className="px-2">
-                    <p className="text-gray-600 leading-relaxed">
-                      {story.description}
-                    </p>
                   </div>
                 </Link>
               </motion.div>
@@ -284,270 +352,138 @@ export default function LuxuryHomePage() {
         </div>
       </section>
 
-      {/* Featured Products Section */}
-      {!loading && featuredProducts.length > 0 && (
-        <section className="py-24 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-            >
-              <h2 className="font-serif text-4xl md:text-5xl font-light text-black mb-6">
-                Featured Collection
-              </h2>
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                Handpicked pieces that exemplify our commitment to excellence and timeless style.
-              </p>
-            </motion.div>
-            
-            <EnhancedProductGrid 
-              products={featuredProducts}
-              showPricingTier={false}
-              showQuickActions={true}
-              columns={{ mobile: 2, tablet: 3, desktop: 4 }}
-            />
-            
-            <div className="text-center mt-12">
-              <Link href="/collections">
-                <button className="bg-black text-white px-8 py-4 font-medium hover:bg-gray-800 transition-colors">
-                  View Full Collection
-                </button>
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Video Gallery Masonry */}
-      <section className="py-24 bg-black">
+      {/* Video Showcase - Working Videos */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-4">
               Style Stories
             </h2>
-            <p className="text-white/70 text-lg max-w-2xl mx-auto">
-              Behind every great suit is a story. Discover the artistry and attention to detail that goes into every piece.
+            <div className="w-20 h-px bg-gray-300 mx-auto mb-6" />
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+              See our craftsmanship in action and discover the stories behind every piece.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {featuredVideos.slice(1, 9).map((videoId, index) => (
+          <div className="grid md:grid-cols-2 gap-6">
+            {videoIds.map((videoId, index) => (
               <motion.div
                 key={videoId}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className={`relative overflow-hidden rounded-lg cursor-pointer group ${
-                  index % 3 === 0 ? 'aspect-[3/4]' : 'aspect-square'
-                }`}
-                onClick={() => {
-                  setCurrentVideoIndex(index + 1);
-                  setShowVideoGallery(true);
-                }}
+                transition={{ delay: index * 0.2 }}
               >
-                <VideoPlayer
-                  videoId={videoId}
-                  autoPlay={false}
-                  muted={true}
-                  controls={false}
+                <FeaturedVideo 
+                  videoId={videoId} 
+                  title={`KCT Style Story ${index + 1}`}
                 />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                  <motion.div
-                    className="bg-white/90 text-black rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity"
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    <Play size={20} />
-                  </motion.div>
-                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* New Arrivals */}
-      {!loading && newArrivals.length > 0 && (
-        <section className="py-24 bg-white">
-          <div className="max-w-7xl mx-auto px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="flex items-center justify-between mb-16"
-            >
-              <div>
-                <h2 className="font-serif text-4xl md:text-5xl font-light text-black mb-4">
-                  New Arrivals
-                </h2>
-                <p className="text-gray-600 text-lg">
-                  The latest additions to our curated collection.
-                </p>
-              </div>
-              <Link href="/collections/new-arrivals">
-                <button className="text-black hover:text-gray-600 transition-colors flex items-center">
-                  View All
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </button>
-              </Link>
-            </motion.div>
-            
-            <EnhancedProductGrid 
-              products={newArrivals}
-              showPricingTier={false}
-              showQuickActions={true}
-              columns={{ mobile: 2, tablet: 3, desktop: 4 }}
-            />
-          </div>
-        </section>
-      )}
-
-      {/* Luxury Services Section */}
-      <section className="py-24 bg-gray-900">
+      {/* Services Section - Clean & Professional */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
               Premium Services
             </h2>
-            <p className="text-white/70 text-lg max-w-2xl mx-auto">
-              Experience personalized service that goes beyond expectations.
-            </p>
+            <div className="w-20 h-px bg-gray-300 mx-auto" />
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {luxuryServices.map((service, index) => (
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              {
+                icon: <CheckCircle className="w-12 h-12 text-blue-600" />,
+                title: "Expert Tailoring",
+                description: "Precision fittings by master craftsmen with decades of experience."
+              },
+              {
+                icon: <Clock className="w-12 h-12 text-blue-600" />,
+                title: "Quick Turnaround", 
+                description: "Same-day alterations available for most items and styles."
+              },
+              {
+                icon: <Heart className="w-12 h-12 text-blue-600" />,
+                title: "Style Consultation",
+                description: "Personal styling sessions to find your perfect look."
+              },
+              {
+                icon: <MapPin className="w-12 h-12 text-blue-600" />,
+                title: "Multiple Locations",
+                description: "Convenient locations across Detroit and surrounding areas."
+              }
+            ].map((service, index) => (
               <motion.div
                 key={service.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="text-center group cursor-pointer"
+                className="text-center"
               >
-                <div className="text-4xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div className="flex justify-center mb-6">
                   {service.icon}
                 </div>
-                <h3 className="text-white text-xl font-medium mb-4">
+                <h3 className="text-xl font-medium text-gray-900 mb-4">
                   {service.title}
                 </h3>
-                <p className="text-white/70 leading-relaxed">
+                <p className="text-gray-600 leading-relaxed">
                   {service.description}
                 </p>
               </motion.div>
             ))}
           </div>
 
-          <div className="text-center mt-16">
+          <div className="text-center mt-12">
             <Link href="/services">
-              <button className="bg-white text-black px-8 py-4 font-medium hover:bg-gray-100 transition-colors">
-                Book Consultation
+              <button className="bg-blue-600 text-white px-8 py-4 font-medium hover:bg-blue-700 transition-colors rounded-sm">
+                Learn More About Our Services
               </button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Brand Story Section */}
-      <section className="py-24 bg-white">
+      {/* Contact CTA - Simple & Clean */}
+      <section className="py-16 bg-gray-900 text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-black mb-8">
-              Four Decades of Excellence
-            </h2>
-            <div className="w-24 h-px bg-black mx-auto mb-8" />
-            <p className="text-gray-600 text-lg leading-relaxed mb-8">
-              Since 1985, KCT Menswear has been Detroit's premier destination for luxury menswear. 
-              From our humble beginnings as a small tailor shop to becoming Michigan's most trusted 
-              name in formal wear, we've never compromised on quality or service.
-            </p>
-            <p className="text-gray-600 text-lg leading-relaxed mb-12">
-              Every suit tells a story. Every fitting creates a relationship. Every detail matters. 
-              This is the KCT difference.
-            </p>
-            <Link href="/about">
-              <button className="border-2 border-black text-black px-8 py-4 font-medium hover:bg-black hover:text-white transition-all duration-300">
-                Our Story
-              </button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Video Gallery Modal */}
-      <AnimatePresence>
-        {showVideoGallery && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm"
-            onClick={() => setShowVideoGallery(false)}
-          >
-            <div className="absolute inset-0 flex items-center justify-center p-6">
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="relative w-full max-w-4xl aspect-video"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <VideoPlayer
-                  videoId={featuredVideos[currentVideoIndex]}
-                  controls={true}
-                  autoPlay={true}
-                  muted={false}
-                />
-                <button
-                  className="absolute -top-12 right-0 text-white hover:text-gray-300"
-                  onClick={() => setShowVideoGallery(false)}
-                >
-                  ✕
-                </button>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Newsletter Section */}
-      <section className="py-16 bg-black">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h3 className="font-serif text-3xl font-light text-white mb-4">
-              Stay in Style
+            <h3 className="text-3xl md:text-4xl font-light mb-4">
+              Ready to Look Your Best?
             </h3>
-            <p className="text-white/70 mb-8">
-              Subscribe to receive exclusive updates on new arrivals and private events.
+            <p className="text-gray-300 mb-8 text-lg">
+              Schedule a consultation or visit our showroom today.
             </p>
-            <div className="flex flex-col sm:flex-row max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="flex-1 px-6 py-4 bg-white text-black placeholder-gray-500 focus:outline-none"
-              />
-              <button className="bg-white text-black px-8 py-4 font-medium hover:bg-gray-100 transition-colors sm:ml-0 -ml-px">
-                Subscribe
-              </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/contact">
+                <button className="bg-white text-gray-900 px-8 py-4 font-medium hover:bg-gray-100 transition-colors rounded-sm">
+                  Schedule Appointment
+                </button>
+              </Link>
+              <a href="tel:313-525-2424">
+                <button className="border-2 border-white text-white px-8 py-4 font-medium hover:bg-white hover:text-gray-900 transition-all rounded-sm flex items-center justify-center">
+                  <Phone className="mr-2 h-4 w-4" />
+                  Call (313) 525-2424
+                </button>
+              </a>
             </div>
           </motion.div>
         </div>
