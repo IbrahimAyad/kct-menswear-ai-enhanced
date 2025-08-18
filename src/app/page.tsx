@@ -4,30 +4,11 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles } from "lucide-react";
-// Dynamically import components to avoid SSR issues
-const ModernHero = dynamic(() => import("@/components/home/ModernHero").then(mod => ({ default: mod.ModernHero })), {
-  ssr: false,
-  loading: () => <div className="h-[70vh] bg-gray-50 animate-pulse" />
-});
-
-const SmartTrendingNow = dynamic(() => import("@/components/home/SmartTrendingNow").then(mod => ({ default: mod.SmartTrendingNow })), {
-  ssr: false,
-  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
-});
-
-const EditorialCollections = dynamic(() => import("@/components/home/EditorialCollections").then(mod => ({ default: mod.EditorialCollections })), {
-  ssr: false,
-  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
-});
-
-const ModernProductShowcase = dynamic(() => import("@/components/home/ModernProductShowcase").then(mod => ({ default: mod.ModernProductShowcase })), {
-  ssr: false,
-  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
-});
-
-const MinimalFooterSection = dynamic(() => import("@/components/home/MinimalFooterSection").then(mod => ({ default: mod.MinimalFooterSection })), {
-  ssr: false
-});
+import { ModernHero } from "@/components/home/ModernHero";
+import { SmartTrendingNow } from "@/components/home/SmartTrendingNow";
+import { EditorialCollections } from "@/components/home/EditorialCollections";
+import { ModernProductShowcase } from "@/components/home/ModernProductShowcase";
+import { MinimalFooterSection } from "@/components/home/MinimalFooterSection";
 import { UniversalProductCard, UniversalProductGrid } from "@/components/products/UniversalProductCard";
 import { cachedKnowledgeAnalyzer } from "@/lib/ai/knowledge-product-analyzer-cached";
 

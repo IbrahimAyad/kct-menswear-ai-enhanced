@@ -235,7 +235,7 @@ export default function WeddingBundleQuickView({ bundle, onClose }: WeddingBundl
               <div>
                 <h3 className="font-semibold mb-3">Perfect For:</h3>
                 <div className="flex flex-wrap gap-2">
-                  {bundle.occasions.map((occasion) => (
+                  {(bundle?.occasions || []).map((occasion) => (
                     <span
                       key={occasion}
                       className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"

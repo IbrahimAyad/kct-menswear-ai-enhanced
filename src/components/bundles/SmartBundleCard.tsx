@@ -29,7 +29,7 @@ export function SmartBundleCard({
 }: SmartBundleCardProps) {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(
-    new Set(bundle.items.map(item => item.product.id))
+    new Set((bundle?.items || []).map(item => item?.product?.id).filter(Boolean))
   );
 
   const toggleItemSelection = (productId: string) => {
@@ -116,7 +116,7 @@ export function SmartBundleCard({
       {/* Bundle Items */}
       <div className="p-4">
         <div className="space-y-3">
-          {bundle.items.map((item, index) => (
+          {(bundle?.items || []).map((item, index) => (
             <motion.div
               key={item.product.id}
               initial={{ opacity: 0, x: -20 }}
@@ -210,7 +210,7 @@ export function SmartBundleCard({
             <div>
               <h5 className="font-medium text-sm text-gray-900 mb-2">Occasions</h5>
               <div className="flex flex-wrap gap-1">
-                {bundle.occasions.map((occasion, index) => (
+                {(bundle?.occasions || []).map((occasion, index) => (
                   <span key={index} className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
                     {occasion}
                   </span>
@@ -221,7 +221,7 @@ export function SmartBundleCard({
             <div>
               <h5 className="font-medium text-sm text-gray-900 mb-2">Style</h5>
               <div className="flex flex-wrap gap-1">
-                {bundle.targetCustomer.style.map((style, index) => (
+                {(bundle?.targetCustomer?.style || []).map((style, index) => (
                   <span key={index} className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full">
                     {style}
                   </span>

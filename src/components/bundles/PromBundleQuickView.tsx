@@ -219,7 +219,7 @@ export default function PromBundleQuickView({ bundle, onClose }: PromBundleQuick
               <div>
                 <h3 className="font-semibold mb-3">Perfect For:</h3>
                 <div className="flex flex-wrap gap-2">
-                  {bundle.occasions.map((occasion) => (
+                  {(bundle?.occasions || []).map((occasion) => (
                     <span
                       key={occasion}
                       className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm"
