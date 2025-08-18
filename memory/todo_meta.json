@@ -1,0 +1,48 @@
+{
+  "todos": {
+    "Coordinator": {
+      "1": {
+        "id": "1",
+        "content": "Audit and normalize product data structure in Supabase",
+        "details": "1. Verify access to all 177 products in products_enhanced table\n2. Standardize core products (28 items: suits, shirts, solid ties)\n3. Organize tie variations (77 colors × 3 widths + bow ties)\n4. Map bundle products (66 suit/shirt/tie combinations)\n5. Ensure consistent image structure and metadata",
+        "status": "pending",
+        "priority": "high"
+      },
+      "2": {
+        "id": "2",
+        "content": "Implement consistent product display components",
+        "details": "1. Create unified ProductCard component for all product types\n2. Develop BundleCard component with hover effects (model + item breakdown)\n3. Build CoreProductCard for basic suits, shirts, ties\n4. Implement TieVariationCard for color/width options\n5. Ensure responsive design across all components",
+        "status": "pending",
+        "priority": "high"
+      },
+      "3": {
+        "id": "3",
+        "content": "Integrate Stripe pricing and bundle logic",
+        "details": "1. Sync individual tie pricing ($24.99) with Stripe\n2. Implement bulk tie pricing (5 for $99)\n3. Set up bundle pricing tiers ($199, $229, $249)\n4. Create dynamic pricing calculation for custom bundles\n5. Ensure consistent pricing display across all products",
+        "status": "pending",
+        "priority": "high"
+      },
+      "4": {
+        "id": "4",
+        "content": "Build custom bundle builder feature",
+        "details": "1. Create interactive bundle builder interface\n2. Allow users to select suit + shirt + tie combinations\n3. Show real-time pricing updates\n4. Display visual preview of complete outfit\n5. Integrate with cart and checkout system",
+        "status": "pending",
+        "priority": "medium"
+      },
+      "5": {
+        "id": "5",
+        "content": "Standardize product pages and collections",
+        "details": "1. Update all product pages to use enhanced products API\n2. Implement consistent filtering and sorting\n3. Create unified collection pages for core products, bundles, and ties\n4. Add search functionality across all product types\n5. Ensure mobile responsiveness",
+        "status": "pending",
+        "priority": "medium"
+      },
+      "6": {
+        "id": "6",
+        "content": "Implement modern fashion brand UI/UX",
+        "details": "1. Create consistent design system with luxury aesthetic\n2. Implement hover effects for bundle previews\n3. Add product zoom and gallery features\n4. Create cohesive typography and color scheme\n5. Optimize performance and user experience",
+        "status": "pending",
+        "priority": "medium"
+      }
+    }
+  }
+}
