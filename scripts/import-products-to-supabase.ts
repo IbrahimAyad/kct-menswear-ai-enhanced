@@ -81,7 +81,7 @@ function mapToSupabaseProduct(scrapedProduct: any): Product {
     sku: scrapedProduct.sku,
     metadata: {
       original_url: scrapedProduct.url,
-      scraped_date: productsData.metadata.lastUpdated
+      scraped_date: productsData.metadata.scrapedDate
     },
     is_featured: false,
     is_new: false,
