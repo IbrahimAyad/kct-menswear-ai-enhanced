@@ -1,13 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // TypeScript errors temporarily ignored - minor admin issues remain
+  // Enable TypeScript error checking for production builds
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: process.env.NODE_ENV === 'development',
   },
-  // Skip ESLint during build
+  // Enable ESLint during builds but don't fail on warnings
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
+    dirs: ['src'],
   },
   
   // Compiler optimizations - automatically remove console.log in production

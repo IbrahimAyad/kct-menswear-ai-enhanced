@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { getProductImageUrl, handleImageError, getCategoryFromProductType } from '@/lib/utils/imageHelpers';
 
 interface CollectionCard {
   id: string;
@@ -295,12 +296,13 @@ export default function MasterCollectionsGrid() {
                     </div>
                   ) : (
                     <Image
-                      src={collection.image}
+                      src={getProductImageUrl(collection.image, getCategoryFromProductType(collection.name))}
                       alt={collection.name}
                       fill
                       className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 768px) 33vw, 16vw"
                       priority={index < 6}
+                      onError={(e) => handleImageError(e, getCategoryFromProductType(collection.name))}
                     />
                   )}
                 </div>

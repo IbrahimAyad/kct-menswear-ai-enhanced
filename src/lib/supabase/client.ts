@@ -32,7 +32,11 @@ export function getSupabaseClient() {
     
     supabaseInstance = createSupabaseClient(supabaseUrl, supabaseAnonKey, {
       auth: {
-        persistSession: false
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+        storageKey: 'kct-auth-session'
       }
     })
   }
@@ -53,7 +57,7 @@ export const supabaseAdmin = (() => {
     return createSupabaseClient<Database>(supabaseUrl, supabaseServiceKey, {
       auth: {
         autoRefreshToken: false,
-        persistSession: false
+        persistSession: false // Admin client doesn't need session persistence
       }
     })
   } catch (error) {

@@ -152,6 +152,25 @@ export const useCartStore = create<CartStore>()(
         }
         return persistedState;
       },
+      // Prevent hydration mismatches
+      partialize: (state) => ({
+        items: state.items,
+        // Don't persist loading state to prevent SSR mismatches
+      }),
+      // Skip hydration on server side
+      skipHydration: typeof window === 'undefined',
+      // Handle rehydration errors gracefully
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.warn('Failed to rehydrate cart store:', error);
+          // Reset to safe state on hydration error
+          return { items: [], isLoading: false };
+        }
+        // Ensure loading state is reset after hydration
+        if (state) {
+          state.isLoading = false;
+        }
+      },
     }
   )
 );

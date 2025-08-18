@@ -51,6 +51,8 @@ export class SettingsService {
   private static cache: Map<string, any> = new Map();
   private static cacheTimeout = 5 * 60 * 1000; // 5 minutes
   private static listeners: Set<(settings: StoreSettings) => void> = new Set();
+  private static localStorageKey = 'kct-settings-backup';
+  private static localStorageTimeout = 24 * 60 * 60 * 1000; // 24 hours
 
   // Fetch public settings from Edge Function
   static async getPublicSettings(): Promise<StoreSettings> {
@@ -62,17 +64,29 @@ export class SettingsService {
       return cached.data;
     }
 
-    // For now, skip Edge Function and use defaults until it's deployed
-    // This prevents 404 errors from crashing the site
-    const settings = this.getDefaultSettings();
+    // Check localStorage backup if API fails
+    const localBackup = this.getLocalStorageBackup();
     
-    // Cache the default settings
-    this.cache.set(cacheKey, {
-      data: settings,
-      timestamp: Date.now()
-    });
-    
-    return settings;
+    try {
+      // For now, skip Edge Function and use defaults until it's deployed
+      // This prevents 404 errors from crashing the site
+      const settings = this.getDefaultSettings();
+      
+      // Cache the settings
+      this.cache.set(cacheKey, {
+        data: settings,
+        timestamp: Date.now()
+      });
+      
+      // Save to localStorage as backup
+      this.saveToLocalStorage(settings);
+      
+      return settings;
+    } catch (error) {
+      console.error('Failed to fetch settings, using backup:', error);
+      // Return localStorage backup if available, otherwise defaults
+      return localBackup || this.getDefaultSettings();
+    }
     
     /* Edge Function code - restore after deployment
     try {
@@ -99,6 +113,53 @@ export class SettingsService {
     */
   }
 
+  // LocalStorage backup methods
+  private static saveToLocalStorage(settings: StoreSettings): void {
+    if (typeof window === 'undefined') return;
+    
+    try {
+      const backup = {
+        settings,
+        timestamp: Date.now()
+      };
+      localStorage.setItem(this.localStorageKey, JSON.stringify(backup));
+    } catch (error) {
+      console.warn('Failed to save settings to localStorage:', error);
+    }
+  }
+
+  private static getLocalStorageBackup(): StoreSettings | null {
+    if (typeof window === 'undefined') return null;
+    
+    try {
+      const backup = localStorage.getItem(this.localStorageKey);
+      if (!backup) return null;
+      
+      const parsed = JSON.parse(backup);
+      
+      // Check if backup is still valid (not expired)
+      if (Date.now() - parsed.timestamp > this.localStorageTimeout) {
+        localStorage.removeItem(this.localStorageKey);
+        return null;
+      }
+      
+      return parsed.settings;
+    } catch (error) {
+      console.warn('Failed to retrieve settings from localStorage:', error);
+      return null;
+    }
+  }
+
+  private static clearLocalStorageBackup(): void {
+    if (typeof window === 'undefined') return;
+    
+    try {
+      localStorage.removeItem(this.localStorageKey);
+    } catch (error) {
+      console.warn('Failed to clear settings backup:', error);
+    }
+  }
+
   // Subscribe to real-time settings changes
   static subscribeToChanges(callback: (settings: StoreSettings) => void) {
     this.listeners.add(callback);
@@ -106,14 +167,25 @@ export class SettingsService {
     const channel = supabase
       .channel('settings-changes')
       .on('broadcast', { event: 'settings-update' }, async (payload) => {
-        // Clear cache on update
-        this.cache.clear();
-        
-        // Fetch fresh settings
-        const settings = await this.getPublicSettings();
-        
-        // Notify all listeners
-        this.listeners.forEach(listener => listener(settings));
+        try {
+          // Update cache instead of clearing it
+          const settings = await this.getPublicSettings();
+          
+          // Update cache timestamp
+          this.cache.set('public_settings', {
+            data: settings,
+            timestamp: Date.now()
+          });
+          
+          // Update localStorage backup
+          this.saveToLocalStorage(settings);
+          
+          // Notify all listeners
+          this.listeners.forEach(listener => listener(settings));
+        } catch (error) {
+          console.error('Failed to update settings:', error);
+          // Don't clear cache on error - keep existing data
+        }
       })
       .subscribe();
 
