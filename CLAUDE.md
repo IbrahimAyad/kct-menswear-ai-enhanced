@@ -112,6 +112,53 @@ All suits available in 2-piece ($299.99) and 3-piece ($349.99):
 - **NO separate image tables** - Simplified architecture
 - CDN: `cdn.kctmenswear.com` for all product images
 
+### 🔴 CRITICAL: Image Fetching - Correct Method (Updated 2025-08-18)
+
+#### ✅ CORRECT Way - Use Enhanced Products JSONB Structure:
+```javascript
+// Enhanced products store images as JSONB with this structure:
+{
+  "hero": { 
+    "url": "https://cdn.kctmenswear.com/...", 
+    "cdn_url": "https://cdn.kctmenswear.com/...",
+    "alt": "Product description"
+  },
+  "primary": { 
+    "cdn_url": "https://cdn.kctmenswear.com/...",
+    "url": "https://cdn.kctmenswear.com/...",
+    "alt_text": "Product description"
+  },
+  "gallery": [
+    { "cdn_url": "...", "alt_text": "..." },
+    { "cdn_url": "...", "alt_text": "..." }
+  ]
+}
+
+// Components should check in this order:
+1. images.hero.url || images.hero.cdn_url
+2. images.primary.cdn_url || images.primary.url  
+3. images.gallery[0].cdn_url
+4. Fallback to placeholder
+```
+
+#### ❌ WRONG Way - DO NOT USE:
+```javascript
+// OLD METHOD - DEPRECATED:
+product.primary_image  // This field doesn't exist in products table
+product.imageUrl       // This is not populated
+product.featured_image // This doesn't exist
+
+// The regular 'products' table does NOT have image fields!
+// All images are in 'products_enhanced' table JSONB
+```
+
+#### Implementation Notes:
+- **test-enhanced-products** page shows the CORRECT implementation
+- **test-minimal-ui** page uses OLD method with hardcoded fallbacks
+- All product cards throughout site need to use Enhanced Products API
+- Never query 'products' table directly for images
+- Always use `/api/products/enhanced` or `/api/products/unified` endpoints
+
 ### API Data Flow:
 - `/api/products/unified` fetches:
   - ✅ Enhanced products from `products_enhanced` 
