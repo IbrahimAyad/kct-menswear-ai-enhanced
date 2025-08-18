@@ -4,9 +4,10 @@ import { createClient } from '@/lib/supabase/server';
 // GET /api/user-profiles/{userId}
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const supabase = createClient();
     
     // Verify authentication
@@ -16,7 +17,7 @@ export async function GET(
     }
 
     // Check if user is requesting their own profile or is admin
-    const isOwnProfile = user.id === params.userId;
+    const isOwnProfile = user.id === userId;
     
     // Check if user is admin
     const { data: adminCheck } = await supabase
@@ -35,7 +36,7 @@ export async function GET(
     const { data: profile, error } = await supabase
       .from('user_profiles')
       .select('*')
-      .eq('id', params.userId)
+      .eq('id', userId)
       .single();
 
     if (error) {
@@ -72,9 +73,10 @@ export async function GET(
 // PUT /api/user-profiles/{userId}
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const supabase = createClient();
     
     // Verify authentication
@@ -84,7 +86,7 @@ export async function PUT(
     }
 
     // Check if user is updating their own profile or is admin
-    const isOwnProfile = user.id === params.userId;
+    const isOwnProfile = user.id === userId;
     
     // Check if user is admin
     const { data: adminCheck } = await supabase
@@ -114,7 +116,7 @@ export async function PUT(
         ...updates,
         updated_at: new Date().toISOString()
       })
-      .eq('id', params.userId)
+      .eq('id', userId)
       .select()
       .single();
 
@@ -135,9 +137,10 @@ export async function PUT(
 // DELETE /api/user-profiles/{userId}
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const supabase = createClient();
     
     // Verify authentication
@@ -147,7 +150,7 @@ export async function DELETE(
     }
 
     // Only allow users to delete their own profile
-    if (user.id !== params.userId) {
+    if (user.id !== userId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -155,7 +158,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('user_profiles')
       .delete()
-      .eq('id', params.userId);
+      .eq('id', userId);
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });

@@ -4,9 +4,10 @@ import { createClient } from '@/lib/supabase/server';
 // PUT /api/user-profiles/{userId}/size-profile
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const supabase = createClient();
     
     // Verify authentication
@@ -16,7 +17,7 @@ export async function PUT(
     }
 
     // Check if user is updating their own profile
-    if (user.id !== params.userId) {
+    if (user.id !== userId) {
       // Check if user is admin
       const { data: adminCheck } = await supabase
         .from('admin_users')
@@ -39,7 +40,7 @@ export async function PUT(
     const { data: currentProfile, error: fetchError } = await supabase
       .from('user_profiles')
       .select('size_profile')
-      .eq('id', params.userId)
+      .eq('id', userId)
       .single();
 
     if (fetchError) {
@@ -60,7 +61,7 @@ export async function PUT(
         size_profile: mergedSizeProfile,
         updated_at: new Date().toISOString()
       })
-      .eq('id', params.userId)
+      .eq('id', userId)
       .select('id, size_profile')
       .single();
 
@@ -72,7 +73,7 @@ export async function PUT(
     await supabase
       .from('activity_logs')
       .insert({
-        user_id: params.userId,
+        user_id: userId,
         action: 'size_profile_updated',
         metadata: {
           fields_updated: Object.keys(validatedSizeProfile),
@@ -96,9 +97,10 @@ export async function PUT(
 // GET /api/user-profiles/{userId}/size-profile
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const supabase = createClient();
     
     // Verify authentication
@@ -108,7 +110,7 @@ export async function GET(
     }
 
     // Check permissions
-    if (user.id !== params.userId) {
+    if (user.id !== userId) {
       const { data: adminCheck } = await supabase
         .from('admin_users')
         .select('id')
@@ -124,7 +126,7 @@ export async function GET(
     const { data: profile, error } = await supabase
       .from('user_profiles')
       .select('size_profile')
-      .eq('id', params.userId)
+      .eq('id', userId)
       .single();
 
     if (error) {

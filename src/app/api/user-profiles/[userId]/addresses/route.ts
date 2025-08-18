@@ -4,9 +4,10 @@ import { createClient } from '@/lib/supabase/server';
 // GET /api/user-profiles/{userId}/addresses
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const supabase = createClient();
     
     // Verify authentication
@@ -16,7 +17,7 @@ export async function GET(
     }
 
     // Check permissions
-    if (user.id !== params.userId) {
+    if (user.id !== userId) {
       const { data: adminCheck } = await supabase
         .from('admin_users')
         .select('id')
@@ -32,7 +33,7 @@ export async function GET(
     const { data: profile, error } = await supabase
       .from('user_profiles')
       .select('saved_addresses')
-      .eq('id', params.userId)
+      .eq('id', userId)
       .single();
 
     if (error) {
@@ -52,9 +53,10 @@ export async function GET(
 // POST /api/user-profiles/{userId}/addresses
 export async function POST(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const supabase = createClient();
     
     // Verify authentication
@@ -64,7 +66,7 @@ export async function POST(
     }
 
     // Check if user is adding to their own profile
-    if (user.id !== params.userId) {
+    if (user.id !== userId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -86,7 +88,7 @@ export async function POST(
     const { data: profile, error: fetchError } = await supabase
       .from('user_profiles')
       .select('saved_addresses')
-      .eq('id', params.userId)
+      .eq('id', userId)
       .single();
 
     if (fetchError) {
@@ -123,7 +125,7 @@ export async function POST(
         saved_addresses: updatedAddresses,
         updated_at: new Date().toISOString()
       })
-      .eq('id', params.userId);
+      .eq('id', userId);
 
     if (updateError) {
       return NextResponse.json({ error: updateError.message }, { status: 500 });
@@ -145,9 +147,10 @@ export async function POST(
 // PUT /api/user-profiles/{userId}/addresses/{addressId}
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const supabase = createClient();
     
     // Get addressId from query params or body
@@ -165,7 +168,7 @@ export async function PUT(
     }
 
     // Check if user is updating their own profile
-    if (user.id !== params.userId) {
+    if (user.id !== userId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -176,7 +179,7 @@ export async function PUT(
     const { data: profile, error: fetchError } = await supabase
       .from('user_profiles')
       .select('saved_addresses')
-      .eq('id', params.userId)
+      .eq('id', userId)
       .single();
 
     if (fetchError) {
@@ -216,7 +219,7 @@ export async function PUT(
         saved_addresses: currentAddresses,
         updated_at: new Date().toISOString()
       })
-      .eq('id', params.userId);
+      .eq('id', userId);
 
     if (updateError) {
       return NextResponse.json({ error: updateError.message }, { status: 500 });
@@ -238,9 +241,10 @@ export async function PUT(
 // DELETE /api/user-profiles/{userId}/addresses/{addressId}
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId } = await params;
     const supabase = createClient();
     
     // Get addressId from query params
@@ -258,7 +262,7 @@ export async function DELETE(
     }
 
     // Check if user is deleting from their own profile
-    if (user.id !== params.userId) {
+    if (user.id !== userId) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -266,7 +270,7 @@ export async function DELETE(
     const { data: profile, error: fetchError } = await supabase
       .from('user_profiles')
       .select('saved_addresses')
-      .eq('id', params.userId)
+      .eq('id', userId)
       .single();
 
     if (fetchError) {
@@ -295,7 +299,7 @@ export async function DELETE(
         saved_addresses: updatedAddresses,
         updated_at: new Date().toISOString()
       })
-      .eq('id', params.userId);
+      .eq('id', userId);
 
     if (updateError) {
       return NextResponse.json({ error: updateError.message }, { status: 500 });
