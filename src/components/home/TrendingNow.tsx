@@ -19,122 +19,137 @@ interface TrendingProduct {
 }
 
 const trendingProducts: Record<string, TrendingProduct[]> = {
-  men: [
+  suits: [
     {
-      id: "1",
-      brand: "HUGO",
-      name: "INTERLOCK-COTTON REGULAR-FIT T-SHIRT WITH...",
-      originalPrice: 90.00,
-      salePrice: 70.00,
-      currentPrice: 70.00,
-      image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
-      href: "/products/hugo-interlock-tshirt",
+      id: "suit-1",
+      brand: "KCT MENSWEAR",
+      name: "GOLD SEQUIN PATTERN PROM BLAZER",
+      originalPrice: 549.00,
+      salePrice: 429.00,
+      currentPrice: 429.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/blazers/prom/mens-gold-sequin-pattern-prom-blazer/front.webp",
+      href: "/collections/prom/prom-blazers/gold-sequin",
       discount: "-22%"
     },
     {
-      id: "2", 
-      brand: "HUGO",
-      name: "ITALIAN-MADE SLIDES WITH CONTRAST-LOGO...",
-      currentPrice: 60.00,
-      image: "https://images.unsplash.com/photo-1603487742131-4160ec999306?w=800&q=80",
-      href: "/products/hugo-slides"
-    },
-    {
-      id: "3",
-      brand: "HUGO",
-      name: "OVERSIZE-FIT T-SHIRT IN COTTON WITH DECORATIV...",
-      originalPrice: 79.00,
-      salePrice: 47.00,
-      currentPrice: 47.00,
-      image: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800&q=80",
-      href: "/products/hugo-oversize-tshirt",
-      discount: "-40%"
-    },
-    {
-      id: "4",
-      brand: "HUGO",
-      name: "RELAXED-FIT T-SHIRT IN COTTON WITH LOGO...",
-      originalPrice: 69.00,
-      salePrice: 34.00,
-      currentPrice: 34.00,
-      image: "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80",
-      href: "/products/hugo-relaxed-tshirt",
-      discount: "-51%"
-    },
-    {
-      id: "5",
-      brand: "HUGO",
-      name: "STRETCH-COTTON SLIM-FIT POLO SHIRT WITH...",
-      originalPrice: 129.00,
-      salePrice: 74.00,
-      currentPrice: 74.00,
-      image: "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=800&q=80",
-      href: "/products/hugo-polo-shirt",
-      discount: "-43%"
-    }
-  ],
-  women: [
-    {
-      id: "w1",
-      brand: "HUGO",
-      name: "RELAXED-FIT DRESS IN STRETCH FABRIC",
-      originalPrice: 199.00,
-      salePrice: 139.00,
-      currentPrice: 139.00,
-      image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=800&q=80",
-      href: "/products/hugo-dress",
-      discount: "-30%"
-    },
-    {
-      id: "w2",
-      brand: "HUGO",
-      name: "CROPPED BLAZER IN STRETCH CREPE",
-      currentPrice: 249.00,
-      image: "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=800&q=80",
-      href: "/products/hugo-blazer",
+      id: "suit-2",
+      brand: "KCT MENSWEAR",
+      name: "EMERALD VELVET DINNER JACKET",
+      currentPrice: 649.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/blazers/velvet/mens-emerald-velvet-dinner-jacket/front.webp",
+      href: "/collections/suits/tuxedos/emerald-velvet",
       isNew: true
     },
     {
-      id: "w3",
-      brand: "HUGO",
-      name: "HIGH-WAISTED TROUSERS IN VIRGIN WOOL",
-      originalPrice: 179.00,
-      salePrice: 89.00,
-      currentPrice: 89.00,
-      image: "https://images.unsplash.com/photo-1594633312954-59c4c89fc074?w=800&q=80",
-      href: "/products/hugo-trousers",
-      discount: "-50%"
-    }
-  ],
-  kids: [
-    {
-      id: "k1",
-      brand: "HUGO",
-      name: "KIDS LOGO T-SHIRT IN COTTON JERSEY",
-      currentPrice: 39.00,
-      image: "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=800&q=80",
-      href: "/products/hugo-kids-tshirt"
+      id: "suit-3",
+      brand: "KCT MENSWEAR",
+      name: "DOUBLE BREASTED CLASSIC SUIT",
+      originalPrice: 599.00,
+      salePrice: 449.00,
+      currentPrice: 449.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp",
+      href: "/collections/suits/double-breasted/classic",
+      discount: "-25%"
     },
     {
-      id: "k2",
-      brand: "HUGO",
-      name: "KIDS TRACK JACKET WITH LOGO TAPE",
+      id: "suit-4",
+      brand: "KCT MENSWEAR",
+      name: "RED FLORAL PATTERN PROM BLAZER",
+      originalPrice: 529.00,
+      salePrice: 399.00,
+      currentPrice: 399.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp",
+      href: "/collections/prom/prom-blazers/red-floral",
+      discount: "-25%"
+    }
+  ],
+  shirts: [
+    {
+      id: "shirt-1",
+      brand: "KCT MENSWEAR",
+      name: "STRETCH COLLAR DRESS SHIRT",
       originalPrice: 89.00,
-      salePrice: 59.00,
-      currentPrice: 59.00,
-      image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800&q=80",
-      href: "/products/hugo-kids-jacket",
-      discount: "-34%"
+      salePrice: 69.00,
+      currentPrice: 69.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp",
+      href: "/collections/accessories/dress-shirts/stretch-collar",
+      discount: "-22%"
+    }
+  ],
+  accessories: [
+    {
+      id: "acc-1",
+      brand: "KCT MENSWEAR",
+      name: "DUSTY SAGE VEST & TIE SET",
+      originalPrice: 89.00,
+      salePrice: 67.00,
+      currentPrice: 67.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/main-solid-vest-tie/dusty-sage-model.png",
+      href: "/collections/accessories/vest-and-tie/dusty-sage",
+      discount: "-25%"
+    },
+    {
+      id: "acc-2",
+      brand: "KCT MENSWEAR",
+      name: "POWDER BLUE VEST & TIE SET",
+      currentPrice: 79.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/main-solid-vest-tie/powder-blue-model.png",
+      href: "/collections/accessories/vest-and-tie/powder-blue",
+      isNew: true
+    },
+    {
+      id: "acc-3",
+      brand: "KCT MENSWEAR",
+      name: "POWDER BLUE SUSPENDER & BOWTIE SET",
+      originalPrice: 59.00,
+      salePrice: 44.00,
+      currentPrice: 44.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/main-suspender-bowtie-set/powder-blue-model.png",
+      href: "/collections/accessories/suspender-bowtie/powder-blue",
+      discount: "-25%"
+    }
+  ],
+  bundles: [
+    {
+      id: "bundle-1",
+      brand: "KCT MENSWEAR",
+      name: "COMPLETE PROM PACKAGE - BLAZER, SHIRT, ACCESSORIES",
+      originalPrice: 699.00,
+      salePrice: 499.00,
+      currentPrice: 499.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/blazers/prom/mens-gold-sequin-pattern-prom-blazer/front.webp",
+      href: "/collections/prom/complete-packages/classic-prom",
+      discount: "-29%"
+    },
+    {
+      id: "bundle-2",
+      brand: "KCT MENSWEAR",
+      name: "FORMAL DINNER JACKET COMPLETE SET",
+      currentPrice: 799.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/blazers/velvet/mens-emerald-velvet-dinner-jacket/front.webp",
+      href: "/collections/bundles/formal-complete",
+      isNew: true
+    },
+    {
+      id: "bundle-3",
+      brand: "KCT MENSWEAR",
+      name: "VEST & ACCESSORIES COMBO PACK",
+      originalPrice: 149.00,
+      salePrice: 119.00,
+      currentPrice: 119.00,
+      image: "https://pub-7cf4fd2172224c91aca2d3399692e862.r2.dev/main-solid-vest-tie/dusty-sage-model.png",
+      href: "/collections/bundles/vest-accessories",
+      discount: "-20%"
     }
   ]
 };
 
 export function TrendingNow() {
-  const [activeTab, setActiveTab] = useState<"men" | "women" | "kids">("men");
+  const [activeTab, setActiveTab] = useState<"suits" | "shirts" | "accessories" | "bundles">("suits");
   const [currentIndex, setCurrentIndex] = useState(0);
   
   const products = trendingProducts[activeTab];
-  const itemsPerPage = 5;
+  const itemsPerPage = 3;
   const maxIndex = Math.max(0, products.length - itemsPerPage);
 
   const handlePrev = () => {
@@ -156,42 +171,55 @@ export function TrendingNow() {
           <div className="flex justify-center gap-12">
             <button
               onClick={() => {
-                setActiveTab("men");
+                setActiveTab("suits");
                 setCurrentIndex(0);
               }}
               className={`text-sm font-semibold tracking-wider transition-all pb-2 ${
-                activeTab === "men" 
+                activeTab === "suits" 
                   ? "text-black border-b-2 border-black" 
                   : "text-gray-500 hover:text-black"
               }`}
             >
-              MEN
+              SUITS
             </button>
             <button
               onClick={() => {
-                setActiveTab("women");
+                setActiveTab("shirts");
                 setCurrentIndex(0);
               }}
               className={`text-sm font-semibold tracking-wider transition-all pb-2 ${
-                activeTab === "women" 
+                activeTab === "shirts" 
                   ? "text-black border-b-2 border-black" 
                   : "text-gray-500 hover:text-black"
               }`}
             >
-              WOMEN
+              SHIRTS
             </button>
             <button
               onClick={() => {
-                setActiveTab("kids");
+                setActiveTab("accessories");
                 setCurrentIndex(0);
               }}
               className={`text-sm font-semibold tracking-wider transition-all pb-2 ${
-                activeTab === "kids" 
+                activeTab === "accessories" 
                   ? "text-black border-b-2 border-black" 
                   : "text-gray-500 hover:text-black"
               }`}
             >
-              KIDS
+              ACCESSORIES
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab("bundles");
+                setCurrentIndex(0);
+              }}
+              className={`text-sm font-semibold tracking-wider transition-all pb-2 ${
+                activeTab === "bundles" 
+                  ? "text-black border-b-2 border-black" 
+                  : "text-gray-500 hover:text-black"
+              }`}
+            >
+              BUNDLES
             </button>
           </div>
         </div>
@@ -229,50 +257,53 @@ export function TrendingNow() {
                 <Link
                   key={product.id}
                   href={product.href}
-                  className="min-w-[20%] px-2 group"
+                  className="min-w-[33.33%] px-4 group"
                 >
-                  <div className="relative">
+                  <div className="relative bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300">
                     {/* Discount Badge */}
                     {product.discount && (
-                      <span className="absolute top-2 left-2 z-10 bg-red-600 text-white text-xs font-bold px-2 py-1">
+                      <span className="absolute top-6 left-6 z-10 bg-red-600 text-white text-sm font-bold px-4 py-2 rounded">
                         {product.discount}
                       </span>
                     )}
                     
                     {/* New Badge */}
                     {product.isNew && (
-                      <span className="absolute top-2 left-2 z-10 bg-black text-white text-xs font-bold px-2 py-1">
+                      <span className="absolute top-6 left-6 z-10 bg-black text-white text-sm font-bold px-4 py-2 rounded">
                         NEW
                       </span>
                     )}
 
-                    {/* Product Image */}
-                    <div className="aspect-[3/4] bg-gray-100 mb-4 overflow-hidden">
+                    {/* Product Image - LARGE IMPRESSIVE SIZE */}
+                    <div className="aspect-[4/5] bg-gray-100 mb-8 overflow-hidden rounded-t-lg" style={{ minHeight: '600px' }}>
                       <img
                         src={product.image}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
                       />
                     </div>
 
-                    {/* Brand */}
-                    <p className="text-red-600 font-bold text-xs mb-2">{product.brand}</p>
+                    <div className="p-6">
+                      {/* Brand */}
+                      <p className="text-red-600 font-bold text-sm mb-4 tracking-wide">{product.brand}</p>
 
-                    {/* Product Name */}
-                    <h3 className="text-xs font-medium mb-3 line-clamp-2 min-h-[2.5rem] uppercase tracking-wide">
-                      {product.name}
-                    </h3>
+                      {/* Product Name */}
+                      <h3 className="text-base font-semibold mb-6 line-clamp-3 min-h-[4.5rem] uppercase tracking-wide leading-relaxed">
+                        {product.name}
+                      </h3>
 
-                    {/* Price */}
-                    <div className="flex items-center gap-2">
-                      {product.originalPrice && (
-                        <span className="text-gray-400 line-through text-sm">
-                          ${product.originalPrice.toFixed(2)}
+                      {/* Price */}
+                      <div className="flex items-center gap-4">
+                        {product.originalPrice && (
+                          <span className="text-gray-500 line-through text-xl">
+                            ${product.originalPrice.toFixed(2)}
+                          </span>
+                        )}
+                        <span className={`text-xl font-bold ${product.salePrice ? 'text-red-600' : 'text-black'}`}>
+                          ${product.currentPrice.toFixed(2)}
                         </span>
-                      )}
-                      <span className={`text-sm font-bold ${product.salePrice ? 'text-red-600' : 'text-black'}`}>
-                        ${product.currentPrice.toFixed(2)}
-                      </span>
+                      </div>
                     </div>
                   </div>
                 </Link>

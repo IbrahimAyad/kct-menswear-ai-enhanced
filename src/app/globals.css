@@ -14,6 +14,9 @@
 /* Conversion-Optimized Mobile Navigation Styles */
 @import '../styles/conversion-mobile-nav.css';
 
+/* KCT Luxury Design System - Premium Fashion UI */
+@import '../styles/luxury-design-system.css';
+
 /* Custom Scrollbar Styles for Style Swiper */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
