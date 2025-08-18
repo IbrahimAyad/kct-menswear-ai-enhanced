@@ -90,7 +90,7 @@ async function setupStripeIntegration() {
 
         if (color) {
           const stripeKey = colorMapping[color];
-          const stripeProduct = stripeProducts.suits[stripeKey];
+          const stripeProduct = stripeProducts.suits[stripeKey as keyof typeof stripeProducts.suits];
           
           if (stripeProduct) {
             // Determine if this is a 2-piece or 3-piece suit
