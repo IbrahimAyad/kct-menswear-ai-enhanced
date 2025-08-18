@@ -199,7 +199,7 @@ export default function HomePage() {
             <p className="text-white/90 text-sm tracking-widest uppercase font-light">
               Detroit's Premier Menswear Since 1985
             </p>
-          </div>
+          </motion.div>
 
           <motion.h1 
             className="text-5xl md:text-7xl font-light text-white mb-6 leading-tight"
