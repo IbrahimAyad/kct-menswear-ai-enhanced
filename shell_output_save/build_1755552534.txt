@@ -1,0 +1,103 @@
+
+> kct-menswear-ai-enhanced@1.0.0 build
+> next build && echo 'Build completed successfully'
+
+   ▲ Next.js 15.4.5
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverActions
+
+   Creating an optimized production build ...
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (108kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ⚠ Compiled with warnings in 2000ms
+
+./node_modules/@supabase/supabase-js/dist/module/index.js
+A Node.js API is used (process.version at line: 17) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+./node_modules/@supabase/supabase-js/dist/module/index.js
+./node_modules/@supabase/ssr/dist/module/createBrowserClient.js
+./node_modules/@supabase/ssr/dist/module/index.js
+
+./node_modules/@supabase/supabase-js/dist/module/index.js
+A Node.js API is used (process.version at line: 18) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+./node_modules/@supabase/supabase-js/dist/module/index.js
+./node_modules/@supabase/ssr/dist/module/createBrowserClient.js
+./node_modules/@supabase/ssr/dist/module/index.js
+
+./node_modules/@supabase/supabase-js/dist/module/index.js
+A Node.js API is used (process.version at line: 21) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+./node_modules/@supabase/supabase-js/dist/module/index.js
+./node_modules/@supabase/ssr/dist/module/createBrowserClient.js
+./node_modules/@supabase/ssr/dist/module/index.js
+
+ ✓ Compiled successfully in 37.0s
+   Skipping validation of types
+   Skipping linting
+   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ...   Collecting page data  .⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ..⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ...⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  .⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ..Error: Neither apiKey nor config.authenticator provided
+    at c._setAuthenticator (.next/server/chunks/7877.js:1:109306)
+    at new c (.next/server/chunks/7877.js:1:103922)
+    at 46234 (.next/server/app/api/test-e2e-checkout/route.js:1:1576)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at <unknown> (.next/server/app/api/test-e2e-checkout/route.js:1:11131)
+    at c.X (.next/server/webpack-runtime.js:1:2125)
+    at <unknown> (.next/server/app/api/test-e2e-checkout/route.js:1:11086)
+    at Object.<anonymous> (.next/server/app/api/test-e2e-checkout/route.js:1:11163)
+Error: Neither apiKey nor config.authenticator provided
+    at c._setAuthenticator (.next/server/chunks/7877.js:1:109306)
+    at new c (.next/server/chunks/7877.js:1:103922)
+    at 53253 (.next/server/app/api/test-specific-product/route.js:1:1589)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at <unknown> (.next/server/app/api/test-specific-product/route.js:10:8672)
+    at c.X (.next/server/webpack-runtime.js:1:2125)
+    at <unknown> (.next/server/app/api/test-specific-product/route.js:10:8627)
+    at Object.<anonymous> (.next/server/app/api/test-specific-product/route.js:10:8704)
+Error: Neither apiKey nor config.authenticator provided
+    at c._setAuthenticator (.next/server/chunks/7877.js:1:109306)
+    at new c (.next/server/chunks/7877.js:1:103922)
+    at 17036 (.next/server/app/api/checkout/enhanced/route.js:1:1226)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at <unknown> (.next/server/app/api/checkout/enhanced/route.js:1:12556)
+    at c.X (.next/server/webpack-runtime.js:1:2125)
+    at <unknown> (.next/server/app/api/checkout/enhanced/route.js:1:12511)
+    at Object.<anonymous> (.next/server/app/api/checkout/enhanced/route.js:1:12588)
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+Error: Neither apiKey nor config.authenticator provided
+    at c._setAuthenticator (.next/server/chunks/7877.js:1:109306)
+    at new c (.next/server/chunks/7877.js:1:103922)
+    at 17396 (.next/server/app/api/checkout/unified/route.js:1:1228)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at <unknown> (.next/server/app/api/checkout/unified/route.js:1:13510)
+    at c.X (.next/server/webpack-runtime.js:1:2125)
+    at <unknown> (.next/server/app/api/checkout/unified/route.js:1:13465)
+    at Object.<anonymous> (.next/server/app/api/checkout/unified/route.js:1:13542)
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+
+ . > Build error occurred
+ . [Error: Failed to collect page data for /api/test-e2e-checkout] {
+  type: 'Error'
+}
+ . 

@@ -1,0 +1,77 @@
+
+> kct-menswear-ai-enhanced@1.0.0 build
+> next build && echo 'Build completed successfully'
+
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+   ▲ Next.js 15.4.5
+   - Experiments (use with caution):
+     · serverActions
+
+   Creating an optimized production build ...
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (108kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ⚠ Compiled with warnings in 2000ms
+
+./node_modules/@supabase/supabase-js/dist/module/index.js
+A Node.js API is used (process.version at line: 17) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+./node_modules/@supabase/supabase-js/dist/module/index.js
+./node_modules/@supabase/ssr/dist/module/createBrowserClient.js
+./node_modules/@supabase/ssr/dist/module/index.js
+
+./node_modules/@supabase/supabase-js/dist/module/index.js
+A Node.js API is used (process.version at line: 18) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+./node_modules/@supabase/supabase-js/dist/module/index.js
+./node_modules/@supabase/ssr/dist/module/createBrowserClient.js
+./node_modules/@supabase/ssr/dist/module/index.js
+
+./node_modules/@supabase/supabase-js/dist/module/index.js
+A Node.js API is used (process.version at line: 21) which is not supported in the Edge Runtime.
+Learn more: https://nextjs.org/docs/api-reference/edge-runtime
+
+Import trace for requested module:
+./node_modules/@supabase/supabase-js/dist/module/index.js
+./node_modules/@supabase/ssr/dist/module/createBrowserClient.js
+./node_modules/@supabase/ssr/dist/module/index.js
+
+ ✓ Compiled successfully in 44s
+   Skipping validation of types
+   Skipping linting
+   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+Error: Missing Supabase environment variables
+    at f (.next/server/app/api/supabase/products/[id]/route.js:1:7133)
+    at 63511 (.next/server/app/api/supabase/products/[id]/route.js:1:7536)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at 72184 (.next/server/app/api/supabase/products/[id]/route.js:1:7633)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at 43165 (.next/server/app/api/supabase/products/[id]/route.js:1:1007)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at <unknown> (.next/server/app/api/supabase/products/[id]/route.js:11:3323)
+    at c.X (.next/server/webpack-runtime.js:1:2125)
+    at <unknown> (.next/server/app/api/supabase/products/[id]/route.js:11:3293)
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ..Error: Missing Supabase environment variables
+    at f (.next/server/app/api/supabase/products/category/[category]/route.js:1:1169)
+    at 63511 (.next/server/app/api/supabase/products/category/[category]/route.js:1:1572)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at 72184 (.next/server/app/api/supabase/products/category/[category]/route.js:1:8470)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at 67055 (.next/server/app/api/supabase/products/category/[category]/route.js:1:1965)
+    at c (.next/server/webpack-runtime.js:1:128)
+    at <unknown> (.next/server/app/api/supabase/products/category/[category]/route.js:11:3326)
+    at c.X (.next/server/webpack-runtime.js:1:2125)
+    at <unknown> (.next/server/app/api/supabase/products/category/[category]/route.js:11:3296)
+
+ . > Build error occurred
+ . [Error: Failed to collect page data for /api/supabase/products/[id]] {
+  type: 'Error'
+}
+ . 
