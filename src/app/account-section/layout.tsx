@@ -16,7 +16,7 @@ export default function AccountLayout({
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.push("/login?redirect=/account");
+      router.push("/auth/login" as any);
     }
   }, [isAuthenticated, isLoading, router]);
 
