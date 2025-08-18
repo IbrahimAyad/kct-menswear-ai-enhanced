@@ -3,45 +3,66 @@
     "Coordinator": {
       "1": {
         "id": "1",
-        "content": "Audit and normalize product data structure in Supabase",
-        "details": "1. Verify access to all 177 products in products_enhanced table\n2. Standardize core products (28 items: suits, shirts, solid ties)\n3. Organize tie variations (77 colors × 3 widths + bow ties)\n4. Map bundle products (66 suit/shirt/tie combinations)\n5. Ensure consistent image structure and metadata",
+        "content": "Repository Setup & Environment Configuration",
+        "details": "1. Clone and extract the repository files from the zip archives\n2. Set up all environment variables from the provided configuration\n3. Install dependencies and verify all integrations (Supabase, Stripe, Railway APIs)\n4. Test the enhanced products API endpoint and database connectivity",
         "status": "pending",
         "priority": "high"
       },
       "2": {
         "id": "2",
-        "content": "Implement consistent product display components",
-        "details": "1. Create unified ProductCard component for all product types\n2. Develop BundleCard component with hover effects (model + item breakdown)\n3. Build CoreProductCard for basic suits, shirts, ties\n4. Implement TieVariationCard for color/width options\n5. Ensure responsive design across all components",
+        "content": "Asset Cleanup & CDN Optimization",
+        "details": "1. Remove all references to deprecated R2 buckets: kct-base-products, kct-new-website-products\n2. Audit all image references to use the correct CDN: https://cdn.kctmenswear.com/\n3. Verify all 172+ products are accessible through the enhanced API\n4. Clean up any old asset URLs throughout the codebase",
         "status": "pending",
         "priority": "high"
       },
       "3": {
         "id": "3",
-        "content": "Integrate Stripe pricing and bundle logic",
-        "details": "1. Sync individual tie pricing ($24.99) with Stripe\n2. Implement bulk tie pricing (5 for $99)\n3. Set up bundle pricing tiers ($199, $229, $249)\n4. Create dynamic pricing calculation for custom bundles\n5. Ensure consistent pricing display across all products",
+        "content": "Luxury Homepage Design Implementation",
+        "details": "1. Implement Hugo Boss-inspired 'Trending Now' product carousel with navigation arrows\n2. Redesign TikTok video integration for high-end presentation\n3. Create luxury hero section with premium aesthetic\n4. Ensure all 12 TikTok videos display elegantly\n5. Implement defensive programming patterns: (products || []).map()",
         "status": "pending",
         "priority": "high"
       },
       "4": {
         "id": "4",
-        "content": "Build custom bundle builder feature",
-        "details": "1. Create interactive bundle builder interface\n2. Allow users to select suit + shirt + tie combinations\n3. Show real-time pricing updates\n4. Display visual preview of complete outfit\n5. Integrate with cart and checkout system",
+        "content": "Product Display Consistency & Enhanced Components",
+        "details": "1. Standardize all pages to use EnhancedProductCard component\n2. Ensure consistent product data sourcing from /api/products/enhanced\n3. Update SmartTrendingNow component to use enhanced products\n4. Fix collections pages to use enhanced products API\n5. Implement luxury product card design matching high-end brands",
         "status": "pending",
-        "priority": "medium"
+        "priority": "high"
       },
       "5": {
         "id": "5",
-        "content": "Standardize product pages and collections",
-        "details": "1. Update all product pages to use enhanced products API\n2. Implement consistent filtering and sorting\n3. Create unified collection pages for core products, bundles, and ties\n4. Add search functionality across all product types\n5. Ensure mobile responsiveness",
+        "content": "Search & Collections Pages Enhancement",
+        "details": "1. Update search functionality to query enhanced products exclusively\n2. Redesign collections pages with luxury grid layouts\n3. Implement filtering by product type, color, and price\n4. Add sophisticated hover effects and interactions\n5. Ensure proper loading states and error handling",
         "status": "pending",
         "priority": "medium"
       },
       "6": {
         "id": "6",
-        "content": "Implement modern fashion brand UI/UX",
-        "details": "1. Create consistent design system with luxury aesthetic\n2. Implement hover effects for bundle previews\n3. Add product zoom and gallery features\n4. Create cohesive typography and color scheme\n5. Optimize performance and user experience",
+        "content": "Product Detail Pages & Bundle Experience",
+        "details": "1. Fix product detail pages to use enhanced products API\n2. Implement luxury bundle showcase with hover functionality\n3. Create custom bundle builder for $199, $229, $249 price points\n4. Integrate with Stripe test mode for bundle pricing\n5. Add visual differentiation between pre-built and custom bundles",
         "status": "pending",
         "priority": "medium"
+      },
+      "7": {
+        "id": "7",
+        "content": "Wedding & Prom Product Pages",
+        "details": "1. Create dedicated wedding product page (avoiding guide pages for V2)\n2. Create dedicated prom product page \n3. Implement wedding-specific product categories and themes\n4. Use luxury design consistent with main site\n5. Integrate with enhanced products API for consistency",
+        "status": "pending",
+        "priority": "medium"
+      },
+      "8": {
+        "id": "8",
+        "content": "Performance Optimization & Code Quality",
+        "details": "1. Remove all 241+ console.logs for production performance\n2. Implement proper loading states and skeleton screens\n3. Optimize image loading strategies with CDN\n4. Ensure all components use defensive programming patterns\n5. Test SSR/SSG compatibility across all pages",
+        "status": "pending",
+        "priority": "low"
+      },
+      "9": {
+        "id": "9",
+        "content": "Final Testing & Quality Assurance",
+        "details": "1. Cross-page consistency testing for luxury brand experience\n2. Verify all pages handle empty/null data gracefully\n3. Test Stripe integration with provided test cards\n4. Validate bundle pricing and checkout flow\n5. Ensure mobile responsiveness matches desktop luxury experience",
+        "status": "pending",
+        "priority": "low"
       }
     }
   }
