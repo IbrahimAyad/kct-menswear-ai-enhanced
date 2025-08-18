@@ -1,15 +1,79 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles } from "lucide-react";
-import { ModernHero } from "@/components/home/ModernHero";
-import { SmartTrendingNow } from "@/components/home/SmartTrendingNow";
-import { EditorialCollections } from "@/components/home/EditorialCollections";
-import { ModernProductShowcase } from "@/components/home/ModernProductShowcase";
-import { MinimalFooterSection } from "@/components/home/MinimalFooterSection";
+// Dynamically import components to avoid SSR issues
+const ModernHero = dynamic(() => import("@/components/home/ModernHero").then(mod => ({ default: mod.ModernHero })), {
+  ssr: false,
+  loading: () => <div className="h-[70vh] bg-gray-50 animate-pulse" />
+});
+
+const SmartTrendingNow = dynamic(() => import("@/components/home/SmartTrendingNow").then(mod => ({ default: mod.SmartTrendingNow })), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+});
+
+const EditorialCollections = dynamic(() => import("@/components/home/EditorialCollections").then(mod => ({ default: mod.EditorialCollections })), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+});
+
+const ModernProductShowcase = dynamic(() => import("@/components/home/ModernProductShowcase").then(mod => ({ default: mod.ModernProductShowcase })), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-gray-50 animate-pulse" />
+});
+
+const MinimalFooterSection = dynamic(() => import("@/components/home/MinimalFooterSection").then(mod => ({ default: mod.MinimalFooterSection })), {
+  ssr: false
+});
 import { UniversalProductCard, UniversalProductGrid } from "@/components/products/UniversalProductCard";
 import { cachedKnowledgeAnalyzer } from "@/lib/ai/knowledge-product-analyzer-cached";
+
+// Editorial collections data
+const editorialCollections = [
+  {
+    id: 'wedding',
+    name: 'Wedding Collection',
+    subtitle: 'Timeless elegance',
+    image: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80',
+    href: '/collections/wedding',
+    size: 'large' as const
+  },
+  {
+    id: 'prom',
+    name: 'Prom 2025',
+    subtitle: 'Make your night',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80',
+    href: '/collections/prom',
+    size: 'medium' as const
+  },
+  {
+    id: 'business',
+    name: 'Business',
+    subtitle: 'Professional style',
+    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=80',
+    href: '/collections/business',
+    size: 'small' as const
+  },
+  {
+    id: 'casual',
+    name: 'Casual',
+    subtitle: 'Everyday comfort',
+    image: 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=800&q=80',
+    href: '/collections/casual',
+    size: 'small' as const
+  },
+  {
+    id: 'accessories',
+    name: 'Accessories',
+    subtitle: 'Complete your look',
+    image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80',
+    href: '/collections/accessories',
+    size: 'medium' as const
+  }
+];
 
 // Premium outfit combinations for Build Your Look
 const outfitCombinations = [
@@ -159,7 +223,7 @@ export default function HomePage() {
       <SmartTrendingNow />
 
       {/* Editorial Collections */}
-      <EditorialCollections />
+      <EditorialCollections collections={editorialCollections} />
 
       {/* AI-Powered New Arrivals */}
       {!loadingAI && aiProducts.newArrivals.length > 0 && (
