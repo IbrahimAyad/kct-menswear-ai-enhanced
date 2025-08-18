@@ -233,7 +233,7 @@ export default function HomePage() {
             Build Your Look
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
-            {outfitCombinations.map((outfit) => (
+            {(outfitCombinations || []).map((outfit) => (
               <motion.div
                 key={outfit.id}
                 initial={{ opacity: 0, y: 20 }}
