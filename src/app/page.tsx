@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Play, Star, ShoppingCart, Heart, CheckCircle, Phone, MapPin, Clock } from "lucide-react";
+import { EnhancedProductCard } from "@/components/products/enhanced/EnhancedProductCard";
 
 // Working video solution using iframe embeds instead of HLS
 const FeaturedVideo = ({ videoId, title, className = "" }: { videoId: string; title: string; className?: string }) => {
@@ -62,80 +63,6 @@ const HeroVideo = ({ className = "" }: { className?: string }) => {
   );
 };
 
-// Product card with real data handling
-const ProductCard = ({ product }: { product: any }) => {
-  const getImageUrl = () => {
-    if (product?.images?.hero?.url) return product.images.hero.url;
-    if (product?.images?.hero?.cdn_url) return product.images.hero.cdn_url;
-    if (product?.images?.primary?.url) return product.images.primary.url;
-    if (product?.images?.primary?.cdn_url) return product.images.primary.cdn_url;
-    
-    // Use category-appropriate stock images instead of placeholder
-    const categoryImages = {
-      suits: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80",
-      tuxedos: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
-      accessories: "https://images.unsplash.com/photo-1521505772811-d7e4ec1b5c7b?w=400&q=80",
-      shoes: "https://images.unsplash.com/photo-1556906781-9a412961c28c?w=400&q=80"
-    };
-    
-    return categoryImages[product.category?.toLowerCase()] || categoryImages.suits;
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 group overflow-hidden"
-    >
-      <div className="relative aspect-square overflow-hidden">
-        <Image
-          src={getImageUrl()}
-          alt={product.name || "Product"}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
-          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-        />
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors">
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="flex gap-2">
-              <button className="bg-white text-gray-900 p-2 rounded-full hover:bg-gray-50 transition-colors shadow-lg">
-                <ShoppingCart size={18} />
-              </button>
-              <button className="bg-white text-gray-900 p-2 rounded-full hover:bg-gray-50 transition-colors shadow-lg">
-                <Heart size={18} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div className="p-4">
-        <div className="flex items-center justify-between text-sm text-gray-500 mb-2">
-          <span className="capitalize">{product.category || "Menswear"}</span>
-          <div className="flex items-center gap-1">
-            <Star size={12} className="text-yellow-400 fill-current" />
-            <span className="text-xs">4.8</span>
-          </div>
-        </div>
-        
-        <h3 className="font-medium text-gray-900 mb-2 line-clamp-2">
-          {product.name || "Premium Suit"}
-        </h3>
-        
-        <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-gray-900">
-            ${product.base_price ? product.base_price.toFixed(2) : "299.00"}
-          </span>
-          <button className="text-blue-600 hover:text-blue-700 transition-colors text-sm font-medium">
-            Quick View
-          </button>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
 
 export default function HomePage() {
   const [products, setProducts] = useState<any[]>([]);
