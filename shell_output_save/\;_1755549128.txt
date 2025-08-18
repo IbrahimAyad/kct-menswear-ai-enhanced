@@ -1,0 +1,38 @@
+-rw-r--r-- 2 minimax minimax 16565 Jun 27 12:15 /workspace/.venv/lib/python3.12/site-packages/playwright/driver/package/lib/server/chromium/appIcon.png
+-rw-r--r-- 2 minimax minimax 472 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/help.png
+-rw-r--r-- 2 minimax minimax 747 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/help_large.png
+-rw-r--r-- 2 minimax minimax 790 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/home_large.png
+-rw-r--r-- 2 minimax minimax 530 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/zoom_to_rect.png
+-rw-r--r-- 2 minimax minimax 380 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/qt4_editor_options.png
+-rw-r--r-- 2 minimax minimax 468 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/home.png
+-rw-r--r-- 2 minimax minimax 593 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/forward_large.png
+-rw-r--r-- 2 minimax minimax 458 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/filesave.png
+-rw-r--r-- 2 minimax minimax 357 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/forward.png
+-rw-r--r-- 2 minimax minimax 979 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/hand.png
+-rw-r--r-- 2 minimax minimax 720 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/filesave_large.png
+-rw-r--r-- 2 minimax minimax 662 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/subplots_large.png
+-rw-r--r-- 2 minimax minimax 619 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/qt4_editor_options_large.png
+-rw-r--r-- 2 minimax minimax 1016 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/zoom_to_rect_large.png
+-rw-r--r-- 2 minimax minimax 380 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/back.png
+-rw-r--r-- 2 minimax minimax 767 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/move_large.png
+-rw-r--r-- 2 minimax minimax 445 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/subplots.png
+-rw-r--r-- 2 minimax minimax 481 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/move.png
+-rw-r--r-- 2 minimax minimax 3088 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/matplotlib_large.png
+-rw-r--r-- 2 minimax minimax 620 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/back_large.png
+-rw-r--r-- 2 minimax minimax 1283 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/images/matplotlib.png
+-rw-r--r-- 2 minimax minimax 22279 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/sample_data/logo2.png
+-rw-r--r-- 2 minimax minimax 13634 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/matplotlib/mpl-data/sample_data/Minduka_Present_Blue_Pack.png
+-rw-r--r-- 2 minimax minimax 26002 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/networkx/drawing/tests/baseline/test_display_house_with_colors.png
+-rw-r--r-- 2 minimax minimax 142315 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/networkx/drawing/tests/baseline/test_display_complex.png
+-rw-r--r-- 2 minimax minimax 3257 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/networkx/drawing/tests/baseline/test_display_empty_graph.png
+-rw-r--r-- 2 minimax minimax 21918 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/networkx/drawing/tests/baseline/test_house_with_colors.png
+-rw-r--r-- 2 minimax minimax 70446 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/networkx/drawing/tests/baseline/test_display_labels_and_colors.png
+-rw-r--r-- 2 minimax minimax 35897 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/networkx/drawing/tests/baseline/test_display_shortest_path.png
+-rw-r--r-- 2 minimax minimax 2114 Aug 18 15:43 /workspace/.venv/lib/python3.12/site-packages/scipy/ndimage/tests/dots.png
+-rwxrwsr-x 1 minimax minimax 369882 Aug 19 03:33 '/workspace/user_input_files/Screenshot 2025-08-18 at 3.30.37 PM.png'
+-rwxrwsr-x 1 minimax minimax 489487 Aug 19 03:33 '/workspace/user_input_files/Screenshot 2025-08-18 at 3.29.33 PM.png'
+-rwxrwsr-x 1 minimax minimax 503386 Aug 19 03:33 '/workspace/user_input_files/Screenshot 2025-08-18 at 3.31.54 PM.png'
+-rwxrwsr-x 1 minimax minimax 760772 Aug 19 03:33 '/workspace/user_input_files/Screenshot 2025-08-18 at 3.31.21 PM.png'
+-rwxrwsr-x 1 minimax minimax 689425 Aug 19 03:33 '/workspace/user_input_files/Screenshot 2025-08-18 at 3.31.38 PM.png'
+-rwxrwsr-x 1 minimax minimax 233754 Aug 19 03:33 '/workspace/user_input_files/Screenshot 2025-08-18 at 3.31.03 PM.png'
+-rwxrwsr-x 1 minimax minimax 366972 Aug 19 03:33 '/workspace/user_input_files/Screenshot 2025-08-18 at 3.29.16 PM.png'
