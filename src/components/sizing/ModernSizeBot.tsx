@@ -91,13 +91,27 @@ export function ModernSizeBot({
     setIsCalculating(true);
     
     try {
+      // Convert weight to pounds if in metric
+      const weightInPounds = isMetric ? weightLbs * 2.20462 : weightLbs;
+      
+      console.log('Size calculation inputs:', {
+        heightInches,
+        weightLbs,
+        weightInPounds,
+        isMetric,
+        fitPreference,
+        productType
+      });
+      
       const recommendation = await sizePredictionService.predictSizeFromBasics({
         height: heightInches,
-        weight: isMetric ? weightLbs * 2.20462 : weightLbs,
+        weight: weightInPounds,
         fitPreference,
         unit: 'imperial',
         productType
       });
+
+      console.log('Size recommendation:', recommendation);
 
       setResult({
         ...recommendation,
