@@ -17,6 +17,7 @@ import { trackBeginCheckout, trackRemoveFromCart, trackViewCart } from "@/lib/an
 import { trackInitiateCheckout } from "@/lib/analytics/facebook-pixel";
 import { createClient } from '@/lib/supabase/client';
 import { getCoreProductById, isCoreProduct } from '@/lib/config/coreProducts';
+import { AICartRecommendations } from '@/components/cart/AICartRecommendations';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
 
@@ -589,6 +590,14 @@ export default function CartPage() {
             </Card>
           </div>
         </div>
+
+        {/* AI-Powered Recommendations Section */}
+        {validCartItems.length > 0 && (
+          <AICartRecommendations 
+            cartItems={validCartItems}
+            userStyle={user?.profile?.style_preferences || undefined}
+          />
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/components/providers/Providers";
-import { AtelierAIChatButton } from "@/components/chat/AtelierAIChat";
+import { SmartChatLauncher } from "@/components/chat/SmartChatLauncher";
 import { ChatWidget } from "@/components/ai/ChatWidget";
 import { SimpleCartDrawer } from "@/components/cart/SimpleCartDrawer";
 import { StyleConsultantButton } from "@/components/style-consultant/VirtualStyleConsultant";
@@ -97,8 +97,8 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
-            <AtelierAIChatButton />
-            <StyleConsultantButton />
+            <SmartChatLauncher />
+            {/* <StyleConsultantButton /> */}
             <SimpleCartDrawer />
             <MobileBottomNav />
             <ServiceWorkerRegistry />
