@@ -17,8 +17,8 @@
       },
       "3": {
         "id": "3",
-        "content": "Luxury Homepage Design Implementation",
-        "details": "1. Implement Hugo Boss-inspired 'Trending Now' product carousel with navigation arrows\n2. Redesign TikTok video integration for high-end presentation\n3. Create luxury hero section with premium aesthetic\n4. Ensure all 12 TikTok videos display elegantly\n5. Implement defensive programming patterns: (products || []).map()",
+        "content": "Minimal Trending Carousel - Hugo Boss Inspired",
+        "details": "1. Create clean, minimal 'Trending Now' carousel matching Hugo Boss design\n2. Center product card slightly larger than side cards for focal point\n3. Implement smooth swipe left/right navigation (no arrows, gesture-based)\n4. Remove all brand logos and visual clutter\n5. Use clean typography and lots of white space\n6. Ensure mobile-first responsive design with touch gestures",
         "status": "pending",
         "priority": "high"
       },
