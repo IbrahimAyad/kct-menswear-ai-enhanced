@@ -159,6 +159,49 @@ product.featured_image // This doesn't exist
 - Never query 'products' table directly for images
 - Always use `/api/products/enhanced` or `/api/products/unified` endpoints
 
+### 🎯 Universal Product Card System (Updated 2025-08-18)
+
+#### The Standard Product Card Component
+Use `UniversalProductCard` for ALL product displays moving forward:
+
+```javascript
+import { UniversalProductCard, UniversalProductGrid } from '@/components/products/UniversalProductCard';
+
+// For product grids
+<UniversalProductGrid products={enhancedProducts} />
+
+// For single cards
+<UniversalProductCard product={product} priority={true} />
+```
+
+#### Key Features:
+1. **Automatic Image Extraction**: Uses `extractProductImages()` helper to get images from enhanced products JSONB
+2. **Hover Image Cycling**: Automatically cycles through all product images on hover (desktop)
+3. **Mobile Touch Support**: Tap to cycle through images on mobile devices
+4. **Minimal Design**: Fashion-forward design inspired by Zara, COS, Everlane
+5. **Mobile First**: 
+   - Large images (3:4 aspect ratio)
+   - 2 columns on mobile, scales to 4 on desktop
+   - Touch-friendly interactions
+6. **Performance**: Lazy loading with priority support for above-fold images
+
+#### Image Helper Functions:
+```javascript
+import { extractProductImages, getPrimaryImageUrl, hasMultipleImages } from '@/lib/products/image-helpers';
+
+// Get all images from a product
+const images = extractProductImages(product); // Returns ProductImage[]
+
+// Get primary image URL
+const primaryUrl = getPrimaryImageUrl(product); // Returns string
+
+// Check if hover effect available
+const canHover = hasMultipleImages(product); // Returns boolean
+```
+
+#### Test Page:
+View the universal card in action: `/test-universal-card`
+
 ### API Data Flow:
 - `/api/products/unified` fetches:
   - ✅ Enhanced products from `products_enhanced` 
