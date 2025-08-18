@@ -152,7 +152,7 @@ export function UniversalProductCard({
           {/* Colors indicator - Optional, minimal */}
           {product.colors && product.colors.length > 1 && (
             <div className="flex items-center gap-1 mt-2">
-              {product.colors.slice(0, 5).map((color: string, idx: number) => (
+              {(product.colors || []).slice(0, 5).map((color: string, idx: number) => (
                 <div
                   key={idx}
                   className="w-3 h-3 rounded-full border border-gray-300"

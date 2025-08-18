@@ -15,10 +15,10 @@ interface Product {
 }
 
 interface ModernProductShowcaseProps {
-  products: Product[];
+  products?: Product[];
 }
 
-export function ModernProductShowcase({ products }: ModernProductShowcaseProps) {
+export function ModernProductShowcase({ products = [] }: ModernProductShowcaseProps) {
   const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
 
   return (
@@ -42,7 +42,7 @@ export function ModernProductShowcase({ products }: ModernProductShowcaseProps) 
 
       {/* Product Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
-        {products.map((product, index) => (
+        {(products || []).map((product, index) => (
           <motion.div
             key={product.id}
             className="group"

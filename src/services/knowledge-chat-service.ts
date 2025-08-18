@@ -450,7 +450,7 @@ export class KnowledgeChatService {
 
   private generateTrendingAdvice(trendingData: any): string {
     if (trendingData && trendingData.current_trends) {
-      const trends = trendingData.current_trends.slice(0, 3).map((t: any) => t.name);
+      const trends = (trendingData.current_trends || []).slice(0, 3).map((t: any) => t.name);
       return `Current standouts include ${trends.join(', ')}. These pieces offer both style and versatility.`;
     }
     return "Focus on timeless pieces with modern updates for maximum style impact.";
@@ -468,7 +468,7 @@ export class KnowledgeChatService {
   private generateColorCombinations(colorData: any, colors: string[]): any {
     // Generate smart color combinations based on color theory
     return {
-      recommended: colors.map(color => ({
+      recommended: (colors || []).map(color => ({
         base: color,
         complements: this.findColorFamily(colorData, color)?.tie_suggestions || []
       }))

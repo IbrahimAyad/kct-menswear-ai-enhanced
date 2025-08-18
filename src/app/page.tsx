@@ -284,8 +284,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Modern Product Showcase */}
-      <ModernProductShowcase />
+      {/* Modern Product Showcase - Will populate with featured products */}
+      {/* <ModernProductShowcase /> */}
 
       {/* AI Insight Banner */}
       <section className="py-12 bg-burgundy text-white">

@@ -52,7 +52,7 @@ export function EditorialCollections({ collections }: EditorialCollectionsProps)
 
       {/* Editorial Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-4 gap-4 md:gap-6 h-auto md:h-[120vh]">
-        {collections.map((collection, index) => (
+        {(collections || []).map((collection, index) => (
           <motion.div
             key={collection.id}
             className={cn(

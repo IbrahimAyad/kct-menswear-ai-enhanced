@@ -266,7 +266,7 @@ export function SmartTrendingNow() {
                   <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all">
                     <div className="aspect-[3/4] bg-gradient-to-br from-gray-100 to-gray-50 p-4">
                       <div className="grid grid-cols-2 gap-2 h-full">
-                        {outfit.products?.slice(0, 4).map((p: any, i: number) => (
+                        {(outfit.products || []).slice(0, 4).map((p: any, i: number) => (
                           <div key={i} className="bg-white rounded-lg overflow-hidden shadow-sm">
                             <img 
                               src={p.images?.[0] || '/placeholder.jpg'} 
