@@ -1,0 +1,150 @@
+ KCT Menswear - Environment Variables for .env.local
+
+  # ============================================
+  # SUPABASE DATABASE (Production)
+  # ============================================
+  NEXT_PUBLIC_SUPABASE_URL=https://gvcswimqaxvylgxbklbz.supabase.co
+  NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3
+  MiOiJzdXBhYmFzZSIsInJlZiI6Imd2Y3N3aW1xYXh2eWxneGJrbGJ6Iiwicm9sZSI6ImFub24
+  iLCJpYXQiOjE3NTM3NjA1MzAsImV4cCI6MjA2OTMzNjUzMH0.UZdiGcJXUV5VYetjWXV26inm
+  bj2yXdiT03Z6t_5Lg24
+  SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOi
+  JzdXBhYmFzZSIsInJlZiI6Imd2Y3N3aW1xYXh2eWxneGJrbGJ6Iiwicm9sZSI6InNlcnZpY2V
+  fcm9sZSIsImlhdCI6MTc1Mzc2MDUzMCwiZXhwIjoyMDY5MzM2NTMwfQ.LCWdoDoyJ_xo05CbR
+  mM7erHsov8PsNqyo31n-bGvYtg
+
+  # ============================================
+  # STRIPE PAYMENTS (Test Mode - Safe for Development)
+  # ============================================
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51RAMT2CHc12x7sCzDeepE4zF2bXbL
+  yOdI8g3LrGGy0TJqnGLJwYgK8JjTZ4Q7YGzgT4OJj4dLHdNOlKA2t9mIgxB00xLgdpMJh
+  STRIPE_SECRET_KEY=sk_test_51RAMT2CHc12x7sCzMkzY8Dz4XR0yGXBCjYJgGtUzJzRQzO
+  a7VpJzUNjGGlGGmZ8sGV2vUGzS5BsGsGkKtGzOaMUNt00UGzYG9pR
+  STRIPE_WEBHOOK_SECRET=whsec_development_test_endpoint
+
+  # ============================================
+  # RAILWAY API SERVICES (All Working)
+  # ============================================
+  # Main Knowledge Bank API
+  NEXT_PUBLIC_KNOWLEDGE_BANK_API=https://kct-knowledge-api-production.up.ra
+  ilway.app
+  NEXT_PUBLIC_KNOWLEDGE_BANK_KEY=kct-menswear-api-2024-secret
+
+  # KCT Chat API (Atelier AI)
+  NEXT_PUBLIC_KCT_API_URL=https://kct-knowledge-api-2-production.up.railway
+  .app
+  NEXT_PUBLIC_KCT_API_KEY=kct-menswear-api-2024-secret
+  NEXT_PUBLIC_KCT_CHAT_API_URL=https://kct-knowledge-api-2-production.up.ra
+  ilway.app/api/v3/chat
+  NEXT_PUBLIC_KCT_CHAT_ENABLED=true
+
+  # Size Bot API
+  NEXT_PUBLIC_SIZE_BOT_API=https://kct-sizebot-api-production.up.railway.ap
+  p
+  NEXT_PUBLIC_SIZE_BOT_KEY=kct-menswear-api-2024-secret
+
+  # Fashion CLIP API (Visual Search)
+  NEXT_PUBLIC_FASHION_CLIP_API=https://fashion-clip-kct-production.up.railw
+  ay.app
+  NEXT_PUBLIC_FASHION_CLIP_KEY=kct-menswear-api-2024-secret
+
+  # ============================================
+  # AI SERVICES
+  # ============================================
+  # Replicate API (For AI Models)
+  REPLICATE_API_TOKEN=r8_5WBPNPhs4UR09CWE34iSZbrgSrTvART2RFOJY
+
+  # ============================================
+  # CLOUDFLARE R2 STORAGE (CDN)
+  # ============================================
+  CLOUDFLARE_ACCOUNT_ID=ea644c4a47a499ad4721449cbac587f4
+  CLOUDFLARE_R2_ACCESS_KEY_ID=019aede6fc6182af8fe7afd3e9250f18
+  CLOUDFLARE_R2_SECRET_ACCESS_KEY=efaae3cc02352932a878196229da535d61a366c8c
+  9a3d39f10f8b436bd3e8fe8
+  NEXT_PUBLIC_R2_BUCKET_NAME=style-swipe
+  NEXT_PUBLIC_R2_PUBLIC_URL=https://pub-140b3d87a1b64af6a3193ba8aa685e26.r2
+  .dev
+
+  # ============================================
+  # ANALYTICS (Optional but Recommended)
+  # ============================================
+  NEXT_PUBLIC_POSTHOG_KEY=phc_nzR6sXQbuxC3GjyesqGCJF7Pki1Gcqy0GxsW7FtbHeK
+  NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+
+  # ============================================
+  # EMAIL (Currently Not Configured - Needs Setup)
+  # ============================================
+  SENDGRID_API_KEY=your_sendgrid_api_key_here
+  SENDGRID_FROM_EMAIL=noreply@kctmenswear.com
+  ADMIN_EMAIL=KCTMenswear@gmail.com
+
+  # ============================================
+  # ADMIN API (Legacy - May Not Be Needed)
+  # ============================================
+  NEXT_PUBLIC_ADMIN_API_URL=https://kct-menswear.vercel.app/api
+  NEXT_PUBLIC_ADMIN_API_KEY=your-admin-api-key-here
+
+  # ============================================
+  # PRODUCTION SETTINGS (For Vercel Deployment)
+  # ============================================
+  NEXT_PUBLIC_APP_URL=https://kct-menswear-ai-enhanced.vercel.app
+  NEXT_PUBLIC_SITE_NAME=KCT Menswear
+  NEXT_FORCE_DYNAMIC_RENDERING=true
+  NEXT_PUBLIC_METADATA_BASE=https://kct-menswear-ai-enhanced.vercel.app
+
+  Important Notes for MiniMax:
+
+  1. These are DEVELOPMENT keys
+
+  - Stripe is in TEST mode (safe to use, no real charges)
+  - All Railway APIs are production and working
+  - Supabase is the production database (be careful with data)
+
+  2. Setup Steps:
+
+  # 1. Clone the repo (once it's public)
+  git clone https://github.com/IbrahimAyad/kct-menswear-ai-enhanced.git
+  cd kct-menswear-ai-enhanced
+
+  # 2. Create .env.local file
+  touch .env.local
+
+  # 3. Copy ALL the keys above into .env.local
+
+  # 4. Install dependencies
+  npm install
+
+  # 5. Run development server
+  npm run dev
+
+  # 6. Access at http://localhost:3000
+
+  3. Database Access:
+
+  - Supabase URL: https://gvcswimqaxvylgxbklbz.supabase.co
+  - Main table: products_enhanced (172 products)
+  - Has full read/write access with the service role key
+
+  4. API Endpoints to Test:
+
+  - Products: http://localhost:3000/api/products/enhanced
+  - Chat: Railway API at the URLs above
+  - Size Bot: Railway API for size recommendations
+  - Fashion CLIP: Visual search API
+
+  5. Stripe Test Cards:
+
+  Success: 4242 4242 4242 4242
+  Decline: 4000 0000 0000 0002
+  Any future date, any CVC
+
+  6. Critical Tables in Supabase:
+
+  - products_enhanced - Main product catalog
+  - user_profiles - User accounts
+  - orders - Order history
+  - cart_items - Shopping cart
+
+  IMPORTANT: The SendGrid email API key is not configured. Email
+  functionality won't work until that's set up with a real SendGrid
+  account.
