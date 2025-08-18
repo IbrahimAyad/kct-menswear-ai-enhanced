@@ -100,8 +100,6 @@ const nextConfig: NextConfig = {
     ],
     // Optimize CSS
     optimizeCss: true,
-    // Enable parallel routes
-    parallelRoutes: true,
     // Use new app directory features
     typedRoutes: true,
   },
