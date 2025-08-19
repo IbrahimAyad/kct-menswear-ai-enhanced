@@ -5,14 +5,14 @@
         "id": "1",
         "content": "Enhanced Product Recommendation Engine for AI Chat",
         "details": "Integrate advanced recommendation algorithms into existing AI chat system: 1. Complementary item suggestions (ties with suits, shoes with outfits), 2. 'Customers also bought' analytics, 3. Occasion-based outfit recommendations, 4. Cross-category upselling logic, 5. Integration with existing size/style/customer service bots",
-        "status": "pending",
+        "status": "in_progress",
         "priority": "high"
       },
       "2": {
         "id": "2",
         "content": "Advanced Search with Visual AI",
         "details": "Build visual search capabilities: 1. Image upload interface for 'find similar items', 2. AI-powered image analysis for color/pattern/style matching, 3. Visual similarity scoring system, 4. Integration with product database, 5. Smart search filters combining visual + text search",
-        "status": "pending",
+        "status": "in_progress",
         "priority": "high"
       }
     }
