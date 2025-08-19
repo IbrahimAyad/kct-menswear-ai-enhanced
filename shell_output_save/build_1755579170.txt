@@ -1,0 +1,334 @@
+
+> kct-menswear-ai-enhanced@1.0.0 build
+> next build && echo 'Build completed successfully'
+
+   ▲ Next.js 15.4.5
+   - Environments: .env.local
+   - Experiments (use with caution):
+     · serverActions
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 23.0s
+   Skipping validation of types
+   Skipping linting
+   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ...⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  .⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ..⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ...⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  .⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ..⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ...⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+API key does not start with "SG.".
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  .⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+   Collecting page data  ..   Collecting page data  ...   Collecting page data  .   Collecting page data  ..⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+ ⚠ Using edge runtime on a page currently disables static generation for that page
+ .     ✓ Collecting page data 
+   Generating static pages (0/225)  [    ]   Generating static pages (0/225)  [=   ]   Generating static pages (0/225)  [==  ]   Generating static pages (0/225)  [=== ]   Generating static pages (0/225)  [ ===]   Generating static pages (0/225)  [  ==]⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+API key does not start with "SG.".
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/navy/navy-main-2.jpg, using fallback
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/shirts/classic-fit-collection.jpg, using fallback
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Fall%20Wedding%20Bundles/brown-vest-tie.png, using fallback
+CDN image detected (known to be down): https://cdn.kctmenswear.com/blazers/prom/mens-gold-sequin-pattern-prom-blazer/front.webp, using fallback
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/3000-MM%20(Burgundy)/mm-burgundy-bowtie.jpg, using fallback
+CDN image detected (known to be down): https://cdn.kctmenswear.com/blazers/velvet/mens-emerald-velvet-dinner-jacket/front.webp, using fallback
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/dusty-sage-vest-tie.png, using fallback
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/indigo-2p-white-dusty-pink.png, using fallback
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/casual-bundles/navy-white-shirt-white-pocket-sqaure.png, using fallback
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png, using fallback
+CDN image detected (known to be down): https://cdn.kctmenswear.com/blazers/prom/mens-burgundy-sparkle-pattern-prom-blazer/front.webp, using fallback
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Fall%20Wedding%20Bundles/brown-suit-white-shirt-brown-tie.png, using fallback
+Broken R2 URL detected: https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/3000-MM%20(Burgundy)/mm-burgundy-bowtie.jpg, using fallback
+ ✓ Generating static pages (225/225)
+   Finalizing page optimization  .   Collecting build traces  .   Finalizing page optimization  ..   Collecting build traces  ..   Finalizing page optimization  ...   Collecting build traces  ...   Finalizing page optimization  .   Collecting build traces  .   Finalizing page optimization  ..   Collecting build traces  ..   Finalizing page optimization  ...   Collecting build traces  ...   Finalizing page optimization  .   Collecting build traces  .   Finalizing page optimization  ..   Collecting build traces  ..   Finalizing page optimization  ...   Collecting build traces  ...   Finalizing page optimization  .   Collecting build traces  .   Finalizing page optimization  ..   Collecting build traces  ..   Finalizing page optimization  ...   Collecting build traces  ...   Finalizing page optimization  .   Collecting build traces  .   Finalizing page optimization  ..   Collecting build traces  ..   Finalizing page optimization  ...   Collecting build traces  ...   Finalizing page optimization  .   Collecting build traces  .   Finalizing page optimization  ..   Collecting build traces  ..   Finalizing page optimization  ...   Collecting build traces  ...   Finalizing page optimization  .   Collecting build traces  .   Collecting build traces     ✓ Collecting build traces 
+   Finalizing page optimization     ✓ Finalizing page optimization 
+
+Route (app)                                           Size  First Load JS    
+┌ ○ /                                              6.32 kB         162 kB
+├ ○ /_not-found                                      335 B         100 kB
+├ ○ /account                                        4.5 kB         149 kB
+├ ○ /account-section                               2.45 kB         149 kB
+├ ○ /account-section/addresses                     1.54 kB         105 kB
+├ ○ /account-section/measurements                  5.06 kB         152 kB
+├ ○ /account-section/orders                        2.94 kB         155 kB
+├ ○ /account-section/preferences                   4.13 kB         151 kB
+├ ○ /account-section/profile                       3.88 kB         151 kB
+├ ○ /account-temp                                  2.46 kB         149 kB
+├ ○ /account-temp/addresses                        1.55 kB         105 kB
+├ ○ /account-temp/measurements                     5.04 kB         152 kB
+├ ○ /account-temp/orders                           2.94 kB         155 kB
+├ ○ /account-temp/preferences                      4.09 kB         151 kB
+├ ○ /account-temp/profile                          3.91 kB         151 kB
+├ ○ /account/orders                                2.93 kB         155 kB
+├ ○ /account/payment                               2.72 kB         103 kB
+├ ○ /account/profile                               5.64 kB         154 kB
+├ ○ /account/wishlist                               3.9 kB         182 kB
+├ ○ /admin                                         4.74 kB         163 kB
+├ ○ /admin/agents                                  9.67 kB         117 kB
+├ ○ /admin/ai-dashboard                             121 kB         242 kB
+├ ○ /admin/auto-tagging                            4.17 kB         159 kB
+├ ○ /admin/bundle-generator                        3.53 kB         103 kB
+├ ○ /admin/debug-images                            4.83 kB         113 kB
+├ ○ /admin/fix-images                              4.99 kB         113 kB
+├ ○ /admin/security                                6.13 kB         168 kB
+├ ○ /admin/style-swiper                             5.1 kB         152 kB
+├ ○ /admin/update-inventory                        4.42 kB         112 kB
+├ ○ /admin/update-vests                            3.42 kB         111 kB
+├ ƒ /api/admin/migrate-product-images                335 B         100 kB
+├ ƒ /api/admin/test-cdn-urls                         335 B         100 kB
+├ ƒ /api/agents                                      335 B         100 kB
+├ ƒ /api/ai/chat                                     335 B         100 kB
+├ ƒ /api/ai/outfit-recommendations                   335 B         100 kB
+├ ƒ /api/ai/size-prediction                          335 B         100 kB
+├ ƒ /api/ai/smart-filter                             335 B         100 kB
+├ ƒ /api/ai/style-analysis                           335 B         100 kB
+├ ƒ /api/ai/test-runner                              335 B         100 kB
+├ ƒ /api/analytics/events                            335 B         100 kB
+├ ƒ /api/bundle-generator                            335 B         100 kB
+├ ƒ /api/checkout/enhanced                           335 B         100 kB
+├ ƒ /api/checkout/payment-intent                     335 B         100 kB
+├ ƒ /api/checkout/unified                            335 B         100 kB
+├ ƒ /api/contact                                     335 B         100 kB
+├ ƒ /api/debug/supabase-products                     335 B         100 kB
+├ ƒ /api/email/order-confirmation                    335 B         100 kB
+├ ƒ /api/email/shipping-notification                 335 B         100 kB
+├ ƒ /api/fix-product-images                          335 B         100 kB
+├ ƒ /api/health                                      335 B         100 kB
+├ ƒ /api/inventory                                   335 B         100 kB
+├ ƒ /api/inventory/[id]/subscribe                    335 B         100 kB
+├ ƒ /api/minimax/checkout                            335 B         100 kB
+├ ƒ /api/newsletter                                  335 B         100 kB
+├ ƒ /api/orders/[orderId]                            335 B         100 kB
+├ ƒ /api/products                                    335 B         100 kB
+├ ƒ /api/products/[id]                               335 B         100 kB
+├ ƒ /api/products/enhanced                           335 B         100 kB
+├ ƒ /api/products/enhanced/[id]                      335 B         100 kB
+├ ƒ /api/products/enhanced/debug                     335 B         100 kB
+├ ƒ /api/products/search                             335 B         100 kB
+├ ƒ /api/products/unified                            335 B         100 kB
+├ ƒ /api/products/unified-simple                     335 B         100 kB
+├ ƒ /api/r2/delete                                   335 B         100 kB
+├ ƒ /api/r2/list                                     335 B         100 kB
+├ ƒ /api/r2/presigned                                335 B         100 kB
+├ ƒ /api/r2/upload                                   335 B         100 kB
+├ ƒ /api/recommendations                             335 B         100 kB
+├ ƒ /api/recommendations/affinity                    335 B         100 kB
+├ ƒ /api/recommendations/trending                    335 B         100 kB
+├ ƒ /api/revalidate                                  335 B         100 kB
+├ ƒ /api/stripe/checkout                             335 B         100 kB
+├ ƒ /api/stripe/list-products                        335 B         100 kB
+├ ƒ /api/stripe/products                             335 B         100 kB
+├ ƒ /api/stripe/test                                 335 B         100 kB
+├ ƒ /api/stripe/webhook                              335 B         100 kB
+├ ƒ /api/style-swiper/images                         335 B         100 kB
+├ ƒ /api/style-swiper/test                           335 B         100 kB
+├ ƒ /api/style-swiper/upload                       2.15 kB         102 kB
+├ ƒ /api/supabase/products                           335 B         100 kB
+├ ƒ /api/supabase/products/[id]                      335 B         100 kB
+├ ƒ /api/supabase/products/category/[category]       335 B         100 kB
+├ ƒ /api/supabase/search                             335 B         100 kB
+├ ƒ /api/supabase/test                               335 B         100 kB
+├ ƒ /api/supabase/update-inventory                   335 B         100 kB
+├ ƒ /api/supabase/update-vests                       335 B         100 kB
+├ ƒ /api/test                                        335 B         100 kB
+├ ƒ /api/test-checkout-flow                          335 B         100 kB
+├ ƒ /api/test-checkout-integration                   335 B         100 kB
+├ ƒ /api/test-e2e-checkout                           335 B         100 kB
+├ ƒ /api/test-enhanced-knowledge                   2.15 kB         102 kB
+├ ƒ /api/test-final-checkout                         335 B         100 kB
+├ ƒ /api/test-knowledge-bank                         163 B         103 kB
+├ ƒ /api/test-shared-service                         335 B         100 kB
+├ ƒ /api/test-simple                                 335 B         100 kB
+├ ƒ /api/test-specific-product                       335 B         100 kB
+├ ƒ /api/test-supabase                               335 B         100 kB
+├ ƒ /api/user-profiles/[userId]                      335 B         100 kB
+├ ƒ /api/user-profiles/[userId]/addresses            335 B         100 kB
+├ ƒ /api/user-profiles/[userId]/size-profile         335 B         100 kB
+├ ƒ /api/user-profiles/[userId]/style-preferences    335 B         100 kB
+├ ƒ /api/voice-search                                335 B         100 kB
+├ ƒ /api/webhooks/admin/inventory                    335 B         100 kB
+├ ƒ /api/webhooks/admin/prices                       335 B         100 kB
+├ ƒ /api/webhooks/admin/products                     335 B         100 kB
+├ ƒ /api/webhooks/customers                          335 B         100 kB
+├ ƒ /api/webhooks/inventory                          335 B         100 kB
+├ ƒ /api/webhooks/orders                             335 B         100 kB
+├ ƒ /api/webhooks/stripe                             335 B         100 kB
+├ ƒ /api/wedding-studio/generate                     335 B         100 kB
+├ ƒ /apple-icon                                      335 B         100 kB
+├ ○ /atelier-ai                                    15.6 kB         176 kB
+├ ○ /auth/forgot-password                          2.46 kB         147 kB
+├ ○ /auth/login                                    7.43 kB         161 kB
+├ ○ /auth/reset-password                           3.28 kB         146 kB
+├ ○ /auth/signup                                   2.47 kB         147 kB
+├ ○ /auth/verify-email                               166 B         103 kB
+├ ○ /build-your-look                               6.13 kB         154 kB
+├ ○ /builder                                        256 kB         398 kB
+├ ○ /bundles                                       13.5 kB         236 kB
+├ ƒ /bundles/[id]                                  3.79 kB         179 kB
+├ ○ /cart                                          7.86 kB         223 kB
+├ ○ /checkout                                      5.83 kB         216 kB
+├ ○ /checkout/success                              4.93 kB         155 kB
+├ ○ /collections                                   4.98 kB         226 kB
+├ ○ /collections/accessories                       3.88 kB         172 kB
+├ ○ /collections/black-tie                           139 B         127 kB
+├ ○ /collections/blazers                             140 B         127 kB
+├ ○ /collections/business                          3.94 kB         173 kB
+├ ○ /collections/cocktail                            140 B         127 kB
+├ ○ /collections/complete-looks                     3.9 kB         172 kB
+├ ○ /collections/date-night                          139 B         127 kB
+├ ○ /collections/dress-shirts                      3.91 kB         151 kB
+├ ƒ /collections/dress-shirts/[color]              5.42 kB         211 kB
+├ ○ /collections/filtered                           7.5 kB         237 kB
+├ ○ /collections/formal                              140 B         127 kB
+├ ○ /collections/index                               139 B         127 kB
+├ ○ /collections/jackets                             140 B         127 kB
+├ ○ /collections/knitwear                            139 B         127 kB
+├ ○ /collections/master                              140 B         127 kB
+├ ○ /collections/overview                          5.13 kB         195 kB
+├ ○ /collections/pants                               139 B         127 kB
+├ ○ /collections/prom                              5.37 kB         174 kB
+├ ○ /collections/shirts                              140 B         127 kB
+├ ○ /collections/shoes                               139 B         127 kB
+├ ○ /collections/suits                             3.91 kB         170 kB
+├ ○ /collections/suits-minimal                       139 B         127 kB
+├ ○ /collections/suspender-bowtie                    140 B         127 kB
+├ ○ /collections/ties                              2.16 kB         153 kB
+├ ƒ /collections/ties/[color]                      6.91 kB         213 kB
+├ ○ /collections/velvet-blazers                      139 B         127 kB
+├ ○ /collections/vest-tie-sets                       139 B         127 kB
+├ ○ /collections/vests                               139 B         127 kB
+├ ○ /collections/wedding                           5.35 kB         174 kB
+├ ○ /contact                                       6.13 kB         118 kB
+├ ○ /custom-suits                                  10.3 kB         212 kB
+├ ○ /demo/advanced-commerce                        20.2 kB         176 kB
+├ ○ /demo/auto-tagging                             5.72 kB         160 kB
+├ ○ /demo/dark-bundle-carousel                       11 kB         169 kB
+├ ○ /demo/glass-bundle-cards                       8.72 kB         164 kB
+├ ○ /demo/knowledge-bank-bundles                   8.15 kB         159 kB
+├ ○ /demo/size-bot-product                         6.08 kB         206 kB
+├ ○ /demo/unified-ai                               9.17 kB         159 kB
+├ ○ /dev/test                                      6.95 kB         154 kB
+├ ƒ /icon                                            335 B         100 kB
+├ ○ /live                                          8.29 kB         167 kB
+├ ○ /locations                                     6.88 kB         115 kB
+├ ○ /maintenance                                     335 B         100 kB
+├ ○ /modern                                         7.5 kB         170 kB
+├ ○ /occasions                                     7.34 kB         158 kB
+├ ƒ /occasions/[occasion]                          4.18 kB         175 kB
+├ ○ /occasions/cocktail                            9.73 kB         226 kB
+├ ○ /occasions/prom                                9.81 kB         226 kB
+├ ○ /occasions/wedding-party                       10.7 kB         226 kB
+├ ○ /offline                                       2.19 kB         105 kB
+├ ○ /orders                                        5.29 kB         154 kB
+├ ƒ /orders/[orderId]                              3.14 kB         103 kB
+├ ○ /privacy                                       5.04 kB         113 kB
+├ ○ /products                                      31.1 kB         248 kB
+├ ○ /products-v2                                   4.19 kB         160 kB
+├ ƒ /products-v2/[id]                              22.3 kB         226 kB
+├ ƒ /products/[id]                                 28.1 kB         242 kB
+├ ƒ /products/category/[category]                  4.03 kB         185 kB
+├ ○ /products/dress-shirts                         2.79 kB         113 kB
+├ ƒ /products/dress-shirts/[id]                    4.18 kB         206 kB
+├ ○ /products/suits                                4.28 kB         115 kB
+├ ● /products/suits/[id]                           9.39 kB         230 kB
+├   ├ /products/suits/prod_SlQuqaI2IR6FRm
+├   ├ /products/suits/prod_SlRx1FInciqpks
+├   ├ /products/suits/prod_SlRxbBl5ZnnoDy
+├   └ [+11 more paths]
+├ ○ /products/suits/test-all-images                2.67 kB         108 kB
+├ ○ /products/suits/test-black                       493 B         106 kB
+├ ƒ /products/ties/[id]                             8.1 kB         210 kB
+├ ƒ /products/tuxedos/[id]                         8.13 kB         168 kB
+├ ○ /profile                                       5.95 kB         156 kB
+├ ○ /profile-enhanced                              25.8 kB         211 kB
+├ ○ /prom                                          10.4 kB         313 kB
+├ ○ /prom-collection                               8.21 kB         170 kB
+├ ○ /prom/group-builder                            3.91 kB         146 kB
+├ ○ /prom/guides                                   7.27 kB         310 kB
+├ ○ /prom/videos                                   9.42 kB         159 kB
+├ ○ /recommendations                               8.21 kB         212 kB
+├ ○ /returns                                       6.26 kB         114 kB
+├ ○ /search                                        1.17 kB         185 kB
+├ ○ /shipping                                       4.6 kB         112 kB
+├ ○ /shop-temp/search                              1.09 kB         185 kB
+├ ƒ /sitemap.xml                                     335 B         100 kB
+├ ○ /size-guide                                    8.23 kB         203 kB
+├ ○ /style-quiz                                    14.2 kB         164 kB
+├ ○ /style-swiper-demo                             6.65 kB         156 kB
+├ ○ /style-swiper-r2                               15.7 kB         208 kB
+├ ○ /terms                                         5.37 kB         113 kB
+├ ○ /test                                            335 B         100 kB
+├ ○ /test-cloudflare-images                        1.96 kB         102 kB
+├ ○ /test-debug                                      554 B         100 kB
+├ ○ /test-enhanced-products                        3.23 kB         120 kB
+├ ○ /test-fashion-clip                             5.54 kB         157 kB
+├ ○ /test-minimal-ui                               2.39 kB         214 kB
+├ ○ /test-products                                 3.42 kB         146 kB
+├ ○ /test-products-debug                           1.62 kB         107 kB
+├ ○ /test-r2-limits                                   3 kB         111 kB
+├ ○ /test-stripe-checkout                           3.1 kB         103 kB
+├ ○ /test-supabase-products                        5.49 kB         183 kB
+├ ○ /test-universal-card                           4.67 kB         108 kB
+├ ○ /verify-cloudflare                             1.56 kB         101 kB
+├ ○ /visual-search                                 13.6 kB         211 kB
+├ ○ /voice-search                                  7.47 kB         175 kB
+├ ○ /wedding                                       5.38 kB         319 kB
+├ ○ /wedding-guide                                 16.6 kB         179 kB
+├ ○ /weddings                                      7.33 kB         172 kB
+├ ○ /weddings/collections                          3.92 kB         149 kB
+├ ○ /weddings/color-matching                       3.99 kB         146 kB
+├ ○ /weddings/coordination                           988 B         150 kB
+├ ○ /weddings/group-ordering                        3.5 kB         146 kB
+├ ○ /weddings/seasonal                             3.88 kB         146 kB
+└ ○ /weddings/video-lookbook                       12.8 kB         163 kB
++ First Load JS shared by all                      99.9 kB
+  ├ chunks/4bd1b696-9909f507f95988b8.js            54.1 kB
+  ├ chunks/5964-7533408aa5f4073d.js                43.7 kB
+  └ other shared chunks (total)                     2.1 kB
+
+
+ƒ Middleware                                       69.8 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+Build completed successfully
