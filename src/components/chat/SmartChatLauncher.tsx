@@ -66,24 +66,28 @@ export function SmartChatLauncher() {
   ];
 
   const handleChatSelect = (chatId: string) => {
+    // Close all existing chats first
+    setShowCustomerService(false);
+    setShowAtelierChat(false);
+    setShowSizeAssistant(false);
+    
     setActiveChat(chatId);
     setIsExpanded(false);
     
     // Open the specific chat interface
-    switch(chatId) {
-      case 'support':
-        // Open customer support chat
-        setShowCustomerService(true);
-        break;
-      case 'stylist':
-        // Open AI stylist chat
-        setShowAtelierChat(true);
-        break;
-      case 'sizing':
-        // Open size assistant
-        setShowSizeAssistant(true);
-        break;
-    }
+    setTimeout(() => {
+      switch(chatId) {
+        case 'support':
+          setShowCustomerService(true);
+          break;
+        case 'stylist':
+          setShowAtelierChat(true);
+          break;
+        case 'sizing':
+          setShowSizeAssistant(true);
+          break;
+      }
+    }, 100); // Small delay to ensure smooth transition
   };
 
   const toggleExpanded = () => {

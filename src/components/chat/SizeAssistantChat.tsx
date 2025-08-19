@@ -195,10 +195,10 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
 
       {/* Fit Preference Selection Screen */}
       {showFitPreference ? (
-        <div className="flex-1 p-6 space-y-4">
+        <div className="flex-1 p-4 space-y-3 overflow-y-auto">
           <div className="text-center space-y-2">
-            <h2 className="text-xl font-semibold text-gray-900">How do you like your suits to fit?</h2>
-            <p className="text-sm text-gray-600">Select your preferred fit style</p>
+            <h2 className="text-lg font-semibold text-gray-900">How do you like your suits to fit?</h2>
+            <p className="text-xs text-gray-600">Select your preferred fit style</p>
           </div>
           
           <div className="space-y-3">
@@ -212,11 +212,11 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
                   <Sparkles className="w-5 h-5 text-yellow-600" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-gray-900">
                     Slim Fit 
-                    <span className="text-xs text-gray-500 font-normal">Modern & Tailored</span>
+                    <span className="text-xs text-gray-500 font-normal ml-1">Modern & Tailored</span>
                   </h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-xs text-gray-600 mt-1">
                     Closer to the body with a contemporary silhouette
                   </p>
                 </div>
@@ -236,12 +236,12 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-gray-900">
                     Regular Fit 
-                    <span className="text-xs text-gray-500 font-normal">Classic & Versatile</span>
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">✓ Recommended</span>
+                    <span className="text-xs text-gray-500 font-normal ml-1">Classic & Versatile</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full ml-2">✓ Recommended</span>
                   </h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-xs text-gray-600 mt-1">
                     Traditional fit with comfortable room through chest and waist
                   </p>
                 </div>
@@ -261,11 +261,11 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-gray-900">
                     Relaxed Fit 
-                    <span className="text-xs text-gray-500 font-normal">Comfort First</span>
+                    <span className="text-xs text-gray-500 font-normal ml-1">Comfort First</span>
                   </h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="text-xs text-gray-600 mt-1">
                     Extra room for maximum comfort and ease of movement
                   </p>
                 </div>
@@ -277,10 +277,10 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
           {/* Not Sure Option */}
           <button
             onClick={() => handleFitSelection('Regular Fit')}
-            className="w-full py-3 text-burgundy hover:text-burgundy-700 transition-colors flex items-center justify-center gap-2"
+            className="w-full py-2 text-burgundy hover:text-burgundy-700 transition-colors flex items-center justify-center gap-2"
           >
-            <Info className="w-4 h-4" />
-            <span className="text-sm">Not sure which to choose? We recommend Regular Fit</span>
+            <Info className="w-3 h-3" />
+            <span className="text-xs">Not sure which to choose? We recommend Regular Fit</span>
           </button>
 
           {/* Back to Chat Link */}
@@ -294,7 +294,7 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
                 timestamp: new Date()
               }]);
             }}
-            className="w-full py-2 text-gray-500 hover:text-gray-700 text-sm"
+            className="w-full py-2 text-gray-500 hover:text-gray-700 text-xs"
           >
             Skip to chat →
           </button>
