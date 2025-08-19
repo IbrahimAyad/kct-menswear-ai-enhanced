@@ -177,7 +177,7 @@ class EnhancedSearchService {
       let clipData: any = {};
       if (clipResponse.ok) {
         clipData = await clipResponse.json();
-        console.log('Fashion CLIP analysis:', clipData);
+
       }
       
       // Step 2: Extract features from Fashion CLIP response

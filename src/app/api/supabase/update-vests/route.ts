@@ -5,152 +5,152 @@ import { supabaseAdmin } from '@/lib/supabase/client'
 const vestProducts = [
   {
     name: 'Turquoise Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/Turquoise-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/Turquoise-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/Turquoise-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/Turquoise-vest.jpg',
     colorFamily: 'Blue'
   },
   {
     name: 'Blush Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/blush-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/blush-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/blush-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/blush-vest.jpg',
     colorFamily: 'Pink'
   },
   {
     name: 'Burnt Orange Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/burnt-orange-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/burnt-orange-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/burnt-orange-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/burnt-orange-vest.jpg',
     colorFamily: 'Orange'
   },
   {
     name: 'Canary Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/canary-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/canary-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/canary-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/canary-vest.jpg',
     colorFamily: 'Yellow'
   },
   {
     name: 'Carolina Blue Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/carolina-blue-men-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/carolina-blue-men-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/carolina-blue-men-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/carolina-blue-men-vest.jpg',
     colorFamily: 'Blue'
   },
   {
     name: 'Chocolate Brown Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/chocolate-brown-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/chocolate-brown-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/chocolate-brown-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/chocolate-brown-vest.jpg',
     colorFamily: 'Brown'
   },
   {
     name: 'Coral Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/coral-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/coral-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/coral-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/coral-vest.jpg',
     colorFamily: 'Pink'
   },
   {
     name: 'Dark Burgundy Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dark-burgundy-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dar-burgundy-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dark-burgundy-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dar-burgundy-vest.jpg',
     colorFamily: 'Red'
   },
   {
     name: 'Dusty Rose Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-rose-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-rose-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dusty-rose-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dusty-rose-vest.jpg',
     colorFamily: 'Pink'
   },
   {
     name: 'Dusty Sage Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-vest.png',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dusty-sage-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/dusty-sage-vest.png',
     colorFamily: 'Green'
   },
   {
     name: 'Emerald Green Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/emerald-green=model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/emerald-green-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/emerald-green=model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/emerald-green-vest.jpg',
     colorFamily: 'Green'
   },
   {
     name: 'Fuchsia Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/fuchsia-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/fuchsia-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/fuchsia-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/fuchsia-vest.jpg',
     colorFamily: 'Pink'
   },
   {
     name: 'Gold Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/gold-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/gold-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/gold-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/gold-vest.jpg',
     colorFamily: 'Yellow'
   },
   {
     name: 'Grey Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/grey-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/grey-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/grey-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/grey-vest.jpg',
     colorFamily: 'Grey'
   },
   {
     name: 'Hunter Green Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/hunter-green-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/hunter-green-model.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/hunter-green-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/hunter-green-model.jpg',
     colorFamily: 'Green'
   },
   {
     name: 'Lilac Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/lilac-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/lilac-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/lilac-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/lilac-vest.jpg',
     colorFamily: 'Purple'
   },
   {
     name: 'Mint Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/mint-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/mint-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/mint-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/mint-vest.jpg',
     colorFamily: 'Green'
   },
   {
     name: 'Peach Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/peach-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/peach-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/peach-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/peach-vest.jpg',
     colorFamily: 'Orange'
   },
   {
     name: 'Pink Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/pink-vest-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/pink-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/pink-vest-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/pink-vest.jpg',
     colorFamily: 'Pink'
   },
   {
     name: 'Plum Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/plum-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/plum-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/plum-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/plum-vest.jpg',
     colorFamily: 'Purple'
   },
   {
     name: 'Powder Blue Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/powder-blue-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/powder-blue-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/powder-blue-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/powder-blue-vest.jpg',
     colorFamily: 'Blue'
   },
   {
     name: 'Red Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/red-vest-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/red-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/red-vest-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/red-vest.jpg',
     colorFamily: 'Red'
   },
   {
     name: 'Rose Gold Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/rose-gold-vest.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/rose-gold-vest.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/rose-gold-vest.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/rose-gold-vest.jpg',
     colorFamily: 'Pink'
   },
   {
     name: 'Royal Blue Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/royal-blue-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/royal-blue-model.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/royal-blue-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/royal-blue-model.jpg',
     colorFamily: 'Blue'
   },
   {
     name: 'Wine Vest & Tie Set',
-    modelImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/wine-model.png',
-    productImage: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/wine-veset.jpg',
+    modelImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/wine-model.png',
+    productImage: 'https://cdn.kctmenswear.com/menswear-accessories/vest-tie-set/wine-veset.jpg',
     colorFamily: 'Red'
   }
 ]

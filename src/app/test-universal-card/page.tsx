@@ -51,16 +51,16 @@ export default function TestUniversalCardPage() {
       compare_at_price: 399.99,
       images: {
         hero: {
-          url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
+          url: 'https://cdn.kctmenswear.com/double_breasted/mens_double_breasted_suit_model_2024_0.webp',
           alt: 'Navy Premium Suit - Front View'
         },
         gallery: [
           {
-            cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_1.webp',
+            cdn_url: 'https://cdn.kctmenswear.com/double_breasted/mens_double_breasted_suit_model_2024_1.webp',
             alt_text: 'Navy Premium Suit - Side View'
           },
           {
-            cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_2.webp',
+            cdn_url: 'https://cdn.kctmenswear.com/double_breasted/mens_double_breasted_suit_model_2024_2.webp',
             alt_text: 'Navy Premium Suit - Back View'
           }
         ]
@@ -74,12 +74,12 @@ export default function TestUniversalCardPage() {
       base_price: 349.99,
       images: {
         primary: {
-          cdn_url: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png',
+          cdn_url: 'https://cdn.kctmenswear.com/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png',
           alt_text: 'Black Tuxedo Classic'
         },
         gallery: [
           {
-            cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/tuxedo/black_tuxedo_detail.webp',
+            cdn_url: 'https://cdn.kctmenswear.com/tuxedo/black_tuxedo_detail.webp',
             alt_text: 'Black Tuxedo Detail'
           }
         ]
@@ -93,16 +93,16 @@ export default function TestUniversalCardPage() {
       compare_at_price: 299.99,
       images: {
         hero: {
-          url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_burgundy_velvet_prom_blazer_model_1015.webp',
+          url: 'https://cdn.kctmenswear.com/prom_blazer/mens_burgundy_velvet_prom_blazer_model_1015.webp',
           alt: 'Burgundy Velvet Blazer'
         },
         gallery: [
           {
-            cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/burgundy_velvet_detail.webp',
+            cdn_url: 'https://cdn.kctmenswear.com/prom_blazer/burgundy_velvet_detail.webp',
             alt_text: 'Burgundy Velvet Detail'
           },
           {
-            cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/burgundy_velvet_back.webp',
+            cdn_url: 'https://cdn.kctmenswear.com/prom_blazer/burgundy_velvet_back.webp',
             alt_text: 'Burgundy Velvet Back'
           }
         ]
@@ -116,7 +116,7 @@ export default function TestUniversalCardPage() {
       base_price: 279.99,
       images: {
         hero: {
-          url: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Summer%20Wedding%20Bundles/sand-suit-white-shirt-sage-green-tie.png',
+          url: 'https://cdn.kctmenswear.com/kct-prodcuts/Summer%20Wedding%20Bundles/sand-suit-white-shirt-sage-green-tie.png',
           alt: 'Light Grey Summer Suit'
         }
       }
@@ -128,20 +128,20 @@ export default function TestUniversalCardPage() {
       base_price: 319.99,
       images: {
         primary: {
-          cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/suits/royal_blue/main.webp',
+          cdn_url: 'https://cdn.kctmenswear.com/suits/royal_blue/main.webp',
           alt_text: 'Royal Blue Slim Fit'
         },
         gallery: [
           {
-            cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/suits/royal_blue/side.webp',
+            cdn_url: 'https://cdn.kctmenswear.com/suits/royal_blue/side.webp',
             alt_text: 'Royal Blue Side'
           },
           {
-            cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/suits/royal_blue/back.webp',
+            cdn_url: 'https://cdn.kctmenswear.com/suits/royal_blue/back.webp',
             alt_text: 'Royal Blue Back'
           },
           {
-            cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/suits/royal_blue/detail.webp',
+            cdn_url: 'https://cdn.kctmenswear.com/suits/royal_blue/detail.webp',
             alt_text: 'Royal Blue Detail'
           }
         ]
@@ -156,12 +156,12 @@ export default function TestUniversalCardPage() {
       compare_at_price: 349.99,
       images: {
         hero: {
-          url: 'https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Fall%20Wedding%20Bundles/brown-suit-white-shirt-brown-tie.png',
+          url: 'https://cdn.kctmenswear.com/kct-prodcuts/Fall%20Wedding%20Bundles/brown-suit-white-shirt-brown-tie.png',
           alt: 'Charcoal Business Essential'
         },
         gallery: [
           {
-            cdn_url: 'https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/suits/charcoal/detail.webp',
+            cdn_url: 'https://cdn.kctmenswear.com/suits/charcoal/detail.webp',
             alt_text: 'Charcoal Detail'
           }
         ]

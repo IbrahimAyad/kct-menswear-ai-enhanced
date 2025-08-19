@@ -167,12 +167,12 @@ async function fixProductImages() {
       .eq('visibility', true)
     
     if (error) {
-      console.error('Error fetching products:', error)
+
       throw error
     }
     
     if (!products || products.length === 0) {
-      console.log('No products found')
+
       return fixedIds
     }
     
@@ -192,19 +192,19 @@ async function fixProductImages() {
           .eq('id', product.id)
         
         if (updateError) {
-          console.error(`Error updating product ${product.name}:`, updateError)
+
         } else {
-          console.log(`Fixed images for: ${product.name}`)
+
           fixedIds.push(product.id)
         }
       } else {
-        console.log(`No mapping found for: ${product.name}`)
+
       }
     }
     
     return fixedIds
   } catch (error) {
-    console.error('Error in fixProductImages:', error)
+
     throw error
   }
 }

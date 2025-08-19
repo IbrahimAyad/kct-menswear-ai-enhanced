@@ -78,7 +78,7 @@ export function handleImageError(event: React.SyntheticEvent<HTMLImageElement>, 
   if (category && CDN_FALLBACKS[category as keyof typeof CDN_FALLBACKS]) {
     const categoryFallback = CDN_FALLBACKS[category as keyof typeof CDN_FALLBACKS];
     if (currentSrc !== categoryFallback) {
-      console.log(`Trying category fallback for ${category}: ${categoryFallback}`);
+
       img.src = categoryFallback;
       return;
     }

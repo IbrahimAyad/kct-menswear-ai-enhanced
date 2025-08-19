@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { PromHub } from '@/components/prom/PromHub';
 import { Product } from '@/lib/types';
 import Link from 'next/link';
@@ -188,18 +189,18 @@ export default function PromPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gold/20 sticky top-16 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      {/* Enhanced Header */}
+      <div className="bg-white/95 backdrop-blur-sm border-b border-purple-200/30 sticky top-16 z-40">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gold transition-colors group">
+            <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors group">
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               Back to Home
             </Link>
 
             <Link 
               href="/prom/guides" 
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
             >
               <BookOpen className="h-4 w-4" />
               Style Guides
@@ -208,90 +209,142 @@ export default function PromPage() {
         </div>
       </div>
 
-      {/* Hero Section with Video */}
+      {/* Enhanced Hero Section with Video */}
       <section className="relative h-screen overflow-hidden">
         <div className="absolute inset-0">
           <VideoPlayer
             videoId="6003e03beafc379e3f4fb5b81b703b84"
             className="w-full h-full object-cover scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-purple-900/60 via-purple-600/40 to-indigo-900/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-900/70 via-purple-600/50 to-indigo-900/80" />
         </div>
 
         <div className="relative z-10 h-full flex items-center justify-center text-white">
-          <div className="text-center px-4 max-w-5xl mx-auto">
-            <div className="space-y-2 mb-8 animate-fade-up">
-              <div className="h-px w-24 bg-purple-400 mx-auto"></div>
-              <p className="text-purple-300 text-sm tracking-[0.3em] uppercase">Make Your Mark</p>
-              <div className="h-px w-24 bg-purple-400 mx-auto"></div>
-            </div>
-            <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif mb-8 animate-fade-up leading-[0.9]" style={{ animationDelay: '0.2s' }}>
+          <div className="text-center px-6 max-w-6xl mx-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-2 mb-12"
+            >
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <div className="h-px w-16 bg-purple-400" />
+                <p className="text-purple-300 text-sm tracking-[0.4em] uppercase font-medium">Make Your Mark</p>
+                <div className="h-px w-16 bg-purple-400" />
+              </div>
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="text-6xl md:text-8xl lg:text-9xl font-light mb-8 leading-[0.85]"
+            >
               Prom
-              <span className="block bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mt-2">Central</span>
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl mb-12 font-light animate-fade-up max-w-4xl mx-auto leading-relaxed text-gray-100" style={{ animationDelay: '0.4s' }}>
-              Stand out on your special night with our curated prom collections, school-specific packages, and exclusive group discounts
-            </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-up" style={{ animationDelay: '0.6s' }}>
-              <button className="px-10 py-6 text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-sm shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105">
+              <span className="block bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent mt-2 font-normal italic">
+                Central
+              </span>
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl md:text-2xl lg:text-3xl mb-16 font-light max-w-5xl mx-auto leading-relaxed text-gray-100"
+            >
+              Stand out on your special night with our curated prom collections, 
+              school-specific packages, and exclusive group discounts
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-6 justify-center"
+            >
+              <button className="px-12 py-4 text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg shadow-2xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:scale-105">
                 Find Your School
               </button>
-              <button className="px-10 py-6 text-lg font-semibold bg-white/5 backdrop-blur-sm text-white border-white/50 hover:bg-white hover:text-purple-600 rounded-sm transition-all duration-300">
+              <button className="px-12 py-4 text-lg font-semibold bg-white/10 backdrop-blur-sm text-white border border-white/30 hover:bg-white hover:text-purple-600 rounded-lg transition-all duration-300">
                 Browse Packages
               </button>
-            </div>
+            </motion.div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-xs tracking-widest uppercase">Explore</span>
-            <div className="w-px h-12 bg-white/50"></div>
+        {/* Enhanced Scroll Indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white"
+        >
+          <div className="flex flex-col items-center gap-3 animate-bounce">
+            <span className="text-xs tracking-widest uppercase font-medium">Explore</span>
+            <div className="w-px h-16 bg-gradient-to-b from-white to-transparent" />
           </div>
-        </div>
+        </motion.div>
       </section>
 
-      {/* Features Section */}
+      {/* Enhanced Features Section */}
       <section className="py-24 bg-white">
-        <div className="container-main">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-serif mb-6">Why Choose Prom Central?</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We make prom planning easy with everything you need in one place
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-5xl md:text-6xl font-light text-gray-900 mb-8">Why Choose Prom Central?</h2>
+            <div className="w-24 h-px bg-purple-300 mx-auto mb-8" />
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              We make prom planning effortless with everything you need in one elegant experience
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
-                <span className="text-3xl text-white">🎓</span>
-              </div>
-              <h3 className="font-serif text-xl font-semibold mb-3 group-hover:text-purple-600 transition-colors">School Partnerships</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Official partnerships with local schools for coordinated group looks and exclusive pricing
-              </p>
-            </div>
-
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
-                <span className="text-3xl text-white">✨</span>
-              </div>
-              <h3 className="font-serif text-xl font-semibold mb-3 group-hover:text-blue-600 transition-colors">Trending Styles</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Stay current with the latest prom trends and social media-worthy looks that photograph beautifully
-              </p>
-            </div>
-
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
-                <span className="text-3xl text-white">💰</span>
-              </div>
-              <h3 className="font-serif text-xl font-semibold mb-3 group-hover:text-indigo-600 transition-colors">Group Savings</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Save up to 30% when you coordinate with friends - the bigger the group, the bigger the savings
-              </p>
-            </div>
+          <div className="grid md:grid-cols-3 gap-12">
+            {[
+              {
+                emoji: '🎓',
+                title: 'School Partnerships',
+                description: 'Official partnerships with local schools for coordinated group looks and exclusive pricing',
+                color: 'from-purple-500 to-purple-600',
+                hoverColor: 'group-hover:text-purple-600'
+              },
+              {
+                emoji: '✨',
+                title: 'Trending Styles',
+                description: 'Stay current with the latest prom trends and social media-worthy looks that photograph beautifully',
+                color: 'from-blue-500 to-blue-600',
+                hoverColor: 'group-hover:text-blue-600'
+              },
+              {
+                emoji: '💰',
+                title: 'Group Savings',
+                description: 'Save up to 30% when you coordinate with friends - the bigger the group, the bigger the savings',
+                color: 'from-indigo-500 to-indigo-600',
+                hoverColor: 'group-hover:text-indigo-600'
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="text-center group"
+              >
+                <div className={`w-24 h-24 bg-gradient-to-br ${feature.color} rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-12`}>
+                  <span className="text-4xl">{feature.emoji}</span>
+                </div>
+                <h3 className={`font-light text-2xl font-semibold mb-4 transition-colors ${feature.hoverColor}`}>
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed text-lg">
+                  {feature.description}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

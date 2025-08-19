@@ -606,15 +606,15 @@ export async function GET(request: NextRequest) {
     const allProducts = [...enhancedProducts];
     
     // Debug logging
-    console.log('API: Enhanced products count:', enhancedProducts.length);
-    console.log('API: Total products before search:', allProducts.length);
+
+
     if (allProducts.length > 0) {
-      console.log('API: Sample product:', JSON.stringify(allProducts[0], null, 2));
+
     }
     
     // Perform unified search with all products
     const results = await unifiedSearch(filters, allProducts);
-    console.log('API: Products after search:', results.products.length);
+
     
     // Add preset metadata if applicable
     if (presetData) {

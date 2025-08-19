@@ -71,13 +71,7 @@ function CollectionsContent() {
     autoFetch: true
   });
   
-  // Debug logging (only in development)
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Collections: Products received:', products?.length);
-    if (products && products.length > 0) {
-      console.log('Collections: Sample product:', products[0]);
-    }
-  }
+
 
   // Calculate category counts
   const categoriesWithCounts = useMemo(() => {

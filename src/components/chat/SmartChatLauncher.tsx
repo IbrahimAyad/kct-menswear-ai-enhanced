@@ -12,8 +12,6 @@ import {
   Bell
 } from "lucide-react";
 import { SizeAssistantChat } from "./SizeAssistantChat";
-import { AtelierStyleChat } from "./AtelierStyleChat";
-import { CustomerServiceChat } from "./CustomerServiceChat";
 
 interface ChatOption {
   id: string;
@@ -38,8 +36,6 @@ export function SmartChatLauncher() {
   const [notification, setNotification] = useState<Notification | null>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showSizeAssistant, setShowSizeAssistant] = useState(false);
-  const [showAtelierChat, setShowAtelierChat] = useState(false);
-  const [showCustomerService, setShowCustomerService] = useState(false);
 
   const chatOptions: ChatOption[] = [
     {
@@ -66,28 +62,24 @@ export function SmartChatLauncher() {
   ];
 
   const handleChatSelect = (chatId: string) => {
-    // Close all existing chats first
-    setShowCustomerService(false);
-    setShowAtelierChat(false);
-    setShowSizeAssistant(false);
-    
     setActiveChat(chatId);
     setIsExpanded(false);
     
     // Open the specific chat interface
-    setTimeout(() => {
-      switch(chatId) {
-        case 'support':
-          setShowCustomerService(true);
-          break;
-        case 'stylist':
-          setShowAtelierChat(true);
-          break;
-        case 'sizing':
-          setShowSizeAssistant(true);
-          break;
-      }
-    }, 100); // Small delay to ensure smooth transition
+    switch(chatId) {
+      case 'support':
+        // Open customer support chat (to be implemented)
+        console.log('Opening customer support chat');
+        break;
+      case 'stylist':
+        // Open AI stylist chat (to be implemented)
+        console.log('Opening Atelier Stylist chat');
+        break;
+      case 'sizing':
+        // Open size assistant
+        setShowSizeAssistant(true);
+        break;
+    }
   };
 
   const toggleExpanded = () => {
@@ -369,27 +361,49 @@ export function SmartChatLauncher() {
         )}
       </AnimatePresence>
 
-      {/* Atelier Style Chat */}
+      {/* Other Chat Windows - Placeholder for future implementation */}
       <AnimatePresence>
-        {showAtelierChat && (
-          <AtelierStyleChat
-            onClose={() => {
-              setShowAtelierChat(false);
-              setActiveChat(null);
-            }}
-          />
-        )}
-      </AnimatePresence>
+        {activeChat && activeChat !== 'sizing' && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="fixed bottom-24 right-6 z-40 w-96 h-[500px] bg-white rounded-2xl shadow-2xl overflow-hidden"
+          >
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-burgundy to-burgundy-700 text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {chatOptions.find(o => o.id === activeChat)?.icon}
+                <div>
+                  <h3 className="font-semibold">{chatOptions.find(o => o.id === activeChat)?.title}</h3>
+                  <p className="text-xs text-white/80">Online now</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setActiveChat(null)}
+                className="hover:bg-white/20 p-1 rounded transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-      {/* Customer Service Chat */}
-      <AnimatePresence>
-        {showCustomerService && (
-          <CustomerServiceChat
-            onClose={() => {
-              setShowCustomerService(false);
-              setActiveChat(null);
-            }}
-          />
+            {/* Chat Content */}
+            <div className="flex-1 p-4 bg-gray-50">
+              <div className="text-center text-gray-500 mt-20">
+                <p className="text-sm">Chat interface for {activeChat}</p>
+                <p className="text-xs mt-2">Coming soon!</p>
+              </div>
+            </div>
+
+            {/* Chat Input */}
+            <div className="p-4 border-t">
+              <input
+                type="text"
+                placeholder="Type your message..."
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-burgundy"
+              />
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

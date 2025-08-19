@@ -328,13 +328,13 @@ Successfully optimized the master collection page (`/collections`) with the foll
 - Product info overlay at bottom-left of product cards
 
 #### Updated Category Images:
-- Suits: `https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/double_breasted/mens_double_breasted_suit_model_2024_0.webp`
-- Shirts: `https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp`
-- Vests: `https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-solid-vest-tie/dusty-sage-model.png`
-- Jackets: `https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp`
+- Suits: `https://cdn.kctmenswear.com/double_breasted/mens_double_breasted_suit_model_2024_0.webp`
+- Shirts: `https://cdn.kctmenswear.com/dress_shirts/stretch_collar/mens_dress_shirt_stretch_collar_model_3005_0.webp`
+- Vests: `https://cdn.kctmenswear.com/main-solid-vest-tie/dusty-sage-model.png`
+- Jackets: `https://cdn.kctmenswear.com/prom_blazer/mens_red_floral_pattern_prom_blazer_model_1018.webp`
 - Shirt & Tie: `https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/dd5c1f7d-722d-4e17-00be-60a3fdb33900/public`
 - Knitwear: `https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/9ac91a19-5951-43d4-6a98-c9d658765c00/public`
-- Accessories: `https://pub-8ea0502158a94b8ca8a7abb9e18a57e8.r2.dev/main-suspender-bowtie-set/powder-blue-model.png`
+- Accessories: `https://cdn.kctmenswear.com/main-suspender-bowtie-set/powder-blue-model.png`
 - Shoes: `https://imagedelivery.net/QI-O2U_ayTU_H_Ilcb4c6Q/7d203d2a-63b7-46d3-9749-1f203e4ccc00/public`
 
 ### Style Swiper Enhancement
@@ -360,12 +360,12 @@ Successfully implemented scroll-based collapsible header for suit collection pag
 - **Item counts**: Always visible
 
 #### Updated Suit Category Images:
-- Summer Suits: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Summer%20Wedding%20Bundles/sand-suit-white-shirt-sage-green-tie.png`
-- Tuxedos: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png`
-- Classic Suits: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/casual-bundles/navy-white-shirt-white-pocket-sqaure.png`
-- Wedding Suits: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Spring%20Wedding%20Bundles/indigo-2p-white-dusty-pink.png`
-- Luxury Suits: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/Fall%20Wedding%20Bundles/brown-suit-white-shirt-brown-tie.png`
-- Three Piece: `https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/kct-prodcuts/suits/black/main.png`
+- Summer Suits: `https://cdn.kctmenswear.com/kct-prodcuts/Summer%20Wedding%20Bundles/sand-suit-white-shirt-sage-green-tie.png`
+- Tuxedos: `https://cdn.kctmenswear.com/kct-prodcuts/Tuxedo-Bundles/black-tuxedo-white-tix-shirt-black-blowtie.png`
+- Classic Suits: `https://cdn.kctmenswear.com/kct-prodcuts/casual-bundles/navy-white-shirt-white-pocket-sqaure.png`
+- Wedding Suits: `https://cdn.kctmenswear.com/kct-prodcuts/Spring%20Wedding%20Bundles/indigo-2p-white-dusty-pink.png`
+- Luxury Suits: `https://cdn.kctmenswear.com/kct-prodcuts/Fall%20Wedding%20Bundles/brown-suit-white-shirt-brown-tie.png`
+- Three Piece: `https://cdn.kctmenswear.com/kct-prodcuts/suits/black/main.png`
 
 ---
 

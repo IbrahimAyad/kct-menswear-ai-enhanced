@@ -5,10 +5,10 @@ import { useProductStore } from "@/lib/store/productStore";
 import { formatPrice, getSizeLabel } from "@/lib/utils/format";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ShoppingBag, Plus, Minus, Trash2, ArrowRight, Tag, User, Lock, Clock, Gift } from "lucide-react";
+import { ShoppingBag, Plus, Minus, X, Shield, Clock, Star, Lock, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { loadStripe } from "@stripe/stripe-js";
 import { CheckoutBenefits } from "@/components/checkout/CheckoutBenefits";
@@ -17,20 +17,18 @@ import { trackBeginCheckout, trackRemoveFromCart, trackViewCart } from "@/lib/an
 import { trackInitiateCheckout } from "@/lib/analytics/facebook-pixel";
 import { createClient } from '@/lib/supabase/client';
 import { getCoreProductById, isCoreProduct } from '@/lib/config/coreProducts';
-import { AICartRecommendations } from '@/components/cart/AICartRecommendations';
+import { useState, useEffect } from "react";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function CartPage() {
-  const { items, cartSummary, updateQuantity, removeFromCart, isLoading } = useCart();
+  const { items, cartSummary, updateQuantity, removeFromCart, clearCart } = useCart();
   const { products } = useProductStore();
   const { user } = useAuth();
-  const [promoCode, setPromoCode] = useState("");
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
   const [showGuestCheckout, setShowGuestCheckout] = useState(false);
   const [guestEmail, setGuestEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(false);
-  const [savedForLater] = useState<any[]>([]);
 
   // Enable cart persistence
   useCartPersistence();
@@ -47,6 +45,11 @@ export default function CartPage() {
   }));
 
   const validCartItems = cartItemsWithProducts.filter(item => item.product);
+
+  // Return empty cart if no items
+  if (validCartItems.length === 0) {
+    return <EmptyCart />;
+  }
 
   // Track cart view
   useEffect(() => {
@@ -106,21 +109,18 @@ export default function CartPage() {
             quantity: item.quantity,
             selectedSize: item.size,
             stripePriceId: coreProduct.stripe_price_id,
-            enhanced: false,
-            category: coreProduct.category,
-            image: coreProduct.image_url
+            enhanced: isEnhanced
           };
         } else {
           // Enhanced or catalog product
+          const product = products.find(p => p.id === item.productId);
           return {
             id: item.productId,
-            name: item.name || 'Product',
+            name: product?.name || 'Unknown Product',
             price: item.price || 0, // Price already in cents
             quantity: item.quantity,
             selectedSize: item.size,
-            enhanced: isEnhanced,
-            category: item.category || 'general',
-            image: item.image
+            enhanced: isEnhanced
           };
         }
       });
@@ -133,7 +133,6 @@ export default function CartPage() {
         },
         body: JSON.stringify({
           items: formattedItems,
-          customerEmail: user?.email || undefined,
           successUrl: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
           cancelUrl: `${window.location.origin}/cart`
         })
@@ -188,21 +187,18 @@ export default function CartPage() {
             quantity: item.quantity,
             selectedSize: item.size,
             stripePriceId: coreProduct.stripe_price_id,
-            enhanced: false,
-            category: coreProduct.category,
-            image: coreProduct.image_url
+            enhanced: isEnhanced
           };
         } else {
           // Enhanced or catalog product
+          const product = products.find(p => p.id === item.productId);
           return {
             id: item.productId,
-            name: item.name || 'Product',
+            name: product?.name || 'Unknown Product',
             price: item.price || 0, // Price already in cents
             quantity: item.quantity,
             selectedSize: item.size,
-            enhanced: isEnhanced,
-            category: item.category || 'general',
-            image: item.image
+            enhanced: isEnhanced
           };
         }
       });
@@ -249,31 +245,10 @@ export default function CartPage() {
     }
   };
 
-  if (items.length === 0) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white">
-        <div className="text-center max-w-md mx-auto px-4">
-          <div className="w-24 h-24 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-8">
-            <ShoppingBag className="h-12 w-12 text-gold" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-serif mb-6">Your Cart is Empty</h1>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            Discover our premium collection of expertly crafted menswear
-          </p>
-          <Link href="/products">
-            <Button size="lg" className="bg-gold hover:bg-gold/90 text-black px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-              Start Shopping
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
+  // Main return for cart with items
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      <div className="container-main py-12">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-stone-100 py-12">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 text-gold mb-4">
             <div className="h-px w-12 bg-gold"></div>
@@ -331,69 +306,61 @@ export default function CartPage() {
                           >
                             {item.product.name}
                           </Link>
-                          <p className="text-gray-600 mt-2">
-                            Size: {getSizeLabel(item.size)}
-                          </p>
-                          <p className="text-sm text-gray-500 mt-1">
-                            SKU: {item.product.sku}
-                          </p>
+                          <div className="text-sm text-gray-600 mt-1">
+                            Size: {getSizeLabel(item.size)} • {item.product.category}
+                          </div>
                         </div>
-                        <button
-                          onClick={() => {
-                            // Track remove from cart
-                            if (item.product) {
-                              trackRemoveFromCart({
-                                item_id: item.product.id,
-                                item_name: item.product.name,
-                                category: item.product.category,
-                                price: item.product.price / 100,
-                                quantity: item.quantity,
-                                size: item.size,
-                              });
-                            }
-                            removeFromCart(item.productId, item.size);
-                          }}
-                          className="text-red-500 hover:text-red-600 p-2 hover:bg-red-50 rounded-sm transition-colors duration-200"
-                          disabled={isLoading}
-                          title="Remove item"
+                        
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeFromCart(item.productId, item.size)}
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
                         >
-                          <Trash2 className="h-5 w-5" />
-                        </button>
+                          <X className="h-4 w-4" />
+                        </Button>
                       </div>
 
-                      <div className="flex items-center justify-between mt-4">
-                        <div className="flex items-center gap-3">
-                          <button
-                            onClick={() => updateQuantity(item.productId, item.size, Math.max(1, item.quantity - 1))}
-                            className="h-10 w-10 border border-gold/30 rounded-sm hover:bg-gold/10 hover:border-gold disabled:opacity-50 flex items-center justify-center transition-all duration-200"
-                            disabled={item.quantity <= 1 || isLoading}
-                          >
-                            <Minus className="h-4 w-4" />
-                          </button>
-                          <span className="w-12 text-center font-semibold text-lg">{item.quantity}</span>
-                          <button
-                            onClick={() => updateQuantity(item.productId, item.size, Math.min(maxStock, item.quantity + 1))}
-                            className="h-10 w-10 border border-gold/30 rounded-sm hover:bg-gold/10 hover:border-gold disabled:opacity-50 flex items-center justify-center transition-all duration-200"
-                            disabled={item.quantity >= maxStock || isLoading}
-                          >
-                            <Plus className="h-4 w-4" />
-                          </button>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <span className="text-sm text-gray-600">Quantity:</span>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => updateQuantity(item.productId, item.size, Math.max(1, item.quantity - 1))}
+                              disabled={item.quantity <= 1}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="w-8 text-center font-medium">
+                              {item.quantity}
+                            </span>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => updateQuantity(item.productId, item.size, Math.min(maxStock, item.quantity + 1))}
+                              disabled={item.quantity >= maxStock}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </div>
                           {maxStock <= 5 && (
-                            <span className="text-sm text-red-500">
-                              Only {maxStock} left
+                            <span className="text-xs text-amber-600">
+                              {maxStock} in stock
                             </span>
                           )}
                         </div>
-
+                        
                         <div className="text-right">
-                          <p className="text-2xl font-bold text-gold">
+                          <div className="text-xl font-semibold">
                             {formatPrice(item.product.price * item.quantity)}
-                          </p>
-                          {item.quantity > 1 && (
-                            <p className="text-sm text-gray-500 mt-1">
-                              {formatPrice(item.product.price)} each
-                            </p>
-                          )}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {formatPrice(item.product.price)} each
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -405,199 +372,169 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <Card className="p-8 border-0 shadow-xl sticky top-24 bg-gradient-to-br from-white to-gray-50">
-              <div className="flex items-center gap-2 mb-8">
-                <div className="w-6 h-6 bg-gold rounded-full flex items-center justify-center">
-                  <span className="text-black text-xs font-bold">✓</span>
+            <Card className="p-6 bg-white shadow-lg sticky top-8">
+              <h2 className="text-2xl font-serif font-semibold mb-6 text-center">Order Summary</h2>
+              
+              <div className="space-y-4 mb-6">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Subtotal ({validCartItems.reduce((sum, item) => sum + item.quantity, 0)} items)</span>
+                  <span className="font-medium">{formatPrice(cartSummary.subtotal)}</span>
                 </div>
-                <h2 className="text-xl font-serif font-semibold">Order Summary</h2>
-              </div>
-
-              <div className="space-y-4 mb-8">
-                <div className="flex justify-between text-gray-700">
-                  <span className="font-medium">Subtotal ({cartSummary.itemCount} items)</span>
-                  <span className="font-semibold">{formatPrice(cartSummary.totalPrice)}</span>
-                </div>
-                <div className="flex justify-between text-gray-700">
-                  <span className="font-medium">Shipping</span>
-                  <span className={`font-semibold ${cartSummary.totalPrice >= 50000 ? 'text-green-600' : ''}`}>
-                    {cartSummary.totalPrice >= 50000 ? "FREE" : formatPrice(1500)}
+                
+                {cartSummary.tax > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Tax</span>
+                    <span>{formatPrice(cartSummary.tax)}</span>
+                  </div>
+                )}
+                
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Shipping</span>
+                  <span className="text-green-600">
+                    {cartSummary.subtotal >= 50000 ? 'FREE' : formatPrice(cartSummary.shipping)}
                   </span>
                 </div>
-                {cartSummary.totalPrice < 50000 && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-sm p-3">
-                    <p className="text-sm text-blue-800 font-medium">
-                      Add {formatPrice(50000 - cartSummary.totalPrice)} more for free shipping!
-                    </p>
+                
+                <div className="border-t pt-4">
+                  <div className="flex justify-between text-xl font-semibold">
+                    <span>Total</span>
+                    <span>{formatPrice(cartSummary.totalPrice)}</span>
                   </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {user ? (
+                  <Button
+                    onClick={handleCheckout}
+                    disabled={isProcessingCheckout}
+                    className="w-full py-3 bg-gold hover:bg-gold/90 text-black text-lg font-medium"
+                  >
+                    {isProcessingCheckout ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                        Processing...
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <Lock className="h-5 w-5" />
+                        Secure Checkout - {formatPrice(cartSummary.totalPrice)}
+                      </div>
+                    )}
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      onClick={handleCheckout}
+                      disabled={isProcessingCheckout}
+                      className="w-full py-3 bg-gold hover:bg-gold/90 text-black text-lg font-medium"
+                    >
+                      {isProcessingCheckout ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                          Processing...
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Lock className="h-5 w-5" />
+                          Sign In & Checkout
+                        </div>
+                      )}
+                    </Button>
+                    
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-200" />
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="bg-white px-2 text-gray-500">or</span>
+                      </div>
+                    </div>
+                    
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowGuestCheckout(!showGuestCheckout)}
+                      className="w-full py-3"
+                    >
+                      Continue as Guest
+                    </Button>
+                    
+                    {showGuestCheckout && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="space-y-4 pt-4 border-t border-gray-200"
+                      >
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Email Address
+                          </label>
+                          <input
+                            type="email"
+                            value={guestEmail}
+                            onChange={(e) => setGuestEmail(e.target.value)}
+                            placeholder="your@email.com"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-gold focus:border-transparent"
+                          />
+                        </div>
+                        
+                        <Button
+                          onClick={handleGuestCheckout}
+                          disabled={!isEmailValid || isProcessingCheckout}
+                          className="w-full py-3 bg-gold hover:bg-gold/90 text-black font-medium disabled:opacity-50"
+                        >
+                          {isProcessingCheckout ? (
+                            <div className="flex items-center gap-2">
+                              <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                              Processing...
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <Lock className="h-5 w-5" />
+                              Complete Order - {formatPrice(cartSummary.totalPrice)}
+                            </div>
+                          )}
+                        </Button>
+                      </motion.div>
+                    )}
+                  </>
                 )}
               </div>
 
-              {/* Promo Code */}
-              <div className="mb-8">
-                <label className="text-sm font-semibold mb-3 block text-gray-700">Promo Code</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
-                    placeholder="Enter discount code"
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-gold transition-all duration-200"
-                  />
-                  <Button variant="outline" className="px-4 py-3 border-gold/30 hover:border-gold hover:bg-gold/10 transition-all duration-200">
-                    <Tag className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* Estimated Total */}
-              <div className="border-2 border-gold/30 rounded-sm p-4 mb-6 bg-gold/5">
-                <div className="flex justify-between text-xl font-bold">
-                  <span>Estimated Total</span>
-                  <span className="text-gold">
-                    {formatPrice(cartSummary.totalPrice + (cartSummary.totalPrice >= 50000 ? 0 : 1500))}
-                  </span>
-                </div>
-                <p className="text-xs text-gray-600 mt-2">
-                  <Lock className="inline w-3 h-3 mr-1" />
-                  Final total calculated at checkout with taxes
-                </p>
-              </div>
-
-              <div className="border-t border-gold/20 pt-6 mb-8">
-                <div className="flex justify-between text-2xl font-bold">
-                  <span>Total</span>
-                  <span className="text-gold">
-                    {formatPrice(
-                      cartSummary.totalPrice + 
-                      (cartSummary.totalPrice < 50000 ? 1500 : 0)
-                    )}
-                  </span>
-                </div>
-              </div>
-
-              {/* Checkout Options */}
-              {!user && !showGuestCheckout ? (
-                <div className="space-y-3">
-                  <Link href="/auth/login?redirectTo=/checkout">
-                    <Button size="lg" className="w-full bg-gold hover:bg-gold/90 text-black py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
-                      <User className="mr-2 h-5 w-5" />
-                      Sign In & Checkout
-                    </Button>
-                  </Link>
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    onClick={() => setShowGuestCheckout(true)}
-                    className="w-full py-4 border-gold/30 hover:border-gold hover:bg-gold/10 transition-all duration-300"
-                  >
-                    Continue as Guest
-                  </Button>
-                </div>
-              ) : showGuestCheckout && !user ? (
-                <div className="space-y-3">
-                  <div className="relative">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      value={guestEmail}
-                      onChange={(e) => setGuestEmail(e.target.value)}
-                      className={`w-full px-4 py-3 border rounded-sm focus:outline-none focus:ring-2 transition-all ${
-                        guestEmail && !isEmailValid 
-                          ? 'border-red-500 focus:ring-red-500' 
-                          : 'border-gray-300 focus:ring-gold focus:border-gold'
-                      }`}
-                      required
-                    />
-                    {guestEmail && !isEmailValid && (
-                      <p className="text-xs text-red-500 mt-1">Please enter a valid email address</p>
-                    )}
-                  </div>
-                  <Button 
-                    size="lg" 
-                    className="w-full bg-gold hover:bg-gold/90 text-black py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
-                    onClick={handleGuestCheckout}
-                    disabled={!isEmailValid || isProcessingCheckout}
-                  >
-                    {isProcessingCheckout ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin mr-2"></div>
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        Proceed to Checkout
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </>
-                    )}
-                  </Button>
-                  <button
-                    onClick={() => setShowGuestCheckout(false)}
-                    className="text-sm text-gray-600 hover:text-black w-full text-center"
-                  >
-                    Back to options
-                  </button>
-                </div>
-              ) : (
-                <Button 
-                  size="lg" 
-                  className="w-full mb-4 bg-gold hover:bg-gold/90 text-black py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
-                  onClick={handleCheckout}
-                  disabled={isProcessingCheckout}
-                >
-                  {isProcessingCheckout ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin mr-2"></div>
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      Proceed to Checkout
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </>
-                  )}
-                </Button>
-              )}
-
-              <Link href="/products">
-                <Button variant="outline" size="lg" className="w-full py-4 border-gold/30 hover:border-gold hover:bg-gold/10 transition-all duration-300">
-                  Continue Shopping
-                </Button>
-              </Link>
-
-              <div className="mt-8 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-sm border border-green-200">
-                <div className="space-y-3 text-sm">
-                  <p className="flex items-center gap-3">
-                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 text-xs font-bold">✓</span>
-                    </div>
-                    <span className="text-green-800 font-medium">Free shipping on orders over $500</span>
-                  </p>
-                  <p className="flex items-center gap-3">
-                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 text-xs font-bold">✓</span>
-                    </div>
-                    <span className="text-green-800 font-medium">Free returns within 30 days</span>
-                  </p>
-                  <p className="flex items-center gap-3">
-                    <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center">
-                      <span className="text-green-600 text-xs font-bold">✓</span>
-                    </div>
-                    <span className="text-green-800 font-medium">Expert tailoring available</span>
-                  </p>
+              {/* Security Notice */}
+              <div className="mt-8 p-4 bg-green-50 rounded-sm border border-green-200">
+                <div className="flex items-center gap-2 text-green-700 text-sm">
+                  <Shield className="h-4 w-4" />
+                  <span className="font-medium">Your payment is protected by 256-bit SSL encryption</span>
                 </div>
               </div>
             </Card>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
 
-        {/* AI-Powered Recommendations Section */}
-        {validCartItems.length > 0 && (
-          <AICartRecommendations 
-            cartItems={validCartItems}
-            userStyle={user?.profile?.style_preferences || undefined}
-          />
-        )}
+// Empty cart component
+function EmptyCart() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-stone-100 py-12">
+      <div className="text-center mb-12">
+        <div className="inline-flex items-center gap-2 text-gold mb-4">
+          <div className="h-px w-12 bg-gold"></div>
+          <span className="text-sm font-semibold tracking-widest uppercase">Your Selection</span>
+          <div className="h-px w-12 bg-gold"></div>
+        </div>
+        <h1 className="text-4xl md:text-5xl font-serif mb-4">Shopping Cart</h1>
+        <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+          Your cart is empty. Discover our luxury collection.
+        </p>
+        <Link href="/">
+          <Button className="bg-gold hover:bg-gold/90 text-black px-8 py-3 text-lg font-medium">
+            Continue Shopping
+          </Button>
+        </Link>
       </div>
     </div>
   );

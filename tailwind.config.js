@@ -47,12 +47,33 @@ module.exports = {
           800: "#1A1A1A",
           900: "#0D0D0D",
         },
+        // Hugo Boss-inspired luxury palette
+        luxury: {
+          charcoal: "#2D2D2D",
+          stone: "#8B8680",
+          cream: "#FEFCF7",
+          platinum: "#E5E4E2",
+          obsidian: "#0C0C0C",
+        }
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
         serif: ["'Playfair Display'", "serif"],
         playfair: ["'Playfair Display'", "serif"],
-        inter: ["Inter", "sans-serif"],
+        inter: ["Inter", "system-ui", "sans-serif"],
+      },
+      fontSize: {
+        '9xl': ['8rem', { lineHeight: '1' }],
+        '10xl': ['10rem', { lineHeight: '1' }],
+      },
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '128': '32rem',
+      },
+      letterSpacing: {
+        'extra-wide': '0.2em',
+        'ultra-wide': '0.3em',
       },
       animation: {
         "fade-in": "fadeIn 0.5s ease-in-out",
@@ -60,6 +81,8 @@ module.exports = {
         "slide-in": "slideIn 0.3s ease-out",
         "shimmer": "shimmer 2s linear infinite",
         "scale-in": "scaleIn 0.3s ease-out",
+        "luxury-fade": "luxuryFade 0.8s ease-out",
+        "carousel-slide": "carouselSlide 0.3s ease-out",
       },
       keyframes: {
         fadeIn: {
@@ -82,9 +105,27 @@ module.exports = {
           "0%": { transform: "scale(0)" },
           "100%": { transform: "scale(1)" },
         },
+        luxuryFade: {
+          "0%": { opacity: "0", transform: "translateY(30px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        carouselSlide: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'luxury-gradient': 'linear-gradient(135deg, #FEFCF7 0%, #F5F5F5 100%)',
+      },
+      boxShadow: {
+        'luxury': '0 4px 20px rgba(0, 0, 0, 0.08)',
+        'luxury-hover': '0 8px 30px rgba(0, 0, 0, 0.12)',
+      },
+      transitionDuration: {
+        '400': '400ms',
+        '600': '600ms',
+        '800': '800ms',
       },
     },
   },

@@ -23,9 +23,7 @@ export default function TestStripeCheckout() {
       // Get first 12 products for testing (mix of Core and Enhanced)
       const testProducts = data.products.slice(0, 12);
       setProducts(testProducts);
-      console.log(`Loaded ${testProducts.length} products for testing`);
     } catch (error) {
-      console.error('Error fetching products:', error);
       setMessage('Error loading products');
     }
   };
@@ -77,7 +75,6 @@ export default function TestStripeCheckout() {
       }
 
     } catch (error: any) {
-      console.error('Checkout error:', error);
       setMessage(`Error: ${error.message}`);
       setLoading(false);
     }

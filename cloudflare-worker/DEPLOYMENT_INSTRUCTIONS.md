@@ -38,7 +38,7 @@ wrangler publish
 ### 6. Test the Worker
 Test URL format:
 ```
-https://kctmenswear.com/cdn-cgi/image/?width=400&quality=90&format=webp&url=https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/your-image.png
+https://kctmenswear.com/cdn-cgi/image/?width=400&quality=90&format=webp&url=https://cdn.kctmenswear.com/your-image.png
 ```
 
 ## How It Works
@@ -67,13 +67,13 @@ The worker intercepts image requests with transformation parameters and:
 The `OptimizedImage` component in your app will automatically use this worker when deployed. The URLs will be transformed from:
 
 ```
-https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/image.png
+https://cdn.kctmenswear.com/image.png
 ```
 
 To:
 
 ```
-https://kctmenswear.com/cdn-cgi/image/?width=400&format=webp&url=https://pub-46371bda6faf4910b74631159fc2dfd4.r2.dev/image.png
+https://kctmenswear.com/cdn-cgi/image/?width=400&format=webp&url=https://cdn.kctmenswear.com/image.png
 ```
 
 ## Alternative: Using Transform Rules (Easier)
