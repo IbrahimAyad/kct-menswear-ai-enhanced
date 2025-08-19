@@ -341,8 +341,8 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
       {showStylePreference ? (
         <div className="flex-1 p-6 space-y-4 bg-gradient-to-b from-gray-50 to-white">
           <div className="text-center space-y-2">
-            <h2 className="text-xl font-semibold text-gray-900">What's the occasion?</h2>
-            <p className="text-sm text-gray-600">I'll tailor my style advice to your needs</p>
+            <h2 className="text-lg font-semibold text-gray-900">What's the occasion?</h2>
+            <p className="text-xs text-gray-600">I'll tailor my style advice to your needs</p>
           </div>
           
           <div className="space-y-3">
@@ -356,8 +356,8 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
                   <Briefcase className="w-5 h-5 text-blue-600" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900">Business & Professional</h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <h3 className="text-sm font-semibold text-gray-900">Business & Professional</h3>
+                  <p className="text-xs text-gray-600 mt-1">
                     Power suits, interview attire, executive presence
                   </p>
                 </div>
@@ -375,8 +375,8 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
                   <Users className="w-5 h-5 text-pink-600" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900">Wedding & Formal Events</h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <h3 className="text-sm font-semibold text-gray-900">Wedding & Formal Events</h3>
+                  <p className="text-xs text-gray-600 mt-1">
                     Groom suits, guest attire, black tie guidance
                   </p>
                 </div>
@@ -394,8 +394,8 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
                   <Shirt className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900">Smart Casual & Weekend</h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <h3 className="text-sm font-semibold text-gray-900">Smart Casual & Weekend</h3>
+                  <p className="text-xs text-gray-600 mt-1">
                     Date nights, social events, relaxed elegance
                   </p>
                 </div>
@@ -413,8 +413,8 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
                   <PartyPopper className="w-5 h-5 text-purple-600" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900">Prom & Special Events</h3>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <h3 className="text-sm font-semibold text-gray-900">Prom & Special Events</h3>
+                  <p className="text-xs text-gray-600 mt-1">
                     Tuxedos, bold styles, memorable looks
                   </p>
                 </div>
@@ -432,13 +432,13 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
             className="w-full py-3 text-burgundy hover:text-burgundy-700 transition-colors flex items-center justify-center gap-2"
           >
             <Info className="w-4 h-4" />
-            <span className="text-sm">I need general style advice</span>
+            <span className="text-xs">I need general style advice</span>
           </button>
 
           {/* Skip Option */}
           <button
             onClick={() => setShowStylePreference(false)}
-            className="w-full py-2 text-gray-500 hover:text-gray-700 text-sm"
+            className="w-full py-2 text-gray-500 hover:text-gray-700 text-xs"
           >
             Skip to chat →
           </button>
@@ -456,7 +456,7 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
               setSelectedStyle(null);
               setSessionStarted(false);
             }}
-            className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-4"
+            className="flex items-center gap-2 text-xs text-gray-600 hover:text-gray-900 mb-4"
           >
             <ChevronLeft className="w-4 h-4" />
             Change occasion ({selectedStyle})

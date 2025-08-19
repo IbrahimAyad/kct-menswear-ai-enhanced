@@ -77,27 +77,24 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
     
     // Add initial messages based on fit selection
     const fitMessages: { [key: string]: string } = {
-      'Slim Fit': "Perfect! You prefer a modern, tailored look. Slim fit suits are cut closer to the body with a contemporary silhouette. Let me help you find your perfect size in our slim fit collection.",
-      'Regular Fit': "Excellent choice! Regular fit offers the perfect balance - traditional fit with comfortable room through the chest and waist. This is our most versatile fit that works for most body types.",
-      'Relaxed Fit': "Great! You value comfort and ease of movement. Our relaxed fit provides extra room for maximum comfort without sacrificing style. Let me help you find your ideal size."
+      'Slim Fit': "Perfect! You prefer a modern, tailored look. Slim fit suits are cut closer to the body with a contemporary silhouette.",
+      'Regular Fit': "Excellent choice! Regular fit offers the perfect balance - traditional fit with comfortable room through the chest and waist.",
+      'Relaxed Fit': "Great! You value comfort and ease of movement. Our relaxed fit provides extra room for maximum comfort."
     };
     
-    const initialMessages: Message[] = [
-      {
-        id: '1',
-        text: fitMessages[fit] || "Great choice! Let me help you find your perfect size.",
-        sender: 'assistant',
-        timestamp: new Date()
-      },
-      {
-        id: '2',
-        text: "Would you like to:\n• Use our AI Size Calculator (30 seconds)\n• Tell me your usual size\n• Learn about our fit guide",
-        sender: 'assistant',
-        timestamp: new Date()
-      }
-    ];
+    const initialMessage: Message = {
+      id: '1',
+      text: fitMessages[fit] || "Great choice!",
+      sender: 'assistant',
+      timestamp: new Date()
+    };
     
-    setMessages(initialMessages);
+    setMessages([initialMessage]);
+    
+    // Immediately open the size calculator to get height/weight
+    setTimeout(() => {
+      setShowSizeCalculator(true);
+    }, 500);
   };
 
   const handleSend = () => {
