@@ -173,7 +173,7 @@ export default function TestSizeBot() {
                   type="text"
                   value={measurements.height}
                   onChange={(e) => setMeasurements({...measurements, height: e.target.value})}
-                  placeholder="e.g., 5'10\" or 6'2\""
+                  placeholder="e.g., 5'10 or 6'2"
                   className="w-full px-3 py-2 border rounded-lg"
                 />
               </div>
