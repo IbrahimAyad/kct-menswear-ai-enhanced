@@ -3,45 +3,17 @@
     "Coordinator": {
       "1": {
         "id": "1",
-        "content": "Add AI-Powered Virtual Styling Assistant",
-        "details": "Implement a chatbot that helps customers choose outfits based on occasion, body type, and style preferences. Could use your existing AI infrastructure.",
+        "content": "Enhanced Product Recommendation Engine for AI Chat",
+        "details": "Integrate advanced recommendation algorithms into existing AI chat system: 1. Complementary item suggestions (ties with suits, shoes with outfits), 2. 'Customers also bought' analytics, 3. Occasion-based outfit recommendations, 4. Cross-category upselling logic, 5. Integration with existing size/style/customer service bots",
         "status": "pending",
         "priority": "high"
       },
       "2": {
         "id": "2",
-        "content": "Enhanced Product Recommendation Engine",
-        "details": "Build smart recommendations that show complementary items (ties with suits, shoes with outfits) and 'customers who bought this also bought' features.",
-        "status": "pending",
-        "priority": "high"
-      },
-      "3": {
-        "id": "3",
-        "content": "Size & Fit Prediction System",
-        "details": "Add an AI system that predicts the best size for customers based on their measurements and previous purchase data.",
-        "status": "pending",
-        "priority": "high"
-      },
-      "4": {
-        "id": "4",
         "content": "Advanced Search with Visual AI",
-        "details": "Allow customers to upload photos and find similar items, or search by color, pattern, style with AI-powered visual search.",
+        "details": "Build visual search capabilities: 1. Image upload interface for 'find similar items', 2. AI-powered image analysis for color/pattern/style matching, 3. Visual similarity scoring system, 4. Integration with product database, 5. Smart search filters combining visual + text search",
         "status": "pending",
-        "priority": "medium"
-      },
-      "5": {
-        "id": "5",
-        "content": "Real-time Inventory & Demand Forecasting",
-        "details": "AI system to predict demand, optimize inventory, and show real-time stock levels with purchase urgency indicators.",
-        "status": "pending",
-        "priority": "medium"
-      },
-      "6": {
-        "id": "6",
-        "content": "Customer Behavior Analytics Dashboard",
-        "details": "Advanced analytics showing customer journey, conversion funnels, and personalized insights for business optimization.",
-        "status": "pending",
-        "priority": "medium"
+        "priority": "high"
       }
     }
   }
