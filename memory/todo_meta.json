@@ -3,16 +3,37 @@
     "Coordinator": {
       "1": {
         "id": "1",
-        "content": "Enhanced Product Recommendation Engine for AI Chat",
-        "details": "Integrate advanced recommendation algorithms into existing AI chat system: 1. Complementary item suggestions (ties with suits, shoes with outfits), 2. 'Customers also bought' analytics, 3. Occasion-based outfit recommendations, 4. Cross-category upselling logic, 5. Integration with existing size/style/customer service bots",
-        "status": "completed",
+        "content": "Download AI Chat Improvements from GitHub",
+        "details": "Access the AI improvements from https://github.com/IbrahimAyad/kct-ai-chat-improvements and download all necessary files",
+        "status": "pending",
         "priority": "high"
       },
       "2": {
         "id": "2",
-        "content": "Advanced Search with Visual AI",
-        "details": "Build visual search capabilities: 1. Image upload interface for 'find similar items', 2. AI-powered image analysis for color/pattern/style matching, 3. Visual similarity scoring system, 4. Integration with product database, 5. Smart search filters combining visual + text search",
-        "status": "completed",
+        "content": "Integrate Critical Chat Components",
+        "details": "Replace SmartChatLauncher.tsx, SizeAssistantChat.tsx, AtelierStyleChat.tsx, CustomerServiceChat.tsx with enhanced versions that have 94-95% confidence training",
+        "status": "pending",
+        "priority": "high"
+      },
+      "3": {
+        "id": "3",
+        "content": "Add AI Services and Libraries",
+        "details": "Copy all AI services (atelier-ai-service.ts, knowledge-chat-service.ts, etc.) and src/lib/ai/ folder with embedded training data",
+        "status": "pending",
+        "priority": "high"
+      },
+      "4": {
+        "id": "4",
+        "content": "Test All Chat Functions",
+        "details": "Verify all 3 chat options work: Atelier Stylist (style preferences first), Size Assistant (fit → height/weight), Customer Support. Check mobile UX improvements",
+        "status": "pending",
+        "priority": "high"
+      },
+      "5": {
+        "id": "5",
+        "content": "Build and Deploy Updated Site",
+        "details": "Run npm build to verify no errors, then deploy to Vercel with all AI improvements integrated",
+        "status": "pending",
         "priority": "high"
       }
     }
