@@ -9,9 +9,13 @@ import {
   Bot,
   ChevronLeft,
   Sparkles,
-  Calculator
+  Calculator,
+  CheckCircle,
+  Info
 } from "lucide-react";
 import { ModernSizeBot } from "@/components/sizing/ModernSizeBot";
+import { SIZE_SHORT_QUERY, buildConversationalSizeResponse } from "@/lib/ai/size-bot-short-queries";
+import { SIZE_BOT_EXPERTISE, buildSizeResponse } from "@/lib/ai/size-bot-expertise";
 
 interface Message {
   id: string;
@@ -26,16 +30,11 @@ interface SizeAssistantChatProps {
 }
 
 export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssistantChatProps) {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: "Hi! I'm your AI Size Assistant. I can help you find your perfect fit in just 30 seconds! Would you like to:",
-      sender: 'assistant',
-      timestamp: new Date()
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [showSizeCalculator, setShowSizeCalculator] = useState(false);
+  const [showFitPreference, setShowFitPreference] = useState(true);
+  const [selectedFit, setSelectedFit] = useState<string | null>(null);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -72,6 +71,35 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
     }, 1500);
   };
 
+  const handleFitSelection = (fit: string) => {
+    setSelectedFit(fit);
+    setShowFitPreference(false);
+    
+    // Add initial messages based on fit selection
+    const fitMessages: { [key: string]: string } = {
+      'Slim Fit': "Perfect! You prefer a modern, tailored look. Slim fit suits are cut closer to the body with a contemporary silhouette. Let me help you find your perfect size in our slim fit collection.",
+      'Regular Fit': "Excellent choice! Regular fit offers the perfect balance - traditional fit with comfortable room through the chest and waist. This is our most versatile fit that works for most body types.",
+      'Relaxed Fit': "Great! You value comfort and ease of movement. Our relaxed fit provides extra room for maximum comfort without sacrificing style. Let me help you find your ideal size."
+    };
+    
+    const initialMessages: Message[] = [
+      {
+        id: '1',
+        text: fitMessages[fit] || "Great choice! Let me help you find your perfect size.",
+        sender: 'assistant',
+        timestamp: new Date()
+      },
+      {
+        id: '2',
+        text: "Would you like to:\n• Use our AI Size Calculator (30 seconds)\n• Tell me your usual size\n• Learn about our fit guide",
+        sender: 'assistant',
+        timestamp: new Date()
+      }
+    ];
+    
+    setMessages(initialMessages);
+  };
+
   const handleSend = () => {
     if (!input.trim()) return;
     
@@ -86,22 +114,30 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
     setInput("");
     setIsTyping(true);
     
-    // Simulate assistant response
+    // Use intelligent size bot responses
     setTimeout(() => {
       setIsTyping(false);
       
-      const lowerInput = input.toLowerCase();
+      const wordCount = input.trim().split(/\s+/).length;
       let response = "";
+      let suggestions: string[] = [];
       
-      if (lowerInput.includes('size') || lowerInput.includes('fit') || lowerInput.includes('measure')) {
-        response = "I'd be happy to help you find your size! Let me open our AI Size Calculator for you.";
-        setTimeout(() => setShowSizeCalculator(true), 500);
-      } else if (lowerInput.includes('alter')) {
-        response = "We offer professional alteration services! Most alterations take 3-5 business days. Common alterations include:\n• Hemming pants ($15)\n• Taking in waist ($25)\n• Shortening sleeves ($20)\n• Adjusting jacket length ($35)";
-      } else if (lowerInput.includes('return') || lowerInput.includes('exchange')) {
-        response = "Our return policy is simple:\n• 30-day returns on unworn items\n• Free exchanges for different sizes\n• We'll help ensure you get the perfect fit!";
+      // Handle short queries (2-7 words) with specialized intelligence
+      if (wordCount >= 2 && wordCount <= 7) {
+        response = buildConversationalSizeResponse(input);
+        const analysis = SIZE_SHORT_QUERY.generate(input);
+        suggestions = analysis.recommendations;
       } else {
-        response = "I can help you with:\n• Finding your perfect size\n• Understanding our size charts\n• Alteration services\n• Fit preferences (Slim, Regular, Relaxed)\n\nWhat would you like to know?";
+        // Use comprehensive size bot expertise for longer queries
+        const sizeResponse = buildSizeResponse(input);
+        response = sizeResponse.response;
+        suggestions = sizeResponse.suggestions;
+      }
+      
+      // Check for specific actions
+      const lowerInput = input.toLowerCase();
+      if (lowerInput.includes('calculator') || lowerInput.includes('measure me')) {
+        setTimeout(() => setShowSizeCalculator(true), 500);
       }
       
       const assistantMessage: Message = {
@@ -112,6 +148,19 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
       };
       
       setMessages(prev => [...prev, assistantMessage]);
+      
+      // Add follow-up suggestions if available
+      if (suggestions.length > 0) {
+        setTimeout(() => {
+          const followUp: Message = {
+            id: (Date.now() + 1).toString(),
+            text: "Quick questions:\n" + suggestions.map(s => `• ${s}`).join('\n'),
+            sender: 'assistant',
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, followUp]);
+        }, 1500);
+      }
     }, 1000);
   };
 
@@ -144,8 +193,113 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
         </button>
       </div>
 
-      {/* Messages or Size Calculator */}
-      {showSizeCalculator ? (
+      {/* Fit Preference Selection Screen */}
+      {showFitPreference ? (
+        <div className="flex-1 p-6 space-y-4">
+          <div className="text-center space-y-2">
+            <h2 className="text-xl font-semibold text-gray-900">How do you like your suits to fit?</h2>
+            <p className="text-sm text-gray-600">Select your preferred fit style</p>
+          </div>
+          
+          <div className="space-y-3">
+            {/* Slim Fit Option */}
+            <button
+              onClick={() => handleFitSelection('Slim Fit')}
+              className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-burgundy transition-colors text-left group"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-5 h-5 text-yellow-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                    Slim Fit 
+                    <span className="text-xs text-gray-500 font-normal">Modern & Tailored</span>
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Closer to the body with a contemporary silhouette
+                  </p>
+                </div>
+                <CheckCircle className="w-5 h-5 text-burgundy opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </button>
+
+            {/* Regular Fit Option */}
+            <button
+              onClick={() => handleFitSelection('Regular Fit')}
+              className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-burgundy transition-colors text-left group"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                    Regular Fit 
+                    <span className="text-xs text-gray-500 font-normal">Classic & Versatile</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">✓ Recommended</span>
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Traditional fit with comfortable room through chest and waist
+                  </p>
+                </div>
+                <CheckCircle className="w-5 h-5 text-burgundy opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </button>
+
+            {/* Relaxed Fit Option */}
+            <button
+              onClick={() => handleFitSelection('Relaxed Fit')}
+              className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-burgundy transition-colors text-left group"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                    Relaxed Fit 
+                    <span className="text-xs text-gray-500 font-normal">Comfort First</span>
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Extra room for maximum comfort and ease of movement
+                  </p>
+                </div>
+                <CheckCircle className="w-5 h-5 text-burgundy opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </button>
+          </div>
+
+          {/* Not Sure Option */}
+          <button
+            onClick={() => handleFitSelection('Regular Fit')}
+            className="w-full py-3 text-burgundy hover:text-burgundy-700 transition-colors flex items-center justify-center gap-2"
+          >
+            <Info className="w-4 h-4" />
+            <span className="text-sm">Not sure which to choose? We recommend Regular Fit</span>
+          </button>
+
+          {/* Back to Chat Link */}
+          <button
+            onClick={() => {
+              setShowFitPreference(false);
+              setMessages([{
+                id: '1',
+                text: "Hi! I'm your AI Size Assistant. How can I help you find your perfect fit today?",
+                sender: 'assistant',
+                timestamp: new Date()
+              }]);
+            }}
+            className="w-full py-2 text-gray-500 hover:text-gray-700 text-sm"
+          >
+            Skip to chat →
+          </button>
+        </div>
+      ) : showSizeCalculator ? (
         <div className="flex-1 overflow-y-auto">
           <div className="p-4">
             <button
@@ -203,8 +357,23 @@ export function SizeAssistantChat({ onClose, productType = 'suit' }: SizeAssista
               </div>
             )}
             
+            {/* Back to Fit Preference Button */}
+            {selectedFit && messages.length > 0 && (
+              <button
+                onClick={() => {
+                  setShowFitPreference(true);
+                  setMessages([]);
+                  setSelectedFit(null);
+                }}
+                className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-2"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Change fit preference ({selectedFit})
+              </button>
+            )}
+            
             {/* Quick Actions - shown after initial message */}
-            {messages.length === 1 && (
+            {messages.length <= 2 && (
               <div className="flex flex-wrap gap-2 mt-4">
                 <button
                   onClick={() => setShowSizeCalculator(true)}

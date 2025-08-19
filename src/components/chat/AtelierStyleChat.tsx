@@ -11,11 +11,17 @@ import {
   MicOff,
   Loader2,
   ChevronDown,
+  ChevronLeft,
   User,
   Bot,
   Heart,
   ShoppingCart,
-  ArrowRight
+  ArrowRight,
+  Briefcase,
+  Users,
+  Shirt,
+  PartyPopper,
+  Info
 } from "lucide-react";
 import Image from "next/image";
 import { AtelierAIService } from "@/services/atelier-ai-service";
@@ -30,6 +36,7 @@ interface Message {
   suggestions?: string[];
   isTyping?: boolean;
   images?: string[];
+  confidence?: number;
 }
 
 interface AtelierStyleChatProps {
@@ -45,6 +52,8 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
   const [isListening, setIsListening] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [showProducts, setShowProducts] = useState(false);
+  const [showStylePreference, setShowStylePreference] = useState(true);
+  const [selectedStyle, setSelectedStyle] = useState<string | null>(null);
   const [sessionStarted, setSessionStarted] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -63,10 +72,63 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
     scrollToBottom();
   }, [messages]);
 
-  // Initialize chat session
+  const handleStyleSelection = async (style: string) => {
+    setSelectedStyle(style);
+    setShowStylePreference(false);
+    setSessionStarted(true);
+    setIsLoading(true);
+    
+    try {
+      const response = await atelierService.current.startConversation();
+      
+      const styleMessages: { [key: string]: string } = {
+        'Business': "Excellent! Let's create your perfect professional wardrobe. Whether it's commanding the boardroom or impressing at networking events, I'll help you project confidence and authority through impeccable style.",
+        'Wedding': "Wonderful choice! Weddings are where style truly matters. Whether you're the groom, groomsman, or distinguished guest, I'll ensure you look exceptional while respecting the occasion's formality.",
+        'Casual': "Perfect! Smart casual is an art form - looking effortlessly stylish while comfortable. Let me help you master the balance between relaxed and refined.",
+        'Prom': "Fantastic! Prom is your moment to shine. Let's create a look that's both memorable and sophisticated - you'll stand out for all the right reasons."
+      };
+      
+      const welcomeMessage: Message = {
+        id: Date.now().toString(),
+        text: styleMessages[style] + "\n\n" + (response.message || "How may I elevate your style today?"),
+        sender: 'bot',
+        timestamp: new Date(),
+        suggestions: style === 'Business' ? 
+          ["Power suit recommendations", "Interview attire", "Business casual guide", "Executive presence"] :
+          style === 'Wedding' ?
+          ["Groom suits", "Wedding guest attire", "Black tie guide", "Seasonal wedding looks"] :
+          style === 'Casual' ?
+          ["Smart casual outfits", "Date night looks", "Weekend style", "Blazer combinations"] :
+          ["Prom tuxedos", "Bold color options", "Trendy styles", "Accessories guide"],
+        confidence: response.confidence
+      };
+      
+      setMessages([welcomeMessage]);
+      
+      // If there's an initial message, send it after style selection
+      if (initialMessage) {
+        setTimeout(() => {
+          handleSendMessage(initialMessage);
+        }, 1000);
+      }
+    } catch (error) {
+      console.error('Failed to start session:', error);
+      setMessages([{
+        id: Date.now().toString(),
+        text: `Great choice! I'm here to help with your ${style.toLowerCase()} style needs. What specific look are you going for?`,
+        sender: 'bot',
+        timestamp: new Date(),
+        suggestions: ["Show me options", "Style advice", "Color matching", "Fit guidance"]
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Initialize chat session only if style preference is skipped
   useEffect(() => {
-    const initSession = async () => {
-      if (!sessionStarted) {
+    if (!showStylePreference && !sessionStarted && !selectedStyle) {
+      const initSession = async () => {
         setSessionStarted(true);
         setIsLoading(true);
         
@@ -83,12 +145,12 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
               "Wedding styling advice",
               "Business attire guide",
               "Seasonal recommendations"
-            ]
+            ],
+            confidence: response.confidence
           };
           
           setMessages([welcomeMessage]);
           
-          // If there's an initial message, send it automatically
           if (initialMessage) {
             setTimeout(() => {
               handleSendMessage(initialMessage);
@@ -96,7 +158,6 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
           }
         } catch (error) {
           console.error('Failed to start session:', error);
-          // Fallback welcome message
           setMessages([{
             id: Date.now().toString(),
             text: "Welcome! I'm your personal Atelier stylist. How can I help you look your absolute best today?",
@@ -107,11 +168,11 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
         } finally {
           setIsLoading(false);
         }
-      }
-    };
+      };
 
-    initSession();
-  }, [initialMessage, sessionStarted]);
+      initSession();
+    }
+  }, [showStylePreference, sessionStarted, selectedStyle, initialMessage]);
 
   // Initialize speech recognition
   useEffect(() => {
@@ -175,11 +236,9 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
     setMessages(prev => [...prev, typingMessage]);
 
     try {
-      // Use knowledge service for comprehensive responses
-      const response = await knowledgeService.current.processMessage(
-        messageText,
-        selectedImage || undefined,
-        context
+      // Try the enhanced Atelier service first
+      const response = await atelierService.current.sendMessage(messageText, 
+        selectedImage ? [URL.createObjectURL(selectedImage)] : undefined
       );
 
       // Remove typing indicator
@@ -192,7 +251,8 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
         sender: 'bot',
         timestamp: new Date(),
         products: response.products,
-        suggestions: response.suggestions
+        suggestions: response.suggestions,
+        confidence: response.confidence
       };
 
       setMessages(prev => [...prev, botMessage]);
@@ -277,8 +337,132 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
         </button>
       </div>
 
+      {/* Style Preference Selection Screen */}
+      {showStylePreference ? (
+        <div className="flex-1 p-6 space-y-4 bg-gradient-to-b from-gray-50 to-white">
+          <div className="text-center space-y-2">
+            <h2 className="text-xl font-semibold text-gray-900">What's the occasion?</h2>
+            <p className="text-sm text-gray-600">I'll tailor my style advice to your needs</p>
+          </div>
+          
+          <div className="space-y-3">
+            {/* Business Option */}
+            <button
+              onClick={() => handleStyleSelection('Business')}
+              className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-burgundy transition-all text-left group hover:shadow-lg"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Briefcase className="w-5 h-5 text-blue-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">Business & Professional</h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Power suits, interview attire, executive presence
+                  </p>
+                </div>
+                <ArrowRight className="w-5 h-5 text-burgundy opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </button>
+
+            {/* Wedding Option */}
+            <button
+              onClick={() => handleStyleSelection('Wedding')}
+              className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-burgundy transition-all text-left group hover:shadow-lg"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Users className="w-5 h-5 text-pink-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">Wedding & Formal Events</h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Groom suits, guest attire, black tie guidance
+                  </p>
+                </div>
+                <ArrowRight className="w-5 h-5 text-burgundy opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </button>
+
+            {/* Casual Option */}
+            <button
+              onClick={() => handleStyleSelection('Casual')}
+              className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-burgundy transition-all text-left group hover:shadow-lg"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Shirt className="w-5 h-5 text-green-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">Smart Casual & Weekend</h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Date nights, social events, relaxed elegance
+                  </p>
+                </div>
+                <ArrowRight className="w-5 h-5 text-burgundy opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </button>
+
+            {/* Prom Option */}
+            <button
+              onClick={() => handleStyleSelection('Prom')}
+              className="w-full p-4 border-2 border-gray-200 rounded-xl hover:border-burgundy transition-all text-left group hover:shadow-lg"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <PartyPopper className="w-5 h-5 text-purple-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">Prom & Special Events</h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Tuxedos, bold styles, memorable looks
+                  </p>
+                </div>
+                <ArrowRight className="w-5 h-5 text-burgundy opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+            </button>
+          </div>
+
+          {/* General Styling Option */}
+          <button
+            onClick={() => {
+              setShowStylePreference(false);
+              setSelectedStyle('General');
+            }}
+            className="w-full py-3 text-burgundy hover:text-burgundy-700 transition-colors flex items-center justify-center gap-2"
+          >
+            <Info className="w-4 h-4" />
+            <span className="text-sm">I need general style advice</span>
+          </button>
+
+          {/* Skip Option */}
+          <button
+            onClick={() => setShowStylePreference(false)}
+            className="w-full py-2 text-gray-500 hover:text-gray-700 text-sm"
+          >
+            Skip to chat →
+          </button>
+        </div>
+      ) : (
+      <>
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 bg-gradient-to-b from-gray-50 to-white">
+        {/* Back to Style Preference Button */}
+        {selectedStyle && messages.length > 0 && (
+          <button
+            onClick={() => {
+              setShowStylePreference(true);
+              setMessages([]);
+              setSelectedStyle(null);
+              setSessionStarted(false);
+            }}
+            className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 mb-4"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Change occasion ({selectedStyle})
+          </button>
+        )}
+        
         {messages.map((message) => (
           <div
             key={message.id}
@@ -310,6 +494,25 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
                         : 'bg-gray-100 text-gray-800'
                     }`}>
                       <p className="text-sm leading-relaxed">{message.text}</p>
+                      
+                      {/* Confidence Indicator */}
+                      {message.sender === 'bot' && message.confidence && (
+                        <div className="mt-2 flex items-center gap-2">
+                          <div className="text-xs text-gray-500">Confidence:</div>
+                          <div className="flex-1 bg-gray-200 rounded-full h-1.5 max-w-[100px]">
+                            <div 
+                              className={`h-1.5 rounded-full transition-all ${
+                                message.confidence >= 90 ? 'bg-green-500' :
+                                message.confidence >= 80 ? 'bg-blue-500' :
+                                message.confidence >= 70 ? 'bg-yellow-500' :
+                                'bg-gray-400'
+                              }`}
+                              style={{ width: `${message.confidence}%` }}
+                            />
+                          </div>
+                          <div className="text-xs text-gray-500">{message.confidence}%</div>
+                        </div>
+                      )}
                       
                       {/* Display images if any */}
                       {message.images && message.images.length > 0 && (
@@ -457,6 +660,8 @@ export function AtelierStyleChat({ onClose, initialMessage, context }: AtelierSt
           </button>
         </div>
       </div>
+      </>
+      )}
     </motion.div>
   );
 }
